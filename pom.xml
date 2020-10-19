@@ -46,7 +46,21 @@
             
             </picUrl>
             </properties>
-        </developer>       
+        </developer>    
+        <developer>
+            <id>Nico</id>
+            <name>Nicolás de Ory</name>
+            <email>deorynicolas@gmail.com</email>
+            <url>https://github.com/nicolasdeory</url>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <properties>
+                <picUrl>
+                    https://avatars0.githubusercontent.com/u/1417708
+                </picUrl>
+            </properties>
+        </developer>   
     </developers>
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
@@ -270,22 +284,5 @@
             <url>https://www.apache.org/licenses/LICENSE-2.0</url>
         </license>
     </licenses>
-
-    <developers>
-        <developer>
-            <id>Nico</id>
-            <name>Nicolás de Ory</name>
-            <email>deorynicolas@gmail.com</email>
-            <url>https://github.com/nicolasdeory</url>
-            <roles>
-                <role>Developer</role>
-            </roles>
-            <properties>
-                <picUrl>
-                    https://avatars0.githubusercontent.com/u/1417708
-                </picUrl>
-            </properties>
-        </developer>
-    </developers>
 
 </project>
