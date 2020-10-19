@@ -77,6 +77,20 @@
 			</properties>
 		</developer>
 		<developer>
+			<id>pedalopon</id>
+			<name>Pedro Alonso</name>
+			<email>pedropontiga@gmail.com</email>
+			<url></url>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<properties>
+				<picUrl>
+
+				</picUrl>
+			</properties>
+		</developer>
+		<developer>
 			<id>Nico</id>
 			<name>Nicolás de Ory</name>
 			<email>deorynicolas@gmail.com</email>
