@@ -31,14 +31,14 @@
         <spring-format.version>0.0.19</spring-format.version>
 
     </properties>
-		
-	<developers>
 	
- 		<developer>
- 			<id>ferrabled</id>
- 			<name>Fernando Rabasco</name>
- 			<email>ferrabled@alum.us.es</email>
-			<roles>
+		
+    <developers>
+        <developer>
+ 			    <id>ferrabled</id>
+ 			  <name>Fernando Rabasco</name>
+ 			    <email>ferrabled@alum.us.es</email>
+			  <roles>
  				<role>student</role>
  			</roles>
  			<properties>
@@ -47,8 +47,37 @@
  			</properties>
  		</developer>
 
-	</developers>
-		
+
+        <developer>
+            <id>JSnow11</id>
+            <name>Jose Nieves</name>
+            <email>esoj.nieves@gmail.com</email>
+            <url></url>
+            <roles>
+            <role>Developer</role>
+            </roles>
+            <properties>
+            <picUrl>
+            
+            </picUrl>
+            </properties>
+        </developer>    
+        <developer>
+            <id>Nico</id>
+            <name>Nicolás de Ory</name>
+            <email>deorynicolas@gmail.com</email>
+            <url>https://github.com/nicolasdeory</url>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <properties>
+                <picUrl>
+                    https://avatars0.githubusercontent.com/u/1417708
+                </picUrl>
+            </properties>
+        </developer>   
+    </developers>
+
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
         <dependency>
@@ -67,16 +96,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        <dependency>  
-            <groupId>org.springframework.security</groupId>  
-            <artifactId>spring-security-taglibs</artifactId>  
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
         </dependency>
         <!-- Databases - Uses H2 by default -->
         <!-- dependency>
                 <groupId>org.hsqldb</groupId>
                 <artifactId>hsqldb</artifactId>
                 <scope>runtime</scope>
-        </dependency-->        
+        </dependency-->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -86,7 +115,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!-- validation 
+        <!-- validation
         <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-validator</artifactId>
@@ -171,7 +200,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <!-- Spring Boot Actuator displays build-related information if a META-INF/build-info.properties 
+                        <!-- Spring Boot Actuator displays build-related information if a META-INF/build-info.properties
                         file is present -->
                         <goals>
                             <goal>build-info</goal>
@@ -207,7 +236,7 @@
                 </executions>
             </plugin>
 
-            <!-- Spring Boot Actuator displays build-related information if a git.properties 
+            <!-- Spring Boot Actuator displays build-related information if a git.properties
             file is present at the classpath -->
             <plugin>
                 <groupId>pl.project13.maven</groupId>
@@ -271,7 +300,5 @@
             <url>https://www.apache.org/licenses/LICENSE-2.0</url>
         </license>
     </licenses>
-
-
 
 </project>
