@@ -30,24 +30,11 @@
 		<jacoco.version>0.8.5</jacoco.version>
 		<spring-format.version>0.0.19</spring-format.version>
 
-
-	</properties>
-	<developers>
-		<developer>
-			<id>Nico</id>
-			<name>Nicolás de Ory</name>
-			<email>deorynicolas@gmail.com</email>
-			<url>https://github.com/nicolasdeory</url>
-			<roles>
-				<role>Developer</role>
-			</roles>
-			<properties>
-				<picUrl>
-					https://avatars0.githubusercontent.com/u/1417708
-				</picUrl>
-			</properties>
-		</developer>
-		<developer>
+    </properties>
+	
+		
+    <developers>
+      <developer>
 			<id>Igna</id>
 			<name>Ignacio</name>
 			<email>inavarroblazquez@gmail.com</email>
@@ -61,16 +48,132 @@
 				</picUrl>
 			</properties>
 		</developer>
-		<developer>
-			<id>JSnow11</id>
-			<name>Jose Nieves</name>
-			<email>esoj.nieves@gmail.com</email>
-			<url></url>
-			<roles>
-				<role>Developer</role>
-			</roles>
-			<properties>
-				<picUrl>
+        <developer>
+ 			    <id>ferrabled</id>
+ 			  <name>Fernando Rabasco</name>
+ 			    <email>ferrabled@alum.us.es</email>
+			  <roles>
+ 				<role>Developer</role>
+ 			</roles>
+ 			<properties>
+ 				<picUrl> https://avatars0.githubusercontent.com/u/48551658?s=460
+				</picUrl>
+ 			</properties>
+ 		</developer>
+
+
+        <developer>
+            <id>JSnow11</id>
+            <name>Jose Nieves</name>
+            <email>esoj.nieves@gmail.com</email>
+            <url></url>
+            <roles>
+            <role>Developer</role>
+            </roles>
+            <properties>
+            <picUrl>
+            
+            </picUrl>
+            </properties>
+        </developer>    
+        <developer>
+            <id>Nico</id>
+            <name>Nicolás de Ory</name>
+            <email>deorynicolas@gmail.com</email>
+            <url>https://github.com/nicolasdeory</url>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <properties>
+                <picUrl>
+                    https://avatars0.githubusercontent.com/u/1417708
+                </picUrl>
+            </properties>
+        </developer>   
+    </developers>
+
+    <dependencies>
+        <!-- Spring and Spring Boot dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+        </dependency>
+        <!-- Databases - Uses H2 by default -->
+        <!-- dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <scope>runtime</scope>
+        </dependency-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- validation
+        <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+        </dependency>-->
+        <!-- caching -->
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+        <!-- Java Servlets, JSP and JSTL -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- WebJars -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${webjars-jquery.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery-ui</artifactId>
+            <version>${webjars-jquery-ui.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${webjars-bootstrap.version}</version>
+        </dependency>
+
 
 				</picUrl>
 			</properties>
@@ -432,6 +535,5 @@
 			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 		</license>
 	</licenses>
-
 
 </project>
