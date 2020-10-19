@@ -14,6 +14,9 @@ INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
 INSERT INTO users(username,password,enabled) VALUES ('nicodeory','admin',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (4,'nicodeory','owner');
 
+INSERT INTO users(username,password,enabled) VALUES ('pedalopon','admin',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (6,'pedalopon','owner');
+
 INSERT INTO users(username,password,enabled) VALUES ('JSnow11','admin',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (5,'JSnow11','owner');
 
