@@ -31,7 +31,22 @@
         <spring-format.version>0.0.19</spring-format.version>
 
     </properties>
+	
+		
     <developers>
+        <developer>
+ 			    <id>ferrabled</id>
+ 			  <name>Fernando Rabasco</name>
+ 			    <email>ferrabled@alum.us.es</email>
+			  <roles>
+ 				<role>student</role>
+ 			</roles>
+ 			<properties>
+ 				<picUrl> https://avatars0.githubusercontent.com/u/48551658?s=460
+				</picUrl>
+ 			</properties>
+ 		</developer>
+
 
         <developer>
             <id>JSnow11</id>
@@ -62,6 +77,7 @@
             </properties>
         </developer>   
     </developers>
+
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
         <dependency>
