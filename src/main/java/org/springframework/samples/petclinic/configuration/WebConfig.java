@@ -16,16 +16,16 @@ import org.springframework.web.servlet.view.JstlView;
 
 
 public class WebConfig implements WebMvcConfigurer {
-	
+
 	@Autowired
 	GenericIdToEntityConverter idToEntityConverter;
-	
+
     @Override
     public void addFormatters(FormatterRegistry registry) {
-    	
+
         registry.addConverter(idToEntityConverter);
     }
-    
+
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
