@@ -32,7 +32,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
+	    http.csrf().disable();
+        http.headers().frameOptions().sameOrigin();
+		/*http.authorizeRequests()
 				.antMatchers("/resources/**","/webjars/**","/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/","/oups").permitAll()
 				.antMatchers("/users/new").permitAll()
@@ -40,11 +42,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")
 				.antMatchers("/vets/**").authenticated()
                 .antMatchers("/newuser").permitAll()
-				.anyRequest().denyAll()
+                .antMatchers("/update_user").permitAll()
+                .antMatchers("/user_list").permitAll()
+                .anyRequest().denyAll()
 				.and()
 				 	.formLogin()
 				 	/*.loginPage("/login")*/
-				 	.failureUrl("/login-error")
+				/* 	.failureUrl("/login-error")
 				.and()
 					.logout()
 						.logoutSuccessUrl("/");
@@ -53,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // ataques de tipo csrf y habilitar los framesets si su contenido
                 // se sirve desde esta misma página.
                 http.csrf().ignoringAntMatchers("/h2-console/**");
-                http.headers().frameOptions().sameOrigin();
+                */
 	}
 
 	@Override

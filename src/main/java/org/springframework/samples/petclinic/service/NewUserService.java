@@ -18,13 +18,16 @@ package org.springframework.samples.petclinic.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Interest;
 import org.springframework.samples.petclinic.model.NewUser;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.repository.InterestRepository;
 import org.springframework.samples.petclinic.repository.NewUserRepository;
 import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -37,10 +40,12 @@ import java.util.Optional;
 public class NewUserService {
 
 	private NewUserRepository userRepository;
+    private InterestRepository interestRepository;
 
 	@Autowired
-	public NewUserService(NewUserRepository userRepository) {
+	public NewUserService(NewUserRepository userRepository, InterestRepository interestRepository) {
 		this.userRepository = userRepository;
+		this.interestRepository = interestRepository;
 	}
 
 	@Transactional
@@ -49,7 +54,16 @@ public class NewUserService {
 		userRepository.save(user);
 	}
 
+    @Transactional
+    public void saveInterest(Interest interest) throws DataAccessException {
+        interestRepository.save(interest);
+    }
+
 	public NewUser findUser(String username) {
 		return userRepository.findById(username);
 	}
+
+    public Collection<NewUser> getAllUsers() {
+        return userRepository.findAll();
+    }
 }

@@ -15,11 +15,7 @@ public class NewUser {
 
 	String password;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
 	List<Interest> interests;
 
-	/*boolean enabled;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private Set<Authorities> authorities;*/
 }

@@ -17,8 +17,11 @@ package org.springframework.samples.petclinic.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.samples.petclinic.model.Interest;
 import org.springframework.samples.petclinic.model.NewUser;
 import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.service.InterestService;
 import org.springframework.samples.petclinic.service.NewUserService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.stereotype.Controller;
@@ -28,7 +31,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Juergen Hoeller
@@ -52,24 +58,34 @@ public class NewUserController {
 	}
 
 	@GetMapping(value = "/newuser")
-	public NewUser getUser(@RequestParam String username) {
-	    NewUser a = userService.findUser(username);
-	    if (a == null)
-	        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find user");
+	public List<NewUser> getUser(@RequestParam(required = false) String username) {
+	    if (username == null)
+        {
+            List<NewUser> list = userService.getAllUsers().stream().collect(Collectors.toList());
+            return list;
+        }
 	    else
-	        return a;
+        {
+            NewUser a = userService.findUser(username);
+            if (a == null)
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find user");
+            else
+            {
+                List<NewUser> list = new ArrayList<>();
+                list.add(a);
+                return list;
+            }
+        }
 	}
 
-	/*@PostMapping(value = "/newuser")
-	public String processCreationForm(@Valid Owner owner, BindingResult result) {
-		if (result.hasErrors()) {
-			return VIEWS_OWNER_CREATE_FORM;
-		}
-		else {
-			//creating owner, user, and authority
-			this.ownerService.saveOwner(owner);
-			return "redirect:/";
-		}
-	}*/
+	@PostMapping(value = "/newuser")
+	public ResponseEntity postUser(@RequestBody NewUser user) {
+	    for (Interest interest : user.getInterests())
+        {
+            interest.setUser(user);
+        }
+        userService.saveUser(user);
+        return ResponseEntity.noContent().build();
+	}
 
 }
