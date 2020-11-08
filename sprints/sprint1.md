@@ -43,4 +43,6 @@ Se estima que este sprint conlleva un 5% del proyecto.
 En general han habido dificultades compatibilizando actividades con otras asignaturas.
 Al ser un sprint con mucho trabajo en común no se han podido paralelizar mucho las actividades.
 
-Se adjuntan los pdf con el tiempo y esfuerzo invertido por integrante con el formato `uvus_sprint1.pdf`
+![alt](https://github.com/gii-is-DP1/dp1-2020-g1-08/blob/master/sprints/Screenshot%20from%202020-11-08%2012-55-11.png)
+
+![alt](https://github.com/gii-is-DP1/dp1-2020-g1-08/blob/master/sprints/Screenshot%20from%202020-11-08%2012-58-09.png)
