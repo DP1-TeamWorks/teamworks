@@ -1,0 +1,31 @@
+.chatBox {
+  float: right;
+  background-color: #363842;
+  margin-top: 55vh;
+  height: 33vh;
+  width: 45vh;
+  max-width: 5vh;
+  color: white;
+  border-radius: 10px 0px 0px 10px;
+  position: relative;
+  transition: max-width 0.2s ease-out;
+}
+
+.messageBox {
+  background-color: #2d2f39;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3vh;
+  max-width: 5vh;
+  padding: 10px 10px;
+  border-radius: 0px 0px 0px 10px;
+  overflow: hidden;
+  transition: max-width 0.2s ease-out;
+}
+
+.active {
+  max-width: 45vh;
+  transition: max-width 0.2s ease-out;
+}
