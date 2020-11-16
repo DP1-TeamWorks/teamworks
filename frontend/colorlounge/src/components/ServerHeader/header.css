@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+.serverBar {
+  background-color: #363842;
+  position: absolute;
+  top: 0;
+  padding: 5px 100px;
+  color: white;
+  border-radius: 0px 0px 10px 10px;
+  align-self: center;
+}
+
+.serverBar a {
+  color: #626f9c;
+}
