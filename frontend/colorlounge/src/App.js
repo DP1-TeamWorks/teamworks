@@ -1,16 +1,10 @@
 import "./App.css";
-import { Chat } from "./components/Chat/Chat";
-import { ServerHeader } from "./components/ServerHeader/ServerHeader";
+import { Login } from "./components/Login/Login";
 
 function App() {
   return (
     <div className={"background"}>
-      <ServerHeader
-        numberOfPeople={5}
-        serverUrl={"red-panda.colorlounge.com"}
-      />
-
-      <Chat />
+      <Login />
     </div>
   );
 }
