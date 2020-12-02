@@ -83,7 +83,7 @@ class LoginForm extends React.Component {
         <input  placeholder="HardToGuessPassword" className="inputLogin" type="password" name="password" onChange={this.changeHandler} />
         <p className="error">{this.state.errors.password}</p>
         <br />
-        <input className="loginButton" type="submit" value="Sign in"/>
+        <input className="loginButton" type="submit" value="Sign in" disabled={hasErrors(Object.values(this.state.errors))} />
       </form>
     );
   }
