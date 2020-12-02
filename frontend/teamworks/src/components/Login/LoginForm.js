@@ -76,15 +76,14 @@ class LoginForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitHandler}>
-        <p>Team Mail:</p>
-        <input type="text" name="mail" onChange={this.changeHandler} />
+        <br/>
+        <input placeholder="name@team" className="inputLogin" type="text" name="mail" onChange={this.changeHandler} />
         <p className="error">{this.state.errors.mail}</p>
-        <p>Password</p>
-        <input type="password" name="password" onChange={this.changeHandler} />
+        <br/>
+        <input  placeholder="HardToGuessPassword" className="inputLogin" type="password" name="password" onChange={this.changeHandler} />
         <p className="error">{this.state.errors.password}</p>
         <br />
-        <br />
-        <input type="submit" />
+        <input className="loginButton" type="submit" value="Sign in"/>
       </form>
     );
   }
