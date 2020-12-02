@@ -1,0 +1,81 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  z-index: 1000;
+}
+
+.loginBox {
+  color: #a6ce56;
+  max-width: 527px;
+  max-height: 523px;
+  background: #262626;
+  padding: 50px;
+}
+
+.teamWord {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 44px;
+
+  color: #ffffff;
+  padding-left: 16%;
+}
+
+.worksWord {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 44px;
+  color: #a7e32d;
+  padding-right: 16%;
+}
+
+.error {
+  font-size: smaller;
+  color: #e32d2d;
+  padding: 10px;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.titleInput{
+  color: #a7e32d;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.inputLogin{
+  background: none;
+  border: 1px solid rgba(166, 206, 86, 0.8);
+  box-sizing: border-box;
+  width: 370px;
+  height: 52px;
+  padding: 15px;
+}
+
+.loginButton{
+  width: 370px;
+  height: 52px;
+  background: linear-gradient(91.13deg, #A6CE56 0%, #D1EF7C 100%);
+  border: 1px solid rgba(166, 206, 86, 0.8);
+  box-sizing: border-box;
+  margin-bottom: 25px;
+  cursor: pointer;
+}
+
+.newTeam{
+  color: #a7e32d;
+  padding-left: 28%;
+  padding-right:28.5%;
+  
+}
