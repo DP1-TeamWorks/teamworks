@@ -1,10 +1,12 @@
+import { useState } from "react";
 import "./App.css";
 import { Login } from "./components/Login/Login";
 
 function App() {
+  const [userSession, setUserSession] = useState({});
   return (
     <div className={"background"}>
-      <Login />
+      {userSession!=={} && <Login setUserSession={setUserSession} />}
     </div>
   );
 }
