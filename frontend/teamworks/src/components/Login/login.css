@@ -43,6 +43,8 @@
 
 .error {
   font-size: smaller;
+  color: #e32d2d;
+  padding: 10px;
 }
 
 .titleInput{
