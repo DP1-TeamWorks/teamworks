@@ -1,30 +1,52 @@
 import React from "react";
+import { login } from "../../utils/api/authApiUtils";
 
+const hasErrors = (errors) => {
+  let b =
+    errors.length === 0
+      ? true
+      : errors.some((e) => {
+          return e !== "";
+        });
+  return b;
+};
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       mail: "",
       password: "",
-      errors: { mail: "", password: "" },
+      errors: {},
+      hasErrors: false,
     };
   }
 
   validate = (field, value) => {
+    let errorMsg = "";
     switch (field) {
       case "mail":
         if (value === "") {
-          this.setState({
-            errors: { ...this.state.errors, mail: "Mail required" },
-          });
+          errorMsg = "Mail required";
         }
+        if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@+[a-zA-Z0-9-]/.test(value)) {
+          errorMsg = "Invalid Mail";
+        }
+
+        this.setState({
+          errors: { ...this.state.errors, mail: errorMsg },
+        });
         break;
+
       case "password":
         if (value === "") {
-          this.setState({
-            errors: { ...this.state.errors, password: "Password required" },
-          });
+          errorMsg = "Password required";
         }
+        if (value.length < 8) {
+          errorMsg = "Passwords are larger";
+        }
+        this.setState({
+          errors: { ...this.state.errors, password: errorMsg },
+        });
         break;
       default:
     }
@@ -39,6 +61,16 @@ class LoginForm extends React.Component {
 
   submitHandler = (event) => {
     event.preventDefault();
+    console.log(Object.values(this.state.errors));
+    if (!hasErrors(Object.values(this.state.errors))) {
+      let mail = this.state.mail;
+      let password = this.state.password;
+      //Call API request in order to receive the user for the session
+      login({ mail, password });
+    } else {
+      console.log("There are errors in this form");
+      console.log(this.state.errors);
+    }
   };
 
   render() {
