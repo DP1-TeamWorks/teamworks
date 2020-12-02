@@ -1,0 +1,13 @@
+.Sidebar {
+  width: 320px;
+  height: 100%;
+  background-color: #20231A;
+}
+
+.Sidebar__PaddedElement {
+  padding: 0 35px;
+}
+
+.Sidebar__PaddedElement--Top {
+  padding-top: 35px;
+}

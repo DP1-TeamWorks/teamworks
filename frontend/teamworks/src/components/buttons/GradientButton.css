@@ -1,0 +1,7 @@
+.GradientButton {
+    width: 255px;
+    height: 45px;
+    border-radius: 3px;
+    background-color: #fff;
+    cursor: pointer;
+}

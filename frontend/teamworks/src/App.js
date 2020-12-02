@@ -1,14 +1,28 @@
-import { useState } from "react";
-import "./App.css";
-import AuthRouter from "./components/Auth/AuthRouter";
+import logo from './logo.svg';
+import './App.css';
+import Header from './components/header/Header';
+import Settings from './sections/Settings';
+import
+  {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
 
-function App() {
-  const [session, setSession] = useState();
+function App()
+{
   return (
-    <div className={"background"}>
-      {!session && <AuthRouter setSession={setSession} />}
-      {session && <p>Holowo {session.name} {session.lastname}</p>}
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/">
+          <div className="App">
+            <Header />
+            <Settings />
+          </div>
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
