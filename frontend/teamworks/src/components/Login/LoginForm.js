@@ -77,13 +77,15 @@ class LoginForm extends React.Component {
     return (
       <form onSubmit={this.submitHandler}>
         <br/>
-        <input placeholder="name@team" className="inputLogin" id="mailLogin" type="text" name="mail" onChange={this.changeHandler} />
+        <input placeholder="name@team" className="inputLogin" id="mailLogin" type="text" name="mail" onChange={this.changeHandler}
+         style={{border: this.state.errors.mail &&  this.state.errors.mail !== "" ? "1px solid #e32d2d": ""}}/>
         <p className="error">{this.state.errors.mail}</p>
         <br/>
-        <input  placeholder="HardToGuessPassword" className="inputLogin" id="passwordLogin" type="password" name="password" onChange={this.changeHandler} />
+        <input  placeholder="HardToGuessPassword" className="inputLogin" id="passwordLogin" type="password" name="password" onChange={this.changeHandler}
+         style={{border: this.state.errors.password &&  this.state.errors.password !== "" ? "1px solid #e32d2d": ""}}/>
         <p className="error">{this.state.errors.password}</p>
         <br />
-        <input className="loginButton" type="submit" value="Sign in" disabled={hasErrors(Object.values(this.state.errors))} />
+        <input className="loginButton" type="submit" value="Sign in" disabled={hasErrors(Object.values(this.state.errors))}/>
       </form>
     );
   }
