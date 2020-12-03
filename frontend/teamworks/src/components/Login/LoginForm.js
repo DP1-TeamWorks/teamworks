@@ -1,15 +1,6 @@
 import React from "react";
 import { login } from "../../utils/api/authApiUtils";
 
-const hasErrors = (errors) => {
-  let b =
-    errors.length === 0
-      ? true
-      : errors.some((e) => {
-          return e !== "";
-        });
-  return b;
-};
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
@@ -17,9 +8,23 @@ class LoginForm extends React.Component {
       mail: "",
       password: "",
       errors: {},
-      hasErrors: false,
+      hasErrors: true,
     };
   }
+
+  updateHasErrors = () => {
+    let errors = Object.values(this.state.errors);
+    let b =
+      errors.length === 0
+        ? true
+        : errors.some((e) => {
+            return e !== "";
+          });
+    this.setState({
+      hasErrors: b,
+    });
+    console.log(this.state.hasErrors);
+  };
 
   validate = (field, value) => {
     let errorMsg = "";
@@ -50,6 +55,7 @@ class LoginForm extends React.Component {
         break;
       default:
     }
+    this.updateHasErrors();
   };
 
   changeHandler = (event) => {
@@ -61,8 +67,7 @@ class LoginForm extends React.Component {
 
   submitHandler = (event) => {
     event.preventDefault();
-    console.log(Object.values(this.state.errors));
-    if (!hasErrors(Object.values(this.state.errors))) {
+    if (!this.state.hasErrors) {
       let mail = this.state.mail;
       let password = this.state.password;
       //Call API request in order to receive the user for the session
@@ -76,16 +81,45 @@ class LoginForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitHandler}>
-        <br/>
-        <input placeholder="name@team" className="inputLogin" id="mailLogin" type="text" name="mail" onChange={this.changeHandler}
-         style={{border: this.state.errors.mail &&  this.state.errors.mail !== "" ? "1px solid #e32d2d": ""}}/>
+        <br />
+        <input
+          placeholder="name@team"
+          className="inputLogin"
+          id="mailLogin"
+          type="text"
+          name="mail"
+          onChange={this.changeHandler}
+          style={{
+            border:
+              this.state.errors.mail && this.state.errors.mail !== ""
+                ? "1px solid #e32d2d"
+                : "",
+          }}
+        />
         <p className="error">{this.state.errors.mail}</p>
-        <br/>
-        <input  placeholder="HardToGuessPassword" className="inputLogin" id="passwordLogin" type="password" name="password" onChange={this.changeHandler}
-         style={{border: this.state.errors.password &&  this.state.errors.password !== "" ? "1px solid #e32d2d": ""}}/>
+        <br />
+        <input
+          placeholder="HardToGuessPassword"
+          className="inputLogin"
+          id="passwordLogin"
+          type="password"
+          name="password"
+          onChange={this.changeHandler}
+          style={{
+            border:
+              this.state.errors.password && this.state.errors.password !== ""
+                ? "1px solid #e32d2d"
+                : "",
+          }}
+        />
         <p className="error">{this.state.errors.password}</p>
         <br />
-        <input className="loginButton" type="submit" value="Sign in" disabled={hasErrors(Object.values(this.state.errors))}/>
+        <input
+          className="loginButton"
+          type="submit"
+          value="Sign in"
+          disabled={this.state.hasErrors}
+        />
       </form>
     );
   }
