@@ -1,7 +1,7 @@
 import React from "react";
 import { login } from "../../../utils/api/authApiUtils";
-import LSInput from "./LSInput";
-import SubmitButton from "./SubmitButton";
+import Input from "../../Forms/Input";
+import SubmitButton from "../../Forms/SubmitButton";
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -16,9 +16,12 @@ class LoginForm extends React.Component {
   }
 
   hasErrors = () => {
-    let errors = Object.values(this.state.errors);
+    const errors = Object.values(this.state.errors);
+    const nInputs = Object.keys(this.state.inputs).length;
+    console.log(this.state.inputs);
+    console.log(nInputs, errors.length);
     let b =
-      errors.length === 0
+      errors.length < nInputs
         ? true
         : errors.some((e) => {
             return e !== "";
@@ -61,11 +64,9 @@ class LoginForm extends React.Component {
         } else if (value.length < 8) {
           errorMsg = "Passwords are larger";
         }
-        console.log(this.state.errors.password);
         this.setState({
           errors: { ...this.state.errors, password: errorMsg },
         });
-        console.log(this.state.errors.password);
         break;
       default:
     }
@@ -75,7 +76,7 @@ class LoginForm extends React.Component {
     let field = event.target.name;
     let value = event.target.value;
     this.validate(field, value);
-    this.setState({ inputs: { [field]: value } });
+    this.setState({ inputs: { ...this.state.inputs, [field]: value } });
   };
 
   submitHandler = (event) => {
@@ -95,7 +96,7 @@ class LoginForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitHandler}>
-        <LSInput
+        <Input
           name="mail"
           type="text"
           placeholder="name@team"
@@ -103,7 +104,7 @@ class LoginForm extends React.Component {
           error={this.state.errors.mail}
           changeHandler={this.changeHandler}
         />
-        <LSInput
+        <Input
           name="password"
           type="password"
           placeholder="HardToGuessPassword"
