@@ -12,11 +12,10 @@ class LoginForm extends React.Component {
         password: "",
       },
       errors: {},
-      hasErrors: true,
     };
   }
 
-  updateHasErrors = () => {
+  hasErrors = () => {
     let errors = Object.values(this.state.errors);
     let b =
       errors.length === 0
@@ -24,13 +23,12 @@ class LoginForm extends React.Component {
         : errors.some((e) => {
             return e !== "";
           });
-    this.setState({
-      hasErrors: b,
-    });
-    console.log(this.state.hasErrors);
+    console.log("hasErrors? ", b);
+    return b;
   };
 
   validateAll = () => {
+    console.log("Validating ALL");
     Object.entries(this.state.inputs).forEach((e) => {
       const [k, v] = e;
       console.log(k);
@@ -40,6 +38,7 @@ class LoginForm extends React.Component {
   };
 
   validate = (field, value) => {
+    console.log("Validating: ", field, value);
     let errorMsg = "";
     switch (field) {
       case "mail":
@@ -62,13 +61,14 @@ class LoginForm extends React.Component {
         } else if (value.length < 8) {
           errorMsg = "Passwords are larger";
         }
+        console.log(this.state.errors.password);
         this.setState({
           errors: { ...this.state.errors, password: errorMsg },
         });
+        console.log(this.state.errors.password);
         break;
       default:
     }
-    this.updateHasErrors();
   };
 
   changeHandler = (event) => {
@@ -80,8 +80,8 @@ class LoginForm extends React.Component {
 
   submitHandler = (event) => {
     event.preventDefault();
-    if (!this.state.hasErrors) {
-      this.validateAll();
+    this.validateAll();
+    if (!this.hasErrors()) {
       let mail = this.state.inputs.mail;
       let password = this.state.inputs.password;
       //Call API request in order to receive the user for the session
@@ -111,7 +111,7 @@ class LoginForm extends React.Component {
           error={this.state.errors.password}
           changeHandler={this.changeHandler}
         />
-        <SubmitButton value="Sign in" hasErrors={this.state.hasErrors} />
+        <SubmitButton value="Sign in" hasErrors={this.hasErrors()} />
       </form>
     );
   }

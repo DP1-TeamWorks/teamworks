@@ -71,9 +71,9 @@
   box-sizing: border-box;
   margin-bottom: 25px;
   cursor: pointer;
-  -webkit-transition: all 1s linear;
-  -moz-transition: all 1s linear;
-  -o-transition: all 1s linear;
+  -webkit-transition: all 1s ease-out;
+  -moz-transition: all 1s ease-out;
+  -o-transition: all 1s ease-out;
   transition-timing-function: ease-out;
   transition: background 1s;
   transition-delay: 1s;
