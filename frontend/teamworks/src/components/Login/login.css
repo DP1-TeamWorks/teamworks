@@ -48,13 +48,13 @@
   padding-top: 0;
 }
 
-.titleInput{
+.titleInput {
   color: #a7e32d;
   padding-top: 10px;
   padding-bottom: 10px;
 }
 
-.inputLogin{
+.inputLogin {
   background: none;
   border: 1px solid rgba(166, 206, 86, 0.8);
   box-sizing: border-box;
@@ -63,19 +63,37 @@
   padding: 15px;
 }
 
-.loginButton{
+.SubmitButton {
   width: 370px;
   height: 52px;
-  background: linear-gradient(91.13deg, #A6CE56 0%, #D1EF7C 100%);
+  background: linear-gradient(91.13deg, #a6ce56 0%, #d1ef7c 100%);
   border: 1px solid rgba(166, 206, 86, 0.8);
   box-sizing: border-box;
   margin-bottom: 25px;
   cursor: pointer;
+  -webkit-transition: all 1s linear;
+  -moz-transition: all 1s linear;
+  -o-transition: all 1s linear;
+  transition-timing-function: ease-out;
+  transition: background 1s;
+  transition-delay: 1s;
 }
 
-.newTeam{
+.SubmitButton.Disabled {
+  background: linear-gradient(91.13deg, #696969 0%, #505050 100%);
+  border: 1px solid rgba(22, 22, 22, 0.8);
+
+  -webkit-transition: all 1s linear;
+  -moz-transition: all 1s linear;
+  -o-transition: all 1s linear;
+  transition-timing-function: ease-out;
+  transition: background 1s;
+  transition-delay: 1s;
+  cursor: auto;
+}
+
+.newTeam {
   color: #a7e32d;
   padding-left: 28%;
-  padding-right:28.5%;
-  
+  padding-right: 28.5%;
 }
