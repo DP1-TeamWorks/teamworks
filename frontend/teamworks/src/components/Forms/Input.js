@@ -1,7 +1,7 @@
 import React from "react";
-import "../login.css";
+import "./forms.css";
 import InputError from "./InputError";
-export default function LSInput({
+export default function Input({
   name,
   type,
   placeholder,
