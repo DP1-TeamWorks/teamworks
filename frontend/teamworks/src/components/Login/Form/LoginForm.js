@@ -1,12 +1,16 @@
 import React from "react";
-import { login } from "../../utils/api/authApiUtils";
+import { login } from "../../../utils/api/authApiUtils";
+import LSInput from "./LSInput";
+import SubmitButton from "./SubmitButton";
 
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mail: "",
-      password: "",
+      inputs: {
+        mail: "",
+        password: "",
+      },
       errors: {},
       hasErrors: true,
     };
@@ -26,14 +30,24 @@ class LoginForm extends React.Component {
     console.log(this.state.hasErrors);
   };
 
+  validateAll = () => {
+    Object.entries(this.state.inputs).forEach((e) => {
+      const [k, v] = e;
+      console.log(k);
+      console.log(v);
+      this.validate(k, v);
+    });
+  };
+
   validate = (field, value) => {
     let errorMsg = "";
     switch (field) {
       case "mail":
         if (value === "") {
           errorMsg = "Mail required";
-        }
-        if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@+[a-zA-Z0-9-]/.test(value)) {
+        } else if (
+          !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@+[a-zA-Z0-9-]/.test(value)
+        ) {
           errorMsg = "Invalid Mail";
         }
 
@@ -45,8 +59,7 @@ class LoginForm extends React.Component {
       case "password":
         if (value === "") {
           errorMsg = "Password required";
-        }
-        if (value.length < 8) {
+        } else if (value.length < 8) {
           errorMsg = "Passwords are larger";
         }
         this.setState({
@@ -62,14 +75,15 @@ class LoginForm extends React.Component {
     let field = event.target.name;
     let value = event.target.value;
     this.validate(field, value);
-    this.setState({ [field]: value });
+    this.setState({ inputs: { [field]: value } });
   };
 
   submitHandler = (event) => {
     event.preventDefault();
     if (!this.state.hasErrors) {
-      let mail = this.state.mail;
-      let password = this.state.password;
+      this.validateAll();
+      let mail = this.state.inputs.mail;
+      let password = this.state.inputs.password;
       //Call API request in order to receive the user for the session
       login({ mail, password });
     } else {
@@ -81,45 +95,23 @@ class LoginForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitHandler}>
-        <br />
-        <input
-          placeholder="name@team"
-          className="inputLogin"
-          id="mailLogin"
-          type="text"
+        <LSInput
           name="mail"
-          onChange={this.changeHandler}
-          style={{
-            border:
-              this.state.errors.mail && this.state.errors.mail !== ""
-                ? "1px solid #e32d2d"
-                : "",
-          }}
+          type="text"
+          placeholder="name@team"
+          styleClass="inputLogin"
+          error={this.state.errors.mail}
+          changeHandler={this.changeHandler}
         />
-        <p className="error">{this.state.errors.mail}</p>
-        <br />
-        <input
-          placeholder="HardToGuessPassword"
-          className="inputLogin"
-          id="passwordLogin"
-          type="password"
+        <LSInput
           name="password"
-          onChange={this.changeHandler}
-          style={{
-            border:
-              this.state.errors.password && this.state.errors.password !== ""
-                ? "1px solid #e32d2d"
-                : "",
-          }}
+          type="password"
+          placeholder="HardToGuessPassword"
+          styleClass="inputLogin"
+          error={this.state.errors.password}
+          changeHandler={this.changeHandler}
         />
-        <p className="error">{this.state.errors.password}</p>
-        <br />
-        <input
-          className="loginButton"
-          type="submit"
-          value="Sign in"
-          disabled={this.state.hasErrors}
-        />
+        <SubmitButton value="Sign in" hasErrors={this.state.hasErrors} />
       </form>
     );
   }
