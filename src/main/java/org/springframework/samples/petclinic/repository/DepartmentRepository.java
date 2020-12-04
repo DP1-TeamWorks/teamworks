@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.repository;
 
+import java.util.Collection;
+
 import org.springframework.dao.DataAccessException;
 
 import org.springframework.data.repository.Repository;
@@ -14,6 +16,8 @@ public interface DepartmentRepository extends Repository<Department, String> {
 	    void save(Department departments) throws DataAccessException;
 
 	    public Department findById(String name);
+
+	    Collection<Department> findAll() throws DataAccessException;;
 	    
 
 
