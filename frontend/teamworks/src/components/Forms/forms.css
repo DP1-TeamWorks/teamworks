@@ -27,20 +27,5 @@
   -webkit-transition: all 1s ease-out;
   -moz-transition: all 1s ease-out;
   -o-transition: all 1s ease-out;
-  transition-timing-function: ease-out;
-  transition: background 1s;
-  transition-delay: 1s;
-}
-
-.SubmitButton.Disabled {
-  background: linear-gradient(91.13deg, #696969 0%, #505050 100%);
-  border: 1px solid rgba(22, 22, 22, 0.8);
-
-  -webkit-transition: all 1s linear;
-  -moz-transition: all 1s linear;
-  -o-transition: all 1s linear;
-  transition-timing-function: ease-out;
-  transition: background 1s;
-  transition-delay: 1s;
-  cursor: auto;
+  transition-delay: 0.5s;
 }
