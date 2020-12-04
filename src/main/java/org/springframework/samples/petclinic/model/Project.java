@@ -41,7 +41,7 @@ public class Project {
 	private LocalDate creationTimestamp;
 	
 	@ManyToOne(optional=false )
-	@JoinColumn(name = "deparments")
+	@JoinColumn(name = "departments")
 	@JsonBackReference
-	private Department deparment;
+	private Department department;
 }
