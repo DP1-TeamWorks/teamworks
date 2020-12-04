@@ -1,3 +1,4 @@
+package org.springframework.samples.petclinic.service;
 /*
  * Copyright 2002-2013 the original author or authors.|
  *
@@ -13,16 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.service;
+
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Interest;
 import org.springframework.samples.petclinic.model.NewUser;
+import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.model.Vet;
+import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.repository.DepartmentRepository;
 import org.springframework.samples.petclinic.repository.InterestRepository;
 import org.springframework.samples.petclinic.repository.NewUserRepository;
+import org.springframework.samples.petclinic.repository.ProjectRepository;
 import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,33 +45,35 @@ import java.util.Optional;
  * @author Michael Isvy
  */
 @Service
-public class NewUserService {
-
-	private NewUserRepository userRepository;
-    private InterestRepository interestRepository;
+public class DepartmentService {
+	private DepartmentRepository departmentRepository;
+	private ProjectRepository projectRepository;
 
 	@Autowired
-	public NewUserService(NewUserRepository userRepository, InterestRepository interestRepository) {
-		this.userRepository = userRepository;
-		this.interestRepository = interestRepository;
+	public DepartmentService(DepartmentRepository departmentRepository, ProjectRepository projectRepository) {
+		this.departmentRepository = departmentRepository;
+		this.projectRepository = projectRepository;
 	}
 
 	@Transactional
-	public void saveUser(NewUser user) throws DataAccessException {
-		//user.setEnabled(true);
-		userRepository.save(user);
+	public void saveDepartment(Department department) throws DataAccessException {
+		departmentRepository.save(department);
+	}
+	
+	@Transactional
+	public void saveProject(Project project) throws DataAccessException {
+		projectRepository.save(project);
 	}
 
-    @Transactional
-    public void saveInterest(Interest interest) throws DataAccessException {
-        interestRepository.save(interest);
-    }
-
-	public NewUser findUser(String username) {
-		return userRepository.findById(username);
+	@Transactional(readOnly = true)
+	public Department findDepartmentById(String name) throws DataAccessException {
+		return departmentRepository.findById(name);
 	}
 
-    public Collection<NewUser> getAllUsers() {
-        return userRepository.findAll();
-    }
+	@Transactional(readOnly = true)
+	public Collection<Department> findDepartments() throws DataAccessException {
+		return departmentRepository.findAll();
+	}
+
+	
 }
