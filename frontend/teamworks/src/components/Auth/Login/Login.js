@@ -4,11 +4,11 @@ import LoginForm from "./LoginForm"
 
 export default function Login({setUserSession}) {
   return (
-      <div className="container">
-        <div className="loginBox">
+      <div className="Container">
+        <div className="LoginBox">
           <span className="TeamWord">TEAM</span><span className="WorksWord">WORKS</span>
           <LoginForm setUserSession={setUserSession} />
-          <p className="newTeam">Create your own team</p>
+          <p className="NewTeam">Create your own team</p>
         </div>
       </div>
   );

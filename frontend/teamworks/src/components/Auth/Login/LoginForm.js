@@ -100,15 +100,15 @@ class LoginForm extends React.Component {
           name="mail"
           type="text"
           placeholder="name@team"
-          styleClass="inputLogin"
+          styleClass="InputLogin"
           error={this.state.errors.mail}
           changeHandler={this.changeHandler}
         />
         <Input
           name="password"
           type="password"
-          placeholder="HardToGuessPassword"
-          styleClass="inputLogin"
+          placeholder="Password"
+          styleClass="InputLogin"
           error={this.state.errors.password}
           changeHandler={this.changeHandler}
         />

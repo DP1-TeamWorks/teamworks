@@ -1,4 +1,4 @@
-.container {
+.Container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,7 +11,7 @@
   z-index: 1000;
 }
 
-.loginBox {
+.LoginBox {
   color: #a6ce56;
   max-width: 527px;
   max-height: 523px;
@@ -40,7 +40,7 @@
   padding-right: 16%;
 }
 
-.newTeam {
+.NewTeam {
   color: #a7e32d;
   padding-left: 28%;
   padding-right: 28.5%;
