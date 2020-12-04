@@ -14,7 +14,7 @@ public interface DepartmentRepository extends Repository<Department, String> {
 	     * @see BaseEntity#isNew
 	     */
 	    void save(Department departments) throws DataAccessException;
-
+	    void deleteById(String name) throws DataAccessException;
 	    public Department findById(String name);
 
 	    Collection<Department> findAll() throws DataAccessException;;

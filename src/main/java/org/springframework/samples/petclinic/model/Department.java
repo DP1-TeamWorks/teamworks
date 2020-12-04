@@ -26,6 +26,6 @@ public class Department {
 	@Column(name = "description")
 	private String description;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "departments", orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "name", orphanRemoval = true)
 	List<Project> projects;
 }

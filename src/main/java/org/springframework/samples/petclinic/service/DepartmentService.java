@@ -20,23 +20,13 @@ package org.springframework.samples.petclinic.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Department;
-import org.springframework.samples.petclinic.model.Interest;
-import org.springframework.samples.petclinic.model.NewUser;
-import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Project;
-import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.model.Vet;
-import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.DepartmentRepository;
-import org.springframework.samples.petclinic.repository.InterestRepository;
-import org.springframework.samples.petclinic.repository.NewUserRepository;
 import org.springframework.samples.petclinic.repository.ProjectRepository;
-import org.springframework.samples.petclinic.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -69,9 +59,12 @@ public class DepartmentService {
 	public Department findDepartmentById(String name) throws DataAccessException {
 		return departmentRepository.findById(name);
 	}
+	public void deleteDepartmentById(String name) throws DataAccessException {
+		departmentRepository.deleteById(name);
+	}
 
 	@Transactional(readOnly = true)
-	public Collection<Department> findDepartments() throws DataAccessException {
+	public Collection<Department> getAllDepartments() throws DataAccessException {
 		return departmentRepository.findAll();
 	}
 
