@@ -24,8 +24,9 @@ import lombok.Data;
 public class Project {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(unique = true)
 	protected Integer id;
-	@Column(name = "name")
+	@Column(name = "name",unique = true)
 	@NotNull
 	@NotEmpty
 	private String name;
