@@ -11,17 +11,18 @@ import org.springframework.samples.petclinic.model.*;
 import java.util.Collection;
 import java.util.Optional;
 
+public interface DepartmentRepository extends Repository<Department, String> {
+	    /**
+	     * Save a <code>Department</code> to the data store, either inserting or updating it.
+	     * @param departments the <code>Department</code> to save
+	     * @see BaseEntity#isNew
+	     */
+	    void save(Department departments) throws DataAccessException;
 
-public interface NewUserRepository extends Repository<NewUser, String> {
-    /**
-     * Save a <code>NewUser</code> to the data store, either inserting or updating it.
-     * @param user the <code>Owner</code> to save
-     * @see BaseEntity#isNew
-     */
-    void save(NewUser user) throws DataAccessException;
+	    public Department findById(String name);
+	    
 
-    public NewUser findById(String id);
 
-    public Collection<NewUser> findAll() throws DataAccessException;
+	}
 
-}
+
