@@ -19,7 +19,6 @@
 .SubmitButton {
   width: 370px;
   height: 52px;
-  background: linear-gradient(91.13deg, #a6ce56 0%, #d1ef7c 100%);
   border: 1px solid rgba(166, 206, 86, 0.8);
   box-sizing: border-box;
   margin-bottom: 25px;
@@ -27,5 +26,5 @@
   -webkit-transition: all 1s ease-out;
   -moz-transition: all 1s ease-out;
   -o-transition: all 1s ease-out;
-  transition-delay: 0.5s;
+  transition-delay: 0.25s;
 }

@@ -9,7 +9,7 @@ export default function InputError({ value, hasErrors }) {
         type="submit"
         value={value}
         disabled={hasErrors}
-        style={{background: hasErrors ? "linear-gradient(91.13deg, #696969 0%, #505050 100%)" : "",
+        style={{backgroundColor: hasErrors ? "#696969" : "#b4dd63",
          border: hasErrors ? "1px solid rgba(22, 22, 22, 0.8)" :"",
           cursor: hasErrors ? "auto": ""}}
       />
