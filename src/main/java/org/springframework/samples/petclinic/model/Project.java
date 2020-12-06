@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -21,12 +22,10 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "projects")
-public class Project {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(unique = true)
-	protected Integer id;
-	@Column(name = "name",unique = true)
+public class Project extends BaseEntity{
+	
+	
+	@Column(name = "name")
 	@NotNull
 	@NotEmpty
 	private String name;
@@ -35,13 +34,11 @@ public class Project {
 	@NotEmpty
 	private String description;
 	@Column(name = "creation_timestamp")        
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	@NotNull
-	@NotEmpty
+	@CreationTimestamp
 	private LocalDate creationTimestamp;
 	
 	@ManyToOne(optional=false )
-	@JoinColumn(name = "departments")
+	@JoinColumn(name = "department_id")
 	@JsonBackReference
 	private Department department;
 }

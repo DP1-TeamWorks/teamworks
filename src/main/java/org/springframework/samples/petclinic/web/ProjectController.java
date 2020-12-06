@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Department;
+import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.ProjectService;
 import org.springframework.web.bind.WebDataBinder;
@@ -20,53 +21,57 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class DepartmentController {
+public class ProjectController {
 	private final DepartmentService departmentService;
+	private final ProjectService projectService;
 	@Autowired
-	public DepartmentController(DepartmentService departmentService,ProjectService projectService) {
+	public ProjectController(DepartmentService departmentService,ProjectService projectService) {
 		this.departmentService = departmentService;
+		this.projectService=projectService;
 	}
-	
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
-	@GetMapping(value = "/departments")
-	public List<Department> getDeparments(@RequestParam(required = false) String name){
-		List<Department> l=new ArrayList<>();
+	@GetMapping(value = "/projects")
+	public List<Project> getProjects(@RequestParam(required = false) String name){
+		List<Project> l=new ArrayList<>();
 		if(name==null) {
-			l = departmentService.getAllDepartments().stream().collect(Collectors.toList());
-            return l;
+			l = projectService.getAllProjects().stream().collect(Collectors.toList());
+           
 		}
 		else {
-			l=departmentService.findDepartmentByName(name).stream().collect(Collectors.toList());
-			return l;
+			l=projectService.getProjectsByName(name).stream().collect(Collectors.toList());
+			
 		}
+		return l;
 	}
-	
-	@PostMapping(value = "/departments")
-	public ResponseEntity<String> postDeparments(@RequestBody Department department) {
-		try {
-			departmentService.saveDepartment(department);
-			return ResponseEntity.ok("Department create");
-		}
-		catch(DataAccessException d) {
-			return ResponseEntity.badRequest().build();
-		}
+	@PostMapping(value = "/projects")
+	public ResponseEntity<String> postProjects(@RequestParam(required = true) Integer departmentId,@RequestBody Project project) {
+		
+				try {
+					Department depar=departmentService.findDepartmentById(departmentId);
+					
+					project.setDepartment(depar);
+					projectService.saveProject(project);
+					return ResponseEntity.ok("Project create");
+				}
+				catch(DataAccessException d) {
+					return ResponseEntity.badRequest().build();
+				}
+			
 	    
 	}
-	
-	@DeleteMapping(value = "/departments")
-	public ResponseEntity<String> deleteDeparments(@RequestParam(required = true) Integer departmentId) {
-		System.out.println(departmentId);
+	@DeleteMapping(value = "/projects")
+	public ResponseEntity<String> deleteProjects(@RequestParam(required = true) Integer projectId) {
 		try {
-			departmentService.deleteDepartmentById(departmentId);
-	        return ResponseEntity.ok("Department delete");
+			projectService.deleteProjectById(projectId);
+	        return ResponseEntity.ok("Project delete");
 		}
 		catch(DataAccessException d) {
 			return ResponseEntity.notFound().build();
 		}
 	    
 	}
+	
 }
