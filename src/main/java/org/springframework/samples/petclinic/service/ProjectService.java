@@ -17,18 +17,24 @@ public class ProjectService {
 	public ProjectService(ProjectRepository projectRepository) {
 		this.projectRepository=projectRepository;
 	}
+	
 	@Transactional
 	public void saveProject(Project project) throws DataAccessException {
-		if(project.getDepartment()!=null) {
 			projectRepository.save(project);
-		}
-		else {
-			throw new IllegalArgumentException("Un projecto debe pertenecer a un departamento");
-		}
-		
 	}
-	public Collection<Project> getAllUsers() {
+	
+	public void deleteProjectById(Integer projectId) throws DataAccessException {
+		projectRepository.deleteById(projectId);
+	}
+	
+	public Collection<Project> getAllProjects() {
         return projectRepository.findAll();
     }
+	
+	public Collection<Project> getProjectsByName(String name) {
+        return projectRepository.findByName(name);
+    }
+
+	
 
 }

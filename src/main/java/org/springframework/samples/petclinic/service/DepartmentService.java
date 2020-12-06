@@ -20,9 +20,7 @@ package org.springframework.samples.petclinic.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Department;
-import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.repository.DepartmentRepository;
-import org.springframework.samples.petclinic.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,12 +35,12 @@ import java.util.Collection;
 @Service
 public class DepartmentService {
 	private DepartmentRepository departmentRepository;
-	private ProjectRepository projectRepository;
+	
 
 	@Autowired
-	public DepartmentService(DepartmentRepository departmentRepository, ProjectRepository projectRepository) {
+	public DepartmentService(DepartmentRepository departmentRepository) {
 		this.departmentRepository = departmentRepository;
-		this.projectRepository = projectRepository;
+		
 	}
 
 	@Transactional
@@ -50,17 +48,18 @@ public class DepartmentService {
 		departmentRepository.save(department);
 	}
 	
-	@Transactional
-	public void saveProject(Project project) throws DataAccessException {
-		projectRepository.save(project);
-	}
-
 	@Transactional(readOnly = true)
-	public Department findDepartmentById(String name) throws DataAccessException {
-		return departmentRepository.findById(name);
+	public Department findDepartmentById(Integer departmentId) throws DataAccessException {
+		return departmentRepository.findById(departmentId);
 	}
-	public void deleteDepartmentById(String name) throws DataAccessException {
-		departmentRepository.deleteById(name);
+	
+	@Transactional(readOnly = true)
+	public Collection<Department> findDepartmentByName(String name) throws DataAccessException {
+		return departmentRepository.findByName(name);
+	}
+	
+	public void deleteDepartmentById(Integer departmentId) throws DataAccessException {
+		departmentRepository.deleteById(departmentId);
 	}
 
 	@Transactional(readOnly = true)
