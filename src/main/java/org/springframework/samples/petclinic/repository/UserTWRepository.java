@@ -21,7 +21,7 @@ public interface UserTWRepository extends Repository<UserTW, String>{
 
 	void deleteById (Integer id) throws DataAccessException;
 	
-    public UserTW findById(String id);
+    public UserTW findById(Integer id);
     
     @Query("SELECT u FROM UserTW u WHERE u.name LIKE :name%")
     public Collection<UserTW> findByName(@Param("name") String name);

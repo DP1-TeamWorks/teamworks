@@ -4,10 +4,12 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.sun.istack.NotNull;
 
@@ -40,17 +42,16 @@ public class UserTW extends BaseEntity {
 	@Column(name = "password")
 	String password;
 	
-	
-	
 	String profileThumbUrl;
 	
-	//@NotNull
-	//@NotEmpty
 	@Column(name= "joinDate")
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	@CreationTimestamp
 	LocalDate joinDate;
 	
 	@NotNull
 	Role role;
-
+	
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "team_id")
+	private Team team;
 }
