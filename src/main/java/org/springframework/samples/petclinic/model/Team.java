@@ -1,10 +1,11 @@
 package org.springframework.samples.petclinic.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
@@ -17,18 +18,19 @@ import lombok.Data;
 @Table(name = "teams")
 
 
-public class Team {
+public class Team extends BaseEntity{
 	
 	@NotNull
 	@NotEmpty
 	@Column(name = "name")
 	String name;
 	
-	@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@NotNull
-	@NotEmpty
-	@Column(name = "identifier")
-	String id;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team", orphanRemoval = true)
+	private List<UserTW> users;
+	
+	
+	
+	
 
 }

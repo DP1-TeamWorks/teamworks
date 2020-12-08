@@ -28,7 +28,7 @@ public class UserTWService {
 	}
 	
 	@Transactional(readOnly = true)
-	public UserTW findUserById(String userId) {
+	public UserTW findUserById(Integer userId) {
 		return userRepository.findById(userId);
 	}
 	

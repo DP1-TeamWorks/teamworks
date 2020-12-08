@@ -26,7 +26,7 @@ public class TeamService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Team findTeamById(String teamId) {
+	public Team findTeamById(Integer teamId) {
 		return teamRepository.findById(teamId);
 	}
 
