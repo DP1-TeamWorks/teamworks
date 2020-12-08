@@ -40,14 +40,17 @@ public class UserTW extends BaseEntity {
 	@Column(name = "password")
 	String password;
 	
+	
+	
 	String profileThumbUrl;
 	
-	@NotNull
-	@NotEmpty
-	@DateTimeFormat (pattern = "dd/MM/yyyy")
+	//@NotNull
+	//@NotEmpty
+	@Column(name= "joinDate")
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	LocalDate joinDate;
 	
-	@NotEmpty
+	@NotNull
 	Role role;
 
 }
