@@ -54,7 +54,7 @@ public class MilestoneService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Collection<Milestone> findDepartmentByName(String name) throws DataAccessException {
+	public Collection<Milestone> findMilestoneByName(String name) throws DataAccessException {
 		return milestoneRepository.findByName(name);
 	}
 	
