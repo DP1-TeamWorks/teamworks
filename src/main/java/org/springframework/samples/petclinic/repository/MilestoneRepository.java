@@ -9,22 +9,22 @@ import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.*;
 
-public interface DepartmentRepository extends Repository<Department, Integer> {
+public interface MilestoneRepository extends Repository<Milestone, Integer> {
 	    /**
 	     * Save a <code>Department</code> to the data store, either inserting or updating it.
 	     * @param departments the <code>Department</code> to save
 	     * @see BaseEntity#isNew
 	     */
-	    void save(Department departments) throws DataAccessException;
+	    void save(Milestone milestones) throws DataAccessException;
 	    
 	    void deleteById(Integer id) throws DataAccessException;
 	    
-	    Department findById(Integer departmentId);
+	    Milestone findById(Integer milestoneId);
 	    
-	    @Query("SELECT u FROM Department u WHERE u.name LIKE :name%")
-		public Collection<Department> findByName(@Param("name") String name);
+	    @Query("SELECT u FROM Milestone u WHERE u.name LIKE :name%")
+		public Collection<Milestone> findByName(@Param("name") String name);
 
-	    Collection<Department> findAll() throws DataAccessException;;
+	    Collection<Milestone> findAll() throws DataAccessException;;
 	    
 
 
