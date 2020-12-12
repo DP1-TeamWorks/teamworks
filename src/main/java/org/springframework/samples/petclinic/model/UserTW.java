@@ -11,6 +11,7 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sun.istack.NotNull;
 
 import lombok.Data;
@@ -34,7 +35,7 @@ public class UserTW extends BaseEntity {
 	
 	@NotNull
 	@NotEmpty
-	@Column(name = "email")
+	@Column(name = "email",unique = true)
 	String email;
 	
 	@NotNull
@@ -53,5 +54,6 @@ public class UserTW extends BaseEntity {
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "team_id")
+	@JsonBackReference
 	private Team team;
 }
