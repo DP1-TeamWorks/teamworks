@@ -26,9 +26,17 @@ public class Team extends BaseEntity{
 	@Column(name = "name")
 	String name;
 	
+	@NotNull
+	@NotEmpty
+	@Column(name = "identifier")
+	String identifier;
 	
+	@Column(name = "users")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team", orphanRemoval = true)
 	private List<UserTW> users;
+	@Column(name = "departments")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team", orphanRemoval = true)
+	private List<Department> departments;
 	
 	
 	
