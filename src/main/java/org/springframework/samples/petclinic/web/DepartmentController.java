@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Department;
+import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.service.DepartmentService;
-import org.springframework.samples.petclinic.service.ProjectService;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DepartmentController {
 	private final DepartmentService departmentService;
+	private final TeamService teamService;
 	@Autowired
-	public DepartmentController(DepartmentService departmentService,ProjectService projectService) {
+	public DepartmentController(DepartmentService departmentService,TeamService teamService) {
 		this.departmentService = departmentService;
+		this.teamService=teamService;
 	}
 	
 	@InitBinder
@@ -46,8 +49,10 @@ public class DepartmentController {
 	}
 	
 	@PostMapping(value = "/departments")
-	public ResponseEntity<String> postDeparments(@RequestBody Department department) {
+	public ResponseEntity<String> postDeparments(@RequestParam(required = true) Integer teamId,@RequestBody Department department) {
 		try {
+			Team team=teamService.findTeamById(teamId);
+			department.setTeam(team);
 			departmentService.saveDepartment(department);
 			return ResponseEntity.ok("Department create");
 		}
