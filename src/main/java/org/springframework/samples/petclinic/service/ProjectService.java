@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,10 @@ public class ProjectService {
 	public Collection<Project> getProjectsByName(String name) {
         return projectRepository.findByName(name);
     }
-
+	@Transactional(readOnly = true)
+	public Project findDepartmentById(Integer projectId) throws DataAccessException {
+		return projectRepository.findById(projectId);
+	}
 	
 
 }

@@ -20,9 +20,9 @@ public interface ProjectRepository extends Repository<Project, Integer> {
     @Query("SELECT u FROM Project u WHERE u.name LIKE :name%")
 	public Collection<Project> findByName(@Param("name") String name);
     
-    Project findById(Integer projectId);
+    Project findById(Integer projectId)throws DataAccessException;
     
-	void deleteById(Integer projectId) throws DataAccessException;;
+	void deleteById(Integer projectId) throws DataAccessException;
     
     public Collection<Project> findAll() throws DataAccessException;
 

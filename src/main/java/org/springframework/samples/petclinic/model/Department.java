@@ -13,7 +13,7 @@ import com.sun.istack.NotNull;
 import lombok.Data;
 @Data
 @Entity
-@Table(name = "departments")
+@Table(name = "department")
 public class Department extends BaseEntity {
 	@NotNull
 	@NotEmpty
