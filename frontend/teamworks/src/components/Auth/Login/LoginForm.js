@@ -12,6 +12,7 @@ class LoginForm extends React.Component {
         password: "",
       },
       errors: {},
+      user: {},
     };
   }
 
@@ -82,7 +83,11 @@ class LoginForm extends React.Component {
       let mail = this.state.inputs.mail;
       let password = this.state.inputs.password;
       //Call API request in order to receive the user for the session
-      AuthApiUtils.login({ mail, password });
+      let user = AuthApiUtils.login(mail, password);
+      console.log(user);
+      if (user !== {}) {
+        this.props.setSession(user);
+      } else this.setState(null);
     } else {
       console.log("There are errors in this form");
       console.log(this.state.errors);
@@ -109,6 +114,7 @@ class LoginForm extends React.Component {
           changeHandler={this.changeHandler}
         />
         <SubmitButton value="Log in" hasErrors={this.hasErrors()} />
+        {this.state.user === null && <p>ERRORR</p>}
       </form>
     );
   }
