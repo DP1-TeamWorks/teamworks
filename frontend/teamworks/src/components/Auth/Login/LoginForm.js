@@ -1,5 +1,5 @@
 import React from "react";
-import { login } from "../../../utils/api/authApiUtils";
+import AuthApiUtils from "../../../utils/api/AuthApiUtils";
 import Input from "../../Forms/Input";
 import SubmitButton from "../../Forms/SubmitButton";
 
@@ -82,7 +82,7 @@ class LoginForm extends React.Component {
       let mail = this.state.inputs.mail;
       let password = this.state.inputs.password;
       //Call API request in order to receive the user for the session
-      login({ mail, password });
+      AuthApiUtils.login({ mail, password });
     } else {
       console.log("There are errors in this form");
       console.log(this.state.errors);
