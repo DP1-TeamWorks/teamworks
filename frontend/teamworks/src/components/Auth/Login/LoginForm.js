@@ -52,10 +52,6 @@ class LoginForm extends React.Component {
         ) {
           errorMsg = "Invalid Mail";
         }
-
-        this.setState({
-          errors: { ...this.state.errors, mail: errorMsg },
-        });
         break;
 
       case "password":
@@ -64,12 +60,12 @@ class LoginForm extends React.Component {
         } else if (value.length < 8) {
           errorMsg = "Passwords are larger";
         }
-        this.setState({
-          errors: { ...this.state.errors, password: errorMsg },
-        });
         break;
       default:
     }
+    this.setState({
+      errors: { ...this.state.errors, [field]: errorMsg },
+    });
   };
 
   changeHandler = (event) => {
