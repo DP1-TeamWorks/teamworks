@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import { Login } from "./components/Login/Login";
+import Login from "./components/Auth/Login/Login";
 
 function App() {
   const [userSession, setUserSession] = useState({});

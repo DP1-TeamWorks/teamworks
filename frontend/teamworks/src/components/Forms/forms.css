@@ -1,0 +1,29 @@
+.Error {
+  font-size: smaller;
+  color: #e32d2d;
+  padding: 10px;
+  padding-bottom: 0;
+  height: 20px;
+}
+
+.InputLogin {
+  background: none;
+  border: 1px solid rgba(166, 206, 86, 0.8);
+  box-sizing: border-box;
+  width: 370px;
+  height: 52px;
+  padding: 15px;
+}
+
+.SubmitButton {
+  width: 370px;
+  height: 52px;
+  border: 1px solid rgba(166, 206, 86, 0.8);
+  box-sizing: border-box;
+  margin-bottom: 25px;
+  cursor: pointer;
+  -webkit-transition: all 1s ease-out;
+  -moz-transition: all 1s ease-out;
+  -o-transition: all 1s ease-out;
+  transition-delay: 0.25s;
+}
