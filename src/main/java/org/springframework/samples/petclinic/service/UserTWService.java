@@ -50,6 +50,17 @@ public class UserTWService {
     public Collection<UserTW> getAllUsers() throws DataAccessException {
         return userRepository.findAll();
     }
+	@Transactional(readOnly = true)
+	public UserTW getLoginUser(String email,String password) throws DataAccessException {
+		UserTW user=userRepository.findbyEmail(email);
+		if(user.getPassword().equals(password)) {
+			return user;
+		}
+		else {
+			return null;
+		}
+		
+	}
 	
 	
 	
