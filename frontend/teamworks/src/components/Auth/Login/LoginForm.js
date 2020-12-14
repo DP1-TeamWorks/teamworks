@@ -108,7 +108,7 @@ class LoginForm extends React.Component {
           error={this.state.errors.password}
           changeHandler={this.changeHandler}
         />
-        <SubmitButton value="Sign in" hasErrors={this.hasErrors()} />
+        <SubmitButton value="Log in" hasErrors={this.hasErrors()} />
       </form>
     );
   }
