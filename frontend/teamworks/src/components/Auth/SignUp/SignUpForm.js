@@ -1,5 +1,5 @@
 import React from "react";
-import authApiUtils from "../../../utils/api/authApiUtils";
+import AuthApiUtils from "../../../utils/api/AuthApiUtils";
 import Input from "../../Forms/Input";
 import SubmitButton from "../../Forms/SubmitButton";
 
@@ -55,14 +55,14 @@ class SignUpForm extends React.Component {
         if (value === "") {
           errorMsg = "Identifier required";
         } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
-          errorMsg = "Invalid identifier, use letters and number";
+          errorMsg = "Invalid identifier, use letters and numbers";
         }
         break;
       case "username":
         if (value === "") {
           errorMsg = "Username required";
         } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
-          errorMsg = "Invalid username, use letters and number";
+          errorMsg = "Invalid username, use letters and numbers";
         }
         break;
       case "password":
@@ -96,7 +96,7 @@ class SignUpForm extends React.Component {
       let username = this.state.inputs.username;
       let password = this.state.inputs.password;
       //Call API request in order to receive the user for the session
-      authApiUtils.signup({ teamname, identifier, username, password });
+      AuthApiUtils.signup({ teamname, identifier, username, password });
     } else {
       console.log("There are errors in this form");
       console.log(this.state.errors);
@@ -122,6 +122,7 @@ class SignUpForm extends React.Component {
           error={this.state.errors.identifier}
           changeHandler={this.changeHandler}
         />
+
         <Input
           name="username"
           type="text"

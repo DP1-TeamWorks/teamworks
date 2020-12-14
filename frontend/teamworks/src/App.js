@@ -3,10 +3,10 @@ import "./App.css";
 import Login from "./components/Auth/Login/Login";
 
 function App() {
-  const [userSession, setUserSession] = useState({});
+  const [session, setSession] = useState({});
   return (
     <div className={"background"}>
-      {userSession!=={} && <Login setUserSession={setUserSession} />}
+      {session!=={} && <Login setSession={setSession} />}
     </div>
   );
 }
