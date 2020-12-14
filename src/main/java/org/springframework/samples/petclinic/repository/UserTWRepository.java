@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.model.UserTW;
 
-public interface UserTWRepository extends Repository<UserTW, String>{
+public interface UserTWRepository extends Repository<UserTW, Integer>{
     /**
      * Save a <code>NewUser</code> to the data store, either inserting or updating it.
      * @param user the <code>Owner</code> to save
@@ -31,4 +31,7 @@ public interface UserTWRepository extends Repository<UserTW, String>{
 
     
     public Collection<UserTW> findAll() throws DataAccessException;
+    
+    @Query("SELECT u FROM UserTW u WHERE u.email = :email")
+    public UserTW findbyEmail(@Param("email") String email);
 }
