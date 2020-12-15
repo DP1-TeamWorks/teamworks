@@ -49,20 +49,22 @@ class SignUpForm extends React.Component {
       case "teamname":
         if (value === "") {
           errorMsg = "TeamName required";
+        } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
+          errorMsg = "Invalid, use letters and numbers";
         }
         break;
       case "identifier":
         if (value === "") {
           errorMsg = "Identifier required";
         } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
-          errorMsg = "Invalid identifier, use letters and numbers";
+          errorMsg = "Invalid, use letters and numbers";
         }
         break;
       case "username":
         if (value === "") {
           errorMsg = "Username required";
         } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
-          errorMsg = "Invalid username, use letters and numbers";
+          errorMsg = "Invalid, use letters and numbers";
         }
         break;
       case "password":
