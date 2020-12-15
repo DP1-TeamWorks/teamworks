@@ -2,14 +2,21 @@
   font-size: smaller;
   color: #e32d2d;
   padding: 10px;
+  padding-top: 5px;
   padding-bottom: 0;
-  height: 20px;
+  height: 10px;
 }
 
 .SubmitError {
   font-size: smaller;
   color: #e32d2d;
-  /*TODO*/
+  padding: 10px;
+  padding-top: 5px;
+  padding-bottom: 0;
+  height: 10px;
+  width: auto;
+  margin-bottom: 25px;
+  text-align: center;
 }
 
 .InputLogin {
@@ -26,10 +33,20 @@
   height: 52px;
   border: 1px solid rgba(166, 206, 86, 0.8);
   box-sizing: border-box;
-  margin-bottom: 25px;
   cursor: pointer;
   -webkit-transition: all 1s ease-out;
   -moz-transition: all 1s ease-out;
   -o-transition: all 1s ease-out;
-  transition-delay: 0.25s;
+  transition-delay: 0.15s;
+}
+
+.InputTitle{
+  font-size: smaller;
+  color: #A6CE56;
+  padding-bottom: 3px;
+}
+
+.line{
+  width: auto;
+  height: 5px;
 }
