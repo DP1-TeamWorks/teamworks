@@ -1,13 +1,23 @@
 import React from "react";
 import "./SignUp.css";
-import SignUpForm from "./SignUpForm"
+import SignUpForm from "./SignUpForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 export default function SignUp() {
   return (
-      <div className="Container">
-        <div className="SignUpBox">
-          <SignUpForm />
+    <div className="Container">
+      <div className="SignUpBox">
+        <div style={{ color: "#A6CE56" }}>
+          <Link to="/login">
+            <FontAwesomeIcon icon={faArrowLeft} style={{ color: "#A6CE56" }} />
+            {"      "} GO BACK
+          </Link>
         </div>
+
+        <SignUpForm />
       </div>
+    </div>
   );
 }
