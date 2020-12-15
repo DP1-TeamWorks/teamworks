@@ -126,11 +126,14 @@ class SignUpForm extends React.Component {
           error={this.state.errors.identifier}
           changeHandler={this.changeHandler}
         />
-
-      <svg className="Line">
-        <line x1="0" y1="0" x2="1000" y2="0" className="ColorLine"/>
-      </svg>
-
+        <br />
+        <span className={"PreviewWord"}>PREVIEW</span>{" "}
+        <span className={"Preview"}>
+          johnyDeep@{this.state.inputs.identifier}
+        </span>
+        <svg className="Line">
+          <line x1="0" y1="0" x2="1000" y2="0" className="ColorLine" />
+        </svg>
         <p className="InputTitle">Username</p>
         <Input
           name="username"
