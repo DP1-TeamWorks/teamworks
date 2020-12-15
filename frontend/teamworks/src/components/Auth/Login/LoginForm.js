@@ -113,6 +113,7 @@ class LoginForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitHandler}>
+        <br/>
         <Input
           name="mail"
           type="text"
@@ -121,6 +122,7 @@ class LoginForm extends React.Component {
           error={this.state.errors.mail}
           changeHandler={this.changeHandler}
         />
+        <br/>
         <Input
           name="password"
           type="password"
@@ -129,6 +131,7 @@ class LoginForm extends React.Component {
           error={this.state.errors.password}
           changeHandler={this.changeHandler}
         />
+        <br/>
         <SubmitButton
           value="Log in"
           requestError={this.state.requestError}

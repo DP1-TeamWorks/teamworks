@@ -106,6 +106,7 @@ class SignUpForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitHandler}>
+        <p className="InputTitle">Team name</p>
         <Input
           name="teamname"
           type="text"
@@ -114,6 +115,7 @@ class SignUpForm extends React.Component {
           error={this.state.errors.teamname}
           changeHandler={this.changeHandler}
         />
+        <p className="InputTitle">Shorthand Identifier</p>
         <Input
           name="identifier"
           type="text"
@@ -122,8 +124,12 @@ class SignUpForm extends React.Component {
           error={this.state.errors.identifier}
           changeHandler={this.changeHandler}
         />
-        <p>XD</p>
 
+      <svg className="line">
+        <line x1="0" y1="0" x2="" y2=""/>
+      </svg>
+
+        <p className="InputTitle">Username</p>
         <Input
           name="username"
           type="text"
@@ -132,6 +138,7 @@ class SignUpForm extends React.Component {
           error={this.state.errors.username}
           changeHandler={this.changeHandler}
         />
+        <p className="InputTitle">Password</p>
         <Input
           name="password"
           type="password"

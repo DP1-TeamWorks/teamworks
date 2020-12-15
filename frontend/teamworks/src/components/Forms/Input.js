@@ -11,7 +11,6 @@ export default function Input({
 }) {
   return (
     <>
-      <br />
       <input
         placeholder={placeholder}
         className={styleClass}

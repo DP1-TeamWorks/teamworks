@@ -39,3 +39,14 @@
   -o-transition: all 1s ease-out;
   transition-delay: 0.15s;
 }
+
+.InputTitle{
+  font-size: smaller;
+  color: #A6CE56;
+  padding-bottom: 3px;
+}
+
+.line{
+  width: auto;
+  height: 5px;
+}
