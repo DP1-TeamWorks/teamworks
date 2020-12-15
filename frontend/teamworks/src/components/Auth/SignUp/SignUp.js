@@ -10,8 +10,8 @@ export default function SignUp() {
     <div className="Container">
       <div className="SignUpBox">
         <div className="GoBack">
-          <Link to="/login">
-            <FontAwesomeIcon icon={faArrowLeft} style={{ color: "#A6CE56" }} />
+          <Link to="/login" className="GoBackText">
+            <FontAwesomeIcon icon={faArrowLeft} style={{ color: "#A6CE56" }} className="Flechita" />
             {"      "} GO BACK
           </Link>
         </div>

@@ -21,5 +21,18 @@
 
 .GoBack {
   color: #a6ce56;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  text-decoration: none;
+  
+
+}
+
+.Flechita{
+  margin-left: -15px;
+}
+
+.GoBackText{
+  text-decoration: none;
+  color: #a6ce56;
+  font-size: smaller;
 }
