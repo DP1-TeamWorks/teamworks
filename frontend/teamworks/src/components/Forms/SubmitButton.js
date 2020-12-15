@@ -1,6 +1,6 @@
 import React from "react";
 import "./forms.css";
-import InputError from "./InputError";
+import SubmitError from "./SubmitError";
 
 export default function SubmitButton({ value, requestError, hasErrors }) {
   return (
@@ -18,7 +18,7 @@ export default function SubmitButton({ value, requestError, hasErrors }) {
         }}
       />
 
-      <InputError error={requestError !== "" && requestError} />
+      <SubmitError error={requestError !== "" && requestError} />
     </>
   );
 }
