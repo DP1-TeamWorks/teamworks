@@ -46,7 +46,12 @@
   padding-bottom: 3px;
 }
 
-.line{
-  width: auto;
+.Line{
+  width: 370px;
   height: 5px;
+}
+
+.ColorLine{
+  stroke: rgba(166, 206, 86, 0.06);
+  stroke-width: 2px;
 }

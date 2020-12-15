@@ -125,8 +125,8 @@ class SignUpForm extends React.Component {
           changeHandler={this.changeHandler}
         />
 
-      <svg className="line">
-        <line x1="0" y1="0" x2="" y2=""/>
+      <svg className="Line">
+        <line x1="0" y1="0" x2="1000" y2="0" className="ColorLine"/>
       </svg>
 
         <p className="InputTitle">Username</p>
