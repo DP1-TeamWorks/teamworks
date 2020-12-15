@@ -28,7 +28,10 @@
 }
 
 .BackArrow{
+  
   margin-left: -15px;
+  color: #a6ce56 !important;
+
 }
 
 .GoBackText{
