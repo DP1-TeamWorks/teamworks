@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Login.css";
 import LoginForm from "./LoginForm"
 
@@ -8,7 +9,7 @@ export default function Login({setSession}) {
         <div className="LoginBox">
           <span className="TeamWord">TEAM</span><span className="WorksWord">WORKS</span>
           <LoginForm setSession={setSession} />
-          <p className="NewTeam">Create your own team</p>
+          <Link to="/signup" className="NewTeam">Create your own team</Link>
         </div>
       </div>
   );

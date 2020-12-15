@@ -122,6 +122,7 @@ class SignUpForm extends React.Component {
           error={this.state.errors.identifier}
           changeHandler={this.changeHandler}
         />
+        <p>XD</p>
 
         <Input
           name="username"

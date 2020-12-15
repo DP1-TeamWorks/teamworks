@@ -1,19 +1,20 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Login from "./Login";
-import SignUp from "./SignUp";
+import Login from "./Login/Login";
+import SignUp from "./SignUp/SignUp";
 
-export default function AuthRouter({ setUserSession }) {
+export default function AuthRouter({ setSession }) {
   return (
     <>
       <Router>
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/">
-            <Login />
+          <Route exact path="/">
+            <Login setSession={setSession} />
           </Route>
-          <Route path="/users">
+          <Route path="/login">
+            <Login setSession={setSession} />
+          </Route>
+          <Route path="/signup">
             <SignUp />
           </Route>
         </Switch>
