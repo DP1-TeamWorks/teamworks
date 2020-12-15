@@ -2,11 +2,11 @@ import React from "react";
 import "./SignUp.css";
 import SignUpForm from "./SignUpForm"
 
-export default function SignUp({setUserSession}) {
+export default function SignUp() {
   return (
       <div className="Container">
         <div className="SignUpBox">
-          <SignUpForm setUserSession={setUserSession} />
+          <SignUpForm />
         </div>
       </div>
   );

@@ -6,6 +6,12 @@
   height: 20px;
 }
 
+.SubmitError {
+  font-size: smaller;
+  color: #e32d2d;
+  /*TODO*/
+}
+
 .InputLogin {
   background: none;
   border: 1px solid rgba(166, 206, 86, 0.8);
