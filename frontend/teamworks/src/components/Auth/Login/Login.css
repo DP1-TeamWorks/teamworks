@@ -13,10 +13,14 @@
 
 .LoginBox {
   color: #a6ce56;
-  max-width: 527px;
+  width: 527px;
   max-height: 523px;
   background: #262626;
   padding: 50px;
+}
+
+.Title {
+  text-align: center;
 }
 
 .TeamWord {
@@ -27,7 +31,6 @@
   line-height: 44px;
 
   color: #ffffff;
-  padding-left: 16%;
 }
 
 .WorksWord {
@@ -37,7 +40,6 @@
   font-size: 36px;
   line-height: 44px;
   color: #a7e32d;
-  padding-right: 16%;
 }
 
 .NewTeam {
