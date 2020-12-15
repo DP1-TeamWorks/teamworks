@@ -9,7 +9,7 @@ export default function SignUp() {
   return (
     <div className="Container">
       <div className="SignUpBox">
-        <div style={{ color: "#A6CE56" }}>
+        <div className="GoBack">
           <Link to="/login">
             <FontAwesomeIcon icon={faArrowLeft} style={{ color: "#A6CE56" }} />
             {"      "} GO BACK
