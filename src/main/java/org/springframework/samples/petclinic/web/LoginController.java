@@ -1,5 +1,8 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -8,9 +11,9 @@ import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,15 +33,26 @@ public class LoginController {
 	}
 
 	@CrossOrigin
-	@GetMapping(value = "/api/auth/login")
-	public UserTW login(@RequestParam(required = true) String email, @RequestParam(required = true) String password) {
+	@PostMapping(value = "/api/auth/login")
+	public ResponseEntity<UserTW> login(HttpServletRequest r,@RequestBody Map<String,String> b ) {
 		try {
+			String email=b.get("mail");
+			String password=b.get("password");
 			UserTW user = userTWService.getLoginUser(email, password);
-			return user;
+			if(user!=null) {
+				r.getSession().setAttribute("userId",user.getId());
+				r.getSession().setAttribute("teamId", user.getTeam().getId());
+				
+				return ResponseEntity.accepted().body(user);
+			}
+			else {
+				return ResponseEntity.badRequest().build();
+			}
+			
+			
 		}
 
 		catch (DataAccessException d) {
-			System.out.println("dsksdfknmsadjkosdaoo");
 			return null;
 		}
 	}
