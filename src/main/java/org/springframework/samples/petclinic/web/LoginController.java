@@ -6,15 +6,19 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.util.CaseUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 public class LoginController {
@@ -55,6 +59,34 @@ public class LoginController {
 		catch (DataAccessException d) {
 			return null;
 		}
+	}
+	public ResponseEntity<String> signUp(@RequestBody Map<String,String> b){
+		try {
+			String teamName=b.get("teamname");
+			String identifier=b.get("identifier");
+			Team team=new Team();
+			team.setName(teamName);
+			team.setIdentifier(identifier);
+			String name=b.get("username");
+			String lastname=b.get("lastname");
+			String password=b.get("password");
+			UserTW user =new UserTW();
+			user.setName(name);
+			user.setLastname(lastname);
+			user.setPassword(password);
+			user.setEmail(CaseUtils.toCamelCase(user.getName()+"_"+user.getLastname())+"@"+team.getIdentifier());
+			user.setRole(Role.team_owner);
+			user.setTeam(team);
+			teamService.saveTeam(team);
+			userTWService.saveUser(user);
+			return ResponseEntity.ok("Usuario y Team creado satisfactoriamente");
+			
+		}
+		catch(DataAccessException d) {
+			
+			return ResponseEntity.badRequest().build();
+		}
+		
 	}
 
 }
