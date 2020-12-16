@@ -81,7 +81,7 @@ class LoginForm extends React.Component {
 
   apiRequestHandler = (mail, password) => {
     console.log("API Request");
-    AuthApiUtils.login(mail, password)
+    AuthApiUtils.login({ mail: { mail }, password: { password } })
       .then((res) => {
         const dataRes = res.data;
         console.log("Data: ", dataRes);
@@ -113,7 +113,7 @@ class LoginForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitHandler}>
-        <br/>
+        <br />
         <Input
           name="mail"
           type="text"
@@ -122,7 +122,7 @@ class LoginForm extends React.Component {
           error={this.state.errors.mail}
           changeHandler={this.changeHandler}
         />
-        <br/>
+        <br />
         <Input
           name="password"
           type="password"
@@ -131,7 +131,7 @@ class LoginForm extends React.Component {
           error={this.state.errors.password}
           changeHandler={this.changeHandler}
         />
-        <br/>
+        <br />
         <SubmitButton
           value="Log in"
           requestError={this.state.requestError}
