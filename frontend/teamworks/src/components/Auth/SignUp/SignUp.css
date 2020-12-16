@@ -14,7 +14,7 @@
 .SignUpBox {
   color: #a6ce56;
   width: 527px;
-  max-height: 671px;
+  max-height: 715px;
   background: #262626;
   padding: 50px;
 }
@@ -23,18 +23,14 @@
   color: #a6ce56;
   margin-bottom: 20px;
   text-decoration: none;
-  
-
 }
 
-.BackArrow{
-  
+.BackArrow {
   margin-left: -15px;
   color: #a6ce56 !important;
-
 }
 
-.GoBackText{
+.GoBackText {
   text-decoration: none;
   color: #a6ce56;
   font-size: smaller;

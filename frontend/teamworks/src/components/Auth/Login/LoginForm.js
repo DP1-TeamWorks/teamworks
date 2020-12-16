@@ -81,7 +81,7 @@ class LoginForm extends React.Component {
 
   apiRequestHandler = (mail, password) => {
     console.log("API Request");
-    AuthApiUtils.login({ mail: { mail }, password: { password } })
+    AuthApiUtils.login({ mail, password })
       .then((res) => {
         const dataRes = res.data;
         console.log("Data: ", dataRes);

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 public class LoginController {
 	private final TeamService teamService;
@@ -38,55 +37,56 @@ public class LoginController {
 
 	@CrossOrigin
 	@PostMapping(value = "/api/auth/login")
-	public ResponseEntity<UserTW> login(HttpServletRequest r,@RequestBody Map<String,String> b ) {
+	public ResponseEntity<UserTW> login(HttpServletRequest r, @RequestBody Map<String, String> b) {
 		try {
-			String email=b.get("mail");
-			String password=b.get("password");
+			String email = b.get("mail");
+			String password = b.get("password");
 			UserTW user = userTWService.getLoginUser(email, password);
-			if(user!=null) {
-				r.getSession().setAttribute("userId",user.getId());
+			if (user != null) {
+				r.getSession().setAttribute("userId", user.getId());
 				r.getSession().setAttribute("teamId", user.getTeam().getId());
-				
+
 				return ResponseEntity.accepted().body(user);
-			}
-			else {
+			} else {
 				return ResponseEntity.badRequest().build();
 			}
-			
-			
+
 		}
 
 		catch (DataAccessException d) {
 			return null;
 		}
 	}
-	public ResponseEntity<String> signUp(@RequestBody Map<String,String> b){
+
+	@CrossOrigin
+	@PostMapping(value = "/api/auth/signup")
+	public ResponseEntity<String> signUp(@RequestBody Map<String, String> b) {
 		try {
-			String teamName=b.get("teamname");
-			String identifier=b.get("identifier");
-			Team team=new Team();
+			String teamName = b.get("teamname");
+			String identifier = b.get("identifier");
+			Team team = new Team();
 			team.setName(teamName);
 			team.setIdentifier(identifier);
-			String name=b.get("username");
-			String lastname=b.get("lastname");
-			String password=b.get("password");
-			UserTW user =new UserTW();
+			String name = b.get("username");
+			String lastname = b.get("lastname");
+			String password = b.get("password");
+			UserTW user = new UserTW();
 			user.setName(name);
 			user.setLastname(lastname);
 			user.setPassword(password);
-			user.setEmail(CaseUtils.toCamelCase(user.getName()+"_"+user.getLastname())+"@"+team.getIdentifier());
+			user.setEmail(
+					CaseUtils.toCamelCase(user.getName() + "_" + user.getLastname()) + "@" + team.getIdentifier());
 			user.setRole(Role.team_owner);
 			user.setTeam(team);
 			teamService.saveTeam(team);
 			userTWService.saveUser(user);
 			return ResponseEntity.ok("Usuario y Team creado satisfactoriamente");
-			
-		}
-		catch(DataAccessException d) {
-			
+
+		} catch (DataAccessException d) {
+
 			return ResponseEntity.badRequest().build();
 		}
-		
+
 	}
 
 }

@@ -11,6 +11,7 @@ class SignUpForm extends React.Component {
         teamname: "",
         identifier: "",
         username: "",
+        lastname: "",
         password: "",
       },
       errors: {},
@@ -96,9 +97,16 @@ class SignUpForm extends React.Component {
       let teamname = this.state.inputs.teamname;
       let identifier = this.state.inputs.identifier;
       let username = this.state.inputs.username;
+      let lastname = this.state.inputs.lastname;
       let password = this.state.inputs.password;
       //Call API request in order to receive the user for the session
-      AuthApiUtils.signup({ teamname, identifier, username, password });
+      AuthApiUtils.signup({
+        teamname,
+        identifier,
+        username,
+        lastname,
+        password,
+      });
     } else {
       console.log("There are errors in this form");
       console.log(this.state.errors);
@@ -129,18 +137,27 @@ class SignUpForm extends React.Component {
         <br />
         <span className={"PreviewWord"}>PREVIEW</span>{" "}
         <span className={"Preview"}>
-          johnyDeep@{this.state.inputs.identifier}
+          johnnyDeep@{this.state.inputs.identifier}
         </span>
         <svg className="Line">
           <line x1="0" y1="0" x2="1000" y2="0" className="ColorLine" />
         </svg>
-        <p className="InputTitle">Username</p>
+        <p className="InputTitle">Name</p>
         <Input
           name="username"
           type="text"
-          placeholder="johnyDeep"
+          placeholder="Johnny"
           styleClass="InputLogin"
           error={this.state.errors.username}
+          changeHandler={this.changeHandler}
+        />
+        <p className="InputTitle">LastName</p>
+        <Input
+          name="lastname"
+          type="text"
+          placeholder="Deep"
+          styleClass="InputLogin"
+          error={this.state.errors.lastname}
           changeHandler={this.changeHandler}
         />
         <p className="InputTitle">Password</p>
