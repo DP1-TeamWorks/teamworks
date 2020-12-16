@@ -15,6 +15,7 @@ class SignUpForm extends React.Component {
         password: "",
       },
       errors: {},
+      requestError: "",
     };
   }
 
@@ -44,6 +45,9 @@ class SignUpForm extends React.Component {
   };
 
   validate = (field, value) => {
+    this.setState({
+      requestError: "",
+    });
     console.log("Validating: ", field, value);
     let errorMsg = "";
     switch (field) {
@@ -90,6 +94,27 @@ class SignUpForm extends React.Component {
     this.setState({ inputs: { ...this.state.inputs, [field]: value } });
   };
 
+  apiRequestHandler = (teamname, identifier, username, lastname, password) => {
+    AuthApiUtils.signup({
+      teamname,
+      identifier,
+      username,
+      lastname,
+      password,
+    })
+      .then((res) => {
+        console.log("Signed Up, redirecting to login");
+        window.location.replace("/login");
+      })
+      .catch((error) => {
+        console.log("API ERROR!");
+        console.log(error);
+        this.setState({
+          requestError: "We had a server problem",
+        });
+      });
+  };
+
   submitHandler = (event) => {
     event.preventDefault();
     this.validateAll();
@@ -100,13 +125,13 @@ class SignUpForm extends React.Component {
       let lastname = this.state.inputs.lastname;
       let password = this.state.inputs.password;
       //Call API request in order to receive the user for the session
-      AuthApiUtils.signup({
+      this.apiRequestHandler(
         teamname,
         identifier,
         username,
         lastname,
-        password,
-      });
+        password
+      );
     } else {
       console.log("There are errors in this form");
       console.log(this.state.errors);
@@ -137,7 +162,8 @@ class SignUpForm extends React.Component {
         <br />
         <span className={"PreviewWord"}>PREVIEW</span>{" "}
         <span className={"Preview"}>
-          johnnyDeep@{this.state.inputs.identifier}
+          {this.state.inputs.username.toLowerCase()}
+          {this.state.inputs.lastname}@{this.state.inputs.identifier}
         </span>
         <svg className="Line">
           <line x1="0" y1="0" x2="1000" y2="0" className="ColorLine" />
@@ -169,7 +195,11 @@ class SignUpForm extends React.Component {
           error={this.state.errors.password}
           changeHandler={this.changeHandler}
         />
-        <SubmitButton value="Sign up" hasErrors={this.hasErrors()} />
+        <SubmitButton
+          value="Sign up"
+          requestError={this.state.requestError}
+          hasErrors={this.hasErrors()}
+        />
       </form>
     );
   }
