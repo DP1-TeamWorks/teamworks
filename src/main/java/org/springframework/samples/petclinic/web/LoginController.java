@@ -75,7 +75,7 @@ public class LoginController {
 			user.setLastname(lastname);
 			user.setPassword(password);
 			user.setEmail(
-					CaseUtils.toCamelCase(user.getName() + "_" + user.getLastname()) + "@" + team.getIdentifier());
+					user.getName().toLowerCase()+CaseUtils.toPascalCase(user.getLastname().toLowerCase()) + "@" + team.getIdentifier());
 			user.setRole(Role.team_owner);
 			user.setTeam(team);
 			teamService.saveTeam(team);

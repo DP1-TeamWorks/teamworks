@@ -1,18 +1,14 @@
 package org.springframework.samples.petclinic.util;
 
+import java.util.stream.IntStream;
+
 public class CaseUtils {
-	public static String toCamelCase(String s){
-		   String[] parts = s.split("_");
-		   String camelCaseString = "";
-		   for (String part : parts){
-		      camelCaseString = camelCaseString + toProperCase(part);
-		   }
-		   return camelCaseString;
+	public static String toPascalCase(String s){
+		  String a=s.substring(0,1).toUpperCase();
+		  String b=s.substring(1).toLowerCase();
+		  return a+b;
 		}
 
-		static String toProperCase(String s) {
-		    return s.substring(0, 1).toUpperCase() +
-		               s.substring(1).toLowerCase();
-		}
+		
 
 }
