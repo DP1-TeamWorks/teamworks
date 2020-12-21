@@ -1,5 +1,5 @@
 import React from "react";
-import { login } from "../../../utils/api/authApiUtils";
+import AuthApiUtils from "../../../utils/api/AuthApiUtils";
 import Input from "../../Forms/Input";
 import SubmitButton from "../../Forms/SubmitButton";
 
@@ -12,6 +12,7 @@ class LoginForm extends React.Component {
         password: "",
       },
       errors: {},
+      requestError: "",
     };
   }
 
@@ -26,7 +27,6 @@ class LoginForm extends React.Component {
         : errors.some((e) => {
             return e !== "";
           });
-    console.log("hasErrors? ", b);
     return b;
   };
 
@@ -41,7 +41,11 @@ class LoginForm extends React.Component {
   };
 
   validate = (field, value) => {
-    console.log("Validating: ", field, value);
+    this.setState({
+      requestError: "",
+    });
+    this.setState();
+    console.log("Validating ", field);
     let errorMsg = "";
     switch (field) {
       case "mail":
@@ -52,10 +56,6 @@ class LoginForm extends React.Component {
         ) {
           errorMsg = "Invalid Mail";
         }
-
-        this.setState({
-          errors: { ...this.state.errors, mail: errorMsg },
-        });
         break;
 
       case "password":
@@ -64,12 +64,12 @@ class LoginForm extends React.Component {
         } else if (value.length < 8) {
           errorMsg = "Passwords are larger";
         }
-        this.setState({
-          errors: { ...this.state.errors, password: errorMsg },
-        });
         break;
       default:
     }
+    this.setState({
+      errors: { ...this.state.errors, [field]: errorMsg },
+    });
   };
 
   changeHandler = (event) => {
@@ -79,6 +79,23 @@ class LoginForm extends React.Component {
     this.setState({ inputs: { ...this.state.inputs, [field]: value } });
   };
 
+  apiRequestHandler = (mail, password) => {
+    console.log("API Request");
+    AuthApiUtils.login({ mail, password })
+      .then((res) => {
+        const dataRes = res.data;
+        console.log("Data: ", dataRes);
+        this.props.setSession(dataRes);
+      })
+      .catch((error) => {
+        console.log("API ERROR!");
+        console.log(error);
+        this.setState({
+          requestError: "User not Found",
+        });
+      });
+  };
+
   submitHandler = (event) => {
     event.preventDefault();
     this.validateAll();
@@ -86,7 +103,7 @@ class LoginForm extends React.Component {
       let mail = this.state.inputs.mail;
       let password = this.state.inputs.password;
       //Call API request in order to receive the user for the session
-      login({ mail, password });
+      this.apiRequestHandler(mail, password);
     } else {
       console.log("There are errors in this form");
       console.log(this.state.errors);
@@ -96,6 +113,7 @@ class LoginForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitHandler}>
+        <br />
         <Input
           name="mail"
           type="text"
@@ -104,6 +122,7 @@ class LoginForm extends React.Component {
           error={this.state.errors.mail}
           changeHandler={this.changeHandler}
         />
+        <br />
         <Input
           name="password"
           type="password"
@@ -112,7 +131,12 @@ class LoginForm extends React.Component {
           error={this.state.errors.password}
           changeHandler={this.changeHandler}
         />
-        <SubmitButton value="Sign in" hasErrors={this.hasErrors()} />
+        <br />
+        <SubmitButton
+          value="Log in"
+          requestError={this.state.requestError}
+          hasErrors={this.hasErrors()}
+        />
       </form>
     );
   }

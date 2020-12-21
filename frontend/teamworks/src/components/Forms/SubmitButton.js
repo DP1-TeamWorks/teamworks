@@ -1,6 +1,8 @@
 import React from "react";
 import "./forms.css";
-export default function InputError({ value, hasErrors }) {
+import SubmitError from "./SubmitError";
+
+export default function SubmitButton({ value, requestError, hasErrors }) {
   return (
     <>
       <br />
@@ -9,10 +11,14 @@ export default function InputError({ value, hasErrors }) {
         type="submit"
         value={value}
         disabled={hasErrors}
-        style={{backgroundColor: hasErrors ? "#696969" : "#b4dd63",
-         border: hasErrors ? "1px solid rgba(22, 22, 22, 0.8)" :"",
-          cursor: hasErrors ? "auto": ""}}
+        style={{
+          backgroundColor: hasErrors ? "#696969" : "#b4dd63",
+          border: hasErrors ? "1px solid rgba(22, 22, 22, 0.8)" : "",
+          cursor: hasErrors ? "auto" : "",
+        }}
       />
+
+      <SubmitError error={requestError !== "" && requestError} />
     </>
   );
 }

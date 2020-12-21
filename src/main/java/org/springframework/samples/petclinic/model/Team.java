@@ -23,12 +23,12 @@ public class Team extends BaseEntity{
 	
 	@NotNull
 	@NotEmpty
-	@Column(name = "name")
+	@Column(name = "name",unique=true)
 	String name;
 	
 	@NotNull
 	@NotEmpty
-	@Column(name = "identifier")
+	@Column(name = "identifier",unique=true)
 	String identifier;
 	
 	@Column(name = "users")
