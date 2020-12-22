@@ -17,3 +17,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+mark {
+  font-weight: 600;
+  color: #A6CE56;
+  background: 0;
+}
+
+span.semibold {
+  font-weight: 600;
+}

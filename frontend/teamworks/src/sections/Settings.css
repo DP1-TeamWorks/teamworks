@@ -3,3 +3,30 @@
   height: 100%;
   background-color: #20231A;
 }
+
+.SettingGroupsContainer {
+  padding: 40px 60px;
+}
+
+.EditableSettingGroup {
+  margin-bottom: 35px;
+}
+
+.SettingGroup__P {
+  margin: 5px 0 20px 0;
+}
+
+.EditableField {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.PenIcon {
+  color: #a6ce5636;
+  margin-left: 20px;
+}
+
+.DangerTitle {
+  color: #FF3C3C;
+}

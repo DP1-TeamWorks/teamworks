@@ -1,13 +1,10 @@
 import React from 'react';
-import "./GradientButton.css"
+import Button from "./Button";
+import "./GradientButton.css";
 
 const GradientButton = (props) =>
 {
-    return (
-        <div className={`GradientButton ${props.className}`} onClick={props.onClick}>
-            {props.children}
-        </div>
-    )
+    return <Button className={`GradientButton ${props.className}`} onClick={props.onClick}>{props.children}</Button>
 }
 
 export default GradientButton

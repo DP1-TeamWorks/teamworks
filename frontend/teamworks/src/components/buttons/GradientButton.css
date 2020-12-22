@@ -3,5 +3,7 @@
     height: 45px;
     border-radius: 3px;
     background-color: #fff;
+    padding: 0;
     cursor: pointer;
+    color: #222;
 }
