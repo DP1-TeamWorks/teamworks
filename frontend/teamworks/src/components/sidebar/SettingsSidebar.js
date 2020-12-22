@@ -2,21 +2,13 @@ import React from 'react';
 import Sidebar from './Sidebar';
 import GradientButton from "../buttons/GradientButton"
 
-class SettingsSidebar extends React.Component
+const SettingsSidebar = (props) =>
 {
-    constructor(props)
-    {
-        super(props);
-    }
-
-    render()
-    {
-        return (
-            <Sidebar>
-                <GradientButton className="Sidebar__PaddedElement--Top">Add a new user</GradientButton>
-            </Sidebar>
-        )
-    }
+    return (
+        <Sidebar>
+            <GradientButton onClick={props.onAddNewUserClicked} className="Sidebar__PaddedElement Sidebar__PaddedElement--Top">Add a new user</GradientButton>
+        </Sidebar>
+    )
 }
 
 export default SettingsSidebar;

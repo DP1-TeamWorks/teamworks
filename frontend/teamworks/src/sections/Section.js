@@ -1,5 +1,13 @@
 import "./Section.css"
 
-const Section = (props) => <div className={`Section ${props.className}`}></div>
+const Section = (props) =>
+{
+
+    return (
+        <div className={`Section ${props.className}`}>
+            {props.children}
+        </div>
+    )
+}
 
 export default Section

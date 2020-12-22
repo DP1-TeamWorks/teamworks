@@ -5,9 +5,9 @@
 }
 
 .Sidebar__PaddedElement {
-  padding: 0 35px;
+  margin: 0 35px;
 }
 
 .Sidebar__PaddedElement--Top {
-  padding-top: 35px;
+  margin-top: 35px;
 }
