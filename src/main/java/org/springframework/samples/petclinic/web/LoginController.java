@@ -38,37 +38,41 @@ public class LoginController {
 			String email = b.get("mail");
 			String password = b.get("password");
 			UserTW user = userTWService.getLoginUser(email, password);
+
 			if (user != null) {
 				r.getSession().setAttribute("userId", user.getId());
-                r.getSession().setAttribute("username", user.getEmail());
-                r.getSession().setAttribute("teamId", user.getTeam().getId());
+				r.getSession().setAttribute("username", user.getEmail());
+				r.getSession().setAttribute("teamId", user.getTeam().getId());
 
 				return ResponseEntity.accepted().body(user);
+
 			} else {
 				return ResponseEntity.badRequest().build();
 			}
-		}
-		catch (DataAccessException d) {
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
 
-    @CrossOrigin
-    @GetMapping(value = "/api/auth/logout")
-    public void logout(HttpServletRequest r) {
-        r.getSession().setAttribute("username", null);
-        r.getSession().setAttribute("teamId", null);
-    }
+	@CrossOrigin
+	@GetMapping(value = "/api/auth/logout")
+	public void logout(HttpServletRequest r) {
+		// Unset the session
+		r.getSession().invalidate();
+	}
 
 	@CrossOrigin
 	@PostMapping(value = "/api/auth/signup")
 	public ResponseEntity<String> signUp(@RequestBody Map<String, String> b) {
 		try {
+			// Set up the team
 			String teamName = b.get("teamname");
 			String identifier = b.get("identifier");
 			Team team = new Team();
 			team.setName(teamName);
 			team.setIdentifier(identifier);
+
+			// Set up the team_owner
 			String name = b.get("username");
 			String lastname = b.get("lastname");
 			String password = b.get("password");
@@ -76,16 +80,17 @@ public class LoginController {
 			user.setName(name);
 			user.setLastname(lastname);
 			user.setPassword(password);
-			user.setEmail(
-					user.getName().toLowerCase()+CaseUtils.toPascalCase(user.getLastname().toLowerCase()) + "@" + team.getIdentifier());
+			user.setEmail(user.getName().toLowerCase() + CaseUtils.toPascalCase(user.getLastname().toLowerCase()) + "@"
+					+ team.getIdentifier());
 			user.setRole(Role.team_owner);
 			user.setTeam(team);
+
+			// Save Team & Team_Owner
 			teamService.saveTeam(team);
 			userTWService.saveUser(user);
 			return ResponseEntity.ok("Usuario y Team creado satisfactoriamente");
 
 		} catch (DataAccessException d) {
-
 			return ResponseEntity.badRequest().build();
 		}
 
