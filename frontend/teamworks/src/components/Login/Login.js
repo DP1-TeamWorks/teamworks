@@ -7,7 +7,7 @@ export function Login({setUserSession}) {
       <div className="container">
         <div className="loginBox">
           <span className="teamWord">TEAM</span><span className="worksWord">WORKS</span>
-          <LoginForm />
+          <LoginForm setUserSession={setUserSession} />
           <p className="newTeam">Create your own team</p>
         </div>
       </div>
