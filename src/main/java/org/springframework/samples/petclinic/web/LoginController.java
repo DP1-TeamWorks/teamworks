@@ -40,7 +40,6 @@ public class LoginController {
 			UserTW user = userTWService.getLoginUser(email, password);
 			if (user != null) {
 				r.getSession().setAttribute("userId", user.getId());
-                r.getSession().setAttribute("username", user.getEmail());
                 r.getSession().setAttribute("teamId", user.getTeam().getId());
 
 				return ResponseEntity.accepted().body(user);
