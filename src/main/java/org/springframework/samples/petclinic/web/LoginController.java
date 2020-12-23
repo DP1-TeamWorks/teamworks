@@ -13,11 +13,7 @@ import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.util.CaseUtils;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class LoginController {
@@ -44,19 +40,25 @@ public class LoginController {
 			UserTW user = userTWService.getLoginUser(email, password);
 			if (user != null) {
 				r.getSession().setAttribute("userId", user.getId());
-				r.getSession().setAttribute("teamId", user.getTeam().getId());
+                r.getSession().setAttribute("username", user.getEmail());
+                r.getSession().setAttribute("teamId", user.getTeam().getId());
 
 				return ResponseEntity.accepted().body(user);
 			} else {
 				return ResponseEntity.badRequest().build();
 			}
-
 		}
-
 		catch (DataAccessException d) {
 			return null;
 		}
 	}
+
+    @CrossOrigin
+    @GetMapping(value = "/api/auth/logout")
+    public void logout(HttpServletRequest r) {
+        r.getSession().setAttribute("username", null);
+        r.getSession().setAttribute("teamId", null);
+    }
 
 	@CrossOrigin
 	@PostMapping(value = "/api/auth/signup")
