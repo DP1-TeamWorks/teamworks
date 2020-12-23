@@ -33,7 +33,7 @@ public class ProjectController {
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	@GetMapping(value = "/projects")
+	@GetMapping(value = "/api/projects")
 	public List<Project> getProjects(@RequestParam(required = false) String name){
 		List<Project> l=new ArrayList<>();
 		if(name==null) {
@@ -46,7 +46,7 @@ public class ProjectController {
 		}
 		return l;
 	}
-	@PostMapping(value = "/projects")
+	@PostMapping(value = "/api/projects")
 	public ResponseEntity<String> postProjects(@RequestParam(required = true) Integer departmentId,@RequestBody Project project) {
 		
 				try {
@@ -62,7 +62,7 @@ public class ProjectController {
 			
 	    
 	}
-	@DeleteMapping(value = "/projects")
+	@DeleteMapping(value = "/api/projects")
 	public ResponseEntity<String> deleteProjects(@RequestParam(required = true) Integer projectId) {
 		try {
 			projectService.deleteProjectById(projectId);

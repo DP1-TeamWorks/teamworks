@@ -21,8 +21,8 @@ public interface DepartmentRepository extends Repository<Department, Integer> {
 	    
 	    Department findById(Integer departmentId);
 	    
-	    @Query("SELECT u FROM Department u WHERE u.name LIKE :name%")
-		public Collection<Department> findByName(@Param("name") String name);
+	    /*@Query("SELECT departemnts FROM Teams u WHERE u.team_id = :teamId%")
+		public Collection<Department> findByTeam(@Param("teamId") Integer teamId);*/
 
 	    Collection<Department> findAll() throws DataAccessException;;
 	    

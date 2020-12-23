@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -34,21 +36,21 @@ public class DepartmentController {
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
-	@GetMapping(value = "/departments")
-	public List<Department> getDeparments(@RequestParam(required = false) String name){
-		List<Department> l=new ArrayList<>();
-		if(name==null) {
-			l = departmentService.getAllDepartments().stream().collect(Collectors.toList());
-            return l;
-		}
-		else {
-			l=departmentService.findDepartmentByName(name).stream().collect(Collectors.toList());
+	/*
+	@GetMapping(value = "/api/departments")
+	public List<Department> getDeparments(HttpServletRequest r){
+		
+			List<Department> l=new ArrayList<>();
+			Integer teamId=(Integer)r.getSession().getAttribute("teamId");
+			l= departmentService.findDepartmentByTeam(teamId).stream().collect(Collectors.toList());
 			return l;
-		}
-	}
+		
+		
+		
+		
+	}*/
 	
-	@PostMapping(value = "/departments")
+	@PostMapping(value = "/api/departments")
 	public ResponseEntity<String> postDeparments(@RequestParam(required = true) Integer teamId,@RequestBody Department department) {
 		try {
 			Team team=teamService.findTeamById(teamId);
@@ -62,7 +64,7 @@ public class DepartmentController {
 	    
 	}
 	
-	@DeleteMapping(value = "/departments")
+	@DeleteMapping(value = "/api/departments")
 	public ResponseEntity<String> deleteDeparments(@RequestParam(required = true) Integer departmentId) {
 		System.out.println(departmentId);
 		try {

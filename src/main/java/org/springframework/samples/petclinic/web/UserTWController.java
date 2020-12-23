@@ -40,7 +40,7 @@ public class UserTWController {
 	}
 	
 	
-	@GetMapping(value = "/userTW")
+	@GetMapping(value = "/api/userTW")
 	public List<UserTW> getUser(@RequestParam(required = false) String user) {
 	    if (user == null) {
             List<UserTW> list = userService.getAllUsers().stream().collect(Collectors.toList());
@@ -58,7 +58,7 @@ public class UserTWController {
 	
 	
 	
-	@PostMapping(value = "/userTW")
+	@PostMapping(value = "/api/userTW")
 	public ResponseEntity<String> postUser(@RequestParam(required = true) Integer teamId, @RequestBody UserTW user) {
         try {
         	
@@ -73,7 +73,7 @@ public class UserTWController {
 	}
 	
 	
-	@DeleteMapping(value= "/userTW")
+	@DeleteMapping(value= "/api/userTW")
 	public ResponseEntity<String> deleteUser(@RequestParam(required=true) Integer userId){
 		//System.out.println("Delete user: "+ userTWId);
 		

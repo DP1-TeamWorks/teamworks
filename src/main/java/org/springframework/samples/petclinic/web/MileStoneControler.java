@@ -29,7 +29,7 @@ public class MileStoneControler {
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	@GetMapping(value = "/milestones")
+	@GetMapping(value = "/api/milestones")
 	public List<Milestone> getMilestones(@RequestParam(required = false) String name){
 		List<Milestone> l=new ArrayList<>();
 		if(name==null) {
@@ -42,7 +42,7 @@ public class MileStoneControler {
 		}
 		return l;
 	}
-	@PostMapping(value = "/milestones")
+	@PostMapping(value = "/api/milestones")
 	public ResponseEntity<String> postMilestones(@RequestParam(required = true) Integer projectId,@RequestBody Milestone milestone) {
 		
 				try {
@@ -58,7 +58,7 @@ public class MileStoneControler {
 			
 	    
 	}
-	@DeleteMapping(value = "/milestones")
+	@DeleteMapping(value = "/api/milestones")
 	public ResponseEntity<String> deleteMilestones(@RequestParam(required = true) Integer milestoneId) {
 		try {
 			milestoneService.deleteMilestonetById(milestoneId);

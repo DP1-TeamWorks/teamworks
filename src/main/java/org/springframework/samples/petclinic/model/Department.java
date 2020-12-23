@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "department")
+@Table(name = "departments")
 public class Department extends BaseEntity {
 	@NotNull
 	@NotEmpty
