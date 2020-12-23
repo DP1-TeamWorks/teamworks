@@ -1,4 +1,5 @@
 import React from "react";
+import "../buttons/GradientButton.css";
 import "./forms.css";
 import SubmitError from "./SubmitError";
 
@@ -7,7 +8,7 @@ export default function SubmitButton({ value, requestError, hasErrors }) {
     <>
       <br />
       <input
-        className={"SubmitButton"}
+        className="SubmitButton GradientButton"
         type="submit"
         value={value}
         disabled={hasErrors}

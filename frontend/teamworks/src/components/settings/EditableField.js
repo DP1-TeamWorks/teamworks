@@ -17,8 +17,8 @@ const EditableField = (props) =>
     if (editing)
     {
         return (
-            <div className="EditingField Input">
-                <input className="EditingInput" type={props.inputType ?? "text"} defaultValue={currentVal} onChange={e => setCurrentVal(e.target.value)} />
+            <div className="EditingField">
+                <input className="Input EditingInput" type={props.inputType ?? "text"} defaultValue={currentVal} onChange={e => setCurrentVal(e.target.value)} />
                 <GradientButton className="EditingOkButton" onClick={() => onOkClicked()}>OK</GradientButton>
             </div>
         );

@@ -52,11 +52,6 @@
   padding-right: 30px;
 }
 
-.EditingInput:focus
-{
-  outline: none;
-}
-
 .EditingOkButton 
 {
   width: 50px;
