@@ -57,7 +57,7 @@ public class MilestoneService {
 	public Collection<Milestone> findMilestoneByName(String name) throws DataAccessException {
 		return milestoneRepository.findByName(name);
 	}
-	
+	@Transactional
 	public void deleteMilestonetById(Integer milestoneId) throws DataAccessException {
 		milestoneRepository.deleteById(milestoneId);
 	}

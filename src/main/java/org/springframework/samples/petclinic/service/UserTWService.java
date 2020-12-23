@@ -41,7 +41,7 @@ public class UserTWService {
 	public Collection<UserTW> findUserByLastName(String lastname) {
 		return userRepository.findByLastName(lastname);
 	}
-	
+	@Transactional 
 	public void deleteUserById(Integer userId) throws DataAccessException {
 		userRepository.deleteById(userId);
 	}

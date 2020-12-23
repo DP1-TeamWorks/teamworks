@@ -57,7 +57,7 @@ public class DepartmentService {
 	public Collection<Department> findDepartmentByName(String name) throws DataAccessException {
 		return departmentRepository.findByName(name);
 	}
-	
+	@Transactional 
 	public void deleteDepartmentById(Integer departmentId) throws DataAccessException {
 		departmentRepository.deleteById(departmentId);
 	}

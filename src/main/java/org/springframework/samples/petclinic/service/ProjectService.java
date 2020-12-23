@@ -22,15 +22,15 @@ public class ProjectService {
 	public void saveProject(Project project) throws DataAccessException {
 			projectRepository.save(project);
 	}
-	
+	@Transactional 
 	public void deleteProjectById(Integer projectId) throws DataAccessException {
 		projectRepository.deleteById(projectId);
 	}
-	
+	@Transactional(readOnly = true)
 	public Collection<Project> getAllProjects() {
         return projectRepository.findAll();
     }
-	
+	@Transactional(readOnly = true)
 	public Collection<Project> getProjectsByName(String name) {
         return projectRepository.findByName(name);
     }
