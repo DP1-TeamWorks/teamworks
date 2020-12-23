@@ -17,29 +17,32 @@ import com.sun.istack.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
+
 @Getter
 @Setter
 @Entity
 @Table(name = "project")
-public class Project extends BaseEntity{
-	
-	
+public class Project extends BaseEntity {
+
 	@Column(name = "name")
 	@NotNull
 	@NotEmpty
 	private String name;
-	@Column(name = "description") 
+
+	@Column(name = "description")
 	@NotNull
 	@NotEmpty
 	private String description;
-	@Column(name = "creation_timestamp")        
+
+	@Column(name = "creation_timestamp")
 	@CreationTimestamp
 	private LocalDate creationTimestamp;
-	
-	@ManyToOne(optional=false )
+
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "department_id")
 	@JsonBackReference
 	private Department department;
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
 	private List<Milestone> milestones;
 }

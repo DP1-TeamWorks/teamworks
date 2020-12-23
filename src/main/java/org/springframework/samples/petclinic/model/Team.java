@@ -2,7 +2,6 @@ package org.springframework.samples.petclinic.model;
 
 import java.util.List;
 
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,28 +19,25 @@ import lombok.Setter;
 @Entity
 @Table(name = "teams")
 
+public class Team extends BaseEntity {
 
-public class Team extends BaseEntity{
-	
 	@NotNull
 	@NotEmpty
 	@Column(name = "name")
 	String name;
-	
+
 	@NotNull
 	@NotEmpty
 	@Column(name = "identifier")
 	String identifier;
-	
+
+	// Relaciones
 	@Column(name = "users")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team", orphanRemoval = true)
 	private List<UserTW> users;
+
 	@Column(name = "departments")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "team", orphanRemoval = true)
 	private List<Department> departments;
-	
-	
-	
-	
 
 }
