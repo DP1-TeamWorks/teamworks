@@ -118,7 +118,7 @@ class LoginForm extends React.Component {
           name="mail"
           type="text"
           placeholder="name@team"
-          styleClass="InputLogin"
+          styleClass="Input InputLogin"
           error={this.state.errors.mail}
           changeHandler={this.changeHandler}
         />
@@ -127,7 +127,7 @@ class LoginForm extends React.Component {
           name="password"
           type="password"
           placeholder="Password"
-          styleClass="InputLogin"
+          styleClass="Input InputLogin"
           error={this.state.errors.password}
           changeHandler={this.changeHandler}
         />

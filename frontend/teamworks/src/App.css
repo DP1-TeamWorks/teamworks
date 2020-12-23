@@ -11,16 +11,12 @@
   color: white;
 }
 
-.background {
-  background: #20231a;
-  height: 100vh;
-}
-
 .App {
   height: 100%;
   color: white;
   font-size: 11.5pt;
   font-weight: 300;
+  background: #20231a;
 }
 
 .Content {

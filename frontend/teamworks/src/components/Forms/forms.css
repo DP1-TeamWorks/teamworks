@@ -21,12 +21,25 @@
 }
 
 .InputLogin {
-  background: none;
-  border: 1px solid rgba(166, 206, 86, 0.8);
-  box-sizing: border-box;
   width: 100%;
   height: 52px;
   padding: 15px;
+}
+
+.Input {
+  background: none;
+  border: 1px solid rgba(166, 206, 86, 0.8);
+  box-sizing: border-box;
+  font: inherit;
+  font-weight: 400;
+}
+
+.Input:-webkit-autofill,
+.Input:-webkit-autofill:hover,
+.Input:-webkit-autofill:focus,
+.Input:-webkit-autofill:active {
+    transition: background-color 0s ease-in-out 5000s, color 5000s;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.041) inset;
 }
 
 .SubmitButton {
