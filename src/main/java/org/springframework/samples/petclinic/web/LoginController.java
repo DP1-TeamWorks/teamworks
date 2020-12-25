@@ -63,6 +63,7 @@ public class LoginController {
 	@CrossOrigin
 	@PostMapping(value = "/api/auth/signup")
 	public ResponseEntity<String> signUp(@RequestBody Map<String, String> b) {
+	    // TODO: Set session so user doesn't need to login
 		try {
 			// Set up the team
 			String teamName = b.get("teamname");
@@ -79,8 +80,8 @@ public class LoginController {
 			user.setName(name);
 			user.setLastname(lastname);
 			user.setPassword(password);
-			user.setEmail(user.getName().toLowerCase() + CaseUtils.toPascalCase(user.getLastname().toLowerCase()) + "@"
-					+ team.getIdentifier());
+			user.setEmail(
+					user.getName().toLowerCase()+user.getLastname().toLowerCase() + "@" + team.getIdentifier());
 			user.setRole(Role.team_owner);
 			user.setTeam(team);
 

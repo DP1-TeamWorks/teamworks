@@ -1,40 +1,39 @@
-import logo from './logo.svg';
-import React, { useState } from "react";
-import './App.css';
-import Header from './components/header/Header';
-import Settings from './sections/Settings';
-import
-{
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-import AuthRouter from "./components/Auth/AuthRouter";
+import React, { useEffect, useState } from "react";
+import LoginPage from "./components/Auth/LoginPage";
+import MainPage from "./MainPage"
 import "./sections/Section.css";
+import "./App.css";
+import AuthApiUtils from "./utils/api/AuthApiUtils";
 
 function App()
 {
-  const [session, setSession] = useState();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  useEffect(() =>
+  {
+    if (!isLoggedIn)
+    {
+      AuthApiUtils.islogged()
+      .then(() => setIsLoggedIn(true))
+      .catch(() => setIsLoggedIn(false));
+    }
+  });
+
+  let page;
+  if (isLoggedIn)
+  {
+    page = <MainPage onLoginChanged={setIsLoggedIn} />;
+  }
+  else
+  {
+    page = <LoginPage onLoginChanged={setIsLoggedIn} />;
+  }
 
   return (
-    <Router>
-      <Switch>
-        <Route path="/login">
-          <div className="App">
-            {!session && <AuthRouter setSession={setSession} />}
-            {session && <p>Holowo {session.name} {session.lastname}</p>}
-          </div>
-        </Route>
-        <Route path="/">
-          <div className="App">
-            <Header />
-            <Settings />
-          </div>
-        </Route>
-      </Switch>
-    </Router>
-  );
+    <div className="App">
+      {page}
+    </div>
+  )
 }
 
 export default App;

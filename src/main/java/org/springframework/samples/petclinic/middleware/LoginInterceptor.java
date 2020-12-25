@@ -11,7 +11,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                              HttpServletResponse res, Object handler) throws Exception {
 
         String userId = (String)req.getSession().getAttribute("userId");
-        System.out.println(userId);
         if (userId == null)
         {
             res.sendError(403);

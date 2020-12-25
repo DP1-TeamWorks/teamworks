@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./Login.css";
 import LoginForm from "./LoginForm";
 
-export default function Login({ setSession }) {
+const Login = ({ onLoginChanged }) => {
   return (
     <div className="Container">
       <div className="LoginBox">
@@ -11,11 +11,13 @@ export default function Login({ setSession }) {
           <span className="TeamWord">TEAM</span>
           <span className="WorksWord">WORKS</span>
         </div>
-        <LoginForm setSession={setSession} />
+        <LoginForm onLoginChanged={onLoginChanged} />
         <Link to="/signup" className="NewTeam">
           Create your own team
         </Link>
       </div>
     </div>
   );
-}
+};
+
+export default Login;

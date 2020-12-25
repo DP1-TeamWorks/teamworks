@@ -44,7 +44,8 @@
 
 .NewTeam {
   color: #a7e32d;
-  padding-left: 28%;
-  padding-right: 28.5%;
+  display: block;
+  width: 100%;
+  text-align: center;
   text-decoration: none;
 }

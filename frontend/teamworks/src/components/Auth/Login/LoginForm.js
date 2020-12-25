@@ -83,9 +83,9 @@ class LoginForm extends React.Component {
     console.log("API Request");
     AuthApiUtils.login({ mail, password })
       .then((res) => {
-        const dataRes = res.data;
-        console.log("Data: ", dataRes);
-        this.props.setSession(dataRes);
+      /*  const dataRes = res.data;
+        console.log("Data: ", dataRes);*/
+        this.props.onLoginChanged(true);
       })
       .catch((error) => {
         console.log("API ERROR!");
@@ -133,7 +133,7 @@ class LoginForm extends React.Component {
         />
         <br />
         <SubmitButton
-          value="Log in"
+          text="Log in"
           requestError={this.state.requestError}
           hasErrors={this.hasErrors()}
         />

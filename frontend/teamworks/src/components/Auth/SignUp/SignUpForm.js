@@ -104,7 +104,7 @@ class SignUpForm extends React.Component {
     })
       .then((res) => {
         console.log("Signed Up, redirecting to login");
-        window.location.replace("/login");
+        window.location.replace("/");
       })
       .catch((error) => {
         console.log("API ERROR!");
@@ -146,7 +146,7 @@ class SignUpForm extends React.Component {
           name="teamname"
           type="text"
           placeholder="Stark Industries"
-          styleClass="InputLogin"
+          styleClass="Input InputLogin"
           error={this.state.errors.teamname}
           changeHandler={this.changeHandler}
         />
@@ -155,7 +155,7 @@ class SignUpForm extends React.Component {
           name="identifier"
           type="text"
           placeholder="stark"
-          styleClass="InputLogin"
+          styleClass="Input InputLogin"
           error={this.state.errors.identifier}
           changeHandler={this.changeHandler}
         />
@@ -173,7 +173,7 @@ class SignUpForm extends React.Component {
           name="username"
           type="text"
           placeholder="Johnny"
-          styleClass="InputLogin"
+          styleClass="Input InputLogin"
           error={this.state.errors.username}
           changeHandler={this.changeHandler}
         />
@@ -182,7 +182,7 @@ class SignUpForm extends React.Component {
           name="lastname"
           type="text"
           placeholder="Deep"
-          styleClass="InputLogin"
+          styleClass="Input InputLogin"
           error={this.state.errors.lastname}
           changeHandler={this.changeHandler}
         />
@@ -191,12 +191,12 @@ class SignUpForm extends React.Component {
           name="password"
           type="password"
           placeholder="Password"
-          styleClass="InputLogin"
+          styleClass="Input InputLogin"
           error={this.state.errors.password}
           changeHandler={this.changeHandler}
         />
         <SubmitButton
-          value="Sign up"
+          text="Sign up"
           requestError={this.state.requestError}
           hasErrors={this.hasErrors()}
         />
