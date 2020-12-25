@@ -11,37 +11,37 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserTWService {
-	
+
 	private UserTWRepository userRepository;
-	
-	
+
+
 	@Autowired
 	public UserTWService(UserTWRepository userRepository) {
 		this.userRepository = userRepository;
-		
+
 	}
-	
-	@Transactional 
+
+	@Transactional
 	public void saveUser(UserTW user) throws DataAccessException {
 		//user.setEnabled(true);
 		userRepository.save(user);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public UserTW findUserById(Integer userId) {
 		return userRepository.findById(userId);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Collection<UserTW> findUserByName(String name) {
 		return userRepository.findByName(name);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Collection<UserTW> findUserByLastName(String lastname) {
 		return userRepository.findByLastName(lastname);
 	}
-	
+
 	public void deleteUserById(Integer userId) throws DataAccessException {
 		userRepository.deleteById(userId);
 	}
@@ -53,16 +53,16 @@ public class UserTWService {
 	@Transactional(readOnly = true)
 	public UserTW getLoginUser(String email,String password) throws DataAccessException {
 		UserTW user=userRepository.findbyEmail(email);
-		if(user!=null&&user.getPassword().equals(password)) {
+		if(user!=null && user.getPassword().equals(password)) {
 			return user;
 		}
 		else {
 			return null;
 		}
-		
+
 	}
-	
-	
-	
+
+
+
 
 }
