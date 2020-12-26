@@ -26,49 +26,49 @@ import org.springframework.web.bind.annotation.RestController;
 public class DepartmentController {
 	private final DepartmentService departmentService;
 	private final TeamService teamService;
+
 	@Autowired
-	public DepartmentController(DepartmentService departmentService,TeamService teamService) {
+	public DepartmentController(DepartmentService departmentService, TeamService teamService) {
 		this.departmentService = departmentService;
-		this.teamService=teamService;
+		this.teamService = teamService;
 	}
-	
+
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
+
 	@GetMapping(value = "/api/departments")
-	public List<Department> getDeparments(HttpServletRequest r){
-			List<Department> l=new ArrayList<>();
-			Integer teamId=(Integer)r.getSession().getAttribute("teamId");
-			l= teamService.findDepartmentByTeam(teamId).stream().collect(Collectors.toList());
-			return l;
+	public List<Department> getDeparments(HttpServletRequest r) {
+		List<Department> l = new ArrayList<>();
+		Integer teamId = (Integer) r.getSession().getAttribute("teamId");
+		l = teamService.findDepartmentByTeam(teamId).stream().collect(Collectors.toList());
+		return l;
 	}
-	
+
 	@PostMapping(value = "/api/departments")
-	public ResponseEntity<String> postDeparments(@RequestParam(required = true) Integer teamId,@RequestBody Department department) {
+	public ResponseEntity<String> postDeparments(@RequestParam(required = true) Integer teamId,
+			@RequestBody Department department) {
 		try {
-			Team team=teamService.findTeamById(teamId);
+			Team team = teamService.findTeamById(teamId);
 			department.setTeam(team);
 			departmentService.saveDepartment(department);
 			return ResponseEntity.ok("Department create");
-		}
-		catch(DataAccessException d) {
+		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
 		}
-	    
+
 	}
-	
+
 	@DeleteMapping(value = "/api/departments")
 	public ResponseEntity<String> deleteDeparments(@RequestParam(required = true) Integer departmentId) {
 		System.out.println(departmentId);
 		try {
 			departmentService.deleteDepartmentById(departmentId);
-	        return ResponseEntity.ok("Department delete");
-		}
-		catch(DataAccessException d) {
+			return ResponseEntity.ok("Department delete");
+		} catch (DataAccessException d) {
 			return ResponseEntity.notFound().build();
 		}
-	    
+
 	}
 }

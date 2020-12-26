@@ -16,30 +16,30 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 	private final TeamService teamService;
 	private final UserTWService userTWService;
-	
+
 	@Autowired
-	public LoginController(TeamService teamService,UserTWService userTWService) {
-		this.teamService=teamService;
-		this.userTWService=userTWService;
+	public LoginController(TeamService teamService, UserTWService userTWService) {
+		this.teamService = teamService;
+		this.userTWService = userTWService;
 	}
-	
+
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setAllowedFields("id");
 	}
-	
-	@GetMapping(value ="/api/auth/login")
-	public UserTW login(@RequestParam(required=true) String email,@RequestParam(required=true) String password) {
-		try{
-			UserTW user=userTWService.getLoginUser(email, password);
+
+	@GetMapping(value = "/api/auth/login")
+	public UserTW login(@RequestParam(required = true) String email, @RequestParam(required = true) String password) {
+		try {
+			UserTW user = userTWService.getLoginUser(email, password);
 			return user;
 		}
-		
+
 		catch (DataAccessException d) {
-			
+
 			System.out.println("dsksdfknmsadjkosdaoo");
 			return null;
 		}
 	}
-	
+
 }

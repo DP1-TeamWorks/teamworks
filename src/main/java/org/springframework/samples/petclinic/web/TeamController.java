@@ -23,80 +23,76 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 public class TeamController {
-	
+
 	private final TeamService teamService;
 	private final UserTWService userService;
-	
+
 	@Autowired
-	public TeamController(TeamService teamService,UserTWService userService) {
+	public TeamController(TeamService teamService, UserTWService userService) {
 		this.teamService = teamService;
-		this.userService=userService;
+		this.userService = userService;
 	}
-	
+
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setAllowedFields("id");
 	}
-	
-	@GetMapping(value= "/api/teams")
-	public List<Team> getTeams(@RequestParam (required=false) String name) {
+
+	@GetMapping(value = "/api/teams")
+	public List<Team> getTeams(@RequestParam(required = false) String name) {
 		List<Team> list = new ArrayList<>();
-		if(name==null) {
-			list= teamService.getAllTeams().stream().collect(Collectors.toList());
+		if (name == null) {
+			list = teamService.getAllTeams().stream().collect(Collectors.toList());
 		} else {
 			list = teamService.findTeamByName(name).stream().collect(Collectors.toList());
 		}
 		return list;
-		
+
 	}
-	
-	
+
 	@PostMapping(value = "/api/teams")
 	public ResponseEntity<String> postTeams(@RequestBody Team team) {
 		try {
 			teamService.saveTeam(team);
 			return ResponseEntity.ok("Team created");
-			
+
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
 		}
 	}
+
 	@PostMapping(value = "/api/teams/update")
-	public ResponseEntity<String> updateTeams(HttpServletRequest r,@RequestParam String name,@RequestParam String identifier) {
+	public ResponseEntity<String> updateTeams(HttpServletRequest r, @RequestParam String name,
+			@RequestParam String identifier) {
 		try {
-			Integer userId= (Integer)r.getSession().getAttribute("userId");
-			Integer teamId= (Integer)r.getSession().getAttribute("teamId");
-			UserTW user=userService.findUserById(userId);
-			if(user.getRole().equals(Role.team_owner)) {
-				Team team=teamService.findTeamById(teamId);
-				if(name!=null&&identifier!=null) {
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
+			UserTW user = userService.findUserById(userId);
+			if (user.getRole().equals(Role.team_owner)) {
+				Team team = teamService.findTeamById(teamId);
+				if (name != null && identifier != null) {
 					team.setName(name);
 					team.setIdentifier(identifier);
-				}
-				else if(name!=null) {
+				} else if (name != null) {
 					team.setName(name);
-				}
-				else if(identifier!=null) {
+				} else if (identifier != null) {
 					team.setIdentifier(identifier);
-				}else {
+				} else {
 					return ResponseEntity.badRequest().build();
 				}
 				teamService.saveTeam(team);
 				return ResponseEntity.ok("Team updtae");
-			}
-			else {
+			} else {
 				return ResponseEntity.status(403).build();
 			}
-			
-			
+
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
+
 	@DeleteMapping(value = "/api/teams")
 	public ResponseEntity<String> deleteTeams(@RequestParam(required = true) Integer teamId) {
 		try {

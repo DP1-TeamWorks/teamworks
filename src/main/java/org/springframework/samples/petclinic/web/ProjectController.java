@@ -24,54 +24,56 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProjectController {
 	private final DepartmentService departmentService;
 	private final ProjectService projectService;
+
 	@Autowired
-	public ProjectController(DepartmentService departmentService,ProjectService projectService) {
+	public ProjectController(DepartmentService departmentService, ProjectService projectService) {
 		this.departmentService = departmentService;
-		this.projectService=projectService;
+		this.projectService = projectService;
 	}
+
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
+
 	@GetMapping(value = "/api/projects")
-	public List<Project> getProjects(@RequestParam(required = false) String name){
-		List<Project> l=new ArrayList<>();
-		if(name==null) {
+	public List<Project> getProjects(@RequestParam(required = false) String name) {
+		List<Project> l = new ArrayList<>();
+		if (name == null) {
 			l = projectService.getAllProjects().stream().collect(Collectors.toList());
-           
-		}
-		else {
-			l=projectService.getProjectsByName(name).stream().collect(Collectors.toList());
-			
+
+		} else {
+			l = projectService.getProjectsByName(name).stream().collect(Collectors.toList());
+
 		}
 		return l;
 	}
+
 	@PostMapping(value = "/api/projects")
-	public ResponseEntity<String> postProjects(@RequestParam(required = true) Integer departmentId,@RequestBody Project project) {
-		
-				try {
-					Department depar=departmentService.findDepartmentById(departmentId);
-					
-					project.setDepartment(depar);
-					projectService.saveProject(project);
-					return ResponseEntity.ok("Project create");
-				}
-				catch(DataAccessException d) {
-					return ResponseEntity.badRequest().build();
-				}
-			
-	    
+	public ResponseEntity<String> postProjects(@RequestParam(required = true) Integer departmentId,
+			@RequestBody Project project) {
+
+		try {
+			Department depar = departmentService.findDepartmentById(departmentId);
+
+			project.setDepartment(depar);
+			projectService.saveProject(project);
+			return ResponseEntity.ok("Project create");
+		} catch (DataAccessException d) {
+			return ResponseEntity.badRequest().build();
+		}
+
 	}
+
 	@DeleteMapping(value = "/api/projects")
 	public ResponseEntity<String> deleteProjects(@RequestParam(required = true) Integer projectId) {
 		try {
 			projectService.deleteProjectById(projectId);
-	        return ResponseEntity.ok("Project delete");
-		}
-		catch(DataAccessException d) {
+			return ResponseEntity.ok("Project delete");
+		} catch (DataAccessException d) {
 			return ResponseEntity.notFound().build();
 		}
-	    
+
 	}
-	
+
 }

@@ -21,53 +21,55 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MileStoneControler {
 	private final MilestoneService milestoneService;
 	private final ProjectService projectService;
-	public MileStoneControler(MilestoneService milestoneService,ProjectService projectService) {
-		this.milestoneService=milestoneService;
-		this.projectService=projectService;
+
+	public MileStoneControler(MilestoneService milestoneService, ProjectService projectService) {
+		this.milestoneService = milestoneService;
+		this.projectService = projectService;
 	}
+
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
+
 	@GetMapping(value = "/api/milestones")
-	public List<Milestone> getMilestones(@RequestParam(required = false) String name){
-		List<Milestone> l=new ArrayList<>();
-		if(name==null) {
+	public List<Milestone> getMilestones(@RequestParam(required = false) String name) {
+		List<Milestone> l = new ArrayList<>();
+		if (name == null) {
 			l = milestoneService.getAllMilestone().stream().collect(Collectors.toList());
-           
-		}
-		else {
-			l=milestoneService.findMilestoneByName(name).stream().collect(Collectors.toList());
-			
+
+		} else {
+			l = milestoneService.findMilestoneByName(name).stream().collect(Collectors.toList());
+
 		}
 		return l;
 	}
+
 	@PostMapping(value = "/api/milestones")
-	public ResponseEntity<String> postMilestones(@RequestParam(required = true) Integer projectId,@RequestBody Milestone milestone) {
-		
-				try {
-					Project project=projectService.findProjectById(projectId);
-					
-					milestone.setProject(project);
-					milestoneService.saveMilestone(milestone);
-					return ResponseEntity.ok("Milestone create");
-				}
-				catch(DataAccessException d) {
-					return ResponseEntity.badRequest().build();
-				}
-			
-	    
+	public ResponseEntity<String> postMilestones(@RequestParam(required = true) Integer projectId,
+			@RequestBody Milestone milestone) {
+
+		try {
+			Project project = projectService.findProjectById(projectId);
+
+			milestone.setProject(project);
+			milestoneService.saveMilestone(milestone);
+			return ResponseEntity.ok("Milestone create");
+		} catch (DataAccessException d) {
+			return ResponseEntity.badRequest().build();
+		}
+
 	}
+
 	@DeleteMapping(value = "/api/milestones")
 	public ResponseEntity<String> deleteMilestones(@RequestParam(required = true) Integer milestoneId) {
 		try {
 			milestoneService.deleteMilestonetById(milestoneId);
-	        return ResponseEntity.ok("Milestone delete");
-		}
-		catch(DataAccessException d) {
+			return ResponseEntity.ok("Milestone delete");
+		} catch (DataAccessException d) {
 			return ResponseEntity.notFound().build();
 		}
-	    
+
 	}
-	
+
 }

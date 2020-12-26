@@ -1,4 +1,5 @@
 package org.springframework.samples.petclinic.model;
+
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,39 +15,35 @@ import lombok.Setter;
 @Entity
 @Table(name = "participation")
 
-public class Participation extends BaseEntity{
-	
-	
-	
+public class Participation extends BaseEntity {
+
 	@NotNull
 	@NotEmpty
-	@Column(name = "initialDate")        
+	@Column(name = "initialDate")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate initialDate;
-	
+
 	@NotNull
 	@NotEmpty
-	@Column(name = "finalDate")        
+	@Column(name = "finalDate")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate finalDate;
-	
+
 	@NotNull
 	@NotEmpty
 	@Column(name = "isProjectManager")
-    private Boolean isProjectManager;
-	
-	
-	
-	//@ManyToOne
-	//@MapsId("userId")
-	//@JoinColumn(name = "userId")
-	//@JsonBackReference
-	//UserTW userTW;
-	
-	//@ManyToOne
-	//@MapsId("projectId")
-	//@JoinColumn(name = "projectId")
-	//@JsonBackReference
-	//Project projects;
+	private Boolean isProjectManager;
+
+	// @ManyToOne
+	// @MapsId("userId")
+	// @JoinColumn(name = "userId")
+	// @JsonBackReference
+	// UserTW userTW;
+
+	// @ManyToOne
+	// @MapsId("projectId")
+	// @JoinColumn(name = "projectId")
+	// @JsonBackReference
+	// Project projects;
 
 }

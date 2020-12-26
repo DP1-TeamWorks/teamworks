@@ -32,6 +32,7 @@ public class ToDo {
     @JoinColumn(name = "milestone_id")
     @JsonBackReference
     private Milestone milestone;
-    
-    //Creo que falta tambien una relacion con Tag pero no te lo toco, estoy mas que nada revisando 
+
+    // Creo que falta tambien una relacion con Tag pero no te lo toco, estoy mas que
+    // nada revisando
 }

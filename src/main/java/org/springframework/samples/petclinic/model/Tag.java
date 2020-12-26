@@ -28,11 +28,11 @@ public class Tag {
     @NotEmpty
     @Column(name = "color")
     String color;
-    
-    //Relaciones
-    
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "projects_id")
-	@JsonBackReference
-	private Project project;
+
+    // Relaciones
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "projects_id")
+    @JsonBackReference
+    private Project project;
 }
