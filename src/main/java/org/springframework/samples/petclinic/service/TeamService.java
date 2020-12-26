@@ -46,6 +46,6 @@ public class TeamService {
     }
 	@Transactional(readOnly = true)
 	public Collection<Department> findDepartmentByTeam(Integer teamId) throws DataAccessException {
-		return teamRepository.findByTeam(teamId);
+		return teamRepository.findDepartmentByTeam(teamId);
 	}
 }

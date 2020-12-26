@@ -20,6 +20,7 @@ package org.springframework.samples.petclinic.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Department;
+import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.repository.DepartmentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +52,10 @@ public class DepartmentService {
 	@Transactional(readOnly = true)
 	public Department findDepartmentById(Integer departmentId) throws DataAccessException {
 		return departmentRepository.findById(departmentId);
+	}
+	@Transactional(readOnly = true)
+	public Collection<Project> findProjectsByDepartmenId(Integer departmentId) throws DataAccessException {
+		return departmentRepository.findProjectsByDepartment(departmentId);
 	}
 	
 	

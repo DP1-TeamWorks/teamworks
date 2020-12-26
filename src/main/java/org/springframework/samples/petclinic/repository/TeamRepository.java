@@ -22,7 +22,7 @@ public interface TeamRepository extends Repository<Team, Integer>{
     public Collection<Team> findByName(@Param("name") String name);
     
     @Query("SELECT departments FROM Team u WHERE u.id =teamId")
-    public Collection<Department> findByTeam(@Param("teamId") int teamId);
+    public Collection<Department> findDepartmentByTeam(@Param("teamId") Integer teamId);
     
     public Collection<Team> findAll() throws DataAccessException;
 }
