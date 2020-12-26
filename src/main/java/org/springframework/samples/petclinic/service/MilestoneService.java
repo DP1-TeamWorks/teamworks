@@ -15,8 +15,6 @@ package org.springframework.samples.petclinic.service;
  * limitations under the License.
  */
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Milestone;
@@ -35,37 +33,38 @@ import java.util.Collection;
 @Service
 public class MilestoneService {
 	private MilestoneRepository milestoneRepository;
-	
 
 	@Autowired
 	public MilestoneService(MilestoneRepository milestoneRepository) {
 		this.milestoneRepository = milestoneRepository;
-		
+
 	}
 
 	@Transactional
 	public void saveMilestone(Milestone milestones) throws DataAccessException {
 		milestoneRepository.save(milestones);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Milestone findMilestoneById(Integer milestoneId) throws DataAccessException {
 		return milestoneRepository.findById(milestoneId);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Collection<Milestone> findMilestoneByName(String name) throws DataAccessException {
 		return milestoneRepository.findByName(name);
 	}
+
 	@Transactional
 	public void deleteMilestonetById(Integer milestoneId) throws DataAccessException {
 		milestoneRepository.deleteById(milestoneId);
 	}
 
+	// Tampoco tiene sentido este método, se devuelven todas las milestones de
+	// todos los projectos de todos los departamentos de todos los teams
 	@Transactional(readOnly = true)
 	public Collection<Milestone> getAllMilestone() throws DataAccessException {
 		return milestoneRepository.findAll();
 	}
 
-	
 }

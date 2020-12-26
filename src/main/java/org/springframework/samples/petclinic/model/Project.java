@@ -45,4 +45,7 @@ public class Project extends BaseEntity {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
 	private List<Milestone> milestones;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
+	private List<ToDo> toDos;
 }

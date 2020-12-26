@@ -22,18 +22,20 @@ public class Department extends BaseEntity {
 	@NotNull
 	@NotEmpty
 	@Column(name = "name", unique = true)
-	private @Getter @Setter String name;
+	private String name;
+
 	@NotNull
 	@NotEmpty
 	@Column(name = "description")
-	private @Getter @Setter String description;
+	private String description;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "team_id")
 	@JsonBackReference
-	private @Getter @Setter Team team;
+	private Team team;
+
 	@Column(name = "projects")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true)
-	private @Getter @Setter List<Project> projects;
+	private List<Project> projects;
 
 }

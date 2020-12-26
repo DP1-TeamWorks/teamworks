@@ -12,20 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TeamService {
-	
+
 	private TeamRepository teamRepository;
-	
+
 	@Autowired
 	public TeamService(TeamRepository teamRepository) {
 		this.teamRepository = teamRepository;
 	}
-	
-	
-	@Transactional 
+
+	@Transactional
 	public void saveTeam(Team team) throws DataAccessException {
 		teamRepository.save(team);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Team findTeamById(Integer teamId) {
 		return teamRepository.findById(teamId);
@@ -35,17 +34,20 @@ public class TeamService {
 	public Collection<Team> findTeamByName(String name) {
 		return teamRepository.findByName(name);
 	}
+
 	@Transactional(readOnly = true)
 	public void deleteTeamById(Integer teamId) throws DataAccessException {
 		teamRepository.deleteById(teamId);
 	}
-	
+
 	@Transactional(readOnly = true)
-    public Collection<Team> getAllTeams() throws DataAccessException {
-        return teamRepository.findAll();
-    }
+	public Collection<Team> getAllTeams() throws DataAccessException {
+		return teamRepository.findAll();
+	}
+
+	// No es necesario
 	@Transactional(readOnly = true)
-	public Collection<Department> findDepartmentByTeam(Integer teamId) throws DataAccessException {
-		return teamRepository.findByTeam(teamId);
+	public Collection<Department> getTeamDepartments(Integer teamId) throws DataAccessException {
+		return teamRepository.getTeamDepartments(teamId);
 	}
 }

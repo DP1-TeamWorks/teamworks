@@ -12,32 +12,35 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProjectService {
 	private ProjectRepository projectRepository;
-	
+
 	@Autowired
 	public ProjectService(ProjectRepository projectRepository) {
-		this.projectRepository=projectRepository;
+		this.projectRepository = projectRepository;
 	}
-	
+
 	@Transactional
 	public void saveProject(Project project) throws DataAccessException {
-			projectRepository.save(project);
+		projectRepository.save(project);
 	}
-	@Transactional 
+
+	@Transactional
 	public void deleteProjectById(Integer projectId) throws DataAccessException {
 		projectRepository.deleteById(projectId);
 	}
+
 	@Transactional(readOnly = true)
 	public Collection<Project> getAllProjects() {
-        return projectRepository.findAll();
-    }
+		return projectRepository.findAll();
+	}
+
 	@Transactional(readOnly = true)
 	public Collection<Project> getProjectsByName(String name) {
-        return projectRepository.findByName(name);
-    }
+		return projectRepository.findByName(name);
+	}
+
 	@Transactional(readOnly = true)
 	public Project findProjectById(Integer projectId) throws DataAccessException {
 		return projectRepository.findById(projectId);
 	}
-	
 
 }
