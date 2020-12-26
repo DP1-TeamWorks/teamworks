@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.repository.TeamRepository;
 import org.springframework.stereotype.Service;
@@ -43,4 +44,8 @@ public class TeamService {
     public Collection<Team> getAllTeams() throws DataAccessException {
         return teamRepository.findAll();
     }
+	@Transactional(readOnly = true)
+	public Collection<Department> findDepartmentByTeam(Integer teamId) throws DataAccessException {
+		return teamRepository.findByTeam(teamId);
+	}
 }
