@@ -42,7 +42,7 @@ public class DepartmentController {
 	public List<Department> getDeparments(HttpServletRequest r) {
 		List<Department> l = new ArrayList<>();
 		Integer teamId = (Integer) r.getSession().getAttribute("teamId");
-		l = teamService.findDepartmentByTeam(teamId).stream().collect(Collectors.toList());
+		l = teamService.getTeamDepartments(teamId).stream().collect(Collectors.toList());
 		return l;
 	}
 
