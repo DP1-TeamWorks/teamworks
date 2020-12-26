@@ -36,19 +36,14 @@ public class DepartmentController {
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	/*
+	
 	@GetMapping(value = "/api/departments")
 	public List<Department> getDeparments(HttpServletRequest r){
-		
 			List<Department> l=new ArrayList<>();
 			Integer teamId=(Integer)r.getSession().getAttribute("teamId");
-			l= departmentService.findDepartmentByTeam(teamId).stream().collect(Collectors.toList());
+			l= teamService.findDepartmentByTeam(teamId).stream().collect(Collectors.toList());
 			return l;
-		
-		
-		
-		
-	}*/
+	}
 	
 	@PostMapping(value = "/api/departments")
 	public ResponseEntity<String> postDeparments(@RequestParam(required = true) Integer teamId,@RequestBody Department department) {
