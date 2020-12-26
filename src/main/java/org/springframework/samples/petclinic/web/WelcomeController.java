@@ -20,23 +20,6 @@ public class WelcomeController {
 
 	  @GetMapping({"/","/welcome"})
 	  public String welcome(Map<String, Object> model) {
-		List<Person> people = new ArrayList<Person>();
-		Person Jose = new Person();
-		Jose.setFirstName("Jose");
-		Jose.setLastName("Snow");
-
-		Person Pedro = new Person();
-		Pedro.setFirstName("Pedro");
-		Pedro.setLastName("Pon");
-
-		people.add(Jose);
-		people.add(Pedro);
-		System.out.println(people);
-
-		model.put("people", people);
-		model.put("title", "My project");
-		model.put("group", "Developers");
-
-		return "user_list";
+		return "index";
 	  }
 }

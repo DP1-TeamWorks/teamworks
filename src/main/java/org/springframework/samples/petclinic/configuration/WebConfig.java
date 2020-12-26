@@ -26,15 +26,13 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("/resources/");
+        registry.addResourceHandler("/**").addResourceLocations("/resources/frontend/teamworks/build/");
     }
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         UrlBasedViewResolver resolver = new UrlBasedViewResolver();
         resolver.setViewClass(InternalResourceView.class);
-        /*InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("/resources/static");*/
         registry.viewResolver(resolver);
     }
 
