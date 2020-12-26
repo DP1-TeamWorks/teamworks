@@ -23,12 +23,12 @@ public class TagService {
     }
 
     @Transactional(readOnly = true)
-    public Tag findTeamById(Integer tagId) {
+    public Tag findTagById(Integer tagId) {
         return tagRepository.findById(tagId);
     }
 
     @Transactional(readOnly = true)
-    public void deleteTeamById(Integer tagId) throws DataAccessException {
+    public void deleteTagById(Integer tagId) throws DataAccessException {
         tagRepository.deleteById(tagId);
     }
 
