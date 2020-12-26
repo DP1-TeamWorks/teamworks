@@ -52,11 +52,8 @@ public class DepartmentService {
 	public Department findDepartmentById(Integer departmentId) throws DataAccessException {
 		return departmentRepository.findById(departmentId);
 	}
-	/*
-	@Transactional(readOnly = true)
-	public Collection<Department> findDepartmentByTeam(Integer teamId) throws DataAccessException {
-		return departmentRepository.findByTeam(teamId);
-	}*/
+	
+	
 	@Transactional 
 	public void deleteDepartmentById(Integer departmentId) throws DataAccessException {
 		departmentRepository.deleteById(departmentId);
