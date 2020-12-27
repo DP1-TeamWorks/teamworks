@@ -4,9 +4,7 @@ import java.util.Collection;
 
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.*;
 
 public interface DepartmentRepository extends Repository<Department, Integer> {
@@ -20,9 +18,6 @@ public interface DepartmentRepository extends Repository<Department, Integer> {
 	    void deleteById(Integer id) throws DataAccessException;
 	    
 	    Department findById(Integer departmentId);
-	    
-	    @Query("SELECT projects FROM Department u WHERE u.id =deparmentId")
-	    public Collection<Project> findProjectsByDepartment(@Param("departmentId") Integer deparmentId);
 	    
 	    Collection<Department> findAll() throws DataAccessException;
 	    

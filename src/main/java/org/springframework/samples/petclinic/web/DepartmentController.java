@@ -2,8 +2,6 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +44,7 @@ public class DepartmentController {
 	public List<Department> getDeparments(HttpServletRequest r){
 			List<Department> l=new ArrayList<>();
 			Integer teamId=(Integer)r.getSession().getAttribute("teamId");
-			l= teamService.findDepartmentByTeam(teamId).stream().collect(Collectors.toList());
+			l= teamService.findTeamById(teamId).getDepartments();
 			return l;
 	}
 	
