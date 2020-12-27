@@ -2,8 +2,6 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +37,7 @@ public class ProjectController {
 	@GetMapping(value = "/api/projects")
 	public List<Project> getProjects(@RequestParam(required = false) Integer departmentId) {
 		List<Project> l = new ArrayList<>();
-
-		l = departmentService.findProjectsByDepartmenId(departmentId).stream().collect(Collectors.toList());
-
+		l = departmentService.findDepartmentById(departmentId).getProjects();
 		return l;
 	}
 
@@ -51,7 +47,6 @@ public class ProjectController {
 
 		try {
 			Department depar = departmentService.findDepartmentById(departmentId);
-
 			project.setDepartment(depar);
 			projectService.saveProject(project);
 			return ResponseEntity.ok("Project create");
