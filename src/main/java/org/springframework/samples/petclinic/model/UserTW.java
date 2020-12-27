@@ -62,7 +62,7 @@ public class UserTW extends BaseEntity {
 	@JoinColumn(name = "team_id")
 	@JsonBackReference
 	private Team team;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userTW", orphanRemoval = true)
 	private List<Belongs> belongs;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userTW", orphanRemoval = true)
