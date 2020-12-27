@@ -20,6 +20,6 @@ public class WelcomeController {
 
 	  @GetMapping({"/","/welcome"})
 	  public String welcome(Map<String, Object> model) {
-		return "index";
+		return "/index.html";
 	  }
 }

@@ -10,7 +10,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest req,
                              HttpServletResponse res, Object handler) throws Exception {
 
-        String userId = (String)req.getSession().getAttribute("userId");
+        Integer userId = (Integer)req.getSession().getAttribute("userId");
         if (userId == null)
         {
             res.sendError(403);

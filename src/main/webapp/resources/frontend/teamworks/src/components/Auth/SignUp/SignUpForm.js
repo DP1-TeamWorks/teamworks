@@ -104,7 +104,11 @@ class SignUpForm extends React.Component {
     })
       .then((res) => {
         console.log("Signed Up, redirecting to login");
-        window.location.replace("/");
+        const mail = `${username.toLowerCase()}${lastname.toLowerCase()}@${identifier}`;
+        AuthApiUtils.login({mail, password}).then(() =>
+        {
+          window.location.replace("/");
+        });
       })
       .catch((error) => {
         console.log("API ERROR!");

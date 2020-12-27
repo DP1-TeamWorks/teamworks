@@ -9,6 +9,8 @@ function App()
 {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   
+  // TODO: Loading state to prevent flicker
+  
   useEffect(() =>
   {
     if (!isLoggedIn)

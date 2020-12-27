@@ -63,7 +63,6 @@ public class LoginController {
 	@CrossOrigin
 	@PostMapping(value = "/api/auth/signup")
 	public ResponseEntity<String> signUp(@RequestBody Map<String, String> b) {
-	    // TODO: Set session so user doesn't need to login
 		try {
 			// Set up the team
 			String teamName = b.get("teamname");
@@ -88,6 +87,7 @@ public class LoginController {
 			// Save Team & Team_Owner
 			teamService.saveTeam(team);
 			userTWService.saveUser(user);
+
 			return ResponseEntity.ok("Usuario y Team creado satisfactoriamente");
 
 		} catch (DataAccessException d) {
