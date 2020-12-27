@@ -1,0 +1,22 @@
+.ProfilePic 
+{
+    border-radius: 50%;
+    box-shadow: 0 0 0px  2px #A7E32D;
+    outline-offset: 5px;
+    height: calc(100% - 85px);
+    margin-left: 60px;
+    padding: 6px;
+}
+
+.ProfileHeader {
+    width: 100%;
+    height: 200px;
+    border-bottom: 1px solid #3c3c3c;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.ProfileTitleContainer {
+    margin-left: 40px;
+}

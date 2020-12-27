@@ -1,0 +1,56 @@
+.SettingGroupsContainer {
+  padding: 40px 60px;
+}
+
+.EditableSettingGroup {
+  margin-bottom: 35px;
+}
+
+.SettingGroup__P {
+  margin: 5px 0 20px 0;
+}
+
+.EditableField {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
+.PenIcon {
+  color: #a6ce5636;
+  margin-left: 20px;
+}
+
+.DangerTitle {
+  color: #FF3C3C;
+}
+
+.EditingField
+{
+  position: relative;
+  width: 300px;
+  height: 40px;
+}
+
+.EditingInput
+{
+  width: calc(100% - 40px);
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: none;
+  border: none;
+  padding-left: 20px;
+  padding-right: 30px;
+}
+
+.EditingOkButton 
+{
+  width: 50px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  border-radius: 0;
+}

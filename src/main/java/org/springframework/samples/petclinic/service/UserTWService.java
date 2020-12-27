@@ -11,58 +11,54 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserTWService {
-	
+
 	private UserTWRepository userRepository;
-	
-	
+
 	@Autowired
 	public UserTWService(UserTWRepository userRepository) {
 		this.userRepository = userRepository;
-		
+
 	}
-	
-	@Transactional 
+
+	@Transactional
 	public void saveUser(UserTW user) throws DataAccessException {
-		//user.setEnabled(true);
+		// user.setEnabled(true);
 		userRepository.save(user);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public UserTW findUserById(Integer userId) {
 		return userRepository.findById(userId);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Collection<UserTW> findUserByName(String name) {
 		return userRepository.findByName(name);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Collection<UserTW> findUserByLastName(String lastname) {
 		return userRepository.findByLastName(lastname);
 	}
-	@Transactional 
+
 	public void deleteUserById(Integer userId) throws DataAccessException {
 		userRepository.deleteById(userId);
 	}
 
 	@Transactional(readOnly = true)
-    public Collection<UserTW> getAllUsers() throws DataAccessException {
-        return userRepository.findAll();
-    }
+	public Collection<UserTW> getAllUsers() throws DataAccessException {
+		return userRepository.findAll();
+	}
+
 	@Transactional(readOnly = true)
-	public UserTW getLoginUser(String email,String password) throws DataAccessException {
-		UserTW user=userRepository.findbyEmail(email);
-		if(user.getPassword().equals(password)) {
+	public UserTW getLoginUser(String email, String password) throws DataAccessException {
+		UserTW user = userRepository.findbyEmail(email);
+		if (user != null && user.getPassword().equals(password)) {
 			return user;
-		}
-		else {
+		} else {
 			return null;
 		}
-		
+
 	}
-	
-	
-	
 
 }

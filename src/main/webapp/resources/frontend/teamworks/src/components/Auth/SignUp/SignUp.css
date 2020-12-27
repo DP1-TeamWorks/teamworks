@@ -1,0 +1,45 @@
+.Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  z-index: 1000;
+}
+
+.SignUpBox {
+  color: #a6ce56;
+  width: 527px;
+  max-height: 715px;
+  background: #262626;
+  padding: 50px;
+}
+
+.GoBack {
+  color: #a6ce56;
+  margin-bottom: 20px;
+  text-decoration: none;
+}
+
+.BackArrow {
+  margin-left: -15px;
+  color: #a6ce56 !important;
+}
+
+.GoBackText {
+  text-decoration: none;
+  color: #a6ce56;
+  font-size: smaller;
+}
+
+.PreviewWord {
+  color: #a6ce56;
+  margin-right: 20px;
+}
+.Preview {
+  color: #e3ffaa;
+}
