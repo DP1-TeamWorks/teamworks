@@ -38,4 +38,6 @@ public class Department extends BaseEntity {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true)
 	private List<Project> projects;
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true)
+	private List<Belongs> belongs;
 }

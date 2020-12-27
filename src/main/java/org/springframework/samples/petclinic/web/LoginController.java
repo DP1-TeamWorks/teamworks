@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LoginController {
-	private final TeamService teamService;
 	private final UserTWService userTWService;
 
 	@Autowired
 	public LoginController(TeamService teamService, UserTWService userTWService) {
-		this.teamService = teamService;
 		this.userTWService = userTWService;
 	}
 

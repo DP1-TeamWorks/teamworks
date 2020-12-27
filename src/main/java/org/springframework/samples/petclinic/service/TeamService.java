@@ -45,9 +45,8 @@ public class TeamService {
 		return teamRepository.findAll();
 	}
 
-	// No es necesario
 	@Transactional(readOnly = true)
-	public Collection<Department> getTeamDepartments(Integer teamId) throws DataAccessException {
-		return teamRepository.getTeamDepartments(teamId);
+	public Collection<Department> findDepartmentByTeam(Integer teamId) throws DataAccessException {
+		return teamRepository.findDepartmentByTeam(teamId);
 	}
 }

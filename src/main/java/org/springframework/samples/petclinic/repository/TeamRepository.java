@@ -20,8 +20,8 @@ public interface TeamRepository extends Repository<Team, Integer> {
     @Query("SELECT u FROM Team u WHERE u.name LIKE :name%")
     public Collection<Team> findByName(@Param("name") String name);
 
-    @Query("SELECT departments FROM team u WHERE u.id =teamId")
-    public Collection<Department> getTeamDepartments(@Param("teamId") int teamId);
+    @Query("SELECT departments FROM Team u WHERE u.id =teamId")
+    public Collection<Department> findDepartmentByTeam(@Param("teamId") Integer teamId);
 
     public Collection<Team> findAll() throws DataAccessException;
 }

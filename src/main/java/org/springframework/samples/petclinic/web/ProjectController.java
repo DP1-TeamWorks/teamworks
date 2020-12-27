@@ -37,15 +37,11 @@ public class ProjectController {
 	}
 
 	@GetMapping(value = "/api/projects")
-	public List<Project> getProjects(@RequestParam(required = false) String name) {
+	public List<Project> getProjects(@RequestParam(required = false) Integer departmentId) {
 		List<Project> l = new ArrayList<>();
-		if (name == null) {
-			l = projectService.getAllProjects().stream().collect(Collectors.toList());
 
-		} else {
-			l = projectService.getProjectsByName(name).stream().collect(Collectors.toList());
+		l = departmentService.findProjectsByDepartmenId(departmentId).stream().collect(Collectors.toList());
 
-		}
 		return l;
 	}
 
