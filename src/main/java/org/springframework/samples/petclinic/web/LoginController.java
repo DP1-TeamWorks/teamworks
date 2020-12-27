@@ -79,14 +79,15 @@ public class LoginController {
 			user.setName(name);
 			user.setLastname(lastname);
 			user.setPassword(password);
-			user.setEmail(user.getName().toLowerCase() + CaseUtils.toPascalCase(user.getLastname().toLowerCase()) + "@"
-					+ team.getIdentifier());
+			user.setEmail(
+					user.getName().toLowerCase()+user.getLastname().toLowerCase() + "@" + team.getIdentifier());
 			user.setRole(Role.team_owner);
 			user.setTeam(team);
 
 			// Save Team & Team_Owner
 			teamService.saveTeam(team);
 			userTWService.saveUser(user);
+
 			return ResponseEntity.ok("Usuario y Team creado satisfactoriamente");
 
 		} catch (DataAccessException d) {

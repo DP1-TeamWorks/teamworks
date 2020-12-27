@@ -1,0 +1,51 @@
+.Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  z-index: 1000;
+}
+
+.LoginBox {
+  color: #a6ce56;
+  width: 527px;
+  max-height: 523px;
+  background: #262626;
+  padding: 50px;
+}
+
+.Title {
+  text-align: center;
+}
+
+.TeamWord {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 44px;
+
+  color: #ffffff;
+}
+
+.WorksWord {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 44px;
+  color: #a7e32d;
+}
+
+.NewTeam {
+  color: #a7e32d;
+  display: block;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+}

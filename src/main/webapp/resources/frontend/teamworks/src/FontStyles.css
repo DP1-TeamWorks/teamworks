@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+body {
+  font-family: 'Inter';
+}
+
+.TinyTitle {
+  font-size: 10pt;
+  color: #A6CE56;
+  letter-spacing: 2px;
+  margin: 0;
+  margin-bottom: 5px;
+  width: fit-content;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+.BigTitle {
+  font-size: 28pt;
+  font-weight: 900;
+  color: white;
+  margin: 0;
+  width: fit-content;
+}
+
+.BoldTitle {
+  font-size: 18pt;
+  font-weight: 900;
+  color: #A6CE56;
+  margin: 0;
+  width: fit-content;
+}
+
+.SmallTitle {
+  font-size: 13pt;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  width: fit-content;
+}
