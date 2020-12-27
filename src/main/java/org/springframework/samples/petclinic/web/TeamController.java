@@ -83,7 +83,7 @@ public class TeamController {
 					return ResponseEntity.badRequest().build();
 				}
 				teamService.saveTeam(team);
-				return ResponseEntity.ok("Team updtae");
+				return ResponseEntity.ok("Team update");
 			} else {
 				return ResponseEntity.status(403).build();
 			}
