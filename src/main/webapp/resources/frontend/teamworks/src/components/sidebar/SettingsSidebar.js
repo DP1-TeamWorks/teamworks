@@ -6,7 +6,8 @@ const SettingsSidebar = (props) =>
 {
     return (
         <Sidebar>
-            <GradientButton onClick={props.onAddNewUserClicked} className="Sidebar__PaddedElement Sidebar__PaddedElement--Top">Add a new user</GradientButton>
+            <GradientButton onClick={props.onAddNewUserClicked} className="MainButton">Add a new user</GradientButton>
+            <hr className="Separator" />
         </Sidebar>
     )
 }

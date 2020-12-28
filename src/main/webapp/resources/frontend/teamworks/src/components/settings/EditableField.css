@@ -1,0 +1,34 @@
+.EditableField {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    width: 300px;
+    height: 40px;
+}
+
+.PenIcon {
+    color: #a6ce5636;
+    margin-left: 20px;
+}
+
+.EditingInput {
+    width: calc(100% - 40px);
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: none;
+    /* border: none; */
+    padding-left: 20px;
+    padding-right: 30px;
+}
+
+.EditingOkButton {
+    width: 50px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    border-radius: 0;
+}

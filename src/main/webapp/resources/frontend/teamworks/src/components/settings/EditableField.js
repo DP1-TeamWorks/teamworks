@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import "../../FontStyles.css";
-import "../../sections/Settings.css";
+import "./EditableField.css";
 import "../Forms/forms.css";
 import GradientButton from "../buttons/GradientButton";
 
