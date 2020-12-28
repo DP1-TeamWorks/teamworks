@@ -104,6 +104,7 @@ class SignUpForm extends React.Component {
     })
       .then((res) => {
         console.log("Signed Up, redirecting to login");
+        // TODO: Fix this
         const mail = `${username.toLowerCase()}${lastname.toLowerCase()}@${identifier}`;
         AuthApiUtils.login({mail, password}).then(() =>
         {
