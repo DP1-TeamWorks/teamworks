@@ -14,7 +14,6 @@ public class UserTWService {
 
 	private UserTWRepository userRepository;
 
-
 	@Autowired
 	public UserTWService(UserTWRepository userRepository) {
 		this.userRepository = userRepository;
@@ -23,7 +22,7 @@ public class UserTWService {
 
 	@Transactional
 	public void saveUser(UserTW user) throws DataAccessException {
-		//user.setEnabled(true);
+		// user.setEnabled(true);
 		userRepository.save(user);
 	}
 
@@ -47,22 +46,19 @@ public class UserTWService {
 	}
 
 	@Transactional(readOnly = true)
-    public Collection<UserTW> getAllUsers() throws DataAccessException {
-        return userRepository.findAll();
-    }
+	public Collection<UserTW> getAllUsers() throws DataAccessException {
+		return userRepository.findAll();
+	}
+
 	@Transactional(readOnly = true)
-	public UserTW getLoginUser(String email,String password) throws DataAccessException {
-		UserTW user=userRepository.findbyEmail(email);
-		if(user!=null && user.getPassword().equals(password)) {
+	public UserTW getLoginUser(String email, String password) throws DataAccessException {
+		UserTW user = userRepository.findbyEmail(email);
+		if (user != null && user.getPassword().equals(password)) {
 			return user;
-		}
-		else {
+		} else {
 			return null;
 		}
 
 	}
-
-
-
 
 }

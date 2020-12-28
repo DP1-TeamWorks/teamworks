@@ -33,55 +33,51 @@ public class UserTWController {
 		this.teamService = teamService;
 	}
 
-
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
 
-
-	@GetMapping(value = "/userTW")
+	@GetMapping(value = "/api/userTW")
 	public List<UserTW> getUser(@RequestParam(required = false) String user) {
-	    if (user == null) {
-            List<UserTW> list = userService.getAllUsers().stream().collect(Collectors.toList());
-            return list;
-        }
-	    else {
-	    	List<UserTW> list = userService.findUserByName(user).stream().collect(Collectors.toList());
-            if (list == null)
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find user");
-            else {
-                return list;
-            }
-        }
+		if (user == null) {
+			List<UserTW> list = userService.getAllUsers().stream().collect(Collectors.toList());
+			return list;
+		} else {
+			List<UserTW> list = userService.findUserByName(user).stream().collect(Collectors.toList());
+			if (list == null)
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find user");
+			else {
+				return list;
+			}
+		}
 	}
 
-
-
-	@PostMapping(value = "/userTW")
+	@PostMapping(value = "/api/userTW")
 	public ResponseEntity<String> postUser(@RequestParam(required = true) Integer teamId, @RequestBody UserTW user) {
-        try { // TODO: Encrypt user password
-        	Team team = teamService.findTeamById(teamId);
-        	user.setTeam(team);
-        	userService.saveUser(user);
-        	return ResponseEntity.ok("User Created");
-        } catch (DataAccessException d) {
-        	return ResponseEntity.badRequest().build();
-        }
+		try {
+
+			Team team = teamService.findTeamById(teamId);
+			user.setTeam(team);
+			userService.saveUser(user);
+			return ResponseEntity.ok("User Created");
+
+		} catch (DataAccessException d) {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 
+	@DeleteMapping(value = "/api/userTW")
+	public ResponseEntity<String> deleteUser(@RequestParam(required = true) Integer userId) {
+		// System.out.println("Delete user: "+ userTWId);
 
-	@DeleteMapping(value= "/userTW")
-	public ResponseEntity<String> deleteUser(@RequestParam(required=true) Integer userId){
-		//System.out.println("Delete user: "+ userTWId);
+		try {
+			userService.deleteUserById(userId);
+			return ResponseEntity.ok("User Deleted");
 
-	try {
-    	userService.deleteUserById(userId);
-		return ResponseEntity.ok("User Deleted");
-
-	} catch (DataAccessException d) {
-    	return ResponseEntity.badRequest().build();
-	}
+		} catch (DataAccessException d) {
+			return ResponseEntity.badRequest().build();
+		}
 
 	}
 

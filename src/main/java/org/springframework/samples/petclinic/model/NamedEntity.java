@@ -21,8 +21,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * Simple JavaBean domain object adds a name property to <code>BaseEntity</code>. Used as
- * a base class for objects needing these properties.
+ * Simple JavaBean domain object adds a name property to
+ * <code>BaseEntity</code>. Used as a base class for objects needing these
+ * properties.
  *
  * @author Ken Krebs
  * @author Juergen Hoeller
@@ -30,8 +31,8 @@ import javax.validation.constraints.Size;
 @MappedSuperclass
 public class NamedEntity extends BaseEntity {
 
-    @Size(min = 1, max = 50)
-    @NotBlank
+	@Size(min = 1, max = 50)
+	@NotBlank
 	@Column(name = "name")
 	private String name;
 

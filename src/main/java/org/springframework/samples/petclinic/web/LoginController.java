@@ -11,14 +11,13 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserTWService;
-import org.springframework.samples.petclinic.util.CaseUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class LoginController {
-	private final TeamService teamService;
 	private final UserTWService userTWService;
+	private final TeamService teamService;
 
 	@Autowired
 	public LoginController(TeamService teamService, UserTWService userTWService) {
@@ -31,7 +30,6 @@ public class LoginController {
 		dataBinder.setAllowedFields("id");
 	}
 
-	@CrossOrigin
 	@PostMapping(value = "/api/auth/login")
 	public ResponseEntity<UserTW> login(HttpServletRequest r, @RequestBody Map<String, String> b) {
 		try {
@@ -53,14 +51,12 @@ public class LoginController {
 		}
 	}
 
-	@CrossOrigin
 	@GetMapping(value = "/api/auth/logout")
 	public void logout(HttpServletRequest r) {
 		// Unset the session
 		r.getSession().invalidate();
 	}
 
-	@CrossOrigin
 	@PostMapping(value = "/api/auth/signup")
 	public ResponseEntity<String> signUp(@RequestBody Map<String, String> b) {
 		try {
@@ -79,8 +75,7 @@ public class LoginController {
 			user.setName(name);
 			user.setLastname(lastname);
 			user.setPassword(password);
-			user.setEmail(
-					user.getName().toLowerCase()+user.getLastname().toLowerCase() + "@" + team.getIdentifier());
+			user.setEmail(user.getName().toLowerCase() + user.getLastname().toLowerCase() + "@" + team.getIdentifier());
 			user.setRole(Role.team_owner);
 			user.setTeam(team);
 
