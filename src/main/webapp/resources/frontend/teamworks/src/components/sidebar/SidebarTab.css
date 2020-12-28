@@ -1,0 +1,13 @@
+.SidebarTab
+{
+    margin: 0 -35px;
+    width: calc(100% + 70px);
+    padding: 15px 35px;
+    font-size: 13pt;
+    font-weight: 400;
+}
+
+.SidebarTab--Selected {
+    background-color: #3E4237;
+    font-weight: 600;
+}

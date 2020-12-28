@@ -7,14 +7,14 @@ import EditableField from '../components/settings/EditableField';
 import Button from '../components/buttons/Button';
 
 
-const Settings = (props) =>
+const Settings = () =>
 {
     return (
         <div className="Content">
             <SettingsSidebar />
             <Section className="Section--Lighter">
                 <ProfileHeader
-                    src="https://avatars0.githubusercontent.com/u/1417708?s=460&u=b8dd20ef775f23c845a418513e48617181de734a&v=4"
+                    src="/default_pfp.png"
                     role="Team Manager"
                     name="Nicolás de Ory" />
                 <div className="SettingGroupsContainer">

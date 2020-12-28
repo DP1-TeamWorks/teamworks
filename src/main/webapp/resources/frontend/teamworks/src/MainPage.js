@@ -9,16 +9,15 @@ import
   Route,
   Link
 } from "react-router-dom";
-import LoginPage from "./components/Auth/LoginPage";
 import "./sections/Section.css";
 
-const MainPage = (props) =>
+const MainPage = () =>
 {
   
   return (
     <Router>
       <Switch>
-        <Route path="/settings">
+        <Route path="/settings/team">
           <div className="App">
             <Header />
             <Settings />
