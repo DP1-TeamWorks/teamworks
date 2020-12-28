@@ -24,6 +24,8 @@
 
 .DangerTitle {
   color: #FF3C3C;
+  font-weight: 600;
+  font-size: 13pt;
 }
 
 .EditingField
@@ -41,7 +43,7 @@
   top: 0;
   left: 0;
   background: none;
-  border: none;
+  /* border: none; */
   padding-left: 20px;
   padding-right: 30px;
 }
