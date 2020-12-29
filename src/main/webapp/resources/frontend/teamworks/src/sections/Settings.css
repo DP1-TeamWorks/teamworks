@@ -44,6 +44,8 @@
   border: none;
   padding-left: 20px;
   padding-right: 30px;
+  font-weight: 800;
+  font-size: large;
 }
 
 .EditingOkButton 
