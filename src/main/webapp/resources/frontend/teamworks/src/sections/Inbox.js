@@ -5,7 +5,7 @@ import Section from "./Section";
 const Inbox = (props) => {
   return (
     <div className="Content">
-      <Section>
+      <Section className="Section--Lighter">
         <InboxSidebar />
       </Section>
     </div>

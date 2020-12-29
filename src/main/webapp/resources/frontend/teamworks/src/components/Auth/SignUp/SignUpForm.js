@@ -1,7 +1,7 @@
 import React from "react";
 import AuthApiUtils from "../../../utils/api/AuthApiUtils";
-import Input from "../../Forms/Input";
-import SubmitButton from "../../Forms/SubmitButton";
+import Input from "../../forms/Input";
+import SubmitButton from "../../forms/SubmitButton";
 
 class SignUpForm extends React.Component {
   constructor(props) {

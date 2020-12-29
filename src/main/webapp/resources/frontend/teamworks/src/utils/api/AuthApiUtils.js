@@ -5,11 +5,11 @@ const AUTH_URL = "/auth";
 const AuthApiUtils = {
   login: (credentials) =>
     axios.post(API_URL + AUTH_URL + "/login", credentials),
+  islogged: () => axios.get(API_URL + AUTH_URL + "/islogged"),
   signup: (signUpProps) =>
     axios.post(API_URL + AUTH_URL + "/signup", signUpProps),
   check: () => axios.get(API_URL + AUTH_URL),
-  logout: () => axios.delete(API_URL + AUTH_URL),
-  islogged: () => axios.get(API_URL + AUTH_URL + "/islogged")
+  logout: () => axios.delete(API_URL + AUTH_URL + "/logout"),
 };
 
 export default AuthApiUtils;

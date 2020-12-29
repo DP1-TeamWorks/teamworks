@@ -1,5 +1,5 @@
 import React from "react";
-import "./forms.css";
+import "./Forms.css";
 import SubmitError from "./SubmitError";
 import GradientButton from "../buttons/GradientButton";
 
