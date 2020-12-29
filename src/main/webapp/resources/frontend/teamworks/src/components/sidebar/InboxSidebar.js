@@ -1,13 +1,13 @@
 import React from 'react';
 import Sidebar from '../sidebar/Sidebar';
-import './MainSidebar.css';
+import GradientButton from "../buttons/GradientButton";
 
-const Sidebar = (props) => {
+const InboxSidebar = (props) => {
     return (
-        <div className="Sidebar">
-            {props.children}
-        </div>
+        <Sidebar>
+            <GradientButton onClick={props.onAddNewUserClicked} className="Sidebar__PaddedElement Sidebar__PaddedElement--Top">Add a new user</GradientButton>
+        </Sidebar>
     )
 }
 
-export default Sidebar;
+export default InboxSidebar;
