@@ -7,7 +7,7 @@ import org.springframework.samples.petclinic.model.Belongs;
 public interface BelongsRepository extends Repository<Belongs, Integer>{
 	void save(Belongs belongs) throws DataAccessException;
 	void deleteById(Integer belongsId) throws DataAccessException;
-	Belongs findById(Integer projectId) throws DataAccessException;
+	Belongs findById(Integer belongsId) throws DataAccessException;
 	
 	
 }
