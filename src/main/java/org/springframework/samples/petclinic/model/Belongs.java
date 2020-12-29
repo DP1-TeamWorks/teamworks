@@ -8,6 +8,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sun.istack.NotNull;
@@ -21,8 +23,7 @@ import lombok.Setter;
 
 public class Belongs extends BaseEntity {
 
-	@NotNull
-	@NotEmpty
+	@CreationTimestamp
 	@Column(name = "initialDate")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate initialDate;
