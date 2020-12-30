@@ -18,7 +18,6 @@ import com.sun.istack.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 @Getter
 @Setter
