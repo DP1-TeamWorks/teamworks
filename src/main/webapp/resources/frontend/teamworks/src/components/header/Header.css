@@ -4,6 +4,7 @@
     background-color: #363636;
     display: inline-flex;
     overflow: hidden;
+    position: relative;
 }
 
 .HeaderTitle{
@@ -14,12 +15,15 @@
 
 .SearchInput{
     height: 40px;
-    width: 550px;
+    width: 100%;
+    min-width: 200px;
+    max-width: 500px;
     margin-top: 25px;
     background-color: #292D22;
     border-style: none;
     padding-left: 40px;
     border-radius: 3px;
+    outline: none;
 }
 
 .HeaderButton{
@@ -27,12 +31,18 @@
     height: 50px;
     margin-left: 80px;
     white-space: nowrap;
+    position: absolute;
+    right: 120px;
+    /*quitarlo*/
 }
 
 .ProfilePic{
     width: auto;
     height: 60px;
     margin: none;
+    position: absolute;
+    right: 20px;
+    /*quitarlo*/
 }
 
 .ProfileHeader{
@@ -42,7 +52,8 @@
 
 .HeaderSearchbar{
     position: relative;
-    width: 500%;
+    width: 100%;
+    /*width: 500%*/
 }
 
 .HeaderSearchbar::before{
