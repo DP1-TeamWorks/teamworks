@@ -38,9 +38,10 @@ public class ToDo extends BaseEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "milestone_id")
-    @JsonBackReference
+    @JsonBackReference(value="milestone-toDo")
     private Milestone milestone;
 
+    
     @ManyToMany
     private List<Tag> tags;
 
