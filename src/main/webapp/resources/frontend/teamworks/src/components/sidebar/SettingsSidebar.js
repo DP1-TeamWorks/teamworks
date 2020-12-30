@@ -6,7 +6,6 @@ import "./SettingsSidebar.css";
 
 const SettingsSidebar = ({onAddNewUserClicked}) =>
 {
-
     return (
         <Sidebar>
             <GradientButton onClick={onAddNewUserClicked} className="MainButton">Add a new user</GradientButton>

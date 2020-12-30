@@ -3,6 +3,7 @@
   height: 100%;
   background-color: #262626;
   padding: 35px 35px;
+  position: fixed;
 }
 
 .MainButton {

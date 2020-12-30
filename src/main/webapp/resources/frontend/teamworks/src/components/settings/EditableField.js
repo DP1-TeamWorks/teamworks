@@ -17,7 +17,7 @@ const EditableField = (props) => // TODO: Enter submit
     if (editing)
     {
         return (
-            <div className="EditingField">
+            <div className="EditableField">
                 <input className="Input EditingInput" type={props.inputType ?? "text"} defaultValue={currentVal} onChange={e => setCurrentVal(e.target.value)} />
                 <GradientButton className="EditingOkButton" onClick={() => onOkClicked()}>OK</GradientButton>
             </div>

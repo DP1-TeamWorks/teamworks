@@ -22,36 +22,36 @@ import lombok.Data;
 
 
 public class UserTW extends BaseEntity {
-	
+
 	@NotNull
 	@NotEmpty
 	@Column(name = "name")
 	String name;
-	
+
 	@NotNull
 	@NotEmpty
 	@Column(name = "lastname")
 	String lastname;
-	
+
 	@NotNull
 	@NotEmpty
 	@Column(name = "email",unique = true)
 	String email;
-	
+
 	@NotNull
 	@NotEmpty
 	@Column(name = "password")
 	String password;
-	
+
 	String profileThumbUrl;
-	
+
 	@Column(name= "joinDate")
 	@CreationTimestamp
 	LocalDate joinDate;
-	
+
 	@NotNull
 	Role role;
-	
+
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "team_id")
 	@JsonBackReference

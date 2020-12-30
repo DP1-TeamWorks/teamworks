@@ -1,7 +1,7 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, withRouter } from "react-router-dom";
 import "./SidebarTab.css";
 
-const SidebarTab = ({text, path}) =>
+const SidebarTab = ({text, path, history, to}) =>
 {
     const location = useLocation();
     
@@ -11,7 +11,7 @@ const SidebarTab = ({text, path}) =>
         className += " SidebarTab--Selected";
     }
 
-    return <div className={className}>{text}</div>
+    return <div className={className} onClick={() => history.push(path)}>{text}</div>
 }
 
-export default SidebarTab;
+export default withRouter(SidebarTab);
