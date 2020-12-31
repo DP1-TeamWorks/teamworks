@@ -5,9 +5,8 @@ import Section from "./Section";
 const Inbox = (props) => {
   return (
     <div className="Content">
-      <Section className="Section--Lighter">
-        <InboxSidebar />
-      </Section>
+      <InboxSidebar />
+      <Section className="Section--Lighter"></Section>
     </div>
   );
 };

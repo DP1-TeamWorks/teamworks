@@ -11,7 +11,7 @@ const MainPage = (props) => {
   return (
     <Router>
       <Switch>
-        <Route path="/">
+        <Route exact path="/">
           <div className="App">
             <Header />
             <Inbox />
