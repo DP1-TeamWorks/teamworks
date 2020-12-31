@@ -1,7 +1,12 @@
 import React, {useState} from "react";
 import "../../FontStyles.css";
+<<<<<<< HEAD
 import "../../sections/Settings.css";
 import "../forms/Forms.css";
+=======
+import "./EditableField.css";
+import "../Forms/forms.css";
+>>>>>>> origin/feature/settings-page-frontend
 import GradientButton from "../buttons/GradientButton";
 
 
@@ -17,7 +22,7 @@ const EditableField = (props) => // TODO: Enter submit
     if (editing)
     {
         return (
-            <div className="EditingField">
+            <div className="EditableField">
                 <input className="Input EditingInput" type={props.inputType ?? "text"} defaultValue={currentVal} onChange={e => setCurrentVal(e.target.value)} />
                 <GradientButton className="EditingOkButton" onClick={() => onOkClicked()}>OK</GradientButton>
             </div>

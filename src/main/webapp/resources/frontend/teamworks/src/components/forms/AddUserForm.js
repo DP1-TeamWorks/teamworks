@@ -1,16 +1,15 @@
 import React from "react";
-import AuthApiUtils from "../../../utils/api/AuthApiUtils";
-import Input from "../../forms/Input";
-import SubmitButton from "../../forms/SubmitButton";
+import AuthApiUtils from "../../utils/api/AuthApiUtils";
+import Input from "./Input";
+import SubmitButton from "./SubmitButton";
+import "./AddUserForm.css";
 
-class SignUpForm extends React.Component {
+class AddUserForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       inputs: {
-        teamname: "",
-        identifier: "",
-        username: "",
+        firstname: "",
         lastname: "",
         password: "",
       },
@@ -44,23 +43,16 @@ class SignUpForm extends React.Component {
     });
     let errorMsg = "";
     switch (field) {
-      case "teamname":
+      case "firstname":
         if (value === "") {
-          errorMsg = "TeamName required";
+          errorMsg = "First name required";
         } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
           errorMsg = "Invalid, use letters and numbers";
         }
         break;
-      case "identifier":
+      case "lastname":
         if (value === "") {
-          errorMsg = "Identifier required";
-        } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
-          errorMsg = "Invalid, use letters and numbers";
-        }
-        break;
-      case "username":
-        if (value === "") {
-          errorMsg = "Username required";
+          errorMsg = "Last name required";
         } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
           errorMsg = "Invalid, use letters and numbers";
         }
@@ -69,9 +61,8 @@ class SignUpForm extends React.Component {
         if (value === "") {
           errorMsg = "Password required";
         } else if (value.length < 8) {
-          errorMsg = "Passwords are larger";
+          errorMsg = "Passwords at least 8 characters";
         }
-
         break;
       default:
     }
@@ -87,18 +78,17 @@ class SignUpForm extends React.Component {
     this.setState({ inputs: { ...this.state.inputs, [field]: value } });
   };
 
-  apiRequestHandler = (teamname, identifier, username, lastname, password) => {
+  apiRequestHandler = (teamname, identifier, firstname, lastname, password) => {
     AuthApiUtils.signup({
       teamname,
       identifier,
-      username,
+      firstname,
       lastname,
       password,
     })
       .then((res) => {
         console.log("Signed Up, redirecting to login");
-        // TODO: Fix this
-        const mail = `${username.toLowerCase()}${lastname.toLowerCase()}@${identifier}`;
+        const mail = `${firstname.toLowerCase()}${lastname.toLowerCase()}@${identifier}`;
         AuthApiUtils.login({mail, password}).then(() =>
         {
           window.location.replace("/");
@@ -139,62 +129,21 @@ class SignUpForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitHandler}>
-        <p className="InputTitle">Team name</p>
-        <Input
-          name="teamname"
-          type="text"
-          placeholder="Stark Industries"
-          styleClass="Input InputLogin"
-          error={this.state.errors.teamname}
-          changeHandler={this.changeHandler}
-        />
-        <p className="InputTitle">Shorthand Identifier</p>
-        <Input
-          name="identifier"
-          type="text"
-          placeholder="stark"
-          styleClass="Input InputLogin"
-          error={this.state.errors.identifier}
-          changeHandler={this.changeHandler}
-        />
-        <br />
-        <span className={"PreviewWord"}>PREVIEW</span>{" "}
-        <span className={"Preview"}>
-          {this.state.inputs.username.toLowerCase()}
-          {this.state.inputs.lastname}@{this.state.inputs.identifier}
-        </span>
-        <svg className="Line">
-          <line x1="0" y1="0" x2="1000" y2="0" className="ColorLine" />
-        </svg>
-        <p className="InputTitle">Name</p>
-        <Input
-          name="username"
-          type="text"
-          placeholder="Johnny"
-          styleClass="Input InputLogin"
-          error={this.state.errors.username}
-          changeHandler={this.changeHandler}
-        />
-        <p className="InputTitle">LastName</p>
-        <Input
-          name="lastname"
-          type="text"
-          placeholder="Deep"
-          styleClass="Input InputLogin"
-          error={this.state.errors.lastname}
-          changeHandler={this.changeHandler}
-        />
+        <p className="InputTitle">First Name</p>
+        <div className="EditableField">
+            <Input name="firstname" styleClass="Input EditingInput" placeholder="Johnny" error={this.state.errors.firstname} changeHandler={this.changeHandler}/>
+        </div>
+        <p className="InputTitle">Last Name</p>
+        <div className="EditableField">
+            <Input name="lastname" styleClass="Input EditingInput" placeholder="Depp" error={this.state.errors.lastname} changeHandler={this.changeHandler}/>
+        </div>
         <p className="InputTitle">Password</p>
-        <Input
-          name="password"
-          type="password"
-          placeholder="Password"
-          styleClass="Input InputLogin"
-          error={this.state.errors.password}
-          changeHandler={this.changeHandler}
-        />
+        <div className="EditableField">
+            <Input name="password" type="password" styleClass="Input EditingInput" placeholder="More than 8 characters" error={this.state.errors.password} changeHandler={this.changeHandler}/>
+        </div>
         <SubmitButton
-          text="Sign up"
+          reducedsize
+          text="Add user"
           requestError={this.state.requestError}
           hasErrors={this.hasErrors()}
         />
@@ -203,4 +152,4 @@ class SignUpForm extends React.Component {
   }
 }
 
-export default SignUpForm;
+export default AddUserForm;

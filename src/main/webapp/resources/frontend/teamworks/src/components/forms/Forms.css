@@ -11,9 +11,8 @@
 .SubmitError {
   font-size: smaller;
   color: #e32d2d;
-  padding: 10px;
-  padding-top: 5px;
-  padding-bottom: 0;
+  margin: 10px;
+  margin-top: 5px;
   height: 10px;
   width: auto;
   margin-bottom: 25px;
