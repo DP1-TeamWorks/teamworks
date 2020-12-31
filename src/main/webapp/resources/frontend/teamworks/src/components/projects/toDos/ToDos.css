@@ -1,0 +1,12 @@
+.ToDoCircle {
+  margin: 0;
+  width: 20px;
+  height: 20px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  display: inline-block;
+  background: rgba(227, 255, 170, 0.06);
+  border: 2px solid rgba(166, 206, 86, 0.06);
+  box-sizing: border-box;
+}

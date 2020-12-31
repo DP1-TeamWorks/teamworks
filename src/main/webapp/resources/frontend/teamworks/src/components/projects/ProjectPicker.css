@@ -1,0 +1,10 @@
+.PickerBox {
+  background: linear-gradient(91.13deg, #292d22 0%, #292d22 100%);
+  border: 0.847162px solid rgba(166, 206, 86, 0.8);
+  box-sizing: border-box;
+  border-radius: 3.38865px;
+  width: 100%;
+
+  text-align: center;
+  color: #c8e874;
+}

@@ -7,11 +7,22 @@
 }
 
 .MainButton {
- /* margin: 0 30px;
+  /* margin: 0 30px;
   width: calc(100% - 60px);*/
   width: 100%;
 }
 
 .Separator {
   margin-top: 25px;
+}
+
+.SidebarSection {
+}
+
+.SidebarSectionTitle {
+  margin: 25px 0px 6px 0px;
+  font-size: 9pt;
+  text-transform: uppercase;
+  font-weight: 600;
+  user-select: none;
 }

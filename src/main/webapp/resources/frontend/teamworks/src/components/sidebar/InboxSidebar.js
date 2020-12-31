@@ -10,13 +10,12 @@ import SidebarSection from "./SidebarSection";
 const InboxSidebar = (props) => {
   return (
     <Sidebar>
-      <GradientButton
-        onClick={props.createNewMessage}
-        className="Sidebar__PaddedElement Sidebar__PaddedElement--Top"
-      >
+      <GradientButton onClick={props.createNewMessage} className="MainButton">
         NEW MESSAGE
       </GradientButton>
-      <SidebarSection />
+
+      <hr className="Separator" />
+
       <Inboxes />
       <ProjectPicker />
       <ProjectTags />
