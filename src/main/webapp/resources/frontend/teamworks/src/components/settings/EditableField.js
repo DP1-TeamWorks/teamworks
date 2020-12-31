@@ -1,44 +1,43 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "../../FontStyles.css";
-<<<<<<< HEAD
-import "../../sections/Settings.css";
-import "../forms/Forms.css";
-=======
 import "./EditableField.css";
-import "../Forms/forms.css";
->>>>>>> origin/feature/settings-page-frontend
+import "../forms/Forms.css";
 import GradientButton from "../buttons/GradientButton";
 
+const EditableField = (
+  props // TODO: Enter submit
+) => {
+  function onOkClicked() {
+    setEditing(false);
+  }
 
-const EditableField = (props) => // TODO: Enter submit
-{
-    function onOkClicked()
-    {
-        setEditing(false);
-    }
-
-    const [editing, setEditing] = useState(false);
-    const [currentVal, setCurrentVal] = useState(props.value);
-    if (editing)
-    {
-        return (
-            <div className="EditableField">
-                <input className="Input EditingInput" type={props.inputType ?? "text"} defaultValue={currentVal} onChange={e => setCurrentVal(e.target.value)} />
-                <GradientButton className="EditingOkButton" onClick={() => onOkClicked()}>OK</GradientButton>
-            </div>
-        );
-    }
-    else
-    {
-        return (
-            <div className="EditableField" onClick={() => setEditing(true)}>
-                <h3 className="BoldTitle">{currentVal}</h3>
-                <i className="fas fa-pen PenIcon"></i>
-            </div>
-        );
-    }
-
-    
-}
+  const [editing, setEditing] = useState(false);
+  const [currentVal, setCurrentVal] = useState(props.value);
+  if (editing) {
+    return (
+      <div className="EditableField">
+        <input
+          className="Input EditingInput"
+          type={props.inputType ?? "text"}
+          defaultValue={currentVal}
+          onChange={(e) => setCurrentVal(e.target.value)}
+        />
+        <GradientButton
+          className="EditingOkButton"
+          onClick={() => onOkClicked()}
+        >
+          OK
+        </GradientButton>
+      </div>
+    );
+  } else {
+    return (
+      <div className="EditableField" onClick={() => setEditing(true)}>
+        <h3 className="BoldTitle">{currentVal}</h3>
+        <i className="fas fa-pen PenIcon"></i>
+      </div>
+    );
+  }
+};
 
 export default EditableField;
