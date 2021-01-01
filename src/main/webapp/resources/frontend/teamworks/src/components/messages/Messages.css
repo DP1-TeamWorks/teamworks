@@ -65,3 +65,11 @@
 
   color: #a7e32d;
 }
+
+.MsgContent {
+  overflow: hidden;
+  height: 400px;
+  background-color: #313826;
+
+  transition: max-height 0.5s ease-out;
+}

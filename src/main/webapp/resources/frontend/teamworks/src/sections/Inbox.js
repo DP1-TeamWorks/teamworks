@@ -15,6 +15,36 @@ const Inbox = (props) => {
         { title: "Planning", color: "#DDFFDD" },
       ],
     },
+    {
+      sender: { name: "Johnny Depp", teamname: "Pearson" },
+      subject: "Welcome to TeamWorks",
+      date: "02/12/2020",
+      time: "19:23",
+      tags: [
+        { title: "Planning", color: "#FFD703" },
+        { title: "Planning", color: "#DDFFDD" },
+      ],
+    },
+    {
+      sender: { name: "Johnny Depp", teamname: "Pearson" },
+      subject: "Welcome to TeamWorks",
+      date: "02/12/2020",
+      time: "19:23",
+      tags: [
+        { title: "Planning", color: "#FFD703" },
+        { title: "Planning", color: "#DDFFDD" },
+      ],
+    },
+    {
+      sender: { name: "Johnny Depp", teamname: "Pearson" },
+      subject: "Welcome to TeamWorks",
+      date: "02/12/2020",
+      time: "19:23",
+      tags: [
+        { title: "Planning", color: "#FFD703" },
+        { title: "Planning", color: "#DDFFDD" },
+      ],
+    },
   ]);
   return (
     <div className="Content">
