@@ -8,3 +8,7 @@
   text-align: center;
   color: #c8e874;
 }
+
+.PickerBox:hover {
+  background: #e8fdb354;
+}

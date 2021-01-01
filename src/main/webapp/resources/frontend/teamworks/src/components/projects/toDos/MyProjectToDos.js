@@ -6,10 +6,7 @@ const MyProjectToDos = ({ projectId, tagColor, tagTitle }) => {
   const [toDoList, setToDoList] = useState([
     {
       title: "Plan a meeting",
-      tagList: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Planning", color: "#DDFFDD" },
-      ],
+      tagList: [{ title: "Planning", color: "#FFD703" }],
     },
     {
       title: "Go to have breakfast",
@@ -20,10 +17,7 @@ const MyProjectToDos = ({ projectId, tagColor, tagTitle }) => {
     },
     {
       title: "Work with my Team",
-      tagList: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Planning", color: "#DDFFDD" },
-      ],
+      tagList: [],
     },
   ]);
   return (

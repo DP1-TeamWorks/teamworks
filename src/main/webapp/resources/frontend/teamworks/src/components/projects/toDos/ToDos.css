@@ -1,5 +1,8 @@
 .ToDoCircle {
-  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+
+  margin-right: 4px;
   width: 20px;
   height: 20px;
   -moz-border-radius: 50%;
@@ -9,4 +12,8 @@
   background: rgba(227, 255, 170, 0.06);
   border: 2px solid rgba(166, 206, 86, 0.06);
   box-sizing: border-box;
+}
+
+.ToDoCircle:hover {
+  background: rgba(218, 250, 154, 0.363);
 }

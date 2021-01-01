@@ -23,11 +23,12 @@
 }
 
 .Circle {
-  margin: 0;
+  margin-right: 4px;
   display: inline-block;
+  vertical-align: middle;
   border: 0;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   border-radius: 50%;
