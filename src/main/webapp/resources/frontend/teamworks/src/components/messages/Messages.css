@@ -1,0 +1,75 @@
+.MsgListContainer {
+  width: auto;
+}
+
+.MsgPreviewContainer {
+  height: 60px;
+  padding: 20px;
+  align-items: center;
+
+  background: #292d22;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  color: #a7e32d;
+}
+
+.MsgPreviewContainer:hover {
+  background: #a6e32d18;
+}
+
+.SelectBox {
+  display: inline-block;
+  vertical-align: middle;
+
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(166, 206, 86, 0.19);
+  box-sizing: border-box;
+  border-radius: 2px;
+}
+
+.SelectBox:hover {
+  background-color: #97b8548e;
+}
+
+.MsgTitle {
+  margin-left: 10px;
+  display: inline-block;
+  vertical-align: middle;
+
+  color: #a7e32d;
+  font-weight: bold;
+}
+
+.MsgTitle--Opened {
+  margin-left: 10px;
+  display: inline-block;
+  vertical-align: middle;
+
+  font-weight: bold;
+}
+
+.MsgSubject {
+  margin-left: 20px;
+  display: inline-block;
+  vertical-align: middle;
+
+  color: #a7e32d;
+}
+
+.MsgDateTime {
+  margin-left: 20px;
+  display: inline-block;
+  vertical-align: middle;
+
+  color: #a7e32d;
+}
+
+.MsgContent {
+  overflow: hidden;
+  height: 400px;
+  background-color: #313826;
+
+  transition: max-height 0.5s ease-out;
+}

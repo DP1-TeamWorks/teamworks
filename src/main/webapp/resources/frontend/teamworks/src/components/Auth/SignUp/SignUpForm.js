@@ -1,7 +1,7 @@
 import React from "react";
 import AuthApiUtils from "../../../utils/api/AuthApiUtils";
-import Input from "../../Forms/Input";
-import SubmitButton from "../../Forms/SubmitButton";
+import Input from "../../forms/Input";
+import SubmitButton from "../../forms/SubmitButton";
 
 class SignUpForm extends React.Component {
   constructor(props) {
@@ -22,24 +22,18 @@ class SignUpForm extends React.Component {
   hasErrors = () => {
     const errors = Object.values(this.state.errors);
     const nInputs = Object.keys(this.state.inputs).length;
-    console.log(this.state.inputs);
-    console.log(nInputs, errors.length);
     let b =
       errors.length < nInputs
         ? true
         : errors.some((e) => {
             return e !== "";
           });
-    console.log("hasErrors? ", b);
     return b;
   };
 
   validateAll = () => {
-    console.log("Validating ALL");
     Object.entries(this.state.inputs).forEach((e) => {
       const [k, v] = e;
-      console.log(k);
-      console.log(v);
       this.validate(k, v);
     });
   };
@@ -48,7 +42,6 @@ class SignUpForm extends React.Component {
     this.setState({
       requestError: "",
     });
-    console.log("Validating: ", field, value);
     let errorMsg = "";
     switch (field) {
       case "teamname":

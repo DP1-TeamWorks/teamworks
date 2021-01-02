@@ -36,3 +36,12 @@
 .Button--red:hover {
     background-color: #352525;
 }
+
+.Button--green {
+    color: #A7E32D;
+    background-color: #292D22;
+}
+
+.Button--green:hover {
+    background-color: #2b3120;
+}

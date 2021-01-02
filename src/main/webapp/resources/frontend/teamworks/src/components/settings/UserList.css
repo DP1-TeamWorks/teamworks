@@ -1,0 +1,15 @@
+.UserList {
+    width: 100%;
+    max-width: 900px;
+    background: #343434;
+}
+
+.UserList__thead {
+    border-bottom: solid 1px #444;
+    background: #434343;
+}
+
+.UserList th {
+    text-align: left;
+    font-weight: 600;
+}

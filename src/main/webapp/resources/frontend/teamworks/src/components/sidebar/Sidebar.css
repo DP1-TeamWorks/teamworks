@@ -1,13 +1,28 @@
 .Sidebar {
-  width: 320px;
+  min-width: 320px;
   height: 100%;
   background-color: #262626;
+  padding: 35px 35px;
+  position: fixed;
 }
 
-.Sidebar__PaddedElement {
-  margin: 0 35px;
+.MainButton {
+  /* margin: 0 30px;
+  width: calc(100% - 60px);*/
+  width: 100%;
 }
 
-.Sidebar__PaddedElement--Top {
-  margin-top: 35px;
+.Separator {
+  margin-top: 25px;
+}
+
+.SidebarSection {
+}
+
+.SidebarSectionTitle {
+  margin: 25px 0px 6px 0px;
+  font-size: 9pt;
+  text-transform: uppercase;
+  font-weight: 600;
+  user-select: none;
 }

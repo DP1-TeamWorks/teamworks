@@ -1,0 +1,8 @@
+.SettingSidebarTitle {
+    margin-top: 65px;
+    margin-bottom: 8px;
+    font-size: 9pt;
+    text-transform: uppercase;
+    font-weight: 600;
+    user-select: none;
+}

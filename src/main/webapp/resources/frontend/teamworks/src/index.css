@@ -5,9 +5,9 @@
   margin: 0;
   font-family: "Inter", sans-serif;
   font-style: normal;
-  font-weight: 600;
-  font-size: 15px;
-  line-height: 22px;
+  font-weight: 400;
+  font-size: 11pt;
+  line-height: 20px;
   color: white;
 }
 
@@ -39,4 +39,11 @@ mark {
 
 span.semibold {
   font-weight: 600;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  border: none;
+  background-color: #333;
 }
