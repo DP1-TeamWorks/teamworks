@@ -67,4 +67,5 @@ public class UserTW extends BaseEntity {
 	private List<Belongs> belongs;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userTW", orphanRemoval = true)
 	private List<Participation> participation;
+	
 }
