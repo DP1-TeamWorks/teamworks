@@ -15,6 +15,7 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 
 import lombok.Getter;
@@ -59,6 +60,15 @@ public class Message extends BaseEntity {
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private UserTW recipient;
+	
+	@ManyToOne(optional = true)
+	@JoinColumn(name="messageId")
+    @JsonBackReference(value="message-id")
+	private Message message;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
+    @JsonManagedReference(value="message-id")
+	private List<Message> messages;
 	
 	//TODO: tag + todo
 	

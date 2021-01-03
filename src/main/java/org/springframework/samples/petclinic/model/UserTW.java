@@ -74,4 +74,5 @@ public class UserTW extends BaseEntity {
 	//@JsonManagedReference(value="user-participation")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userTW", orphanRemoval = true)
 	private List<Participation> participation;
+	
 }
