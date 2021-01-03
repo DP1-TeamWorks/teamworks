@@ -42,9 +42,11 @@ public class Message extends BaseEntity {
 	
 	
 	//Relations
+	/*
 	@Column(name = "attatchment")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
 	private List<Attatchment> attatchments;
+	*/
 	
 	@ManyToOne(optional = false)
     @JoinColumn(name = "message")
@@ -52,13 +54,13 @@ public class Message extends BaseEntity {
     private Message reply;
 	
 	@ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JoinColumn(name = "user_idsender")
+    @JsonBackReference(value = "message-sender")
     private UserTW sender;
 	
 	@ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JoinColumn(name = "user_idrecipient")
+    @JsonBackReference(value = "message-recipient")
     private UserTW recipient;
 	
 	@ManyToOne(optional = true)
