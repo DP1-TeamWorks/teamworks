@@ -114,31 +114,28 @@ public class DepartmentController {
 	// Belongs Requests
 	@PostMapping(value = "/api/departments/belongs")
 	public ResponseEntity<String> createBelongs(@RequestParam(required = true) Integer belongUserId,
-			@RequestParam(required = true) Integer departmentId, @RequestParam(required = false) Boolean isDepartmentManager, HttpServletRequest r) {
+			@RequestParam(required = true) Integer departmentId,
+			@RequestParam(required = false) Boolean isDepartmentManager, HttpServletRequest r) {
 
 		try {
-			Integer userId = (Integer) r.getSession().getAttribute("userId");
-			UserTW user = userTWService.findUserById(userId);
-			Department department = departmentService.findDepartmentById(departmentId);
 
-			if (user.getRole().equals(Role.team_owner) || belongsService
-					.findBelongByUserIdAndDepartmentId(userId, departmentId).getIsDepartmentManager()) {
-
+			Belongs currentBelongs = belongsService.findBelongByUserIdAndDepartmentId(belongUserId, departmentId);
+			Boolean teamOwner = Boolean.valueOf((String)r.getSession().getAttribute("teamOwner")) ;
+			if (currentBelongs == null) {
+				Department department = departmentService.findDepartmentById(departmentId);
 				UserTW belongUser = userTWService.findUserById(belongUserId);
 				Belongs belongs = new Belongs();
 				belongs.setDepartment(department);
 				belongs.setUserTW(belongUser);
 				belongs.setIsDepartmentManager(false);
 
-				if (isDepartmentManager != null && user.getRole().equals(Role.team_owner)) {
+				if (isDepartmentManager != null && teamOwner) {
 					belongs.setIsDepartmentManager(isDepartmentManager);
 				}
-				System.out.println(belongs.getDepartment().getId()+","+belongs.getUserTW().getId()+","+isDepartmentManager);
 				belongsService.saveBelongs(belongs);
 				return ResponseEntity.ok().build();
-
 			} else {
-				return ResponseEntity.status(403).build();
+				return ResponseEntity.badRequest().build();
 			}
 
 		} catch (DataAccessException d) {
@@ -153,21 +150,10 @@ public class DepartmentController {
 			Integer departmentId, HttpServletRequest r) {
 
 		try {
-			Integer userId = (Integer) r.getSession().getAttribute("userId");
-			UserTW user = userTWService.findUserById(userId);
-
-			if (user.getRole().equals(Role.team_owner) || belongsService
-					.findBelongByUserIdAndDepartmentId(userId, departmentId).getIsDepartmentManager()) {
-			
-				Belongs belongs = belongsService.findBelongByUserIdAndDepartmentId(belongUserId, departmentId);
-				belongs.setFinalDate(LocalDate.now());
-				belongs.setIsDepartmentManager(false);
-				belongsService.saveBelongs(belongs);
-				return ResponseEntity.ok().build();
-
-			} else {
-				return ResponseEntity.status(403).build();
-			}
+			Belongs belongs = belongsService.findBelongByUserIdAndDepartmentId(belongUserId, departmentId);
+			belongs.setFinalDate(LocalDate.now());
+			belongsService.saveBelongs(belongs);
+			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();

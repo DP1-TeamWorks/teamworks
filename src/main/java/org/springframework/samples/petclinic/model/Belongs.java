@@ -35,7 +35,6 @@ public class Belongs extends BaseEntity {
 	private Boolean isDepartmentManager;
 
 	@ManyToOne(optional = false)
-
 	@JoinColumn(name = "userId")
 	@JsonBackReference(value="user-belongs")
 	UserTW userTW;
