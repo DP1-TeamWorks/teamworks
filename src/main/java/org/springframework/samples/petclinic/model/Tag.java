@@ -41,10 +41,11 @@ public class Tag extends BaseEntity {
     @JoinColumn(name = "projects_id")
     @JsonBackReference
     private Project project;
-
+    
+    
     @ManyToMany
     private List<Milestone> milestones;
-
+    
     @ManyToMany
     private List<ToDo> toDos;
 

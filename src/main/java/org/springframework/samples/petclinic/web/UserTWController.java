@@ -3,10 +3,13 @@ package org.springframework.samples.petclinic.web;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.TeamService;
@@ -54,13 +57,21 @@ public class UserTWController {
 	}
 
 	@PostMapping(value = "/api/userTW")
-	public ResponseEntity<String> postUser(@RequestParam(required = true) Integer teamId, @RequestBody UserTW user) {
+	public ResponseEntity<String> postUser(HttpServletRequest r, @RequestBody UserTW user) {
 		try {
-
-			Team team = teamService.findTeamById(teamId);
-			user.setTeam(team);
-			userService.saveUser(user);
-			return ResponseEntity.ok("User Created");
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
+			UserTW userAdmin=userService.findUserById(userId);
+			if(userAdmin.getRole().equals(Role.team_owner)){
+				Team team = teamService.findTeamById(teamId);
+				user.setTeam(team);
+				user.setRole(Role.employee);
+				userService.saveUser(user);
+				return ResponseEntity.ok("User Created");
+			}else {
+				return ResponseEntity.status(403).build();
+			}
+			
 
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();

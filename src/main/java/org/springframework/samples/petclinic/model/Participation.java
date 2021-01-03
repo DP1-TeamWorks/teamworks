@@ -42,13 +42,13 @@ public class Participation extends BaseEntity {
 	@ManyToOne
 	@MapsId("userId")
 	@JoinColumn(name = "userId")
-	@JsonBackReference
+	@JsonBackReference(value="user-participation")
 	UserTW userTW;
 
 	@ManyToOne
 	@MapsId("projectId")
 	@JoinColumn(name = "projectId")
-	@JsonBackReference
+	@JsonBackReference(value="project-participation")
 	Project project;
 
 }
