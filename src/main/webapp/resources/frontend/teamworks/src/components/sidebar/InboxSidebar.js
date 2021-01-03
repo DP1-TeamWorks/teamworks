@@ -6,11 +6,12 @@ import MyProjectToDos from "../projects/toDos/MyProjectToDos";
 import ProjectTags from "../projects/tags/ProjectTags";
 import GradientButton from "../buttons/GradientButton";
 import SidebarSection from "./SidebarSection";
+import NewMessage from "../messages/NewMessage";
 
 const InboxSidebar = (props) => {
   return (
     <Sidebar>
-      <GradientButton onClick={props.createNewMessage} className="MainButton">
+      <GradientButton /*onClick={props.createNewMessage}*/ onClick={NewMessage} className="MainButton">
         NEW MESSAGE
       </GradientButton>
 
