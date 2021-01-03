@@ -16,10 +16,9 @@ const MainPage = () => {
             <Inbox />
           </div>
         </Route>
-
         <Route path="/settings">
           <div className="App">
-            <Header />
+            <Header onlyprofile />
             <Settings />
           </div>
         </Route>
