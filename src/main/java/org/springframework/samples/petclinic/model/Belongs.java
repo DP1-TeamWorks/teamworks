@@ -5,9 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -27,25 +25,22 @@ public class Belongs extends BaseEntity {
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate initialDate;
 
-	@NotNull
-	@NotEmpty
+	
 	@Column(name = "finalDate")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate finalDate;
 
 	@NotNull
-	@NotEmpty
 	@Column(name = "isDepartmentManager")
 	private Boolean isDepartmentManager;
 
 	@ManyToOne(optional = false)
-	@MapsId("userId")
+
 	@JoinColumn(name = "userId")
 	@JsonBackReference(value="user-belongs")
 	UserTW userTW;
 
 	@ManyToOne(optional = false)
-	@MapsId("departmentId")
 	@JoinColumn(name = "departmentId")
 	@JsonBackReference(value="department-belongs")
 	Department department;

@@ -114,7 +114,7 @@ public class DepartmentController {
 	// Belongs Requests
 	@PostMapping(value = "/api/departments/belongs")
 	public ResponseEntity<String> createBelongs(@RequestParam(required = true) Integer belongUserId,
-			Integer departmentId, @RequestParam(required = false) Boolean isDepartmentManager, HttpServletRequest r) {
+			@RequestParam(required = true) Integer departmentId, @RequestParam(required = false) Boolean isDepartmentManager, HttpServletRequest r) {
 
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
@@ -133,7 +133,7 @@ public class DepartmentController {
 				if (isDepartmentManager != null && user.getRole().equals(Role.team_owner)) {
 					belongs.setIsDepartmentManager(isDepartmentManager);
 				}
-
+				System.out.println(belongs.getDepartment().getId()+","+belongs.getUserTW().getId()+","+isDepartmentManager);
 				belongsService.saveBelongs(belongs);
 				return ResponseEntity.ok().build();
 
@@ -158,7 +158,7 @@ public class DepartmentController {
 
 			if (user.getRole().equals(Role.team_owner) || belongsService
 					.findBelongByUserIdAndDepartmentId(userId, departmentId).getIsDepartmentManager()) {
-
+			
 				Belongs belongs = belongsService.findBelongByUserIdAndDepartmentId(belongUserId, departmentId);
 				belongs.setFinalDate(LocalDate.now());
 				belongs.setIsDepartmentManager(false);

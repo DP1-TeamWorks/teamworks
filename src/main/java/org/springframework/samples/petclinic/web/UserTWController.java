@@ -65,6 +65,7 @@ public class UserTWController {
 			if(userAdmin.getRole().equals(Role.team_owner)){
 				Team team = teamService.findTeamById(teamId);
 				user.setTeam(team);
+				user.setRole(Role.employee);
 				userService.saveUser(user);
 				return ResponseEntity.ok("User Created");
 			}else {
