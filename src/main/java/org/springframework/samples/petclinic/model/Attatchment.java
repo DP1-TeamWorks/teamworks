@@ -15,10 +15,10 @@ public class Attatchment extends BaseEntity {
 	@Column(name = "url")
 	private String url;
 	
-	
+	/*
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "message")
 	@JsonBackReference
 	private Message message;
-
+	*/
 }
