@@ -31,7 +31,10 @@ public class BelongsService {
 	}
 
 	public Belongs findBelongByUserIdAndDepartmentId(Integer userId, Integer departmentId) {
-		return new Belongs();
+		return belongsRepository.findBelongByUserAndDeparment(userId, departmentId);
+	}
+	public Belongs findCurrentBelongs(Integer userId, Integer departmentId) {
+		return belongsRepository.findCurrentBelongs(userId, departmentId);
 	}
 
 }
