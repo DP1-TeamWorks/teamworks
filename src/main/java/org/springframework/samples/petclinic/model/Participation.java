@@ -40,13 +40,11 @@ public class Participation extends BaseEntity {
 	private Boolean isProjectManager;
 
 	@ManyToOne
-	@MapsId("userId")
 	@JoinColumn(name = "userId")
 	@JsonBackReference(value="user-participation")
 	UserTW userTW;
 
 	@ManyToOne
-	@MapsId("projectId")
 	@JoinColumn(name = "projectId")
 	@JsonBackReference(value="project-participation")
 	Project project;
