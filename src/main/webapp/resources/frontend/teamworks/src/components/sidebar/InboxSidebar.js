@@ -8,7 +8,12 @@ import GradientButton from "../buttons/GradientButton";
 import SidebarSection from "./SidebarSection";
 import NewMessage from "../messages/NewMessage";
 
-const InboxSidebar = (props) => {
+const InboxSidebar = ({setModalNewMessage, modalNewMessage}) => {
+
+  const ChangeModalNewMessage = () =>{
+    setModalNewMessage(!modalNewMessage)
+  }
+
   return (
     <Sidebar>
       <GradientButton /*onClick={props.createNewMessage}*/ onClick={NewMessage} className="MainButton">

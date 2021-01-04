@@ -8,8 +8,7 @@ const NewMessage = () => {
                 <div className="NewMsgTo">
                 </div>
                 <div className="SecondLineFlex">
-                    <div className="NewMsgDepartment">
-                    </div>
+                    <div className="NewMsgDepartment"></div>
                     <div className="NewMsgProject"></div>
                     <div className="NewMsgTags"></div>
                 </div>

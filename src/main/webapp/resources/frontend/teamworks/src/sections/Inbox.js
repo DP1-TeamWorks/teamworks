@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import MessageList from "../components/messages/MessageList";
+import NewMessage from "../components/messages/NewMessage";
 import InboxSidebar from "../components/sidebar/InboxSidebar";
 import Section from "./Section";
 
@@ -46,10 +47,14 @@ const Inbox = (props) => {
       ],
     },
   ]);
+
+  const [modalNewMessage, setModalNewMessage] = useState("False");
+
   return (
     <div className="Content">
-      <InboxSidebar />
+      <InboxSidebar modalNewMessage = {modalNewMessage} setModalNewMessage= {setModalNewMessage}/>
       <Section className="Section--Lighter">
+        {modalNewMessage && <NewMessage/>}
         <MessageList messages={messages} />
       </Section>
     </div>
