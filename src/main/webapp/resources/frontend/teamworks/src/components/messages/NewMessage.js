@@ -1,27 +1,24 @@
 import React, { useState } from "react";
+import Input from "../forms/Input";
 
 const NewMessage = () => {
-    return (
-        /*añadir el div solo a section lighter*/
-        <div>
-            <div className="NewMsgContainer">
-                <div className="NewMsgTo">
-                </div>
-                <div className="SecondLineFlex">
-                    <div className="NewMsgDepartment"></div>
-                    <div className="NewMsgProject"></div>
-                    <div className="NewMsgTags"></div>
-                </div>
-                <div className="NewMsgSubject"></div>
-                <div className="NewMsgBody"></div>
-                send button and upload
-            </div>
-            <div className="NewMsgBackground">
-            </div>
+  return (
+    /*añadir el div solo a section lighter*/
+      <div className="NewMsgModal">
+        <div className="NewMsgContainer">
+          <Input placeholder="Users" styleClass="Input"></Input>
+          <div className="SecondLineFlex">
+            <Input placeholder="DPT" styleClass="Input"></Input>
+            <Input placeholder="Project" styleClass="Input"></Input>
+            <Input placeholder="Tags" styleClass="Input"></Input>
+          </div>
+          <div className="NewMsg">
+          <Input styleClass="Input NewMsgHead" placeholder="How are you?"></Input> /*usar label para el ::before */
+          <Input styleClass="Input NewMsgBody"></Input>
+          </div>
         </div>
-    );
-  };
-  
-
+      </div>
+  );
+};
 
 export default NewMessage;

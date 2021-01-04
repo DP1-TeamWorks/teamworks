@@ -11,7 +11,7 @@ import NewMessage from "../messages/NewMessage";
 const InboxSidebar = ({setModalNewMessage, modalNewMessage}) => {
 
   const ChangeModalNewMessage = () =>{
-    setModalNewMessage(!modalNewMessage)
+    setModalNewMessage(!modalNewMessage) /*&& document.getElementById('ModalBackground').style.filter == 'blur(5px)';*/
   }
 
   return (

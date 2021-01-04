@@ -48,7 +48,7 @@ const Inbox = (props) => {
     },
   ]);
 
-  const [modalNewMessage, setModalNewMessage] = useState("False");
+  const [modalNewMessage, setModalNewMessage] = useState(false);
 
   return (
     <div className="Content">
