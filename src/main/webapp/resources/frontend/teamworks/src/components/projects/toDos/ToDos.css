@@ -8,22 +8,48 @@
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   border-radius: 50%;
-  display: inline-block;
+
   background: rgba(227, 255, 170, 0.06);
   border: 2px solid rgba(166, 206, 86, 0.06);
   box-sizing: border-box;
   outline: none;
 }
 
-.ToDoCircle:hover {
+.ToDoCircle:hover,
+.ToDoAdd:hover {
   background: rgba(218, 250, 154, 0.363);
 }
 
-.svg-inline--fa{
+.ToDoAdd {
+  display: inline-block;
+  vertical-align: middle;
+
+  margin-top: 10px;
+  margin-right: 4px;
+  width: 20px;
+  height: 20px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  border: 0px;
+  background: transparent;
+
+  box-sizing: border-box;
+  outline: none;
+}
+
+.AddNewText {
+  display: inline-block;
+  vertical-align: middle;
+  color: lightgray;
+
+  margin-top: 10px;
+}
+
+.svg-inline--fa {
   display: inline-block;
   font-size: inherit;
   height: 1em;
   overflow: visible;
-  vertical-align: 0px;
-  margin-left: -6px;
+  vertical-align: center;
 }
