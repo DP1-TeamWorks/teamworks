@@ -119,7 +119,7 @@ public class DepartmentController {
 
 		try {
 
-			Belongs currentBelongs = belongsService.findBelongByUserIdAndDepartmentId(belongUserId, departmentId);
+			Belongs currentBelongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
 			UserTW user = userTWService.findUserById((Integer)r.getSession().getAttribute("userId"));
 			Boolean teamOwner =  user.getRole().equals(Role.team_owner);
 			if (currentBelongs == null) {
