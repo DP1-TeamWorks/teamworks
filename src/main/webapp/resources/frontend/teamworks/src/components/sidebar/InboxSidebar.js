@@ -16,7 +16,7 @@ const InboxSidebar = ({setModalNewMessage, modalNewMessage}) => {
 
   return (
     <Sidebar>
-      <GradientButton /*onClick={props.createNewMessage}*/ onClick={NewMessage} className="MainButton">
+      <GradientButton /*onClick={props.createNewMessage}*/ onClick={ChangeModalNewMessage} className="MainButton">
         NEW MESSAGE
       </GradientButton>
 
