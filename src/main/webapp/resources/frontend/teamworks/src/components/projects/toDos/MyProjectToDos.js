@@ -9,10 +9,12 @@ const MyProjectToDos = ({ myProjectToDoList }) => {
   const [newToDo, setNewToDo] = useState("");
 
   const addNewToDo = () => {
-    myProjectToDoList.push({
+    const newToDoObject = {
       title: newToDo,
       tagList: [],
-    });
+    };
+    myProjectToDoList.push(newToDoObject);
+    // TODO api call to update toDos
     console.log(myProjectToDoList);
   };
 
