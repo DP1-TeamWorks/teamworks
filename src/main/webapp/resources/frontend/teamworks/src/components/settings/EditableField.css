@@ -8,6 +8,11 @@
     height: 40px;
 }
 
+.EditableField--OnlyInput {
+    margin-bottom: 5px;
+    cursor: inherit;
+}
+
 .PenIcon {
     color: #a6ce5636;
     margin-left: 20px;

@@ -5,6 +5,7 @@ import ProfileHeader from '../components/profile/ProfileHeader';
 import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import TeamSettings from '../components/settings/TeamSettings';
 import UserSettings from '../components/settings/UserSettings';
+import DepartmentSettings from "../components/settings/DepartmentSettings";
 
 const PATHS = ["/settings/team", "/settings/departments", "/settings/projects", "/settings/users"];
 
@@ -26,6 +27,9 @@ const Settings = () =>
                 <Switch>
                     <Route path="/settings/team">
                         <TeamSettings />
+                    </Route>
+                    <Route path="/settings/departments">
+                        <DepartmentSettings />
                     </Route>
                     <Route path="/settings/users">
                         <UserSettings />

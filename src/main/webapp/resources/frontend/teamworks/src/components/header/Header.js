@@ -6,10 +6,10 @@ import ProfilePic from "../profile/ProfilePic";
 import LinkButton from "../buttons/LinkButton";
 import MainTitle from "./MainTitle";
 
-const Header = ({onlyprofile}) => { 
+const Header = ({nosearchbar}) => { 
 
   let content;
-  if (onlyprofile)
+  if (nosearchbar)
   {
     content = <LinkButton className="Button--green HeaderButton" path="/">Go to Inbox</LinkButton>
   } else

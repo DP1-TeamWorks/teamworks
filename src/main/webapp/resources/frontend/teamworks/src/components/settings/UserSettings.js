@@ -9,14 +9,12 @@ const UserSettings = () => {
     <div className="SettingGroupsContainer">
       <SettingGroup
         name="Add a new user"
-        description="You will need to specify their full name and login details."
-      >
+        description="Fill out the form fields below.">
         <AddUserForm />
       </SettingGroup>
       <SettingGroup
         name="User list"
-        description="Registered users are shown below:"
-      >
+        description="Registered users are shown below:">
         <UserList />
       </SettingGroup>
     </div>

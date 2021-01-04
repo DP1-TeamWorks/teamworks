@@ -4,7 +4,8 @@
     background-color: #363636;
     display: inline-flex;
     overflow: hidden;
-    position: relative;
+    position: fixed;
+    z-index: 1;
 }
 
 .HeaderTitle{
@@ -37,7 +38,7 @@
     height: 50px;
     margin-left: 80px;
     white-space: nowrap;
-    position: absolute;
+    position: fixed;
     right: 120px;
     /*quitarlo*/
 }

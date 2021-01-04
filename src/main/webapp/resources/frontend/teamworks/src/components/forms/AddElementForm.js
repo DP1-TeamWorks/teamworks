@@ -4,18 +4,19 @@ import Input from "./Input";
 import SubmitButton from "./SubmitButton";
 import "./AddUserForm.css";
 
-class AddUserForm extends React.Component {
+class AddElementForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       inputs: {
-        firstname: "",
-        lastname: "",
-        password: "",
+        name: ""
       },
       errors: {},
       requestError: "",
     };
+    this.submitText = props.submitText;
+    this.attributeName = props.attributeName;
+    this.attributePlaceholder = props.attributePlaceholder;
   }
 
   hasErrors = () => {
@@ -43,28 +44,13 @@ class AddUserForm extends React.Component {
     });
     let errorMsg = "";
     switch (field) {
-      case "firstname":
+      case "name":
         if (value === "") {
-          errorMsg = "First name required";
-        } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
+          errorMsg = "Name required";
+        } else if (!/^[A-Za-z0-9_\s]*$/.test(value)) {
           errorMsg = "Invalid, use letters and numbers";
         }
         break;
-      case "lastname":
-        if (value === "") {
-          errorMsg = "Last name required";
-        } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
-          errorMsg = "Invalid, use letters and numbers";
-        }
-        break;
-      case "password":
-        if (value === "") {
-          errorMsg = "Password required";
-        } else if (value.length < 8) {
-          errorMsg = "Passwords at least 8 characters";
-        }
-        break;
-      default:
     }
     this.setState({
       errors: { ...this.state.errors, [field]: errorMsg },
@@ -129,21 +115,13 @@ class AddUserForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitHandler}>
-        <p className="InputTitle">First Name</p>
+        <p className="InputTitle">{this.attributeName}</p>
         <div className="EditableField EditableField--OnlyInput">
-            <Input name="firstname" styleClass="Input EditingInput" placeholder="Johnny" error={this.state.errors.firstname} changeHandler={this.changeHandler}/>
-        </div>
-        <p className="InputTitle">Last Name</p>
-        <div className="EditableField EditableField--OnlyInput">
-            <Input name="lastname" styleClass="Input EditingInput" placeholder="Depp" error={this.state.errors.lastname} changeHandler={this.changeHandler}/>
-        </div>
-        <p className="InputTitle">Password</p>
-        <div className="EditableField EditableField--OnlyInput">
-            <Input name="password" type="password" styleClass="Input EditingInput" placeholder="More than 8 characters" error={this.state.errors.password} changeHandler={this.changeHandler}/>
+            <Input name="name" styleClass="Input EditingInput" placeholder={this.attributePlaceholder} error={this.state.errors.firstname} changeHandler={this.changeHandler}/>
         </div>
         <SubmitButton
           reducedsize
-          text="Add user"
+          text={this.submitText}
           requestError={this.state.requestError}
           hasErrors={this.hasErrors()}
         />
@@ -152,4 +130,4 @@ class AddUserForm extends React.Component {
   }
 }
 
-export default AddUserForm;
+export default AddElementForm;
