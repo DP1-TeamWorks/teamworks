@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import Input from "../forms/Input";
+import InboxSidebar from "../sidebar/InboxSidebar"
+import Inbox from "../../sections/Inbox"
 
-const NewMessage = () => {
+
+const NewMessage = ({ChangeModalNewMessage}) => {
+
   return (
     /*añadir el div solo a section lighter*/
       <div className="NewMsgModal">
         <div className="NewMsgContainer">
+          <label className="CloseNewMsg" onClick={ChangeModalNewMessage}>
+          </label>
           <Input placeholder="Users" styleClass="Input"></Input>
           <div className="SecondLineFlex">
             <Input placeholder="DPT" styleClass="Input"></Input>

@@ -54,7 +54,7 @@ const Inbox = (props) => {
     <div className="Content">
       <InboxSidebar modalNewMessage = {modalNewMessage} setModalNewMessage= {setModalNewMessage}/>
       <Section className="Section--Lighter">
-        {modalNewMessage && <NewMessage/>}
+        {modalNewMessage && <NewMessage ChangeModalNewMessage={()=> setModalNewMessage(!modalNewMessage)}/>}
         <MessageList messages={messages} />
       </Section>
     </div>
