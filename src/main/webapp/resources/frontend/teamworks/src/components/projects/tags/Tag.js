@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import Circle from "./Circle";
 
-const Tag = ({ color, title, noOpenedMessages }) => {
-  console.log(color);
+const Tag = ({
+  color,
+  title,
+  selectedTab,
+  setSelectedTab,
+  noOpenedMessages,
+}) => {
   return (
-    <div className="TagTab">
+    <>
       <Circle color={color} /> <span>{title} </span>{" "}
       <span style={{ float: "right" }}> {noOpenedMessages} </span>
-    </div>
+    </>
   );
 };
 

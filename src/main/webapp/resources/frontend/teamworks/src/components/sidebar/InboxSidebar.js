@@ -9,12 +9,13 @@ import SidebarSection from "./SidebarSection";
 import NewMessage from "../messages/NewMessage";
 
 const InboxSidebar = ({ setModalNewMessage, modalNewMessage }) => {
+  const [selectedTab, setSelectedTab] = useState("Inbox");
   const [pickedProject, setPickedProject] = useState({
     title: "TeamWorks1",
     tagList: [
       { title: "Planning", color: "#FFD703", noOpenedMessages: 25 },
-      { title: "Planning", color: "#DDFFDD", noOpenedMessages: 12 },
-      { title: "Planning", color: "#AAD7F3", noOpenedMessages: 43 },
+      { title: "Cleaning", color: "#DDFFDD", noOpenedMessages: 12 },
+      { title: "MockUp", color: "#AAD7F3", noOpenedMessages: 43 },
     ],
     myProjectToDoList: [
       {
@@ -41,21 +42,22 @@ const InboxSidebar = ({ setModalNewMessage, modalNewMessage }) => {
 
   return (
     <Sidebar>
-      <GradientButton
-        /*onClick={props.createNewMessage}*/ onClick={ChangeModalNewMessage}
-        className="MainButton"
-      >
-        New Message
+      <GradientButton onClick={ChangeModalNewMessage} className="MainButton">
+        New message
       </GradientButton>
 
       <hr className="Separator" />
 
-      <Inboxes />
+      <Inboxes selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
       <ProjectPicker
         pickedProject={pickedProject}
         setPickedProject={setPickedProject}
       />
-      <ProjectTags tagList={pickedProject.tagList} />
+      <ProjectTags
+        tagList={pickedProject.tagList}
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+      />
       <MyProjectToDos myProjectToDoList={pickedProject.myProjectToDoList} />
     </Sidebar>
   );

@@ -1,18 +1,29 @@
 import React, { useState } from "react";
 import Tag from "./Tag";
+import InboxSidebarTab from "../../sidebar/InboxSidebarTab";
+
 import "./Tags.css";
 
-const ProjectTags = ({ tagList}) => {
+const ProjectTags = ({ tagList, selectedTab, setSelectedTab }) => {
   return (
     <>
       <h3 className="SidebarSectionTitle">Tags</h3>
       {tagList.map((tag) => {
         return (
-          <Tag
-            title={tag.title}
-            color={tag.color}
-            noOpenedMessages={tag.noOpenedMessages}
-          />
+          <InboxSidebarTab
+            text={tag.title + tag.color}
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
+            isTag={true}
+          >
+            <Tag
+              title={tag.title}
+              color={tag.color}
+              selectedTab={selectedTab}
+              setSelectedTab={setSelectedTab}
+              noOpenedMessages={tag.noOpenedMessages}
+            />
+          </InboxSidebarTab>
         );
       })}
     </>
