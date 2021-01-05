@@ -1,5 +1,4 @@
 package org.springframework.samples.petclinic.web;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
@@ -59,19 +59,14 @@ public class UserTWController {
 	@PostMapping(value = "/api/userTW")
 	public ResponseEntity<String> postUser(HttpServletRequest r, @RequestBody UserTW user) {
 		try {
-			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
-			UserTW userAdmin=userService.findUserById(userId);
-			if(userAdmin.getRole().equals(Role.team_owner)){
-				Team team = teamService.findTeamById(teamId);
-				user.setTeam(team);
-				user.setRole(Role.employee);
-				userService.saveUser(user);
-				return ResponseEntity.ok("User Created");
-			}else {
-				return ResponseEntity.status(403).build();
-			}
-			
+			Team team = teamService.findTeamById(teamId);
+			user.setTeam(team);
+			user.setEmail(user.getName().toLowerCase() + user.getLastname().toLowerCase() + "@" + team.getIdentifier());
+			user.setRole(Role.employee);
+			user.setPassword(SecurityConfiguration.passwordEncoder().encode(user.getPassword()));
+			userService.saveUser(user);
+			return ResponseEntity.ok("User Created");
 
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
@@ -80,8 +75,6 @@ public class UserTWController {
 
 	@DeleteMapping(value = "/api/userTW")
 	public ResponseEntity<String> deleteUser(@RequestParam(required = true) Integer userId) {
-		// System.out.println("Delete user: "+ userTWId);
-
 		try {
 			userService.deleteUserById(userId);
 			return ResponseEntity.ok("User Deleted");
@@ -91,5 +84,5 @@ public class UserTWController {
 		}
 
 	}
-
+	
 }
