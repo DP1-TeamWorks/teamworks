@@ -5,9 +5,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -22,14 +23,11 @@ import lombok.Setter;
 
 public class Participation extends BaseEntity {
 
-	@NotNull
-	@NotEmpty
+	@CreationTimestamp
 	@Column(name = "initialDate")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate initialDate;
 
-	@NotNull
-	@NotEmpty
 	@Column(name = "finalDate")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate finalDate;
@@ -39,14 +37,12 @@ public class Participation extends BaseEntity {
 	@Column(name = "isProjectManager")
 	private Boolean isProjectManager;
 
-	@ManyToOne
-	@MapsId("userId")
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "userId")
 	@JsonBackReference(value="user-participation")
 	UserTW userTW;
 
-	@ManyToOne
-	@MapsId("projectId")
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "projectId")
 	@JsonBackReference(value="project-participation")
 	Project project;
