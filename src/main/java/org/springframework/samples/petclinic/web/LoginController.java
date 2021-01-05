@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
@@ -74,7 +75,8 @@ public class LoginController {
 			UserTW user = new UserTW();
 			user.setName(name);
 			user.setLastname(lastname);
-			user.setPassword(password);
+			user.setPassword(SecurityConfiguration.passwordEncoder().encode(password));
+			System.out.println(user.getPassword());
 			user.setEmail(user.getName().toLowerCase() + user.getLastname().toLowerCase() + "@" + team.getIdentifier());
 			user.setRole(Role.team_owner);
 			user.setTeam(team);
