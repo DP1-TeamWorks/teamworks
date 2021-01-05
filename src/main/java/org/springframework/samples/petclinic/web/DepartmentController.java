@@ -60,10 +60,7 @@ public class DepartmentController {
 	@GetMapping(value = "/api/departments/my")
 	public List<Department> getMyDeparments(HttpServletRequest r) {
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
-		UserTW user = userTWService.findUserById(userId);
-
-		List<Department> l = user.getBelongs().stream().filter(b -> b.getFinalDate() != null)
-				.map(b -> b.getDepartment()).collect(Collectors.toList());
+		List<Department> l = belongsService.findMyDepartments(userId).stream().collect(Collectors.toList());
 		return l;
 	}
 
@@ -120,8 +117,8 @@ public class DepartmentController {
 		try {
 
 			Belongs currentBelongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
-			UserTW user = userTWService.findUserById((Integer)r.getSession().getAttribute("userId"));
-			Boolean teamOwner =  user.getRole().equals(Role.team_owner);
+			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
+			Boolean teamOwner = user.getRole().equals(Role.team_owner);
 			if (currentBelongs == null) {
 				Department department = departmentService.findDepartmentById(departmentId);
 				UserTW belongUser = userTWService.findUserById(belongUserId);
@@ -136,7 +133,7 @@ public class DepartmentController {
 				belongsService.saveBelongs(belongs);
 				return ResponseEntity.ok().build();
 			} else {
-				return ResponseEntity.badRequest().build();
+				return ResponseEntity.badRequest().body("Ya existe un belongs");
 			}
 
 		} catch (DataAccessException d) {
@@ -146,15 +143,21 @@ public class DepartmentController {
 	}
 
 	// Belongs Requests
-	@DeleteMapping(value = "/api/departments/belongs/")
+	@DeleteMapping(value = "/api/departments/belongs")
 	public ResponseEntity<String> deleteBelongs(@RequestParam(required = true) Integer belongUserId,
 			Integer departmentId, HttpServletRequest r) {
 
 		try {
-			Belongs belongs = belongsService.findBelongByUserIdAndDepartmentId(belongUserId, departmentId);
-			belongs.setFinalDate(LocalDate.now());
-			belongsService.saveBelongs(belongs);
-			return ResponseEntity.ok().build();
+			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
+			Boolean teammOwner = user.getRole().equals(Role.team_owner);
+			Belongs belongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
+			if (belongs.getIsDepartmentManager() == false || teammOwner) {
+				belongs.setFinalDate(LocalDate.now());
+				belongsService.saveBelongs(belongs);
+				return ResponseEntity.ok().build();
+			} else {
+				return ResponseEntity.status(403).build();
+			}
 
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
