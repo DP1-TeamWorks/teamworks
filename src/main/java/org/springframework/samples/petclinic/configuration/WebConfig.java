@@ -54,5 +54,6 @@ public class WebConfig implements WebMvcConfigurer {
             .excludePathPatterns("/api/auth/login")
             .excludePathPatterns("/api/auth/signup").order(0);
         registry.addInterceptor(new TeamOwnerInterceptor(userTWService)).addPathPatterns("/api/teams/**").addPathPatterns("/api/userTW").addPathPatterns("/api/departments").order(1);
-        registry.addInterceptor(new DepartmentManagerInterceptor(userTWService,belongsService)).excludePathPatterns("/api/departments").excludePathPatterns("/api/departments/my").addPathPatterns("/api/departments/**").order(2);    }
+        registry.addInterceptor(new DepartmentManagerInterceptor(userTWService,belongsService)).addPathPatterns("/api/projects").order(2);    
+        }
 }
