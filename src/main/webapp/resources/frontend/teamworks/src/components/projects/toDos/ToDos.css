@@ -53,3 +53,28 @@
   overflow: visible;
   vertical-align: center;
 }
+
+.ToDoTab {
+  margin: 0 -35px;
+  width: calc(100% + 70px);
+  padding: 5px 35px;
+  font-size: 13pt;
+  font-weight: 400;
+  cursor: pointer;
+  transition: box-shadow 0.05s;
+  user-select: none;
+}
+
+.ToDoTab:hover {
+  box-shadow: inset 0 0 0 100px #fff1;
+  transition: text-decoration 0.5s;
+}
+
+.ToDoTab:active {
+  box-shadow: inset 0 0 0 100px #0001;
+}
+
+.ToDoTab--Selected {
+  background-color: #3e4237;
+  font-weight: 600;
+}
