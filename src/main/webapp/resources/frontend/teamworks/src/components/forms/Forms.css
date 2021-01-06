@@ -72,3 +72,12 @@
   stroke: rgba(166, 206, 86, 0.06);
   stroke-width: 2px;
 }
+
+.InputNewMsg{
+  border-radius: 4px;
+  background: #262626;
+  height: 40px;
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
