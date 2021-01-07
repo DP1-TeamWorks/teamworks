@@ -1,5 +1,5 @@
 import React from "react";
-import "./forms.css";
+import "./Forms.css";
 import InputError from "./InputError";
 export default function Input({
   name,

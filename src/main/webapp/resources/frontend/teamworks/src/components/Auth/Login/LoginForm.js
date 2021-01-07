@@ -1,7 +1,7 @@
 import React from "react";
 import AuthApiUtils from "../../../utils/api/AuthApiUtils";
-import Input from "../../Forms/Input";
-import SubmitButton from "../../Forms/SubmitButton";
+import Input from "../../forms/Input";
+import SubmitButton from "../../forms/SubmitButton";
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -19,8 +19,6 @@ class LoginForm extends React.Component {
   hasErrors = () => {
     const errors = Object.values(this.state.errors);
     const nInputs = Object.keys(this.state.inputs).length;
-    console.log(this.state.inputs);
-    console.log(nInputs, errors.length);
     let b =
       errors.length < nInputs
         ? true
@@ -31,11 +29,8 @@ class LoginForm extends React.Component {
   };
 
   validateAll = () => {
-    console.log("Validating ALL");
     Object.entries(this.state.inputs).forEach((e) => {
       const [k, v] = e;
-      console.log(k);
-      console.log(v);
       this.validate(k, v);
     });
   };
@@ -45,7 +40,6 @@ class LoginForm extends React.Component {
       requestError: "",
     });
     this.setState();
-    console.log("Validating ", field);
     let errorMsg = "";
     switch (field) {
       case "mail":
@@ -80,11 +74,8 @@ class LoginForm extends React.Component {
   };
 
   apiRequestHandler = (mail, password) => {
-    console.log("API Request");
     AuthApiUtils.login({ mail, password })
       .then((res) => {
-      /*  const dataRes = res.data;
-        console.log("Data: ", dataRes);*/
         this.props.onLoginChanged(true);
       })
       .catch((error) => {
@@ -104,9 +95,6 @@ class LoginForm extends React.Component {
       let password = this.state.inputs.password;
       //Call API request in order to receive the user for the session
       this.apiRequestHandler(mail, password);
-    } else {
-      console.log("There are errors in this form");
-      console.log(this.state.errors);
     }
   };
 

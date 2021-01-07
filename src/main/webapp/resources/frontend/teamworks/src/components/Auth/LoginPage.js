@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import Login from "./Login/Login";
 import SignUp from "./SignUp/SignUp";
 
-const LoginPage = ({onLoginChanged}) =>
+const LoginPage = ({ onLoginChanged }) =>
 {
   return (
     <Router>
@@ -19,6 +19,7 @@ const LoginPage = ({onLoginChanged}) =>
         </Route>
       </Switch>
     </Router>
+
   );
 }
 

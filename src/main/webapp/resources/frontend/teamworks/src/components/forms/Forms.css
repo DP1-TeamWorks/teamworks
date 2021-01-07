@@ -11,13 +11,24 @@
 .SubmitError {
   font-size: smaller;
   color: #e32d2d;
-  padding: 10px;
-  padding-top: 5px;
-  padding-bottom: 0;
+  margin: 10px;
+  margin-top: 5px;
   height: 10px;
   width: auto;
   margin-bottom: 25px;
   text-align: center;
+}
+
+.InputNewToDo {
+  margin-top: 15px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 80%;
+  height: 52px;
+  text-align: left;
+  background: transparent;
+  color: lightgray;
+  border: 0;
 }
 
 .InputLogin {
@@ -38,11 +49,11 @@
 .Input:-webkit-autofill:hover,
 .Input:-webkit-autofill:focus,
 .Input:-webkit-autofill:active {
-    transition: background-color 0s ease-in-out 5000s, color 5000s;
-    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.041) inset;
+  transition: background-color 0s ease-in-out 5000s, color 5000s;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.041) inset;
 }
 
-.Input:focus {
+.Input:focus .InputNewToDo:focus {
   outline: none;
 }
 
