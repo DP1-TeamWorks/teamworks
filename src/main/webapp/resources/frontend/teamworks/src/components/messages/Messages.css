@@ -94,8 +94,6 @@
   background-color: #363636;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
-  display: flex;
-  flex-direction: column;
 
 }
 
@@ -139,10 +137,16 @@
   margin-right: 0px;
 }
 
+.NewMsg{
+  display: flex;
+  flex-direction: column;
+}
+
 .NewMsgHeadLabel{
   position: relative;
   display: inline-block;
   width: 100%;
+  flex: 0;
 }
 
 .NewMsgHeadText{
@@ -166,14 +170,14 @@
 .NewMsgTextLabel{
   position: relative;
   width: 100%;
-  overflow: hidden;
+  height: 100%;
   flex: 1 0 auto;
 }
 
 .NewMsgBodyText{
   position: absolute;
-  left: 10px;
-  top: 10px;
+  left: 1px;
+  top: 1px;
   color: #A6CE56;
   font-family: Inter;
   font-style: normal;
@@ -181,13 +185,43 @@
   font-size: 15px;
   line-height: 19px;
   color: #A6CE56;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: calc(100% - 101px);
+  padding-bottom: 5px;
+  background-color: #262626;
 }
 
 .NewMsgBody{
   padding-top: 40px;
   height: 100%;
   resize: none;
-  overflow: hidden;
   box-sizing: border-box;
+}
 
+.NewMsgSendOptions{
+  display: flex;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.NewMsgUpload{
+ width: 20px;
+ margin: 10px;
+ cursor: pointer;
+}
+
+.NewMsgSendButton{
+  padding-right: 60px;
+}
+
+.NewMsgSendButton::after{
+  content: "";
+  position: absolute;
+  right: 15px;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyLjAwNSA1MTIuMDA1IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDA1IDUxMi4wMDU7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNNDY2LjIyLDIwNS43ODdMMjYzLjU1MywzLjEyYy00LjE2LTQuMTYtMTAuOTIzLTQuMTYtMTUuMDgzLDBMNDUuODA0LDIwNS43ODdjLTIxLjgwMywyMS44MDMtMjEuODAzLDU3LjI4LDAsNzkuMDgzDQoJCQlzNTcuMjgsMjEuODAzLDc5LjA4MywwbDc3Ljc4MS03Ny43ODF2MjUxLjU4NGMwLDI5LjM5NywyMy45MzYsNTMuMzMzLDUzLjMzMyw1My4zMzNzNTMuMzMzLTIzLjkzNiw1My4zMzMtNTMuMzMzVjIwNy4wODgNCgkJCWw3Ny43ODEsNzcuNzgxYzIxLjgwMywyMS44MDMsNTcuMjgsMjEuODAzLDc5LjA4MywwQzQ4OC4wMDEsMjYzLjA4OCw0ODguMDAxLDIyNy41ODksNDY2LjIyLDIwNS43ODd6Ii8+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=") center / contain no-repeat;
 }
