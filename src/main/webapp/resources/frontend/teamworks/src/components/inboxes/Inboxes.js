@@ -1,15 +1,34 @@
-import React, { useState } from "react";
-import SidebarTab from "../sidebar/SidebarTab";
+import React from "react";
+import MessageApiUtils from "../../utils/api/MessageApiUtils";
+import InboxSidebarTab from "../sidebar/InboxSidebarTab";
 
-const Inboxes = (props) => {
-  const [inboxMessages, setInboxMessages] = useState(25);
-  const [sentMessages, setSentMessages] = useState(12);
-
+const Inboxes = ({
+  numberOfInboxMessages,
+  numberOfSentMessages,
+  selectedTab,
+  setSelectedTab,
+}) => {
   return (
     <>
       <h3 className="SidebarSectionTitle">Inboxes</h3>
-      <SidebarTab text="Inbox" /*noOpenedMessages={inboxMessages}*/ />
-      <SidebarTab text="Sent" /*noOpenedMessages={sentMessages}*/ />
+      <InboxSidebarTab
+        text="Inbox"
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+        isTag={false}
+      >
+        Inbox
+        <span style={{ float: "right" }}>{numberOfInboxMessages}</span>
+      </InboxSidebarTab>
+      <InboxSidebarTab
+        text="Sent"
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+        isTag={false}
+      >
+        Sent
+        <span style={{ float: "right" }}>{numberOfSentMessages}</span>
+      </InboxSidebarTab>
     </>
   );
 };

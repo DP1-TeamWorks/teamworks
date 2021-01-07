@@ -73,3 +73,8 @@
 
   transition: max-height 0.5s ease-out;
 }
+
+.NewMsgBackground{
+  opacity: 40%;
+  background-color: #161812;
+}
