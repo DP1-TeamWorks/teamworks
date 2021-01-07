@@ -3,18 +3,19 @@ package org.springframework.samples.petclinic.model;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 
@@ -51,9 +52,9 @@ public class Message extends BaseEntity {
 	private List<Attatchment> attatchments;
 	*/
 	
-	@ManyToOne(optional = false)
+	@OneToOne(optional = true)
     @JoinColumn(name = "message")
-    @JsonBackReference
+    @JsonIgnore
     private Message reply;
 	
 	@ManyToOne(optional = false)
@@ -61,11 +62,11 @@ public class Message extends BaseEntity {
     @JsonBackReference(value = "message-sender")
     private UserTW sender;
 	
-	@ManyToOne(optional = false)
-    @JoinColumn(name = "user_idrecipient")
-    @JsonBackReference(value = "message-recipient")
-    private UserTW recipient;
+	@ManyToMany
+    @JsonManagedReference(value = "message-recipient")
+    private List<UserTW> recipients;
 	
+	/*	nada
 	@ManyToOne(optional = true)
 	@JoinColumn(name="messageId")
     @JsonBackReference(value="message-id")
@@ -74,8 +75,15 @@ public class Message extends BaseEntity {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
     @JsonManagedReference(value="message-id")
 	private List<Message> messages;
+	*/
 	
-	//TODO: tag + todo
+	@JsonIgnore
+	@ManyToMany
+	private List<Tag> tags;
+	
+	@JsonIgnore
+	@ManyToMany
+	private List<ToDo> toDos;
 	
 	
 }
