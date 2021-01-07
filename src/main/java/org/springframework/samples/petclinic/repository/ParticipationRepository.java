@@ -20,4 +20,7 @@ public interface ParticipationRepository extends Repository<Participation, Integ
 	
 	@Query(value="SELECT u.project FROM Participation u WHERE u.userTW.id = :userId and u.finalDate=null" )
 	public Collection<Project> findMyProjects(@Param("userId") Integer userId);
+	
+	@Query(value="SELECT u.project FROM Participation u WHERE u.userTW.id = :userId and u.project.department.id = :departmentId and u.finalDate=null" )
+	public Collection<Project> findMyDepartemntProjects(@Param("userId") Integer userId,@Param("departmentId") Integer departmentId);
 }

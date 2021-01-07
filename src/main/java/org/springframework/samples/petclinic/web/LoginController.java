@@ -42,7 +42,7 @@ public class LoginController {
 				r.getSession().setAttribute("userId", user.getId());
 				r.getSession().setAttribute("teamId", user.getTeam().getId());
 
-				return ResponseEntity.accepted().body(user);
+				return ResponseEntity.accepted().build();
 
 			} else {
 				return ResponseEntity.badRequest().build();

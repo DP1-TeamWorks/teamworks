@@ -51,42 +51,25 @@ public class TeamController {
 		return list;
 
 	}
-
+	
 	@PostMapping(value = "/api/teams")
-	public ResponseEntity<String> postTeams(@RequestBody Team team) {
-		try {
-			teamService.saveTeam(team);
-			return ResponseEntity.ok("Team created");
-
-		} catch (DataAccessException d) {
-			return ResponseEntity.badRequest().build();
-		}
-	}
-
-	@PostMapping(value = "/api/teams/update")
 	public ResponseEntity<String> updateTeams(HttpServletRequest r, @RequestParam String name,
 			@RequestParam String identifier) {
 		try {
-			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
-			UserTW user = userService.findUserById(userId);
-			if (user.getRole().equals(Role.team_owner)) {
-				Team team = teamService.findTeamById(teamId);
-				if (name != null && identifier != null) {
-					team.setName(name);
-					team.setIdentifier(identifier);
-				} else if (name != null) {
-					team.setName(name);
-				} else if (identifier != null) {
-					team.setIdentifier(identifier);
-				} else {
-					return ResponseEntity.badRequest().build();
-				}
-				teamService.saveTeam(team);
-				return ResponseEntity.ok("Team update");
+			Team team = teamService.findTeamById(teamId);
+			if (name != null && identifier != null) {
+				team.setName(name);
+				team.setIdentifier(identifier);
+			} else if (name != null) {
+				team.setName(name);
+			} else if (identifier != null) {
+				team.setIdentifier(identifier);
 			} else {
-				return ResponseEntity.status(403).build();
+				return ResponseEntity.badRequest().build();
 			}
+			teamService.saveTeam(team);
+			return ResponseEntity.ok("Team update");
 
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();

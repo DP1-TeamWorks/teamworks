@@ -44,4 +44,8 @@ public class ParticipationService {
 	public Collection<Project> findMyProjects(Integer userId){
 		return participationRepository.findMyProjects(userId);
 	}
+	@Transactional(readOnly = true)
+	public Collection<Project> findMyDepartemntProjects(Integer userId,Integer departmentId){
+		return participationRepository.findMyDepartemntProjects(userId,departmentId);
+	}
 }

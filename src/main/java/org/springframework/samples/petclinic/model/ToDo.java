@@ -30,7 +30,8 @@ public class ToDo extends BaseEntity {
     @NotEmpty
     @Column(name = "title")
     String title;
-
+    
+    
     // Relations
 
     @ManyToOne(optional = false)

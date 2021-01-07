@@ -21,7 +21,11 @@ import org.springframework.samples.petclinic.model.Milestone;
 import org.springframework.samples.petclinic.repository.MilestoneRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -50,10 +54,6 @@ public class MilestoneService {
 		return milestoneRepository.findById(milestoneId);
 	}
 
-	@Transactional(readOnly = true)
-	public Collection<Milestone> findMilestoneByName(String name) throws DataAccessException {
-		return milestoneRepository.findByName(name);
-	}
 
 	@Transactional
 	public void deleteMilestonetById(Integer milestoneId) throws DataAccessException {
@@ -66,5 +66,10 @@ public class MilestoneService {
 	public Collection<Milestone> getAllMilestone() throws DataAccessException {
 		return milestoneRepository.findAll();
 	}
+	@Transactional(readOnly = true)
+	public Milestone findNextMilestone(Integer projectId) throws DataAccessException {
+		return milestoneRepository.findNextMilestone(projectId).stream().filter(x->x.getDueFor().isBefore(LocalDate.now())).sorted(Comparator.comparing(x->x.getDueFor())).sorted(Collections.reverseOrder()).findFirst().get();
+	}
+	
 
 }

@@ -16,8 +16,8 @@ public interface MilestoneRepository extends Repository<Milestone, Integer> {
 
 	Milestone findById(Integer milestoneId);
 
-	@Query("SELECT u FROM Milestone u WHERE u.name LIKE :name%")
-	public Collection<Milestone> findByName(@Param("name") String name);
+	@Query(value="SELECT u FROM Milestone u WHERE u.project.id = :projectId" )
+	public Collection<Milestone> findNextMilestone(@Param("projectId") Integer projectId);
 
 	Collection<Milestone> findAll() throws DataAccessException;;
 

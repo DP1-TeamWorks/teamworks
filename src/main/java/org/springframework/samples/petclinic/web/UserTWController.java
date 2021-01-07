@@ -1,4 +1,5 @@
 package org.springframework.samples.petclinic.web;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
@@ -42,18 +44,11 @@ public class UserTWController {
 	}
 
 	@GetMapping(value = "/api/userTW")
-	public List<UserTW> getUser(@RequestParam(required = false) String user) {
-		if (user == null) {
-			List<UserTW> list = userService.getAllUsers().stream().collect(Collectors.toList());
-			return list;
-		} else {
-			List<UserTW> list = userService.findUserByName(user).stream().collect(Collectors.toList());
-			if (list == null)
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find user");
-			else {
-				return list;
-			}
-		}
+	public List<UserTW> getUser(HttpServletRequest r) {
+		List<UserTW> l = new ArrayList<>();
+		Integer teamId = (Integer) r.getSession().getAttribute("teamId");
+		l = teamService.findTeamById(teamId).getUsers();
+		return l;
 	}
 
 	@PostMapping(value = "/api/userTW")
