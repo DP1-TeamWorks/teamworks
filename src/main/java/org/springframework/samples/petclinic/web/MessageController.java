@@ -69,6 +69,7 @@ public class MessageController {
 
 		try {
 			messageService.deleteMessageById(messageId);
+			
 			return ResponseEntity.ok("Message Deleted");
 
 		} catch (DataAccessException d) {
