@@ -7,10 +7,12 @@ import AddToDoForm from "./AddToDoForm";
 const MyProjectToDos = ({ projectId }) => {
   const [toDoList, setToDoList] = useState([
     {
+      id: 1,
       title: "Plan a meeting",
       tagList: [{ title: "Planning", color: "#FFD703" }],
     },
     {
+      id: 2,
       title: "Go to have breakfast",
       tagList: [
         { title: "Planning", color: "#FFD703" },
@@ -18,6 +20,7 @@ const MyProjectToDos = ({ projectId }) => {
       ],
     },
     {
+      id: 3,
       title: "Work with my Team",
       tagList: [],
     },
@@ -35,7 +38,7 @@ const MyProjectToDos = ({ projectId }) => {
     }
 
     setReloadToDos(false);
-  }, [reloadToDos]);
+  }, [projectId, reloadToDos]);
 
   return (
     <>

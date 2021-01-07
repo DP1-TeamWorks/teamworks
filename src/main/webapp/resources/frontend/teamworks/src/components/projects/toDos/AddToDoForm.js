@@ -68,7 +68,8 @@ class AddToDoForm extends React.Component {
     event.preventDefault();
     if (!this.hasErrors()) {
       let toDo = this.state.inputs.toDo;
-      //Call API request in order to receive the user for the session
+      this.setState({ inputs: { ...this.state.inputs, toDo: "" } });
+      console.log(toDo)
       this.apiRequestHandler(toDo);
     }
   };
