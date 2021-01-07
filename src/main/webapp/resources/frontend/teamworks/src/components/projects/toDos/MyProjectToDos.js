@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
 import ToDo from "./ToDo";
 import "./ToDos.css";
 import AddToDoForm from "./AddToDoForm";
+import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
+import MilestoneApiUtils from "../../../utils/api/MilestoneApiUtils";
 
 const MyProjectToDos = ({ projectId }) => {
+  const [milestone, setMilestone] = useState({
+    date: new Date(),
+  });
   const [toDoList, setToDoList] = useState([
     {
       id: 1,
@@ -28,9 +32,19 @@ const MyProjectToDos = ({ projectId }) => {
   const [reloadToDos, setReloadToDos] = useState(true);
 
   useEffect(() => {
+    MilestoneApiUtils.getNextMilestone(projectId)
+      .then((res) => {
+        setMilestone(res.data);
+      })
+      .catch((error) => {
+        console.log("ERROR: cannot get the next milestone");
+      });
+  }, [projectId]);
+
+  useEffect(() => {
     if (reloadToDos) {
       console.log("todo request");
-      ProjectApiUtils.getMyToDos(projectId)
+      ToDoApiUtils.getMyToDos(milestone.id)
         .then((res) => {
           setToDoList(res.data);
         })
@@ -38,7 +52,7 @@ const MyProjectToDos = ({ projectId }) => {
     }
 
     setReloadToDos(false);
-  }, [projectId, reloadToDos]);
+  }, [milestone, reloadToDos]);
 
   return (
     <>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
+import React, { useState } from "react";
+import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
 import Circle from "../tags/Circle";
 import ToDoCircle from "./ToDoCircle";
 
@@ -12,7 +12,7 @@ const ToDo = ({ id, tagList, title }) => {
     // TODO: fix the animation
     setTimeout(
       () =>
-        ProjectApiUtils.markToDoAsDone(id)
+        ToDoApiUtils.markToDoAsDone(id)
           .then(() => {
             setIsDone(true);
           })

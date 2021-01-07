@@ -4,6 +4,7 @@ import Input from "../../forms/Input";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
 
 class AddToDoForm extends React.Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class AddToDoForm extends React.Component {
   };
 
   apiRequestHandler = (toDo) => {
-    ProjectApiUtils.addNewToDo({ toDo: toDo, tagList: [] })
+    ToDoApiUtils.addNewToDo({toDo})
       .then((res) => {
         this.props.setReloadToDos(true);
       })

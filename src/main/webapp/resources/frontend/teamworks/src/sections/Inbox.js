@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MessageList from "../components/messages/MessageList";
 import NewMessage from "../components/messages/NewMessage";
 import InboxSidebar from "../components/sidebar/InboxSidebar";
@@ -51,7 +51,7 @@ const Inbox = (props) => {
   ]);
   const [sentMessages, setSentMessages] = useState([
     {
-      sender: { name: "Johnny Depp", teamname: "Pearson" },
+      sender: { name: "Kevin Depp", teamname: "Stark" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
       time: "19:23",
@@ -61,7 +61,7 @@ const Inbox = (props) => {
       ],
     },
     {
-      sender: { name: "Johnny Depp", teamname: "Pearson" },
+      sender: { name: "Kevin Depp", teamname: "Stark" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
       time: "19:23",
@@ -71,7 +71,7 @@ const Inbox = (props) => {
       ],
     },
     {
-      sender: { name: "Johnny Depp", teamname: "Pearson" },
+      sender: { name: "Kevin Depp", teamname: "Stark" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
       time: "19:23",
@@ -81,7 +81,7 @@ const Inbox = (props) => {
       ],
     },
     {
-      sender: { name: "Johnny Depp", teamname: "Pearson" },
+      sender: { name: "Kevin Depp", teamname: "Stark" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
       time: "19:23",
@@ -128,14 +128,16 @@ const Inbox = (props) => {
   return (
     <div className="Content">
       <InboxSidebar
-        inboxMessages={inboxMessages}
-        sentMessages={sentMessages}
+        numberOfInboxMessages={inboxMessages.filter((msg) => !msg.read).length}
+        numberOfSentMessages={sentMessages.filter((msg) => !msg.read).length}
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
         modalNewMessage={modalNewMessage}
         setModalNewMessage={setModalNewMessage}
       />
       <Section className="Section--Lighter">
         {modalNewMessage && <NewMessage />}
-        <MessageList messages={} />
+        <MessageList messages={selectedMessages()} />
       </Section>
     </div>
   );

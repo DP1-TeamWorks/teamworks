@@ -1,119 +1,72 @@
 import React, { useEffect, useState } from "react";
-import TeamApiUtils from "../../utils/api/TeamApiUtils";
+import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
+import ProjectApiUtils from "../../utils/api/ProjectApiUtils";
 import "./ProjectPicker.css";
 
 const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   const [departmentList, setDepartmentList] = useState([
     {
-      dptName: "DPT1",
-      projectList: [
-        {
-          title: "TW1",
-          id: "3",
-          tagList: [
-            { title: "Planning", color: "#FFD703", noOpenedMessages: 15 },
-            { title: "Cleaning", color: "#DDFFDD", noOpenedMessages: 12 },
-            { title: "MockUp", color: "#AAD7F3", noOpenedMessages: 43 },
-          ],
-        },
-        {
-          title: "LOL12",
-          id: "5",
-          tagList: [
-            { title: "Planning", color: "#FFD703", noOpenedMessages: 25 },
-            { title: "Cleaning", color: "#DDFFDD", noOpenedMessages: 12 },
-            { title: "MockUp", color: "#AAD7F3", noOpenedMessages: 43 },
-          ],
-        },
-        {
-          title: "GH14",
-          id: "71",
-          tagList: [
-            { title: "Planning", color: "#FFD703", noOpenedMessages: 5 },
-            { title: "Cleaning", color: "#DDFFDD", noOpenedMessages: 162 },
-            { title: "MockUp", color: "#AAD7F3", noOpenedMessages: 33 },
-          ],
-        },
-      ],
+      name: "DPT1",
+      id: 15,
     },
     {
-      dptName: "DPT2",
+      name: "DPT2",
       id: 12,
-      projectList: [
-        {
-          title: "KO3",
-          id: "3",
-          tagList: [
-            { title: "Planning", color: "#FFD703", noOpenedMessages: 15 },
-            { title: "Cleaning", color: "#DDFFDD", noOpenedMessages: 12 },
-            { title: "MockUp", color: "#AAD7F3", noOpenedMessages: 43 },
-          ],
-        },
-        {
-          title: "JH",
-          id: "5",
-          tagList: [
-            { title: "Planning", color: "#FFD703", noOpenedMessages: 25 },
-            { title: "Cleaning", color: "#DDFFDD", noOpenedMessages: 12 },
-            { title: "MockUp", color: "#AAD7F3", noOpenedMessages: 43 },
-          ],
-        },
-        {
-          title: "SADK4",
-          id: "71",
-          tagList: [
-            { title: "Planning", color: "#FFD703", noOpenedMessages: 5 },
-            { title: "Cleaning", color: "#DDFFDD", noOpenedMessages: 162 },
-            { title: "MockUp", color: "#AAD7F3", noOpenedMessages: 33 },
-          ],
-        },
+    },
+    {
+      name: "DPT3",
+      id: 143,
+    },
+  ]);
+  const [projectList, setProjectList] = useState([
+    {
+      name: "TeamWorks1",
+      id: 1,
+      tags: [
+        { title: "Planning", color: "#FFD703" },
+        { title: "Cleaning", color: "#DDFFDD" },
+        { title: "MockUp", color: "#AAD7F3" },
       ],
     },
     {
-      dptName: "DPT3",
-      id: 143,
-      projectList: [
-        {
-          title: "HW1",
-          id: "3",
-          tagList: [
-            { title: "Planning", color: "#FFD703", noOpenedMessages: 15 },
-            { title: "Cleaning", color: "#DDFFDD", noOpenedMessages: 12 },
-            { title: "New ORders", color: "#AAD7F3", noOpenedMessages: 43 },
-          ],
-        },
-        {
-          title: "LASDL12",
-          id: "123",
-          tagList: [
-            { title: "Planning", color: "#FFD703", noOpenedMessages: 25 },
-            { title: "Greetings", color: "#DDFFDD", noOpenedMessages: 12 },
-            { title: "New stuff", color: "#AAD7F3", noOpenedMessages: 43 },
-          ],
-        },
-        {
-          title: "HSAJ124",
-          id: "53",
-          tagList: [
-            { title: "Planning", color: "#FFD703", noOpenedMessages: 5 },
-            { title: "Debugging", color: "#DDFFDD", noOpenedMessages: 162 },
-            { title: "MockUp", color: "#AAD7F3", noOpenedMessages: 33 },
-          ],
-        },
+      name: "NEWHorizons1",
+      id: 3,
+      tags: [
+        { title: "Planning", color: "#FFD703" },
+        { title: "Cleaning", color: "#DDFFDD" },
+        { title: "MockUp", color: "#AAD7F3" },
+      ],
+    },
+    {
+      name: "CaptureTheFlag",
+      id: 6,
+      tags: [
+        { title: "Planning", color: "#FFD703" },
+        { title: "Cleaning", color: "#DDFFDD" },
+        { title: "MockUp", color: "#AAD7F3" },
       ],
     },
   ]);
+
   const [department, setDepartment] = useState(departmentList[0]);
   const [pickedDepartment, setPickedDepartment] = useState(departmentList[0]);
   const [opened, setOpened] = useState(false);
 
   useEffect(() => {
-    TeamApiUtils.getMyDepartments()
+    DepartmentApiUtils.getMyDepartments()
       .then((res) => {
         setDepartmentList(res.data);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the departments");
+      });
+
+    ProjectApiUtils.getMyProjects(department.id)
+      .then((res) => {
+        setProjectList(res.data);
+      })
+      .catch((error) => {
+        console.log("ERROR: cannot get the projects");
       });
   }, []);
 
@@ -123,6 +76,13 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
 
   const handlePickDepartment = (dpt) => {
     setPickedDepartment(dpt);
+    ProjectApiUtils.getMyProjects(dpt.id)
+      .then((res) => {
+        setProjectList(res.data);
+      })
+      .catch((error) => {
+        console.log("ERROR: cannot get the projects");
+      });
   };
 
   const handlePickProject = (project) => {
@@ -136,7 +96,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
       <h3 className="SidebarSectionTitle">Project</h3>
 
       <button className="PickerBox" onClick={openOrClose}>
-        {department.dptName} - {pickedProject.title}
+        {department.name} - {pickedProject.title}
       </button>
       <div
         className="CollapsedDPTPicker"
@@ -149,13 +109,13 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
                 className="CollapsedDepartment"
                 onClick={() => handlePickDepartment(dpt)}
               >
-                {dpt.dptName}
+                {dpt.name}
               </button>
             );
           })}
         </div>
         <div className="ProjectPicker">
-          {pickedDepartment.projectList.map((project) => {
+          {projectList.map((project) => {
             return (
               <button
                 className="CollapsedDepartment"

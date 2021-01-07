@@ -1,27 +1,16 @@
 import axios from "axios";
 import { API_URL } from "../../config/config";
-const PROJECT_URL = "/project";
+const PROJECT_URL = "/projects";
 
 const ProjectApiUtils = {
-  /*TAGS*/
-  getTags: (projectId) =>
-    axios.get(API_URL + PROJECT_URL + "/tags?projectId=" + projectId),
-  addNewTag: (projectId, tag) =>
-    axios.post(API_URL + PROJECT_URL + "/tags?projectId=" + projectId, tag),
-  deleteTag: (tagId) =>
-    axios.delete(API_URL + PROJECT_URL + "/tags?tagId=" + tagId),
+  /*PROJECT*/
+  getProjects: (departmentId) => axios.get(API_URL + PROJECT_URL),
+  getMyProjects: (departmentId) =>
+    axios.get(API_URL + PROJECT_URL + "/mine?departmentId=" + departmentId),
 
-  /*ToDos*/
-  getToDos: (projectId) =>
-    axios.get(API_URL + PROJECT_URL + "/toDos?projectId=" + projectId),
-  getMyToDos: (projectId) =>
-    axios.get(
-      API_URL + PROJECT_URL + "/toDos?projectId=" + projectId + "&mine=true"
-    ),
-  addNewToDo: (projectId, toDo) =>
-    axios.post(API_URL + PROJECT_URL + "/toDos?projectId=" + projectId, toDo),
-  markToDoAsDone: (toDoId) =>
-    axios.post(API_URL + PROJECT_URL + "/toDos?toDoId=" + toDoId),
+  /*MILESTONES*/
+  getNextMilestone: (projectId) =>
+    axios.get(API_URL + PROJECT_URL + "/milestones"),
 };
 
 export default ProjectApiUtils;
