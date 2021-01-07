@@ -40,6 +40,9 @@ public class Message extends BaseEntity {
 	@Column(name = "text")
 	private String text;
 	
+	@Column(name = "read")
+	private Boolean read;
+	
 	
 	//Relations
 	/*
