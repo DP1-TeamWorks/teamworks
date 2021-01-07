@@ -71,6 +71,7 @@ class AddToDoForm extends React.Component {
       this.setState({ inputs: { ...this.state.inputs, toDo: "" } });
       console.log(toDo)
       this.apiRequestHandler(toDo);
+      event.target.reset();
     }
   };
 
@@ -84,6 +85,7 @@ class AddToDoForm extends React.Component {
           placeholder="Add new ToDo ..."
           styleClass="InputNewToDo"
           changeHandler={this.changeHandler}
+          error={this.state.errors.toDo}
         />
       </form>
     );
