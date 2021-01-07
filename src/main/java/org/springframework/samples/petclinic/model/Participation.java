@@ -34,20 +34,19 @@ public class Participation extends BaseEntity {
 	private LocalDate finalDate;
 
 	@NotNull
-	@NotEmpty
 	@Column(name = "isProjectManager")
 	private Boolean isProjectManager;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "userId")
 	@JsonIgnore
-	//@JsonBackReference(value="user-participation")
+	// @JsonBackReference(value="user-participation")
 	UserTW userTW;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "projectId")
 	@JsonIgnore
-	//@JsonBackReference(value="project-participation")
+	// @JsonBackReference(value="project-participation")
 	Project project;
 
 }

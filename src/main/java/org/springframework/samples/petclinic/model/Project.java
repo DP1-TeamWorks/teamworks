@@ -43,21 +43,20 @@ public class Project extends BaseEntity {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "department_id")
 	@JsonIgnore
-	//@JsonBackReference(value="department-project")
+	// @JsonBackReference(value="department-project")
 	private Department department;
-	
+
 	@JsonIgnore
-	//@JsonManagedReference(value="project-milestone")
+	// @JsonManagedReference(value="project-milestone")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
 	private List<Milestone> milestones;
-	
+
 	@JsonIgnore
-	//@JsonManagedReference(value="project-participation")
+	// @JsonManagedReference(value="project-participation")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
 	private List<Participation> participation;
-	
-	
-	@JsonManagedReference(value="project-tag")
+
+	@JsonManagedReference(value = "project-tag")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
 	private List<Tag> tags;
 }
