@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from "react";
+import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
 import Circle from "../tags/Circle";
 import ToDoCircle from "./ToDoCircle";
 
-const ToDo = ({ tagList, title }) => {
+const ToDo = ({ id, tagList, title }) => {
   const [isDone, setIsDone] = useState(false);
   const [isDoneAnimation, setIsDoneAnimation] = useState(false);
 
   const markAsDone = () => {
     setIsDoneAnimation(true);
     // TODO: fix the animation
-    setTimeout(() => setIsDone(true), 700);
-    // TODO: call API request to mark as done the real TODO
+    setTimeout(
+      () =>
+        ProjectApiUtils.markToDoAsDone(id)
+          .then(() => {
+            setIsDone(true);
+          })
+          .catch((error) => {
+            console.log("ERROR: cannot mark the todo as done");
+            setIsDoneAnimation(false);
+          }),
+      700
+    );
   };
 
   return (

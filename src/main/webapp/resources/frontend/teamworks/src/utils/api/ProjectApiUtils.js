@@ -16,11 +16,11 @@ const ProjectApiUtils = {
     axios.get(API_URL + PROJECT_URL + "/toDos?projectId=" + projectId),
   getMyToDos: (projectId) =>
     axios.get(
-      API_URL + PROJECT_URL + "/toDos?projectId=" + projectId + "&my=true"
+      API_URL + PROJECT_URL + "/toDos?projectId=" + projectId + "&mine=true"
     ),
   addNewToDo: (projectId, toDo) =>
     axios.post(API_URL + PROJECT_URL + "/toDos?projectId=" + projectId, toDo),
-  markAsDone: (toDoId) =>
+  markToDoAsDone: (toDoId) =>
     axios.post(API_URL + PROJECT_URL + "/toDos?toDoId=" + toDoId),
 };
 

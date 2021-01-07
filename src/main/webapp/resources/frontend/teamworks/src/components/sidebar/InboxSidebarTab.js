@@ -1,4 +1,4 @@
-import { useLocation, withRouter } from "react-router-dom";
+import React from "react"
 import "./SidebarTab.css";
 
 const InboxSidebarTab = ({
@@ -13,7 +13,6 @@ const InboxSidebarTab = ({
   if (selectedTab === text) {
     className += " SidebarTab--Selected";
   }
-  console.log("HELLO" + selectedTab + isTag + text);
 
   return (
     <div className={className} onClick={() => setSelectedTab(text)}>

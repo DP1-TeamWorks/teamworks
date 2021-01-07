@@ -1,50 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
 import ToDo from "./ToDo";
 import "./ToDos.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import Input from "../../forms/Input";
+import AddToDoForm from "./AddToDoForm";
 
-const MyProjectToDos = ({ myProjectToDoList }) => {
-  const [newToDo, setNewToDo] = useState("");
-
-  const addNewToDo = () => {
-    const newToDoObject = {
-      title: newToDo,
+const MyProjectToDos = ({ projectId }) => {
+  const [toDoList, setToDoList] = useState([
+    {
+      title: "Plan a meeting",
+      tagList: [{ title: "Planning", color: "#FFD703" }],
+    },
+    {
+      title: "Go to have breakfast",
+      tagList: [
+        { title: "Planning", color: "#FFD703" },
+        { title: "Planning", color: "#DDFFDD" },
+      ],
+    },
+    {
+      title: "Work with my Team",
       tagList: [],
-    };
-    myProjectToDoList.push(newToDoObject);
-    // TODO api call to update toDos
-    console.log(myProjectToDoList);
-  };
+    },
+  ]);
+  const [reloadToDos, setReloadToDos] = useState(true);
+
+  useEffect(() => {
+    if (reloadToDos) {
+      console.log("todo request");
+      ProjectApiUtils.getMyToDos(projectId)
+        .then((res) => {
+          setToDoList(res.data);
+        })
+        .catch(console.log("ERROR: Cannot get myToDos from the API"));
+    }
+
+    setReloadToDos(false);
+  }, [reloadToDos]);
 
   return (
     <>
       <h3 className="SidebarSectionTitle">ToDo</h3>
-      {myProjectToDoList.map((toDo) => {
-        return <ToDo title={toDo.title} tagList={toDo.tagList} />;
+      {toDoList.map((toDo) => {
+        return <ToDo id={toDo.id} title={toDo.title} tagList={toDo.tagList} />;
       })}
-      <button className="ToDoAdd" onClick={null}>
-        <FontAwesomeIcon icon={faPlus} style={{ color: "lightgray" }} />
-      </button>{" "}
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          console.log(newToDo);
-          addNewToDo();
-          event.target.reset();
-          setNewToDo("");
-        }}
-        style={{ display: "inline-block" }}
-      >
-        <Input
-          placeholder="Add new ToDo ..."
-          styleClass="InputNewToDo"
-          changeHandler={(event) => {
-            setNewToDo(event.target.value);
-          }}
-        />
-      </form>
+      <AddToDoForm setReloadToDos={setReloadToDos} />
     </>
   );
 };
