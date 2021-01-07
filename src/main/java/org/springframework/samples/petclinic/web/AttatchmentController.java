@@ -59,20 +59,11 @@ public class AttatchmentController {
 	}
 	*/
 	@PostMapping(value = "/api/attatchment")
-	public ResponseEntity<String> postAttatchment(HttpServletRequest r, @RequestBody Message message) {
+	public ResponseEntity<String> postAttatchment(HttpServletRequest r, @RequestBody Attatchment attatchment, Integer messageId) {
 		try {
-			Integer attatchmentId = (Integer) r.getSession().getAttribute("attatchmentId");
-			Integer messageId = (Integer) r.getSession().getAttribute("messageId");
-			//UserTW userAdmin=attatcgService.findUserById(messageId);
-			if(userAdmin.getRole().equals(Role.team_owner)){
-				Team team = teamService.findTeamById(teamId);
-				user.setTeam(team);
-				user.setRole(Role.employee);
-				userService.saveUser(user);
-				return ResponseEntity.ok("User Created");
-			}else {
-				return ResponseEntity.status(403).build();
-			}
+			Message message = messageService.findMessageById(messageId);
+			attatchmentService.saveAttatchment(attatchment);
+			return ResponseEntity.ok("Attatchment saved");
 			
 
 		} catch (DataAccessException d) {
@@ -82,7 +73,6 @@ public class AttatchmentController {
 
 	@DeleteMapping(value = "/api/attatchment")
 	public ResponseEntity<String> deleteAttatchment(@RequestParam(required = true) Integer attatchmentId) {
-		// System.out.println("Delete user: "+ userTWId);
 
 		try {
 			attatchmentService.deleteAttatchmentById(attatchmentId);
