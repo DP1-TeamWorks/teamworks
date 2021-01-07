@@ -8,8 +8,7 @@ import GradientButton from "../buttons/GradientButton";
 import SidebarSection from "./SidebarSection";
 import NewMessage from "../messages/NewMessage";
 
-const InboxSidebar = ({ setModalNewMessage, modalNewMessage }) => {
-  const [selectedTab, setSelectedTab] = useState("Inbox");
+const InboxSidebar = ({ selectedTab, setSelectedTab, setModalNewMessage, modalNewMessage }) => {
   const [pickedProject, setPickedProject] = useState({
     title: "TeamWorks1",
     id:"1",

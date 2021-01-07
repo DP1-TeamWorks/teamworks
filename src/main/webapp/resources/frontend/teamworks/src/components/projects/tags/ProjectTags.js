@@ -11,7 +11,7 @@ const ProjectTags = ({ tagList, selectedTab, setSelectedTab }) => {
       {tagList.map((tag) => {
         return (
           <InboxSidebarTab
-            text={tag.title + tag.color}
+            text={tag.id}
             selectedTab={selectedTab}
             setSelectedTab={setSelectedTab}
             isTag={true}
