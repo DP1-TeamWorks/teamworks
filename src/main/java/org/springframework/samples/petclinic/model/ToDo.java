@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 
 import lombok.Getter;
@@ -33,15 +35,18 @@ public class ToDo extends BaseEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JsonIgnore
+    //@JsonBackReference
     private UserTW assignee;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "milestone_id")
-    @JsonBackReference(value="milestone-toDo")
+    @JsonIgnore
+    //@JsonBackReference(value="milestone-toDo")
     private Milestone milestone;
 
-    
+    @JsonIgnore
+    @JsonManagedReference(value="toDo-tag")
     @ManyToMany
     private List<Tag> tags;
 
