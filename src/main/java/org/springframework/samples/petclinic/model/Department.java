@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import lombok.Getter;
@@ -33,15 +34,18 @@ public class Department extends BaseEntity {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "team_id")
-	@JsonBackReference(value="team-department")
+	@JsonIgnore
+	//@JsonBackReference(value="team-department")
 	private Team team;
 	
-	@JsonManagedReference(value="department-project")
+	@JsonIgnore
+	//@JsonManagedReference(value="department-project")
 	@Column(name = "projects")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true)
 	private List<Project> projects;
 	
-	@JsonManagedReference(value="department-belongs")
+	@JsonIgnore
+	//@JsonManagedReference(value="department-belongs")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true)
 	private List<Belongs> belongs;
 }

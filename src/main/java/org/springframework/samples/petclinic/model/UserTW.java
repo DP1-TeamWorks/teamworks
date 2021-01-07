@@ -15,6 +15,7 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 
@@ -43,6 +44,7 @@ public class UserTW extends BaseEntity {
 	@Column(name = "email", unique = true)
 	String email;
 
+	
 	@NotNull
 	@NotEmpty
 	@Column(name = "password")
@@ -59,12 +61,17 @@ public class UserTW extends BaseEntity {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "team_id")
-	@JsonBackReference("team-user")
+	@JsonIgnore
+	//@JsonBackReference("team-user")
 	private Team team;
-	@JsonManagedReference(value="user-belongs")
+	
+	@JsonIgnore
+	//@JsonManagedReference(value="user-belongs")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userTW", orphanRemoval = true)
 	private List<Belongs> belongs;
-	@JsonManagedReference(value="user-participation")
+	
+	@JsonIgnore
+	//@JsonManagedReference(value="user-participation")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userTW", orphanRemoval = true)
 	private List<Participation> participation;
 }

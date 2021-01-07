@@ -57,7 +57,7 @@ public class DepartmentController {
 		return l;
 	}
 
-	@GetMapping(value = "/api/departments/my")
+	@GetMapping(value = "/api/departments/mine")
 	public List<Department> getMyDeparments(HttpServletRequest r) {
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
 		List<Department> l = belongsService.findMyDepartments(userId).stream().collect(Collectors.toList());

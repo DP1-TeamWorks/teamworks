@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Participation;
@@ -38,12 +39,13 @@ public class ProjectController {
 	private final BelongsService belongsService;
 
 	@Autowired
-	public ProjectController(DepartmentService departmentService, ProjectService projectService,ParticipationService participationService,UserTWService userTWService,BelongsService belongsService) {
+	public ProjectController(DepartmentService departmentService, ProjectService projectService,
+			ParticipationService participationService, UserTWService userTWService, BelongsService belongsService) {
 		this.departmentService = departmentService;
 		this.projectService = projectService;
-		this.participationService=participationService;
-		this.userTWService=userTWService;
-		this.belongsService=belongsService;
+		this.participationService = participationService;
+		this.userTWService = userTWService;
+		this.belongsService = belongsService;
 	}
 
 	@InitBinder
@@ -52,19 +54,22 @@ public class ProjectController {
 	}
 
 	@GetMapping(value = "/api/projects")
-	public List<Project> getProjects(@RequestParam(required = false) Integer departmentId) {
+	public List<Project> getProjects(@RequestParam(required = true) Integer departmentId) {
 		List<Project> l = new ArrayList<>();
 		l = departmentService.findDepartmentById(departmentId).getProjects();
 		return l;
 	}
-	@GetMapping(value = "/api/projects/my")
-	public List<Project> getMyProjects(HttpServletRequest r) {
+
+	@GetMapping(value = "/api/projects/mine")
+	public List<Project> getMyProjects(HttpServletRequest r, @RequestParam(required = true) Integer departmentId) {
+
 		List<Project> l = new ArrayList<>();
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
-		l = participationService.findMyProjects(userId).stream().collect(Collectors.toList());
+		l = participationService.findMyDepartemntProjects(userId, departmentId).stream().collect(Collectors.toList());
 		return l;
+
 	}
-	
+
 	@PostMapping(value = "/api/projects")
 	public ResponseEntity<String> postProjects(@RequestParam(required = true) Integer departmentId,
 			@RequestBody Project project) {
@@ -90,28 +95,31 @@ public class ProjectController {
 		}
 
 	}
-	
+
 	@PostMapping(value = "/api/projects/participation")
 	public ResponseEntity<String> postParticipation(@RequestParam(required = true) Integer participationUserId,
-			@RequestParam(required = true) Integer projectId,
-			@RequestParam(required = false) Boolean isProjectManager, HttpServletRequest r) {
+			@RequestParam(required = true) Integer projectId, @RequestParam(required = false) Boolean isProjectManager,
+			HttpServletRequest r) {
 
 		try {
-			
-			Participation currentParticipation = participationService.findCurrentParticipation(participationUserId, projectId);
-			UserTW user = userTWService.findUserById((Integer)r.getSession().getAttribute("userId"));
-			Project project=projectService.findProjectById(projectId);
-			Boolean isDepartmentManager = belongsService.findCurrentBelongs(user.getId() ,project.getDepartment().getId()).getIsDepartmentManager();
-			Boolean teamOwner=user.getRole().equals(Role.team_owner);
-			//Comprueba si existe una participacion
-			if (currentParticipation  == null) {
+
+			Participation currentParticipation = participationService.findCurrentParticipation(participationUserId,
+					projectId);
+			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
+			Project project = projectService.findProjectById(projectId);
+			Boolean isDepartmentManager = belongsService
+					.findCurrentBelongs(user.getId(), project.getDepartment().getId()).getIsDepartmentManager();
+			Boolean teamOwner = user.getRole().equals(Role.team_owner);
+			// Comprueba si existe una participacion
+			if (currentParticipation == null) {
 				UserTW participationUser = userTWService.findUserById(participationUserId);
 				Participation participation = new Participation();
 				participation.setProject(project);
 				participation.setUserTW(participationUser);
 				participation.setIsProjectManager(false);
-				//Solo puedes asignar el rol de project manager si eres teamOwner o departmentManager
-				if (isProjectManager!=null &&(isDepartmentManager || teamOwner )) {
+				// Solo puedes asignar el rol de project manager si eres teamOwner o
+				// departmentManager
+				if (isProjectManager != null && (isDepartmentManager || teamOwner)) {
 					participation.setIsProjectManager(isProjectManager);
 				}
 				participationService.saveParticipation(participation);
@@ -124,25 +132,26 @@ public class ProjectController {
 		}
 
 	}
-	
+
 	@DeleteMapping(value = "/api/projects/participation")
 	public ResponseEntity<String> deleteParticipation(@RequestParam(required = true) Integer participationUserId,
-			@RequestParam(required = true) Integer projectId,HttpServletRequest r) {
+			@RequestParam(required = true) Integer projectId, HttpServletRequest r) {
 		try {
-			UserTW user = userTWService.findUserById((Integer)r.getSession().getAttribute("userId"));
-			Participation participation= participationService.findCurrentParticipation(participationUserId, projectId);
-			Project project=participation.getProject();
-			Boolean isDepartmentManager = belongsService.findCurrentBelongs(user.getId() ,project.getDepartment().getId()).getIsDepartmentManager();
-			Boolean teamOwner=user.getRole().equals(Role.team_owner);
-			Boolean isProjectManager=participation.getIsProjectManager();
-			if(isProjectManager==false||(isDepartmentManager || teamOwner)) {
+			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
+			Participation participation = participationService.findCurrentParticipation(participationUserId, projectId);
+			Project project = participation.getProject();
+			Boolean isDepartmentManager = belongsService
+					.findCurrentBelongs(user.getId(), project.getDepartment().getId()).getIsDepartmentManager();
+			Boolean teamOwner = user.getRole().equals(Role.team_owner);
+			Boolean isProjectManager = participation.getIsProjectManager();
+			if (isProjectManager == false || (isDepartmentManager || teamOwner)) {
 				participation.setFinalDate(LocalDate.now());
 				participationService.saveParticipation(participation);
 				return ResponseEntity.ok("Participation delete");
-			}else {
+			} else {
 				return ResponseEntity.status(403).build();
 			}
-			
+
 		} catch (DataAccessException d) {
 			return ResponseEntity.notFound().build();
 		}

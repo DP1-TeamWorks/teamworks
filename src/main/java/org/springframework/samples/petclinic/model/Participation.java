@@ -12,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,12 +40,14 @@ public class Participation extends BaseEntity {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "userId")
-	@JsonBackReference(value="user-participation")
+	@JsonIgnore
+	//@JsonBackReference(value="user-participation")
 	UserTW userTW;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "projectId")
-	@JsonBackReference(value="project-participation")
+	@JsonIgnore
+	//@JsonBackReference(value="project-participation")
 	Project project;
 
 }
