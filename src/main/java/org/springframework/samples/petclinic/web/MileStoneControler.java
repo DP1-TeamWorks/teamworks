@@ -39,14 +39,13 @@ public class MileStoneControler {
 
 		return milestoneService.findNextMilestone(projectId);
 	}
-	
+
 	@GetMapping(value = "/api/milestones")
 	public List<Milestone> getMilestones(@RequestParam(required = false) String name) {
 		List<Milestone> l = new ArrayList<>();
-		
-			l = milestoneService.getAllMilestone().stream().collect(Collectors.toList());
 
-		 
+		l = milestoneService.getAllMilestone().stream().collect(Collectors.toList());
+
 		return l;
 	}
 
