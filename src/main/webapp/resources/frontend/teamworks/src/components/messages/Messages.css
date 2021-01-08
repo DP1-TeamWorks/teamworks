@@ -7,15 +7,27 @@
   padding: 20px;
   align-items: center;
 
-  background: #292d22;
+  background: #a6e32d18;
   font-weight: 600;
   font-size: 18px;
   line-height: 22px;
   color: #a7e32d;
+
+  transition: all linear 0.5s;
 }
 
 .MsgPreviewContainer:hover {
-  background: #a6e32d18;
+  background: #5a771f18;
+}
+
+.MsgPreviewContainer--Read {
+  background: #5a771f18;
+  color: #6c8344;
+  transition: all linear 0.5s;
+}
+.MsgPreviewContainer--Active {
+  color: white;
+  transition: all linear 0.5s;
 }
 
 .SelectBox {
@@ -38,15 +50,7 @@
   display: inline-block;
   vertical-align: middle;
 
-  color: #a7e32d;
-  font-weight: bold;
-}
-
-.MsgTitle--Opened {
-  margin-left: 10px;
-  display: inline-block;
-  vertical-align: middle;
-
+  color: inherit;
   font-weight: bold;
 }
 
@@ -55,7 +59,7 @@
   display: inline-block;
   vertical-align: middle;
 
-  color: #a7e32d;
+  color: inherit;
 }
 
 .MsgDateTime {
@@ -63,18 +67,52 @@
   display: inline-block;
   vertical-align: middle;
 
-  color: #a7e32d;
+  color: inherit;
 }
 
 .MsgContent {
-  overflow: hidden;
-  height: 400px;
-  background-color: #313826;
+  font-size: large;
+  max-height: none;
+  min-height: 160px;
+  background-color: #a6e32d0e;
+  color: #acacac;
 
-  transition: max-height 0.5s ease-out;
+  transition: max-height 0.5s ease-in-out;
 }
 
-.NewMsgBackground{
+.MsgContent--Collapsed {
+  max-height: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+
+  color: #a6e32d0e;
+
+  transition: max-height 0.5s ease-in-out;
+}
+
+.MsgContentText {
+  display: inline-block;
+  max-width: 85%;
+  padding: 10px 10px 40px 50px;
+}
+
+.MsgContentSentTo {
+  max-width: 85%;
+  padding: 10px 5px 0px 50px;
+}
+
+.MsgContentButtons {
+  display: inline-flex;
+  flex-direction: column;
+  align-content: space-between;
+  align-items: flex-start;
+  max-width: 15%;
+  padding-right: 10px;
+  float: right;
+}
+
+.NewMsgBackground {
   opacity: 40%;
   background-color: #161812;
 }

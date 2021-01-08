@@ -9,82 +9,106 @@ const Inbox = (props) => {
   const [selectedTab, setSelectedTab] = useState("Inbox");
   const [inboxMessages, setInboxMessages] = useState([
     {
+      id: 9,
       sender: { name: "Johnny Depp", teamname: "Pearson" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
       time: "19:23",
+      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
       tags: [
         { title: "Planning", color: "#FFD703" },
         { title: "Planning", color: "#DDFFDD" },
       ],
+      text:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     },
     {
+      id: 4,
       sender: { name: "Johnny Depp", teamname: "Pearson" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
       time: "19:23",
+      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
       tags: [
         { title: "Planning", color: "#FFD703" },
         { title: "Planning", color: "#DDFFDD" },
       ],
+      text:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     },
     {
+      id: 2,
       sender: { name: "Johnny Depp", teamname: "Pearson" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
       time: "19:23",
+      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
       tags: [
         { title: "Planning", color: "#FFD703" },
         { title: "Planning", color: "#DDFFDD" },
       ],
+      text:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     },
     {
+      id: 1,
       sender: { name: "Johnny Depp", teamname: "Pearson" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
       time: "19:23",
+      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
       tags: [
         { title: "Planning", color: "#FFD703" },
         { title: "Planning", color: "#DDFFDD" },
       ],
+      text:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     },
   ]);
   const [sentMessages, setSentMessages] = useState([
     {
+      id: 4,
       sender: { name: "Kevin Depp", teamname: "Stark" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
       time: "19:23",
+      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
       tags: [
         { title: "Planning", color: "#FFD703" },
         { title: "Planning", color: "#DDFFDD" },
       ],
     },
     {
+      id: 4,
       sender: { name: "Kevin Depp", teamname: "Stark" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
       time: "19:23",
+      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
       tags: [
         { title: "Planning", color: "#FFD703" },
         { title: "Planning", color: "#DDFFDD" },
       ],
     },
     {
+      id: 4,
       sender: { name: "Kevin Depp", teamname: "Stark" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
       time: "19:23",
+      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
       tags: [
         { title: "Planning", color: "#FFD703" },
         { title: "Planning", color: "#DDFFDD" },
       ],
     },
     {
+      id: 4,
       sender: { name: "Kevin Depp", teamname: "Stark" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
       time: "19:23",
+      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
       tags: [
         { title: "Planning", color: "#FFD703" },
         { title: "Planning", color: "#DDFFDD" },
