@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Message;
@@ -24,6 +26,16 @@ public class MessageService {
 	@Transactional(readOnly = true)
 	public Message findMessageById(Integer messageId) throws DataAccessException {
 		return messageRepository.findById(messageId);
+	}
+	
+	@Transactional
+	public Collection<Message> findMessagesByUserId(Integer userId) throws DataAccessException {
+		return messageRepository.findMessagesByUserId(userId);
+	}
+	
+	@Transactional
+	public Collection<Message> findMessagesSentByUserId(Integer userId) throws DataAccessException {
+		return messageRepository.findMessagesSentByUserId(userId);
 	}
 
 	@Transactional

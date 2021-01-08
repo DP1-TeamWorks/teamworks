@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -38,43 +40,116 @@ public class MessageController {
 		dataBinder.setDisallowedFields("id");
 	}
 	
-	@GetMapping(value = "/api/messages")
-	public List<Message> getMessages(@RequestParam(required = false) String user) {
-		if (user == null) {
-			//get messages by the user?
-			//List<Message> list = messageService.getAllMessages().stream().collect(Collectors.toList());
-			return null;
-		} else {
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find user");
+	@GetMapping(value = "/api/messages/inbox")
+	public List<Message> getMyInboxMessages(@RequestBody HttpServletRequest r) {
+		try {
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			List<Message> messageList = (messageService.findMessagesByUserId(userId)).stream().collect(Collectors.toList());
+			return messageList;
+		} catch (DataAccessException d) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
 
 		}
 	}
 	
-	@PostMapping(value = "/api/messages")
-	public ResponseEntity<String> postMessages(@RequestParam(required = true) Integer messageId, HttpServletRequest r) {
+	
+	@GetMapping(value = "/api/messages/sent")
+	public List<Message> getMySentMessages(@RequestBody HttpServletRequest r) {
 		try {
-			//TODO 
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			List<Message> messageList = (messageService.findMessagesSentByUserId(userId)).stream().collect(Collectors.toList());
+			return messageList;
+		} catch (DataAccessException d) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
+
+		}
+	}
+	
+	
+	//TODO GETMESSAGESBYTAG
+	
+	
+
+	
+	
+	//CHANGE ALL INTO REQUEST BODY
+	@PostMapping(value = "/message")
+	public ResponseEntity<String> newMessage(HttpServletRequest r, @RequestBody(required = true) Message message, @RequestBody(required = false) List<Integer> recipients,
+			@RequestBody(required = false) List<String> toDoIdList, @RequestBody(required = false) List<String> TagIdList) {
+		try {
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			UserTW sender = userService.findUserById(userId);
+			message.setSender(sender);
+			List<UserTW> recipientList = new ArrayList<>();
+			for (int i=0; i<recipients.size(); i++){
+				UserTW recipient = userService.findUserById(recipients.get(i));
+				recipientList.add(recipient);
+			}
+			message.setRecipients(recipientList);			;
+			
+			if(toDoIdList != null) {
+				//message.setToDos(toDoIdList);
+			}
 			
 			
+			//TODO isMarked Tag
 			
-			return ResponseEntity.ok("Message sent");
+			
+			//messageService.saveMessage(message);
+			return ResponseEntity.ok().build();
+
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
 		}
 	}
 	
-	@DeleteMapping(value = "/api/messages")
-	public ResponseEntity<String> deleteMessage(@RequestParam(required = true) Integer messageId) {
-		// System.out.println("Delete user: "+ userTWId);
-
+	@PostMapping(value = "/message")
+	public ResponseEntity<String> replyMessage(HttpServletRequest r, @RequestParam(required = true) Integer messageId, @RequestParam(required = true)Message message,
+			@RequestParam(required = false) List<String> TodoIdList, @RequestParam(required = false) List<String> TagList) {
 		try {
-			messageService.deleteMessageById(messageId);
-			return ResponseEntity.ok("Message Deleted");
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			UserTW sender = userService.findUserById(userId);
+			message.setSender(sender);
+			
+			//message.setRecipients(recipientList);			
+			if(TodoIdList != null) {
+				
+			} 
+			
+			//TODO REFERENCES TO-DO
+			//TODO isMarked Tag
+			
+			//messageService.saveMessage(message);
+			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
 		}
+	}
+	
+	
+	@PostMapping(value = "/message")
+	public ResponseEntity<String> forwardMessage(HttpServletRequest r, @RequestParam(required = true) Integer messageId) {
+		try {
+			//TODO
+			return ResponseEntity.ok().build();
 
+		} catch (DataAccessException d) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	
+	@PostMapping(value = "/api/markAsRead")
+	public ResponseEntity<String> markAsRead(HttpServletRequest r, @RequestParam(required = true) Integer messageId) {
+		try {
+			Message message = messageService.findMessageById(messageId);
+			message.setRead(true);
+			return ResponseEntity.ok().build();
+
+		} catch (DataAccessException d) {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 
 }
