@@ -33,7 +33,7 @@ public class Department extends BaseEntity {
 	private String description;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "team_id")
+	@JoinColumn(name = "teamId")
 	@JsonIgnore
 	//@JsonBackReference(value="team-department")
 	private Team team;

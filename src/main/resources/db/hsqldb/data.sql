@@ -106,3 +106,15 @@ values
         "Web app for the street bakery",
         2
     )
+INSERT INTO users(name,lastname,email,password,role,team_id)values("Julia", "Fabra", "juliafabra@cyber","123456789",1)
+INSERT INTO users(name,lastname,email,password,role,team_id)values("Maria", "Torres", "mariatorres@cyber","123456789",1)
+INSERT INTO users(name,lastname,email,password,role,team_id)values("Luis", "Cumbrera", "luiscumbrera@cyber","123456789",1)
+INSERT INTO users(name,lastname,email,password,role,team_id)values("Roman", "Calle", "romancalle@cyber","123456789",1)
+INSERT INTO departments(name,description,teamId) values('Calidad','Aseguro la ...',1)
+INSERT INTO belongs(isDepartmentManager,userId,departmentId) values(true,1,2)
+INSERT INTO belongs(isDepartmentManager,userId,departmentId) values(false,1,5)
+INSERT INTO departments(name,description,teamId) values('Gestion','La mejor gestion ...',1)
+INSERT INTO belongs(isDepartmentManager,userId,departmentId) values(true,2,3)
+INSERT INTO departments(name,description,teamId) values('Ventas','Debemos vender ...',1)
+INSERT INTO belongs(isDepartmentManager,userId,departmentId) values(true,3,4)
+
