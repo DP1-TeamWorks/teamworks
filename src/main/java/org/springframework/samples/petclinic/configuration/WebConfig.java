@@ -17,18 +17,14 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-	
-	
-	
-	
-    
-	
-	@Autowired
-	GenericIdToEntityConverter idToEntityConverter;
-	@Autowired
-	UserTWService userTWService;
-	@Autowired
-	BelongsService belongsService;
+
+    @Autowired
+    GenericIdToEntityConverter idToEntityConverter;
+    @Autowired
+    UserTWService userTWService;
+    @Autowired
+    BelongsService belongsService;
+
     @Override
     public void addFormatters(FormatterRegistry registry) {
 
@@ -49,11 +45,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor())
-            .addPathPatterns("/api/**")
-            .excludePathPatterns("/api/auth/login")
-            .excludePathPatterns("/api/auth/signup").order(0);
-        registry.addInterceptor(new TeamOwnerInterceptor(userTWService)).addPathPatterns("/api/teams/**").addPathPatterns("/api/userTW").addPathPatterns("/api/departments").order(1);
-        registry.addInterceptor(new DepartmentManagerInterceptor(userTWService,belongsService)).addPathPatterns("/api/projects").order(2);    
-        }
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/api/**")
+                .excludePathPatterns("/api/auth/login").excludePathPatterns("/api/auth/signup").order(0);
+        registry.addInterceptor(new TeamOwnerInterceptor(userTWService)).addPathPatterns("/api/teams/**")
+                .addPathPatterns("/api/userTW").addPathPatterns("/api/departments").order(1);
+        registry.addInterceptor(new DepartmentManagerInterceptor(userTWService, belongsService))
+                .addPathPatterns("/api/projects").addPathPatterns("/api/departments/belongs").order(2);
+
+        // TODO: project manager interceptor
+        // TODO: maybe ? team employee interceptor -ToDos
+    }
 }

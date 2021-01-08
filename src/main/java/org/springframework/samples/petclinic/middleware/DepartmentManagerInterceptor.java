@@ -10,29 +10,32 @@ import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-public class DepartmentManagerInterceptor extends HandlerInterceptorAdapter{
+public class DepartmentManagerInterceptor extends HandlerInterceptorAdapter {
 	private final UserTWService userTWService;
 	private final BelongsService belongsService;
+
 	@Autowired
 	public DepartmentManagerInterceptor(UserTWService userTWService, BelongsService belongsService) {
 		this.belongsService = belongsService;
 		this.userTWService = userTWService;
 	}
+
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
 		Integer userId = (Integer) req.getSession().getAttribute("userId");
-		Integer departmentId =Integer.valueOf(req.getParameter("departmentId"));
-		Belongs belongs=belongsService.findCurrentBelongs(userId, departmentId);
-		Boolean departmentManager=false;
-		if(belongs!=null) {
-			departmentManager=belongs.getIsDepartmentManager();
+		Integer departmentId = Integer.valueOf(req.getParameter("departmentId"));
+		Belongs belongs = belongsService.findCurrentBelongs(userId, departmentId);
+		Boolean departmentManager = false;
+
+		if (belongs != null) {
+			departmentManager = belongs.getIsDepartmentManager();
 		}
-		if(userTWService.findUserById(userId).getRole().equals(Role.team_owner)||departmentManager) {
+		if (userTWService.findUserById(userId).getRole().equals(Role.team_owner) || departmentManager) {
 			return true;
-		}else {
+		} else {
 			res.sendError(403);
 			return false;
 		}
-		
+
 	}
 }
