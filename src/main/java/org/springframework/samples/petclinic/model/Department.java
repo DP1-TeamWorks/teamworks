@@ -21,7 +21,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "departments")
 public class Department extends BaseEntity {
-	
+
 	@NotNull
 	@NotEmpty
 	@Column(name = "name", unique = true)
@@ -33,19 +33,19 @@ public class Department extends BaseEntity {
 	private String description;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "teamId")
+	@JoinColumn(name = "team_id")
 	@JsonIgnore
-	//@JsonBackReference(value="team-department")
+	// @JsonBackReference(value="team-department")
 	private Team team;
-	
+
 	@JsonIgnore
-	//@JsonManagedReference(value="department-project")
+	// @JsonManagedReference(value="department-project")
 	@Column(name = "projects")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true)
 	private List<Project> projects;
-	
+
 	@JsonIgnore
-	//@JsonManagedReference(value="department-belongs")
+	// @JsonManagedReference(value="department-belongs")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "department", orphanRemoval = true)
 	private List<Belongs> belongs;
 }

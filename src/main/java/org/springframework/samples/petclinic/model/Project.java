@@ -23,7 +23,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "project")
+@Table(name = "projects")
 public class Project extends BaseEntity {
 
 	@Column(name = "name")
@@ -41,7 +41,7 @@ public class Project extends BaseEntity {
 	private LocalDate creationTimestamp;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "departmentId")
+	@JoinColumn(name = "department_id")
 	@JsonIgnore
 	// @JsonBackReference(value="department-project")
 	private Department department;

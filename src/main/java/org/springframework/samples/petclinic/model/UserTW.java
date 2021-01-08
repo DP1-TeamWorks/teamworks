@@ -59,7 +59,7 @@ public class UserTW extends BaseEntity {
 	Role role;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "teamId")
+	@JoinColumn(name = "team_id")
 	@JsonIgnore
 	// @JsonBackReference("team-user")
 	private Team team;
