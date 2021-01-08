@@ -36,12 +36,12 @@ public class Project extends BaseEntity {
 	@NotEmpty
 	private String description;
 
-	@Column(name = "creation_timestamp")
+	@Column(name = "creationTimestamp")
 	@CreationTimestamp
 	private LocalDate creationTimestamp;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "department_id")
+	@JoinColumn(name = "departmentId")
 	@JsonIgnore
 	// @JsonBackReference(value="department-project")
 	private Department department;
