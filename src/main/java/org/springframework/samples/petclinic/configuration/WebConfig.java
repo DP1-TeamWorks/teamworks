@@ -6,7 +6,6 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.samples.petclinic.middleware.ProjectManagerInterceptor;
 import org.springframework.samples.petclinic.middleware.DepartmentManagerInterceptor;
 import org.springframework.samples.petclinic.middleware.LoginInterceptor;
-import org.springframework.samples.petclinic.middleware.ProjectManagerInterceptor;
 import org.springframework.samples.petclinic.middleware.TeamOwnerInterceptor;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.ParticipationService;
@@ -57,7 +56,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/api/**")
                 .excludePathPatterns("/api/auth/login").excludePathPatterns("/api/auth/signup").order(0);
         registry.addInterceptor(new TeamOwnerInterceptor(userTWService)).addPathPatterns("/api/teams/**")
-                .addPathPatterns("/api/userTW").addPathPatterns("/api/departments").order(1);
+                .addPathPatterns("/api/userTW/**").addPathPatterns("/api/departments").order(1);
         registry.addInterceptor(new DepartmentManagerInterceptor(userTWService, belongsService))
                 .addPathPatterns("/api/projects").addPathPatterns("/api/departments/belongs").order(2);
         registry.addInterceptor(
