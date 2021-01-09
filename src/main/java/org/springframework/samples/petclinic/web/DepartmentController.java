@@ -54,7 +54,7 @@ public class DepartmentController {
 	@GetMapping(value = "/api/department/users")
 	public List<UserTW> getTeamUser(HttpServletRequest r,@RequestParam(required=true) Integer departmentId) {
 		List<UserTW> l = new ArrayList<>();
-		l=belongsService.findDepartmentUsers(departmentId).stream().collect(Collectors.toList());
+		l=departmentService.findDepartmentUsers(departmentId).stream().collect(Collectors.toList());
 		return l;
 	}
 

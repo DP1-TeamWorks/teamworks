@@ -50,9 +50,6 @@ public class BelongsService {
 		return belongsRepository.findMyDepartments(userId);
 	}
 	
-	@Transactional(readOnly = true)
-	public Collection<UserTW> findDepartmentUsers(Integer departmentId) {
-		return belongsRepository.findDepartmentUsers(departmentId);
-	}
+	
 
 }

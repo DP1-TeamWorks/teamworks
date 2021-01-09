@@ -28,6 +28,7 @@ public interface ProjectRepository extends Repository<Project, Integer> {
     void deleteById(Integer projectId) throws DataAccessException;
 
     public Collection<Project> findAll() throws DataAccessException;
-    @Query(value = "SELECT u.user FROM Participation u WHERE u.project.id = :projectId and u.finalDate=null")
+    
+    @Query(value = "SELECT u.userTW FROM Participation u WHERE u.project.id = :projectId and u.finalDate=null")
 	public Collection<UserTW> findProjectUsers(@Param("projectId") Integer projectId);
 }

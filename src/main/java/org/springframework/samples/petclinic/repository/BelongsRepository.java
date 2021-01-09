@@ -27,7 +27,6 @@ public interface BelongsRepository extends Repository<Belongs, Integer> {
 	@Query(value = "SELECT u.department FROM Belongs u WHERE u.userTW.id = :userId and u.finalDate=null")
 	public Collection<Department> findMyDepartments(@Param("userId") Integer userId);
 	
-	@Query(value = "SELECT u.user FROM Belongs u WHERE u.department.id= :departmentId and u.finalDate=null")
-	public Collection<UserTW> findDepartmentUsers( @Param("departmentId") Integer departmentId);
+	
 	
 }
