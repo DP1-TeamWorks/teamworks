@@ -16,12 +16,12 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class LoginController {
+public class AuthController {
 	private final UserTWService userTWService;
 	private final TeamService teamService;
 
 	@Autowired
-	public LoginController(TeamService teamService, UserTWService userTWService) {
+	public AuthController(TeamService teamService, UserTWService userTWService) {
 		this.teamService = teamService;
 		this.userTWService = userTWService;
 	}

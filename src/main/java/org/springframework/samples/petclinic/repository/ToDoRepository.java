@@ -14,7 +14,8 @@ public interface ToDoRepository extends Repository<ToDo, Integer> {
     void deleteById(Integer id) throws DataAccessException;
 
     public ToDo findById(Integer id);
-    
-    @Query(value="SELECT u FROM ToDo u WHERE u.assignee.id = :userId and u.milestone.id = :milestoneId" )
-	public Collection<ToDo> findToDoByMilestoneAndUser(@Param("milestoneId") Integer milestoneId,@Param("userId") Integer userId);
+
+    @Query(value = "SELECT u FROM ToDo u WHERE u.assignee.id = :userId and u.milestone.id = :milestoneId")
+    public Collection<ToDo> findToDoByMilestoneAndUser(@Param("milestoneId") Integer milestoneId,
+            @Param("userId") Integer userId);
 }

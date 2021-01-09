@@ -116,6 +116,7 @@ const Inbox = (props) => {
     },
   ]);
 
+
   useEffect(() => {
     MessageApiUtils.getMyInboxMessages()
       .then((res) => {
@@ -160,7 +161,7 @@ const Inbox = (props) => {
         setModalNewMessage={setModalNewMessage}
       />
       <Section className="Section--Lighter">
-        {modalNewMessage && <NewMessage />}
+        {modalNewMessage && <NewMessage ChangeModalNewMessage={()=> setModalNewMessage(!modalNewMessage)}/>}
         <MessageList messages={selectedMessages()} />
       </Section>
     </div>

@@ -23,7 +23,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "project")
+@Table(name = "projects")
 public class Project extends BaseEntity {
 
 	@Column(name = "name")
@@ -36,7 +36,7 @@ public class Project extends BaseEntity {
 	@NotEmpty
 	private String description;
 
-	@Column(name = "creation_timestamp")
+	@Column(name = "creationTimestamp")
 	@CreationTimestamp
 	private LocalDate creationTimestamp;
 

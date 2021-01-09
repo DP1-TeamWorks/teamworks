@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-public class MileStoneControler {
+public class MilestoneController {
 	private final MilestoneService milestoneService;
 	private final ProjectService projectService;
 
 	@Autowired
-	public MileStoneControler(MilestoneService milestoneService, ProjectService projectService) {
+	public MilestoneController(MilestoneService milestoneService, ProjectService projectService) {
 		this.milestoneService = milestoneService;
 		this.projectService = projectService;
 	}

@@ -53,6 +53,7 @@ public class ToDoController {
 			Milestone milestone = milestoneService.findMilestoneById(milestoneId);
 			toDo.setAssignee(user);
 			toDo.setMilestone(milestone);
+			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {

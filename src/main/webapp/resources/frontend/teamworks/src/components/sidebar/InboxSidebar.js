@@ -20,9 +20,9 @@ const InboxSidebar = ({
     tags: [
     ]});
 
-  const ChangeModalNewMessage = () => {
-    setModalNewMessage(!modalNewMessage);
-  };
+  const ChangeModalNewMessage = () =>{
+    setModalNewMessage(!modalNewMessage)
+  }
 
   return (
     <Sidebar>

@@ -39,7 +39,7 @@ public class Tag extends BaseEntity {
     // Relations
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "projects_id")
+    @JoinColumn(name = "projectId")
     @JsonBackReference(value = "project-tag")
     private Project project;
 
