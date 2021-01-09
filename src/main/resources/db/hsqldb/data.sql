@@ -284,4 +284,74 @@ values
     	4
     );
     
+	/*MILESTONES*/	
+
+INSERT INTO milestones(name , dueFor, projectId)
+values
+	(
+		'Finish documentation', 
+		2021/03/01, 
+		1
+	);
 	
+
+ /*TODOS*/
+  
+INSERT INTO toDo(title,milestoneId,userId)
+values
+	(
+		'Point 1',
+		1,
+		1	
+	);
+	
+INSERT INTO toDo(title,milestoneId,userId)
+values
+	(
+		'Point 2',
+		1,
+		2
+	);
+	
+INSERT INTO toDo(title,milestoneId,userId)
+values
+	(
+		'Point 3',
+		1,
+		3
+		
+	);
+	
+INSERT INTO toDo(title,milestoneId,userId)
+values
+	(
+		'Point 4',
+		1,
+		4
+		
+	);	
+	
+ /*TAGS*/
+INSERT INTO tags(title,color,projectId,)
+values
+	(
+		'Finished', 
+		'#A6F718' ,
+		1
+	); 
+	
+INSERT INTO tags(title,color,projectId,)
+values
+	(
+		'In process', 
+		'#F72C18' ,
+		1
+	); 
+	
+INSERT INTO tags(title,color,projectId,)
+values
+	(
+		'Review', 
+		'#35a9fc' ,
+		1
+	); 
