@@ -6,6 +6,7 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.samples.petclinic.middleware.ProjectManagerInterceptor;
 import org.springframework.samples.petclinic.middleware.DepartmentManagerInterceptor;
 import org.springframework.samples.petclinic.middleware.LoginInterceptor;
+import org.springframework.samples.petclinic.middleware.ProjectManagerInterceptor;
 import org.springframework.samples.petclinic.middleware.TeamOwnerInterceptor;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.ParticipationService;
