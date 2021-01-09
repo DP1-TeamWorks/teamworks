@@ -78,7 +78,7 @@ class AddToDoForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.submitHandler} style={{ display: "inline-block" }}>
+      <form onSubmit={this.submitHandler}>
         <span className="ToDoAdd" onClick={null}>
           <FontAwesomeIcon icon={faPlus} style={{ color: "lightgray" }} />
         </span>{" "}

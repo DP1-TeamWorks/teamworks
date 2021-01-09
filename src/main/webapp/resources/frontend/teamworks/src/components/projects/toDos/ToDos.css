@@ -16,8 +16,7 @@
   outline: none;
 }
 
-.ToDoCircle:hover,
-.ToDoAdd:hover {
+.ToDoCircle:hover {
   background: rgba(218, 250, 154, 0.363);
 }
 
@@ -29,9 +28,6 @@
   margin-right: 4px;
   width: 20px;
   height: 20px;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
   border: 0px;
   background: transparent;
 

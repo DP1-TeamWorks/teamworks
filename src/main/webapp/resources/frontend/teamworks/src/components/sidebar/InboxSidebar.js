@@ -16,7 +16,7 @@ const InboxSidebar = ({
 }) => {
   const [pickedProject, setPickedProject] = useState({
     name: "Pick a project",
-    id: 1,
+    id: 9999999999999999999,
     tags: [],
   });
 

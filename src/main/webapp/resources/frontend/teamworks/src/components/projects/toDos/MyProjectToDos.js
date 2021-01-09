@@ -9,26 +9,7 @@ const MyProjectToDos = ({ projectId }) => {
   const [milestone, setMilestone] = useState({
     date: "13/12/2010",
   });
-  const [toDoList, setToDoList] = useState([
-    {
-      id: 1,
-      title: "Plan a meeting",
-      tags: [{ title: "Planning", color: "#FFD703" }],
-    },
-    {
-      id: 2,
-      title: "Go to have breakfast",
-      tags: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Planning", color: "#DDFFDD" },
-      ],
-    },
-    {
-      id: 3,
-      title: "Work with my Team",
-      tags: [],
-    },
-  ]);
+  const [toDoList, setToDoList] = useState([]);
   const [reloadToDos, setReloadToDos] = useState(true);
 
   useEffect(() => {

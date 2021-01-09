@@ -57,10 +57,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new DepartmentManagerInterceptor(userTWService, belongsService))
                 .addPathPatterns("/api/projects").addPathPatterns("/api/departments/belongs").order(2);
         registry.addInterceptor(new ProjectManagerInterceptor(userTWService, participationService))
-                .addPathPatterns("/api/tags/**").addPathPatterns("/api/toDos/**")
-                .addPathPatterns("/api/projects/participation").addPathPatterns("api/milestones/**")
-                .excludePathPatterns("/api/toDos/mine").excludePathPatterns("/api/toDos/markAsDone")
-                .excludePathPatterns("/api/milestones/next").order(3);
+                .addPathPatterns("/api/tags/**").addPathPatterns("/api/projects/participation")
+                .addPathPatterns("api/milestones/**").excludePathPatterns("/api/milestones/next").order(3);
 
         // TODO: project manager interceptor
         // TODO: maybe ? team employee interceptor -ToDos

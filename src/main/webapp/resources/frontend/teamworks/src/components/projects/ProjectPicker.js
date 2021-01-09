@@ -4,52 +4,11 @@ import ProjectApiUtils from "../../utils/api/ProjectApiUtils";
 import "./ProjectPicker.css";
 
 const ProjectPicker = ({ pickedProject, setPickedProject }) => {
-  const [departmentList, setDepartmentList] = useState([
-    {
-      name: "DPT1",
-      id: 15,
-    },
-    {
-      name: "DPT2",
-      id: 12,
-    },
-    {
-      name: "DPT3",
-      id: 143,
-    },
-  ]);
-  const [projectList, setProjectList] = useState([
-    {
-      name: "TeamWorks1",
-      id: 1,
-      tags: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Cleaning", color: "#DDFFDD" },
-        { title: "MockUp", color: "#AAD7F3" },
-      ],
-    },
-    {
-      name: "NEWHorizons1",
-      id: 3,
-      tags: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Cleaning", color: "#DDFFDD" },
-        { title: "MockUp", color: "#AAD7F3" },
-      ],
-    },
-    {
-      name: "CaptureTheFlag",
-      id: 6,
-      tags: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Cleaning", color: "#DDFFDD" },
-        { title: "MockUp", color: "#AAD7F3" },
-      ],
-    },
-  ]);
+  const [departmentList, setDepartmentList] = useState([]);
+  const [projectList, setProjectList] = useState([]);
 
-  const [department, setDepartment] = useState(departmentList[0]);
-  const [pickedDepartment, setPickedDepartment] = useState(departmentList[0]);
+  const [department, setDepartment] = useState("DPT");
+  const [pickedDepartment, setPickedDepartment] = useState({});
   const [opened, setOpened] = useState(false);
 
   useEffect(() => {

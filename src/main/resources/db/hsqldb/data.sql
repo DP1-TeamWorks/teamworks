@@ -225,3 +225,13 @@ INSERT INTO
     todos(title, user_id, milestone_id)
 values
     ('Mark this as done', 2, 1);
+
+INSERT INTO
+    todos(title, user_id, milestone_id)
+values
+    ('Mark this again ', 2, 1);
+
+INSERT INTO
+    todos(title, user_id, milestone_id)
+values
+    ('Finish The toDos section', 2, 1);
