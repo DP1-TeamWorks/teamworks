@@ -2,16 +2,12 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
-const ToDoCircle = ({ isDone, setIsDone }) => {
+const ToDoCircle = ({ isDone, markAsDone }) => {
   console.log("isDone=" + isDone);
-
-  const checkToDo = () => {
-    setIsDone(true);
-  };
 
   return (
     <>
-      <button className="ToDoCircle" onClick={checkToDo}>
+      <button className="ToDoCircle" onClick={markAsDone}>
         {isDone && <FontAwesomeIcon icon={faCheck} />}
       </button>
     </>

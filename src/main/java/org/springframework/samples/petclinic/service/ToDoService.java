@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.ToDo;
@@ -23,13 +25,17 @@ public class ToDoService {
     }
 
     @Transactional(readOnly = true)
-    public ToDo findTeamById(Integer toDoId) {
+    public ToDo findToDoById(Integer toDoId) {
         return toDoRepository.findById(toDoId);
     }
 
     @Transactional(readOnly = true)
-    public void deleteTeamById(Integer toDoId) throws DataAccessException {
+    public void deleteToDoById(Integer toDoId) throws DataAccessException {
         toDoRepository.deleteById(toDoId);
+    }
+    @Transactional(readOnly = true)
+    public Collection<ToDo> findToDoByMilestoneAndUser(Integer milestoneId,Integer userId) {
+    	return toDoRepository.findToDoByMilestoneAndUser(milestoneId, userId);
     }
 
 }
