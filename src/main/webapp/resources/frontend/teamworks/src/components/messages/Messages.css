@@ -105,7 +105,6 @@
 
   display: flex;
   flex-direction: row;
-  margin-bottom: 12px;
 }
 
 
@@ -144,15 +143,14 @@
 
 .NewMsgHeadLabel{
   position: relative;
-  display: inline-block;
+  display: flex;
   width: 100%;
-  flex: 0;
 }
 
 .NewMsgHeadText{
   position: absolute;
   left: 10px;
-  top: 10px;
+  top: 29px;
   color: #A6CE56;
   font-family: Inter;
   font-style: normal;
@@ -163,8 +161,9 @@
 }
 
 .NewMsgHead{
-  width: 60%;
+  width: 100%;
   padding-left: 80px;
+  margin-top: 19px;
 }
 
 .NewMsgTextLabel{
