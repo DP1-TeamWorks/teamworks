@@ -8,6 +8,7 @@ import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.model.Project;
+import org.springframework.samples.petclinic.model.UserTW;
 
 public interface ProjectRepository extends Repository<Project, Integer> {
     /**
@@ -27,5 +28,7 @@ public interface ProjectRepository extends Repository<Project, Integer> {
     void deleteById(Integer projectId) throws DataAccessException;
 
     public Collection<Project> findAll() throws DataAccessException;
-
+    
+    @Query(value = "SELECT u.userTW FROM Participation u WHERE u.project.id = :projectId and u.finalDate=null")
+	public Collection<UserTW> findProjectUsers(@Param("projectId") Integer projectId);
 }
