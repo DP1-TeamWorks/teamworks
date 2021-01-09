@@ -3,10 +3,12 @@ package org.springframework.samples.petclinic.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.samples.petclinic.middleware.ProjectManagerInterceptor;
 import org.springframework.samples.petclinic.middleware.DepartmentManagerInterceptor;
 import org.springframework.samples.petclinic.middleware.LoginInterceptor;
 import org.springframework.samples.petclinic.middleware.TeamOwnerInterceptor;
 import org.springframework.samples.petclinic.service.BelongsService;
+import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -24,6 +26,9 @@ public class WebConfig implements WebMvcConfigurer {
     UserTWService userTWService;
     @Autowired
     BelongsService belongsService;
+
+    @Autowired
+    ParticipationService participationService;
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
@@ -51,6 +56,10 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/userTW").addPathPatterns("/api/departments").order(1);
         registry.addInterceptor(new DepartmentManagerInterceptor(userTWService, belongsService))
                 .addPathPatterns("/api/projects").addPathPatterns("/api/departments/belongs").order(2);
+        registry.addInterceptor(new ProjectManagerInterceptor(userTWService, participationService))
+                .addPathPatterns("/api/tags/**").addPathPatterns("/api/toDos/**")
+                .addPathPatterns("/api/projects/participation").addPathPatterns("api/milestones/**")
+                .excludePathPatterns("/api/toDos/mine").excludePathPatterns("/api/toDos/markAsDone").order(2);
 
         // TODO: project manager interceptor
         // TODO: maybe ? team employee interceptor -ToDos
