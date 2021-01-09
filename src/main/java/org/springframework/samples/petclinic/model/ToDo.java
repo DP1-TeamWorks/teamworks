@@ -35,13 +35,13 @@ public class ToDo extends BaseEntity {
     // Relations
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     @JsonIgnore
     //@JsonBackReference
     private UserTW assignee;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "milestone_id")
+    @JoinColumn(name = "milestoneId")
     @JsonIgnore
     //@JsonBackReference(value="milestone-toDo")
     private Milestone milestone;
