@@ -23,6 +23,12 @@ body {
   width: fit-content;
 }
 
+.BigTitle--Slim {
+  font-size: 18pt;
+  margin-top: -10px;
+  font-weight: 800;
+}
+
 .BoldTitle {
   font-size: 18pt;
   font-weight: 900;

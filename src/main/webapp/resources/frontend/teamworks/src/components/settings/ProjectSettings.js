@@ -1,9 +1,4 @@
 import SettingGroup from "./SettingGroup";
-import EditableField from "./EditableField";
-import Button from "../buttons/Button";
-import AddUserForm from "../forms/AddUserForm";
-import UserList from "./UserList";
-import AddElementForm from "../forms/AddElementForm";
 import SubsettingContainerProjects from "./SubsettingContainerProjects";
 
 const ProjectSettings = () =>
