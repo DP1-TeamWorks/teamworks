@@ -1,9 +1,43 @@
-/*USERS*/
+
+
+/*TEAMS*/
 INSERT INTO
     teams(name, identifier)
 values
-    ('Cybergroup', 'cyber');
+    (
+    	'Cybergroup', 
+    	'cyber'
+    );
+    
+INSERT INTO teams(name , identifier)
+values
+	(
+		'Microsoft', 
+		'infor'
+	);
+	
+INSERT INTO teams(name , identifier)
+values
+	(
+		'Inova S.L',
+	 	'infor'
+	 );
+	
+INSERT INTO teams(name , identifier)
+values
+	(
+		'Monitor S.L',
+		 'infor'
+	);
 
+INSERT INTO teams(name , identifier)
+values
+	(
+		'AVERROES S.L',
+		'infor'
+	);
+
+/*USERS*/
 INSERT INTO
     users(name, lastname, email, password, role, team_id)
 values
@@ -68,47 +102,85 @@ values
 INSERT INTO
     departments(name, description, team_id)
 values
-    ('Calidad', 'Aseguro la ...', 1);
+    (
+    	'Calidad',
+     	'Aseguro la ...', 
+     	1
+     );
 
 INSERT INTO
     belongs(is_department_manager, user_id, department_id)
 values
-    (TRUE, 2, 1);
+    (
+    	TRUE, 
+    	2, 
+    	1
+    );
 
 INSERT INTO
     belongs(is_department_manager, user_id, department_id)
 values
-    (FALSE, 5, 1);
+    (
+    	FALSE, 
+    	5, 
+    	1
+    );
 
 INSERT INTO
     departments(name, description, team_id)
 values
-    ('Gestion', 'La mejor gestion ...', 1);
+    (
+    	'Gestion',
+     	'La mejor gestion ...',
+     	 1
+     );
 
 INSERT INTO
     belongs(is_department_manager, user_id, department_id)
 values
-    (TRUE, 3, 2);
+    (
+    	TRUE, 
+    	3, 
+    	2
+    );
 
 INSERT INTO
     departments(name, description, team_id)
 values
-    ('Ventas', 'Debemos vender ...', 1);
+    (
+    	'Ventas',
+    	 'Debemos vender ...',
+    	  1
+    );
+
+/*BELONGS*/
 
 INSERT INTO
     belongs(is_department_manager, user_id, department_id)
 values
-    (TRUE, 4, 3);
+    (
+    	TRUE,
+    	 4,
+    	 3
+    );
 
 INSERT INTO
     belongs(is_department_manager, user_id, department_id)
 values
-    (FALSE, 2, 2);
+    (
+    	FALSE,
+    	 2,
+    	 2
+    );
 
 INSERT INTO
     belongs(is_department_manager, user_id, department_id)
 values
-    (FALSE, 2, 3);
+    (
+    	FALSE, 
+    	2, 
+    	3
+    );
 
 /*PROJECTS*/
 INSERT INTO
@@ -173,23 +245,43 @@ values
         ' Web app for the street bakery ',
         2
     );
+    
+/*PARTICIPATION*/
 
 INSERT INTO
     participations(is_project_manager, user_id, project_id)
 values
-    (TRUE, 2, 1);
+    (
+    	TRUE, 
+    	2, 
+    	1
+    );
 
 INSERT INTO
     participations(is_project_manager, user_id, project_id)
 values
-    (TRUE, 2, 2);
+    (
+    	TRUE, 
+    	2, 
+    	2
+    );
 
 INSERT INTO
     participations(is_project_manager, user_id, project_id)
 values
-    (TRUE, 2, 3);
+    (
+    	TRUE, 
+    	2, 
+    	3
+    );
 
 INSERT INTO
     participations(is_project_manager, user_id, project_id)
 values
-    (TRUE, 2, 4);
+    (
+    	TRUE, 
+    	2, 
+    	4
+    );
+    
+	
