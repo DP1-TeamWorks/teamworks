@@ -8,6 +8,10 @@
     height: 40px;
 }
 
+.EditableField--Smaller {
+    width: 100%;
+}
+
 .EditableField--OnlyInput {
     margin-bottom: 5px;
     cursor: inherit;

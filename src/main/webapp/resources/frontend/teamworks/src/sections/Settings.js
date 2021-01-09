@@ -6,6 +6,7 @@ import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import TeamSettings from '../components/settings/TeamSettings';
 import UserSettings from '../components/settings/UserSettings';
 import DepartmentSettings from "../components/settings/DepartmentSettings";
+import ProjectSettings from '../components/settings/ProjectSettings';
 
 const PATHS = ["/settings/team", "/settings/departments", "/settings/projects", "/settings/users"];
 
@@ -30,6 +31,9 @@ const Settings = () =>
                     </Route>
                     <Route path="/settings/departments">
                         <DepartmentSettings />
+                    </Route>
+                    <Route path="/settings/projects">
+                        <ProjectSettings />
                     </Route>
                     <Route path="/settings/users">
                         <UserSettings />

@@ -4,7 +4,7 @@ import Button from "../buttons/Button";
 import AddUserForm from "../forms/AddUserForm";
 import UserList from "./UserList";
 import AddElementForm from "../forms/AddElementForm";
-import SubsettingContainer from "./SubsettingContainer";
+import SubsettingContainerDepartments from "./SubsettingContainerDepartments";
 
 const DepartmentSettings = () =>
 {
@@ -18,7 +18,7 @@ const DepartmentSettings = () =>
       <SettingGroup
         name="Manage departments"
         description="Only showing departments you have management permissions on.">
-        <SubsettingContainer />
+        <SubsettingContainerDepartments />
       </SettingGroup>
     </div>
   );

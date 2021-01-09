@@ -128,18 +128,18 @@ class AddUserForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.submitHandler}>
+      <form onSubmit={this.submitHandler} autoComplete="off">
         <p className="InputTitle">First Name</p>
         <div className="EditableField EditableField--OnlyInput">
-            <Input name="firstname" styleClass="Input EditingInput" placeholder="Johnny" error={this.state.errors.firstname} changeHandler={this.changeHandler}/>
+            <Input name="firstname" styleClass="Input EditingInput" placeholder="Johnny" error={this.state.errors.firstname} changeHandler={this.changeHandler} />
         </div>
         <p className="InputTitle">Last Name</p>
         <div className="EditableField EditableField--OnlyInput">
-            <Input name="lastname" styleClass="Input EditingInput" placeholder="Depp" error={this.state.errors.lastname} changeHandler={this.changeHandler}/>
+            <Input name="lastname" styleClass="Input EditingInput" placeholder="Depp" error={this.state.errors.lastname} changeHandler={this.changeHandler} />
         </div>
         <p className="InputTitle">Password</p>
         <div className="EditableField EditableField--OnlyInput">
-            <Input name="password" type="password" styleClass="Input EditingInput" placeholder="More than 8 characters" error={this.state.errors.password} changeHandler={this.changeHandler}/>
+            <Input name="password" styleClass="Input EditingInput" placeholder="More than 8 characters" error={this.state.errors.password} changeHandler={this.changeHandler} />
         </div>
         <SubmitButton
           reducedsize
