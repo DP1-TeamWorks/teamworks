@@ -44,8 +44,7 @@ public class Milestone extends BaseEntity {
 	// @JsonBackReference(value="project-milestone")
 	private Project project;
 
-	@JsonIgnore
-	// @JsonManagedReference(value="milestone-toDo")
+	@JsonManagedReference(value = "milestone-toDo")
 	@Column(name = "toDos")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "milestone", orphanRemoval = true)
 	private List<ToDo> toDos;

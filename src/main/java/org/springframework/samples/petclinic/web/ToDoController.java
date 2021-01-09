@@ -47,7 +47,7 @@ public class ToDoController {
 	}
 
 	@PostMapping(value = "/api/toDos")
-	public ResponseEntity<String> postToDo(@RequestBody ToDo toDo, HttpServletRequest r,
+	public ResponseEntity<String> createToDo(@RequestBody ToDo toDo, HttpServletRequest r,
 			@RequestParam(required = true) Integer milestoneId) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
@@ -73,5 +73,4 @@ public class ToDoController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-
 }

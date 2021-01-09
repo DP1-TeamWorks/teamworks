@@ -9,7 +9,6 @@ const ToDo = ({ id, tagList, title }) => {
 
   const markAsDone = () => {
     setIsDoneAnimation(true);
-    // TODO: fix the animation
     setTimeout(
       () =>
         ToDoApiUtils.markToDoAsDone(id)
