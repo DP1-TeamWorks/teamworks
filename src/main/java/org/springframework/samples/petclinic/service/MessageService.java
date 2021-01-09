@@ -43,6 +43,11 @@ public class MessageService {
 		messageRepository.deleteById(messageId);
 	}
 	
+	@Transactional
+	public Collection<Message> findMessagesByTag(Integer userId, Integer tagId) throws DataAccessException {
+		return messageRepository.findMessagesByTag(userId, tagId);
+	}
+	
 	/*
 	@Transactional(readOnly = true)
 	public Collection<Message> getAllMessages() throws DataAccessException {

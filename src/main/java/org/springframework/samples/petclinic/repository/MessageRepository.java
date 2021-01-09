@@ -23,13 +23,16 @@ public interface MessageRepository extends Repository<Message, Integer> {
 
 	Message findById(Integer messageId);
 
-	@Query(value="SELECT u FROM Message WHERE u.recipient = :userId" )
+	@Query(value="SELECT m FROM Message m WHERE :userId in m.recipients" )
 	public Collection<Message> findMessagesByUserId(@Param("userId") Integer userId);
 	
-	@Query(value="SELECT u FROM Message WHERE u.sender = :userId" )
+	@Query(value="SELECT m FROM Message m WHERE m.sender = :userId" )
 	public Collection<Message> findMessagesSentByUserId(@Param("userId") Integer userId);
 	
-	//Collection<Message> findAll() throws DataAccessException;
+	
+	@Query(value="SELECT m FROM Message m WHERE :userId in m.recipients and :tagId in m.tags")
+	public Collection<Message> findMessagesByTag(@Param("userId") Integer userId, @Param("tagId") Integer tagId);
+	
 
 }
 

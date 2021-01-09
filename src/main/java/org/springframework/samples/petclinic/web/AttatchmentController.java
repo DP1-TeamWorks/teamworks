@@ -58,6 +58,7 @@ public class AttatchmentController {
 		}
 	}
 	*/
+	/*
 	@PostMapping(value = "/api/attatchment")
 	public ResponseEntity<String> postAttatchment(HttpServletRequest r, @RequestBody Attatchment attatchment, Integer messageId) {
 		try {
@@ -70,7 +71,7 @@ public class AttatchmentController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-
+	*/
 	@DeleteMapping(value = "/api/attatchment")
 	public ResponseEntity<String> deleteAttatchment(@RequestParam(required = true) Integer attatchmentId) {
 

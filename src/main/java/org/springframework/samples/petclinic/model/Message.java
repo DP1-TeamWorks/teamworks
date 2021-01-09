@@ -1,13 +1,16 @@
 package org.springframework.samples.petclinic.model;
 
 import java.time.LocalDate;
+
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
@@ -25,7 +28,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "userTW")
+@Table(name = "message")
 
 public class Message extends BaseEntity {
 	// Attributes
@@ -63,20 +66,14 @@ public class Message extends BaseEntity {
     private UserTW sender;
 	
 	@ManyToMany
-    @JsonManagedReference(value = "message-recipient")
+	@JsonIgnore
     private List<UserTW> recipients;
 	
-	/*	nada
-	@ManyToOne(optional = true)
-	@JoinColumn(name="messageId")
-    @JsonBackReference(value="message-id")
-	private Message message;
-	
+	@JsonIgnore
+	@Column(name = "attatchments")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
-    @JsonManagedReference(value="message-id")
-	private List<Message> messages;
-	*/
-	
+	private List<Attatchment> attatchemnts;
+		
 	@JsonIgnore
 	@ManyToMany
 	private List<Tag> tags;

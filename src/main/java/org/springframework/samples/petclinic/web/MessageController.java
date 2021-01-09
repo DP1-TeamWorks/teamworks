@@ -11,11 +11,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Message;
+import org.springframework.samples.petclinic.model.Tag;
+import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.MessageService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,37 +66,60 @@ public class MessageController {
 		}
 	}
 	
-	
-	//TODO GETMESSAGESBYTAG
-	
-	
+	//This only gets the messages that you receive regarding one tag
+	@GetMapping(value = "/api/messages/bytag")
+	public List<Message> getMessagesByTag(@RequestBody HttpServletRequest r, @RequestBody(required = true) Tag tag) {
+		try {
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			Integer tagId = tag.getId();
+			List<Message> messageList = (messageService.findMessagesByTag(userId, tagId)).stream().collect(Collectors.toList());
+			return messageList;
+		} catch (DataAccessException d) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
 
+		}
+	}
+	
 	
 	
 	//CHANGE ALL INTO REQUEST BODY
-	@PostMapping(value = "/message")
-	public ResponseEntity<String> newMessage(HttpServletRequest r, @RequestBody(required = true) Message message, @RequestBody(required = false) List<Integer> recipients,
-			@RequestBody(required = false) List<String> toDoIdList, @RequestBody(required = false) List<String> TagIdList) {
+	@PostMapping(value = "/message/new")
+	public ResponseEntity<String> newMessage(HttpServletRequest r, @RequestBody(required = false) Message message, Integer recipients,
+			Message reply,  List<ToDo> toDoList, List<Tag> tagList) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
+			System.out.println(userId);
 			message.setSender(sender);
+			message.setRead(false);
+			List<UserTW> recipientList = new ArrayList<>();
+			
+			
+	
+			UserTW recipient = userService.findUserById(2);
+			recipientList.add(recipient);
+	
+			message.setRecipients(recipientList);
+			/*
 			List<UserTW> recipientList = new ArrayList<>();
 			for (int i=0; i<recipients.size(); i++){
 				UserTW recipient = userService.findUserById(recipients.get(i));
 				recipientList.add(recipient);
 			}
-			message.setRecipients(recipientList);			;
-			
-			if(toDoIdList != null) {
-				//message.setToDos(toDoIdList);
+			message.setRecipients(recipientList);	
+			*/
+			if(reply != null) {
+				
+				message.setReply(reply);
+			}
+			if(toDoList != null) {
+				message.setToDos(toDoList);
+			}
+			if(tagList!= null) {
+				message.setTags(tagList);
 			}
 			
-			
-			//TODO isMarked Tag
-			
-			
-			//messageService.saveMessage(message);
+			messageService.saveMessage(message);
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {
@@ -103,7 +127,7 @@ public class MessageController {
 		}
 	}
 	
-	@PostMapping(value = "/message")
+	@PostMapping(value = "/message/reply")
 	public ResponseEntity<String> replyMessage(HttpServletRequest r, @RequestParam(required = true) Integer messageId, @RequestParam(required = true)Message message,
 			@RequestParam(required = false) List<String> TodoIdList, @RequestParam(required = false) List<String> TagList) {
 		try {
@@ -128,7 +152,7 @@ public class MessageController {
 	}
 	
 	
-	@PostMapping(value = "/message")
+	@PostMapping(value = "/message/forward")
 	public ResponseEntity<String> forwardMessage(HttpServletRequest r, @RequestParam(required = true) Integer messageId) {
 		try {
 			//TODO
