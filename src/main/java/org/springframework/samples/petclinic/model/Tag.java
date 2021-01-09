@@ -37,9 +37,8 @@ public class Tag extends BaseEntity {
     String color;
 
     // Relations
-
     @ManyToOne(optional = false)
-    @JoinColumn(name = "projectId")
+    @JoinColumn(name = "project_id")
     @JsonBackReference(value = "project-tag")
     private Project project;
 

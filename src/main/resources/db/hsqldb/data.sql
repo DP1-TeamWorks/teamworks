@@ -193,3 +193,19 @@ INSERT INTO
     participations(is_project_manager, user_id, project_id)
 values
     (TRUE, 2, 4);
+
+/*TAGS*/
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Planning', '#EFCAC4', 1);
+
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Debugging', '#E19494', 1);
+
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Testing', '#B0D9CD', 1);
