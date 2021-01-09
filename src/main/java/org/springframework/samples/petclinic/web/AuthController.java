@@ -52,7 +52,7 @@ public class AuthController {
 		}
 	}
 
-	@GetMapping(value = "/api/auth/logout")
+	@DeleteMapping(value = "/api/auth/logout")
 	public void logout(HttpServletRequest r) {
 		// Unset the session
 		r.getSession().invalidate();

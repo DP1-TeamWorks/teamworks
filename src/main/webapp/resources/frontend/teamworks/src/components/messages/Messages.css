@@ -3,6 +3,7 @@
 }
 
 .MsgPreviewContainer {
+  cursor: pointer;
   height: 60px;
   padding: 20px;
   align-items: center;
