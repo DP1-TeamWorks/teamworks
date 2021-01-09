@@ -56,7 +56,8 @@ public class ProjectController {
 	public ResponseEntity<List<Project>> getProjects(@RequestParam(required = true) Integer departmentId,HttpServletRequest r) {
 		Integer userId=(Integer)r.getSession().getAttribute("userId");
 		UserTW user=userTWService.findUserById(userId);
-		Belongs currentBelongs=belongsService.findCurrentBelongs(userId, departmentId);
+		Belongs currentBelongs=belongsService.findCurrentBelong(userId, departmentId);
+		//Revisa si perteneces 
 		if(user.getRole().equals(Role.team_owner)||currentBelongs!=null) {
 			List<Project> l = new ArrayList<>();
 			l = departmentService.findDepartmentById(departmentId).getProjects();
@@ -71,13 +72,13 @@ public class ProjectController {
 		Integer userId=(Integer)r.getSession().getAttribute("userId");
 		UserTW user=userTWService.findUserById(userId);
 		Project project =projectService.findProjectById(projectId);
-		Belongs currentBelongs=belongsService.findCurrentBelongs(userId, project.getDepartment().getId());
+		Belongs currentBelongs=belongsService.findCurrentBelong(userId, project.getDepartment().getId());
 		if(user.getRole().equals(Role.team_owner)||currentBelongs!=null) {
 			List<UserTW> users=projectService.findUserProjects(project.getId()).stream().collect(Collectors.toList());
 			Map<String,Object> m=new HashMap<>();
 			m.put("members",users);
 			m.put("milestones", project.getMilestones());
-			m.put("tag", project.getTags());
+			m.put("tags", project.getTags());
 			return ResponseEntity.ok(m);
 		}else {
 			return ResponseEntity.status(403).build();

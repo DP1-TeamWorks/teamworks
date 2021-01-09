@@ -59,8 +59,16 @@ public class UserTWController {
 		return l;
 	}
 	@GetMapping(value = "/api/userTW")
-	public UserTW getUser(HttpServletRequest r,Integer userId) {
-		return userService.findUserById(userId);
+	public Map<String,Object> getUser(HttpServletRequest r,Integer userId) {
+		Map<String,Object> m = new HashMap<>();
+		UserTW user=userService.findUserById(userId);
+		m.put("user", user);
+		List<Belongs> lb=belongsService.findUserBelongs(userId).stream().collect(Collectors.toList());
+		m.put("currentDepartments", lb);
+		List<Participation> lp=participationService.findUserParticipations(userId).stream().collect(Collectors.toList());
+		m.put("currentProjects", lp);
+		return m;
+		
 	}
 
 	@PostMapping(value = "/api/userTW")
@@ -96,9 +104,9 @@ public class UserTWController {
 		Map<String,Object> m = new HashMap<>();
 		UserTW user=userService.findUserById(userId);
 		m.put("isTeamManager", user.getRole().equals(Role.team_owner));
-		List<Belongs> lb=belongsService.findUserBelongs(userId).stream().collect(Collectors.toList());
+		List<Belongs> lb=belongsService.findCurrentBelongsUser(userId).stream().collect(Collectors.toList());
 		m.put("currentDepartments", lb);
-		List<Participation> lp=participationService.findUserParticipations(userId).stream().collect(Collectors.toList());
+		List<Participation> lp=participationService.findCurrentParticipationsUser(userId).stream().collect(Collectors.toList());
 		m.put("currentProjects", lp);
 		return m;
 	}

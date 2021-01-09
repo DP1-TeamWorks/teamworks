@@ -46,7 +46,7 @@ public class BelongsController {
 
 			try {
 
-				Belongs currentBelongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
+				Belongs currentBelongs = belongsService.findCurrentBelong(belongUserId, departmentId);
 				UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 				Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
 				if (currentBelongs == null) {
@@ -79,7 +79,7 @@ public class BelongsController {
 			try {
 				UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 				Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
-				Belongs belongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
+				Belongs belongs = belongsService.findCurrentBelong(belongUserId, departmentId);
 				if (belongs.getIsDepartmentManager() == false || isTeamOwner) {
 					belongs.setFinalDate(LocalDate.now());
 					belongsService.saveBelongs(belongs);

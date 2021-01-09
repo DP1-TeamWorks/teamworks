@@ -44,8 +44,11 @@ public class BelongsService {
 	}
 
 	@Transactional(readOnly = true)
-	public Belongs findCurrentBelongs(Integer userId, Integer departmentId) {
-		return belongsRepository.findCurrentBelongs(userId, departmentId);
+	public Belongs findCurrentBelong(Integer userId, Integer departmentId) {
+		return belongsRepository.findCurrentBelong(userId, departmentId);
+	}@Transactional(readOnly = true)
+	public Collection<Belongs> findCurrentBelongsUser(Integer userId) {
+		return belongsRepository.findCurrentBelongsUser(userId);
 	}
 
 	@Transactional(readOnly = true)
