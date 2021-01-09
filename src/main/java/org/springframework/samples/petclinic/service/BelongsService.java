@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
+import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.repository.BelongsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +48,11 @@ public class BelongsService {
 	@Transactional(readOnly = true)
 	public Collection<Department> findMyDepartments(Integer userId) {
 		return belongsRepository.findMyDepartments(userId);
+	}
+	
+	@Transactional(readOnly = true)
+	public Collection<UserTW> findDepartmentUsers(Integer departmentId) {
+		return belongsRepository.findDepartmentUsers(departmentId);
 	}
 
 }
