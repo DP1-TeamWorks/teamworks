@@ -32,23 +32,29 @@ const MyProjectToDos = ({ projectId }) => {
   const [reloadToDos, setReloadToDos] = useState(true);
 
   useEffect(() => {
+    console.log("GETTING NEXT MILESTONE");
     MilestoneApiUtils.getNextMilestone(projectId)
       .then((res) => {
         setMilestone(res.data);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the next milestone");
+        console.log(error);
       });
   }, [projectId]);
 
   useEffect(() => {
     if (reloadToDos) {
-      console.log("todo request");
+      console.log("GETTING TODOs");
       ToDoApiUtils.getMyToDos(milestone.id)
         .then((res) => {
+          console.log(res);
           setToDoList(res.data);
         })
-        .catch(console.log("ERROR: Cannot get myToDos from the API"));
+        .catch((error) => {
+          console.log("ERROR: Cannot get myToDos");
+          console.log(error);
+        });
     }
 
     setReloadToDos(false);

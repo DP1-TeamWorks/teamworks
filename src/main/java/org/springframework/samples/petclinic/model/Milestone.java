@@ -34,25 +34,25 @@ public class Milestone extends BaseEntity {
 
 	@NotNull
 	@NotEmpty
-	@Column(name = "dueFor")
+	@Column(name = "due_for")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate dueFor;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "projectId")
+	@JoinColumn(name = "project_id")
 	@JsonIgnore
-	//@JsonBackReference(value="project-milestone")
+	// @JsonBackReference(value="project-milestone")
 	private Project project;
-	
+
 	@JsonIgnore
-	//@JsonManagedReference(value="milestone-toDo")
+	// @JsonManagedReference(value="milestone-toDo")
 	@Column(name = "toDos")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "milestone", orphanRemoval = true)
 	private List<ToDo> toDos;
-	
+
 	@JsonIgnore
-	//@JsonManagedReference(value="milestone-tag")
-    @ManyToMany
-    private List<Tag> tags;
+	// @JsonManagedReference(value="milestone-tag")
+	@ManyToMany
+	private List<Tag> tags;
 
 }

@@ -48,9 +48,8 @@ public class Tag extends BaseEntity {
     private List<Milestone> milestones;
 
     @JsonIgnore
-    // @JsonBackReference(value = "toDo-tag")
     @ManyToMany
-    private List<ToDo> toDos;
+    private List<ToDo> todos;
 
     // TODO: Message Relation
 

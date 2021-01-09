@@ -79,7 +79,7 @@ const Inbox = (props) => {
       ],
     },
     {
-      id: 4,
+      id: 77,
       sender: { name: "Kevin Depp", teamname: "Stark" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
@@ -91,7 +91,7 @@ const Inbox = (props) => {
       ],
     },
     {
-      id: 4,
+      id: 45,
       sender: { name: "Kevin Depp", teamname: "Stark" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",
@@ -103,7 +103,7 @@ const Inbox = (props) => {
       ],
     },
     {
-      id: 4,
+      id: 13,
       sender: { name: "Kevin Depp", teamname: "Stark" },
       subject: "Welcome to TeamWorks",
       date: "02/12/2020",

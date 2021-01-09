@@ -209,3 +209,19 @@ INSERT INTO
     tags(title, color, project_id)
 values
     ('Testing', '#B0D9CD', 1);
+
+/*MILESTONES*/
+INSERT INTO
+    milestones(name, due_for, project_id)
+values
+    (
+        'New Year objectives',
+        TO_DATE('13/12/2021', 'DD/MM/YYYY'),
+        1
+    );
+
+/*ToDoS*/
+INSERT INTO
+    todos(title, user_id, milestone_id)
+values
+    ('Mark this as done', 2, 1);
