@@ -289,9 +289,34 @@ values
 INSERT INTO milestones(name , dueFor, projectId)
 values
 	(
-		'Finish documentation', 
+		'Facture documentation', 
 		2021/03/01, 
 		1
+	);
+	
+	
+INSERT INTO milestones(name , dueFor, projectId)
+values
+	(
+		'Documentation', 
+		2021/03/03, 
+		3
+	);
+	
+INSERT INTO milestones(name , dueFor, projectId)
+values
+	(
+		'Diagram', 
+		2021/03/04, 
+		3
+	);
+	
+INSERT INTO milestones(name , dueFor, projectId)
+values
+	(
+		'Review the project', 
+		2021/03/05, 
+		3
 	);
 	
 
@@ -331,6 +356,55 @@ values
 		
 	);	
 	
+INSERT INTO toDo(title,milestoneId,userId)
+values
+	(
+		'Point 1',
+		2,
+		5
+		
+	);	
+INSERT INTO toDo(title,milestoneId,userId)
+values
+	(
+		'Point 2',
+		2,
+		6
+		
+	);	
+INSERT INTO toDo(title,milestoneId,userId)
+values
+	(
+		'Do diagram',
+		3,
+		5
+		
+	);	
+INSERT INTO toDo(title,milestoneId,userId)
+values
+	(
+		'Visual Diagram',
+		3,
+		6
+		
+	);	
+	
+INSERT INTO toDo(title,milestoneId,userId)
+values
+	(
+		'review documentation',
+		4,
+		5
+		
+	);	
+INSERT INTO toDo(title,milestoneId,userId)
+values
+	(
+		'review diagram',
+		4,
+		6
+		
+	);	
  /*TAGS*/
 INSERT INTO tags(title,color,projectId,)
 values
@@ -354,4 +428,28 @@ values
 		'Review', 
 		'#35a9fc' ,
 		1
+	); 
+	
+INSERT INTO tags(title,color,projectId,)
+values
+	(
+		'Finished', 
+		'#A6F718' ,
+		3
+	); 
+	
+INSERT INTO tags(title,color,projectId,)
+values
+	(
+		'In process', 
+		'#F72C18' ,
+		3
+	); 
+	
+INSERT INTO tags(title,color,projectId,)
+values
+	(
+		'Review', 
+		'#35a9fc' ,
+		3
 	); 
