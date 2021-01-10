@@ -1,20 +1,51 @@
-.ProfilePic {
-  border-radius: 50%;
-  box-shadow: 0 0 0px 2px #a7e32d;
-  outline-offset: 5px;
-  height: calc(100% - 85px);
-  margin-left: 60px;
-  padding: 6px;
+.ProfilePic 
+{
+    border-radius: 50%;
+    box-shadow: 0 0 0px  2px #A7E32D;
+    outline-offset: 5px;
+    height: calc(100% - 85px);
+    padding: 6px;
+}
+
+.ProfilePicHeader {
+    border-radius: 50%;
+    box-shadow: 0 0 0px  2px #A7E32D;
+    outline-offset: 5px;
+    height: calc(100% - 85px);
+    margin-left: 60px;
+    padding-left: 60px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+    height: 55px;
+    position: absolute;
+    right: 20px;
+    padding: 4px;
+}
+
+.ProfilePic--Slim {
+    border-radius: 50%;
+    box-shadow: 0 0 0px  2px #A7E32D;
+    outline-offset: 5px;
+    height: calc(100% - 85px);
+    width: auto;
+    height: 55px;
+    padding: 4px;
 }
 
 .ProfileHeader {
-  cursor: pointer;
-  width: 100%;
-  height: 200px;
-  border-bottom: 1px solid #3c3c3c;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+    width: 100%;
+    height: 200px;
+    border-bottom: 1px solid #3c3c3c;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 60px;
+}
+
+.ProfileHeader--Slim {
+    height: 100px;
 }
 
 .ProfileTitleContainer {

@@ -5,6 +5,11 @@ import ProfileHeader from '../components/profile/ProfileHeader';
 import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import TeamSettings from '../components/settings/TeamSettings';
 import UserSettings from '../components/settings/UserSettings';
+import DepartmentSettings from "../components/settings/DepartmentSettings";
+import ProjectSettings from '../components/settings/ProjectSettings';
+import UserPage from '../components/settings/UserPage';
+import MilestonePage from '../components/settings/MilestonePage';
+
 
 const PATHS = ["/settings/team", "/settings/departments", "/settings/projects", "/settings/users"];
 
@@ -12,7 +17,8 @@ const Settings = () =>
 {
 
     const location = useLocation();
-    if (location.pathname.indexOf("/settings") >= 0 && PATHS.indexOf(location.pathname) === -1)
+    if (location.pathname.indexOf("/settings") >= 0 && PATHS.indexOf(location.pathname) === -1 
+            && !(location.pathname.indexOf("/settings/projects") >= 0 || location.pathname.indexOf("/settings/users") >= 0))
         return <Redirect to="/settings/team" />
 
     return (
@@ -26,6 +32,14 @@ const Settings = () =>
                 <Switch>
                     <Route path="/settings/team">
                         <TeamSettings />
+                    </Route>
+                    <Route path="/settings/departments">
+                        <DepartmentSettings />
+                    </Route>
+                    <Route path="/settings/users/:userId" component={UserPage} />
+                    <Route path="/settings/projects/:projectId/:milestoneId" component={MilestonePage} />
+                    <Route path="/settings/projects">
+                        <ProjectSettings />
                     </Route>
                     <Route path="/settings/users">
                         <UserSettings />

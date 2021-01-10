@@ -1,0 +1,48 @@
+.SubsettingContainer {
+    display: flex;
+    flex-direction: row;
+    background-color: #333;
+    border-radius: 2px;
+}
+
+.SubsettingSidePane {
+    width: 200px;
+    background-color: #222;
+    border-radius: 0px 2px 0px 2px;
+}
+
+.SubsettingSidePane--Second {
+    background-color: #272727;
+}
+
+.SidePaneElement {
+    text-align: center;
+    padding: 10px;
+    transition: background-color 0.05s;
+    border-radius: 2px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.SidePaneElement:not(.SidePaneElement--Selected):hover {
+    background-color: #fff1;
+}
+
+.SidePaneElement:not(.SidePaneElement--Selected):active {
+    background-color: #1e1e1e;
+}
+
+.SidePaneElement--Selected {
+    background-color: #a6ce56;
+    color: #222;
+    font-weight: 600;
+}
+
+.SidePaneElement--Highlighted {
+    background-color: #444;
+}
+
+.AddIcon {
+    margin-right: 10px;
+    margin-bottom: -1px;
+}

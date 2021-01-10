@@ -1,15 +1,13 @@
 import React from "react";
 import Sidebar from "./Sidebar";
-import GradientButton from "../buttons/GradientButton";
+import LinkButton from "../buttons/LinkButton";
 import SidebarTab from "./SidebarTab";
 import "./SettingsSidebar.css";
 
 const SettingsSidebar = ({ onAddNewUserClicked }) => {
   return (
     <Sidebar>
-      <GradientButton onClick={onAddNewUserClicked} className="MainButton">
-        Add a new user
-      </GradientButton>
+      <LinkButton gradient onClick={onAddNewUserClicked} className="MainButton" path="/settings/users">Add a new user</LinkButton>
       <hr className="Separator" />
       <h3 className="SettingSidebarTitle">Team Settings</h3>
       <SidebarTab text="Team" path="/settings/team"></SidebarTab>
