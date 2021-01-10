@@ -193,3 +193,45 @@ INSERT INTO
     participations(is_project_manager, user_id, project_id)
 values
     (TRUE, 2, 4);
+
+/*TAGS*/
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Planning', '#EFCAC4', 1);
+
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Debugging', '#E19494', 1);
+
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Testing', '#B0D9CD', 1);
+
+/*MILESTONES*/
+INSERT INTO
+    milestones(name, due_for, project_id)
+values
+    (
+        'New Year objectives',
+        TO_DATE('13/12/2021', 'DD/MM/YYYY'),
+        1
+    );
+
+/*ToDoS*/
+INSERT INTO
+    todos(title, user_id, milestone_id)
+values
+    ('Mark this as done', 2, 1);
+
+INSERT INTO
+    todos(title, user_id, milestone_id)
+values
+    ('Mark this again ', 2, 1);
+
+INSERT INTO
+    todos(title, user_id, milestone_id)
+values
+    ('Finish The toDos section', 2, 1);

@@ -5,7 +5,7 @@ const MILESTONE_URL = "/milestones";
 const MilestoneApiUtils = {
   /*MILESTONES*/
   getNextMilestone: (projectId) =>
-    axios.get(API_URL + MILESTONE_URL + "/next"),
+    axios.get(API_URL + MILESTONE_URL + "/next?projectId=" + projectId),
 };
 
 export default MilestoneApiUtils;

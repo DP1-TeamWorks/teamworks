@@ -1,5 +1,6 @@
 import "./Profile.css";
 import "../../FontStyles.css";
+import AuthApiUtils from "../../utils/api/AuthApiUtils";
 
 import ProfilePic from "./ProfilePic";
 

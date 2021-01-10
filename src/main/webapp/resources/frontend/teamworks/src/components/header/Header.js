@@ -27,7 +27,6 @@ const Header = ({nosearchbar}) => {
       {content}
       <ProfilePic small src="/default_pfp.png" />
     </div>
-    
   );
 };
 
