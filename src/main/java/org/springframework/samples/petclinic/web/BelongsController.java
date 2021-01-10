@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public class BelongsController {
-	
+
 	private final DepartmentService departmentService;
 	private final UserTWService userTWService;
 	private final BelongsService belongsService;
 
 	@Autowired
-	public BelongsController(DepartmentService departmentService,
-			UserTWService userTWService, BelongsService belongsService) {
+	public BelongsController(DepartmentService departmentService, UserTWService userTWService,
+			BelongsService belongsService) {
 		this.departmentService = departmentService;
 		this.userTWService = userTWService;
 		this.belongsService = belongsService;
@@ -38,59 +38,60 @@ public class BelongsController {
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
+
 	// Belongs Requests
-		@PostMapping(value = "/api/departments/belongs")
-		public ResponseEntity<String> createBelongs(@RequestParam(required = true) Integer belongUserId,
-				@RequestParam(required = true) Integer departmentId,
-				@RequestParam(required = false) Boolean isDepartmentManager, HttpServletRequest r) {
+	@PostMapping(value = "/api/departments/belongs")
+	public ResponseEntity<String> createBelongs(@RequestParam(required = true) Integer belongUserId,
+			@RequestParam(required = true) Integer departmentId,
+			@RequestParam(required = false) Boolean isDepartmentManager, HttpServletRequest r) {
 
-			try {
+		try {
 
-				Belongs currentBelongs = belongsService.findCurrentBelong(belongUserId, departmentId);
-				UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
-				Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
-				if (currentBelongs == null) {
-					Department department = departmentService.findDepartmentById(departmentId);
-					UserTW belongUser = userTWService.findUserById(belongUserId);
-					Belongs belongs = new Belongs();
-					belongs.setDepartment(department);
-					belongs.setUserTW(belongUser);
-					belongs.setIsDepartmentManager(false);
+			Belongs currentBelongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
+			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
+			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
+			if (currentBelongs == null) {
+				Department department = departmentService.findDepartmentById(departmentId);
+				UserTW belongUser = userTWService.findUserById(belongUserId);
+				Belongs belongs = new Belongs();
+				belongs.setDepartment(department);
+				belongs.setUserTW(belongUser);
+				belongs.setIsDepartmentManager(false);
 
-					if (isDepartmentManager != null && isTeamOwner) {
-						belongs.setIsDepartmentManager(isDepartmentManager);
-					}
-					belongsService.saveBelongs(belongs);
-					return ResponseEntity.ok().build();
-				} else {
-					return ResponseEntity.badRequest().body("Ya existe un belongs");
+				if (isDepartmentManager != null && isTeamOwner) {
+					belongs.setIsDepartmentManager(isDepartmentManager);
 				}
-
-			} catch (DataAccessException d) {
-				return ResponseEntity.badRequest().build();
+				belongsService.saveBelongs(belongs);
+				return ResponseEntity.ok().build();
+			} else {
+				return ResponseEntity.badRequest().body("Ya existe un belongs");
 			}
 
+		} catch (DataAccessException d) {
+			return ResponseEntity.badRequest().build();
 		}
 
-		// Belongs Requests
-		@DeleteMapping(value = "/api/departments/belongs")
-		public ResponseEntity<String> deleteBelongs(@RequestParam(required = true) Integer belongUserId,
-				Integer departmentId, HttpServletRequest r) {
-			try {
-				UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
-				Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
-				Belongs belongs = belongsService.findCurrentBelong(belongUserId, departmentId);
-				if (belongs.getIsDepartmentManager() == false || isTeamOwner) {
-					belongs.setFinalDate(LocalDate.now());
-					belongsService.saveBelongs(belongs);
-					return ResponseEntity.ok().build();
-				} else {
-					return ResponseEntity.status(403).build();
-				}
+	}
 
-			} catch (DataAccessException d) {
-				return ResponseEntity.badRequest().build();
+	// Belongs Requests
+	@DeleteMapping(value = "/api/departments/belongs")
+	public ResponseEntity<String> deleteBelongs(@RequestParam(required = true) Integer belongUserId,
+			Integer departmentId, HttpServletRequest r) {
+		try {
+			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
+			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
+			Belongs belongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
+			if (belongs.getIsDepartmentManager() == false || isTeamOwner) {
+				belongs.setFinalDate(LocalDate.now());
+				belongsService.saveBelongs(belongs);
+				return ResponseEntity.ok().build();
+			} else {
+				return ResponseEntity.status(403).build();
 			}
 
+		} catch (DataAccessException d) {
+			return ResponseEntity.badRequest().build();
 		}
+
+	}
 }

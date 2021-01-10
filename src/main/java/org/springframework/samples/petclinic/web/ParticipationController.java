@@ -27,18 +27,21 @@ public class ParticipationController {
 	private final ParticipationService participationService;
 	private final UserTWService userTWService;
 	private final BelongsService belongsService;
+
 	@Autowired
-	public ParticipationController( ProjectService projectService,
-			ParticipationService participationService, UserTWService userTWService, BelongsService belongsService) {
+	public ParticipationController(ProjectService projectService, ParticipationService participationService,
+			UserTWService userTWService, BelongsService belongsService) {
 		this.projectService = projectService;
 		this.participationService = participationService;
 		this.userTWService = userTWService;
 		this.belongsService = belongsService;
 	}
+
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
+
 	@PostMapping(value = "/api/projects/participation")
 	public ResponseEntity<String> postParticipation(@RequestParam(required = true) Integer participationUserId,
 			@RequestParam(required = true) Integer projectId, @RequestParam(required = false) Boolean isProjectManager,
@@ -49,7 +52,7 @@ public class ParticipationController {
 					projectId);
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 			Project project = projectService.findProjectById(projectId);
-			Belongs belongs = belongsService.findCurrentBelong(user.getId(), project.getDepartment().getId());
+			Belongs belongs = belongsService.findCurrentBelongs(user.getId(), project.getDepartment().getId());
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
 			// Comprueba si existe una participacion
 			if (currentParticipation == null && belongs != null) {
@@ -82,7 +85,7 @@ public class ParticipationController {
 			Participation participation = participationService.findCurrentParticipation(participationUserId, projectId);
 			Project project = participation.getProject();
 			Boolean isDepartmentManager = belongsService
-					.findCurrentBelong(user.getId(), project.getDepartment().getId()).getIsDepartmentManager();
+					.findCurrentBelongs(user.getId(), project.getDepartment().getId()).getIsDepartmentManager();
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
 			Boolean isProjectManager = participation.getIsProjectManager();
 

@@ -24,7 +24,7 @@ public class DepartmentManagerInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
 		Integer userId = (Integer) req.getSession().getAttribute("userId");
 		Integer departmentId = Integer.valueOf(req.getParameter("departmentId"));
-		Belongs belongs = belongsService.findCurrentBelong(userId, departmentId);
+		Belongs belongs = belongsService.findCurrentBelongs(userId, departmentId);
 		Boolean isDepartmentManager = false;
 
 		if (belongs != null) {

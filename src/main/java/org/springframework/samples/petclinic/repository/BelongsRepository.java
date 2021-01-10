@@ -19,19 +19,17 @@ public interface BelongsRepository extends Repository<Belongs, Integer> {
 	@Query(value = "SELECT u FROM Belongs u WHERE u.userTW.id = :userId and u.department.id= :departmentId")
 	public Collection<Belongs> findBelongByUserAndDeparment(@Param("userId") Integer userId,
 			@Param("departmentId") Integer departmentId);
-	
+
 	@Query(value = "SELECT u FROM Belongs u WHERE u.userTW.id = :userId")
 	public Collection<Belongs> findUserBelongs(@Param("userId") Integer userId);
 
 	@Query(value = "SELECT u FROM Belongs u WHERE u.userTW.id = :userId and u.department.id= :departmentId and u.finalDate=null")
-	public Belongs findCurrentBelong(@Param("userId") Integer userId, @Param("departmentId") Integer departmentId);
-	
+	public Belongs findCurrentBelongs(@Param("userId") Integer userId, @Param("departmentId") Integer departmentId);
+
 	@Query(value = "SELECT u FROM Belongs u WHERE u.userTW.id = :userId and u.finalDate=null")
-	public Collection<Belongs> findCurrentBelongsUser(@Param("userId") Integer userId);
+	public Collection<Belongs> findCurrentUserBelongs(@Param("userId") Integer userId);
 
 	@Query(value = "SELECT u.department FROM Belongs u WHERE u.userTW.id = :userId and u.finalDate=null")
 	public Collection<Department> findMyDepartments(@Param("userId") Integer userId);
-	
-	
-	
+
 }

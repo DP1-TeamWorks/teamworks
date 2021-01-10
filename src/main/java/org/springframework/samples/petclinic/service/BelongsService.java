@@ -38,24 +38,25 @@ public class BelongsService {
 	public Collection<Belongs> findBelongByUserIdAndDepartmentId(Integer userId, Integer departmentId) {
 		return belongsRepository.findBelongByUserAndDeparment(userId, departmentId);
 	}
+
 	@Transactional(readOnly = true)
 	public Collection<Belongs> findUserBelongs(Integer userId) {
 		return belongsRepository.findUserBelongs(userId);
 	}
 
 	@Transactional(readOnly = true)
-	public Belongs findCurrentBelong(Integer userId, Integer departmentId) {
-		return belongsRepository.findCurrentBelong(userId, departmentId);
-	}@Transactional(readOnly = true)
-	public Collection<Belongs> findCurrentBelongsUser(Integer userId) {
-		return belongsRepository.findCurrentBelongsUser(userId);
+	public Belongs findCurrentBelongs(Integer userId, Integer departmentId) {
+		return belongsRepository.findCurrentBelongs(userId, departmentId);
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Belongs> findCurrentUserBelongs(Integer userId) {
+		return belongsRepository.findCurrentUserBelongs(userId);
 	}
 
 	@Transactional(readOnly = true)
 	public Collection<Department> findMyDepartments(Integer userId) {
 		return belongsRepository.findMyDepartments(userId);
 	}
-	
-	
 
 }
