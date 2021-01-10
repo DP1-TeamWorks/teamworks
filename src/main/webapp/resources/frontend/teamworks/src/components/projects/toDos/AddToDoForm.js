@@ -53,7 +53,7 @@ class AddToDoForm extends React.Component {
   };
 
   apiRequestHandler = (toDoTitle) => {
-    ToDoApiUtils.addNewToDo(this.props.milestoneId, { title: toDoTitle })
+    ToDoApiUtils.addNewPersonalToDo(this.props.milestoneId, { title: toDoTitle })
       .then((res) => {
         this.props.setReloadToDos(true);
       })

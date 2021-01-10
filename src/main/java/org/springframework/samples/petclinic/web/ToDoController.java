@@ -46,11 +46,19 @@ public class ToDoController {
 		return toDoService.findToDoByMilestoneAndUser(milestoneId, userId).stream().collect(Collectors.toList());
 	}
 
+	@PostMapping(value = "/api/toDos/mine")
+	public ResponseEntity<String> createPersonalToDo(@RequestBody ToDo toDo, HttpServletRequest r,
+			@RequestParam(required = true) Integer milestoneId) {
+
+		Integer userId = (Integer) r.getSession().getAttribute("userId");
+		return createToDo(toDo, r, milestoneId, userId);
+
+	}
+
 	@PostMapping(value = "/api/toDos")
 	public ResponseEntity<String> createToDo(@RequestBody ToDo toDo, HttpServletRequest r,
-			@RequestParam(required = true) Integer milestoneId) {
+			@RequestParam(required = true) Integer milestoneId, @RequestParam(required = false) Integer userId) {
 		try {
-			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW user = userService.findUserById(userId);
 			Milestone milestone = milestoneService.findMilestoneById(milestoneId);
 			toDo.setAssignee(user);
