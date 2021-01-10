@@ -2,7 +2,6 @@ package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.Test;
@@ -16,38 +15,37 @@ import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 public class TeamServiceTest {
-    @Autowired
-    protected TeamService teamService;
-    
-    
-    @Test
+	@Autowired
+	protected TeamService teamService;
+
+	@Test
 	void shouldFindTeamWithCorrectId() {
 		Team team3 = this.teamService.findTeamById(2);
 		assertThat(team3.getName().equals("Nike"));
 		assertThat(team3.getIdentifier()).isEqualTo("nk");
 
 	}
-    @Test
+
+	@Test
 	@Transactional
 	public void shouldInsertTeamIntoDatabaseAndGenerateId() {
-		
 
 		Team team = new Team();
 		team.setName("Ubisoft");
 		team.setIdentifier("ub");
-		
+
 		teamService.saveTeam(team);
 		try {
-                this.teamService.saveTeam(team);
-            } catch (DataAccessException ex) {
-                Logger.getLogger(TeamServiceTest.class.getName()).log(Level.SEVERE, null, ex);
-            }
+			this.teamService.saveTeam(team);
+		} catch (DataAccessException ex) {
+			Logger.getLogger(TeamServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
 		assertThat(team.getId()).isNotNull();
-		
+
 	}
-    
-    @Test
+
+	@Test
 	@Transactional
 	void shouldUpdateTeam() {
 		Team team = this.teamService.findTeamById(1);
@@ -58,17 +56,18 @@ public class TeamServiceTest {
 		this.teamService.saveTeam(team);
 
 		// retrieving new name from database
-		team = this.teamService.findTeamById(1);;
+		team = this.teamService.findTeamById(1);
+		;
 		assertThat(team.getName()).isEqualTo(newName);
 	}
-    
-    @Test
+
+	@Test
 	@Transactional
 	void shouldDeleteTeam() {
-    	
-    	teamService.deleteTeamById(2);
+
+		teamService.deleteTeamById(2);
 		Team team = this.teamService.findTeamById(2);
 		assertThat(team).isNull();
 	}
-    
+
 }
