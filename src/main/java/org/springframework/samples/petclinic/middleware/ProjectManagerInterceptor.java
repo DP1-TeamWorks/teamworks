@@ -19,22 +19,24 @@ public class ProjectManagerInterceptor extends HandlerInterceptorAdapter {
 	private final BelongsService belongsService;
 	private final ParticipationService participationService;
 	private final ProjectService projectService;
-	
+
 	@Autowired
-	public ProjectManagerInterceptor(UserTWService userTWService, BelongsService belongsService,ParticipationService participationService,ProjectService projectService) {
+	public ProjectManagerInterceptor(UserTWService userTWService, BelongsService belongsService,
+			ParticipationService participationService, ProjectService projectService) {
 		this.belongsService = belongsService;
 		this.userTWService = userTWService;
-		this.participationService=participationService;
-		this.projectService=projectService;
+		this.participationService = participationService;
+		this.projectService = projectService;
 	}
+
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
 		Integer userId = (Integer) req.getSession().getAttribute("userId");
 		Integer projectId = Integer.valueOf(req.getParameter("projectId"));
-		Participation participation=participationService.findCurrentParticipation(userId, projectId);
-		Project project=projectService.findProjectById(projectId);
+		Participation participation = participationService.findCurrentParticipation(userId, projectId);
+		Project project = projectService.findProjectById(projectId);
 		Belongs belongs = belongsService.findCurrentBelongs(userId, project.getDepartment().getId());
-		Boolean isDepartmentManager=false;
+		Boolean isDepartmentManager = false;
 		Boolean isProjectManager = false;
 		if (participation != null) {
 			isProjectManager = participation.getIsProjectManager();
@@ -42,7 +44,8 @@ public class ProjectManagerInterceptor extends HandlerInterceptorAdapter {
 		if (belongs != null) {
 			isDepartmentManager = belongs.getIsDepartmentManager();
 		}
-		if (userTWService.findUserById(userId).getRole().equals(Role.team_owner) || isDepartmentManager||isProjectManager) {
+		if (userTWService.findUserById(userId).getRole().equals(Role.team_owner) || isDepartmentManager
+				|| isProjectManager) {
 			return true;
 		} else {
 			res.sendError(403);
