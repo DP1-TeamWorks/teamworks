@@ -4,14 +4,28 @@ import "./EditableField.css";
 import "../forms/Forms.css";
 import GradientButton from "../buttons/GradientButton";
 
-const EditableField = ({value, inputType, smaller}) => {
+const EditableField = ({value, inputType, smaller, editable}) => {
   // TODO: Enter submit
   function onOkClicked() {
     setEditing(false);
   }
 
+  function enterEditingMode()
+  {
+    if (editable !== false) // editable = true when prop is undefined
+    {
+      setEditing(true)
+    } else
+    {
+      setCopied(true);
+      navigator.clipboard.writeText(currentVal);
+      setTimeout(() => setCopied(false), 1000);
+    }
+  }
+
   const [editing, setEditing] = useState(false);
   const [currentVal, setCurrentVal] = useState(value);
+  const [copied, setCopied] = useState(false);
   if (editing) {
     return (
       <div className={`EditableField ${smaller ? "EditableField--Smaller" : ""}`}>
@@ -30,10 +44,16 @@ const EditableField = ({value, inputType, smaller}) => {
       </div>
     );
   } else {
+    let penIcon;
+    if (editable !== false)
+    {
+      penIcon = <i className="fas fa-pen PenIcon"></i>;
+    }
     return (
-      <div className={`EditableField ${smaller ? "EditableField--Smaller" : ""}`} onClick={() => setEditing(true)}>
+      <div className={`EditableField ${smaller ? "EditableField--Smaller" : ""}`} onClick={() => enterEditingMode()}>
         <h3 className={`BoldTitle ${smaller ? "BoldTitle--Smaller" : ""}`}>{currentVal}</h3>
-        <i className="fas fa-pen PenIcon"></i>
+        {penIcon}
+        {copied ? <span className="CopiedSpan">Copied</span> : ""}
       </div>
     );
   }
