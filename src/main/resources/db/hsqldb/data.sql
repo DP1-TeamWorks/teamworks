@@ -3,6 +3,10 @@ INSERT INTO
     teams(name, identifier)
 values
     ('Cybergroup', 'cyber');
+INSERT INTO
+    teams(name, identifier)
+values
+    ('Nike', 'nk');    
 
 INSERT INTO
     users(name, lastname, email, password, role, team_id)

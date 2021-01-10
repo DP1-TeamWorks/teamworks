@@ -41,14 +41,16 @@ public class TeamController {
 	}
 
 	@GetMapping(value = "/api/teams")
-	public List<Team> getTeams(@RequestParam(required = false) String name) {
-		List<Team> list = new ArrayList<>();
-		if (name == null) {
-			list = teamService.getAllTeams().stream().collect(Collectors.toList());
-		} else {
-			list = teamService.findTeamByName(name).stream().collect(Collectors.toList());
+	public ResponseEntity<Team> getTeam(HttpServletRequest r) {
+		try {
+			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
+			Team team = teamService.findTeamById(teamId);
+			return ResponseEntity.ok(team);
 		}
-		return list;
+		catch(DataAccessException d) {
+			return ResponseEntity.badRequest().build();
+		}
+		 
 
 	}
 
