@@ -1,7 +1,6 @@
 package org.springframework.samples.petclinic.model;
 
 import java.time.LocalDate;
-
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,13 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 
 import lombok.Getter;
@@ -33,7 +30,6 @@ import lombok.Setter;
 public class Message extends BaseEntity {
 	// Attributes
 	@NotNull
-	@NotEmpty
 	@Column(name = "timeStamp")
 	@CreationTimestamp
 	LocalDate timeStamp;
@@ -48,37 +44,43 @@ public class Message extends BaseEntity {
 	private Boolean read;
 	
 	
-	//Relations
-	/*
-	@Column(name = "attatchment")
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
-	private List<Attatchment> attatchments;
-	*/
+	@Transient
+	private List<String> recipientsEmail;
 	
+	@Transient
+	private List<Integer> recipientsIds;
+	
+	
+	//Relations
 	@OneToOne(optional = true)
-    @JoinColumn(name = "message")
-    @JsonIgnore
-    private Message reply;
+    @JoinColumn(name = "reply_to")
+    private Message replyTo;
+	
 	
 	@ManyToOne(optional = false)
-    @JoinColumn(name = "user_idsender")
-    @JsonBackReference(value = "message-sender")
+    @JoinColumn(name = "sender")
+    @JsonIgnore
     private UserTW sender;
 	
-	@ManyToMany
-	@JsonIgnore
+	
+	@OneToMany
     private List<UserTW> recipients;
 	
-	@JsonIgnore
+	
+    
+	
+		
 	@Column(name = "attatchments")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
-	private List<Attatchment> attatchemnts;
+	private List<Attatchment> attatchments;
 		
-	@JsonIgnore
+	
+
 	@ManyToMany
 	private List<Tag> tags;
 	
-	@JsonIgnore
+	
+
 	@ManyToMany
 	private List<ToDo> toDos;
 	

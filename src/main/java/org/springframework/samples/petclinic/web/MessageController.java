@@ -41,8 +41,8 @@ public class MessageController {
 		dataBinder.setDisallowedFields("id");
 	}
 	
-	@GetMapping(value = "/api/messages/inbox")
-	public List<Message> getMyInboxMessages(@RequestBody HttpServletRequest r) {
+	@GetMapping(value = "/api/message/inbox")
+	public List<Message> getMyInboxMessages(HttpServletRequest r) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			List<Message> messageList = (messageService.findMessagesByUserId(userId)).stream().collect(Collectors.toList());
@@ -54,8 +54,8 @@ public class MessageController {
 	}
 	
 	
-	@GetMapping(value = "/api/messages/sent")
-	public List<Message> getMySentMessages(@RequestBody HttpServletRequest r) {
+	@GetMapping(value = "/api/message/sent")
+	public List<Message> getMySentMessages(HttpServletRequest r) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			List<Message> messageList = (messageService.findMessagesSentByUserId(userId)).stream().collect(Collectors.toList());
@@ -67,7 +67,7 @@ public class MessageController {
 	}
 	
 	//This only gets the messages that you receive regarding one tag
-	@GetMapping(value = "/api/messages/bytag")
+	@GetMapping(value = "/api/message/bytag")
 	public List<Message> getMessagesByTag(@RequestBody HttpServletRequest r, @RequestBody(required = true) Tag tag) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
@@ -83,43 +83,23 @@ public class MessageController {
 	
 	
 	//CHANGE ALL INTO REQUEST BODY
-	@PostMapping(value = "/message/new")
-	public ResponseEntity<String> newMessage(HttpServletRequest r, @RequestBody(required = false) Message message, Integer recipients,
-			Message reply,  List<ToDo> toDoList, List<Tag> tagList) {
+	@PostMapping(value = "api/message/new")
+	public ResponseEntity<String> newMessage(HttpServletRequest r, @RequestBody Message message) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
-			System.out.println(userId);
 			message.setSender(sender);
 			message.setRead(false);
-			List<UserTW> recipientList = new ArrayList<>();
 			
 			
-	
-			UserTW recipient = userService.findUserById(2);
-			recipientList.add(recipient);
-	
-			message.setRecipients(recipientList);
-			/*
 			List<UserTW> recipientList = new ArrayList<>();
-			for (int i=0; i<recipients.size(); i++){
-				UserTW recipient = userService.findUserById(recipients.get(i));
+			for (int i=0; i<message.getRecipientsIds().size(); i++){
+				UserTW recipient = userService.findUserById(message.getRecipientsIds().get(i));
 				recipientList.add(recipient);
 			}
 			message.setRecipients(recipientList);	
-			*/
-			if(reply != null) {
-				
-				message.setReply(reply);
-			}
-			if(toDoList != null) {
-				message.setToDos(toDoList);
-			}
-			if(tagList!= null) {
-				message.setTags(tagList);
-			}
-			
 			messageService.saveMessage(message);
+			
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {
@@ -127,7 +107,7 @@ public class MessageController {
 		}
 	}
 	
-	@PostMapping(value = "/message/reply")
+	@PostMapping(value = "api/message/reply")
 	public ResponseEntity<String> replyMessage(HttpServletRequest r, @RequestParam(required = true) Integer messageId, @RequestParam(required = true)Message message,
 			@RequestParam(required = false) List<String> TodoIdList, @RequestParam(required = false) List<String> TagList) {
 		try {
@@ -152,7 +132,7 @@ public class MessageController {
 	}
 	
 	
-	@PostMapping(value = "/message/forward")
+	@PostMapping(value = "api/message/forward")
 	public ResponseEntity<String> forwardMessage(HttpServletRequest r, @RequestParam(required = true) Integer messageId) {
 		try {
 			//TODO
@@ -164,7 +144,7 @@ public class MessageController {
 	}
 	
 	
-	@PostMapping(value = "/api/markAsRead")
+	@PostMapping(value = "/api/message/markAsRead")
 	public ResponseEntity<String> markAsRead(HttpServletRequest r, @RequestParam(required = true) Integer messageId) {
 		try {
 			Message message = messageService.findMessageById(messageId);

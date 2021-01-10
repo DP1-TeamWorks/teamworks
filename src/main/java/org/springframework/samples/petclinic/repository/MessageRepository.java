@@ -22,11 +22,13 @@ public interface MessageRepository extends Repository<Message, Integer> {
 	void deleteById(Integer id) throws DataAccessException;
 
 	Message findById(Integer messageId);
-
+	//@Query(value="SELECT m FROM MESSAGE_RECIPIENTS, MESSAGE m WHERE :userId = MESSAGE_RECIPIENTS.RECIPIENTS_ID AND :userId = MESSAGE.ID" )
+	//  SELECT * FROM Message, MESSAGE_RECIPIENTS WHERE 1 = MESSAGE_RECIPIENTS.RECIPIENTS_ID
+	
 	@Query(value="SELECT m FROM Message m WHERE :userId in m.recipients" )
 	public Collection<Message> findMessagesByUserId(@Param("userId") Integer userId);
 	
-	@Query(value="SELECT m FROM Message m WHERE m.sender = :userId" )
+	@Query(value="SELECT m FROM Message m WHERE :userId in m.sender")
 	public Collection<Message> findMessagesSentByUserId(@Param("userId") Integer userId);
 	
 	
