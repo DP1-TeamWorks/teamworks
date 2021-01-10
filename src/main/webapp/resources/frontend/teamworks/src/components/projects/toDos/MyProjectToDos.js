@@ -6,28 +6,38 @@ import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
 import MilestoneApiUtils from "../../../utils/api/MilestoneApiUtils";
 
 const MyProjectToDos = ({ projectId }) => {
-  const [milestone, setMilestone] = useState({
-    date: "13/12/2010",
-  });
+  const [milestone, setMilestone] = useState({});
   const [toDoList, setToDoList] = useState([]);
-  const [reloadToDos, setReloadToDos] = useState(true);
+  const [reloadToDos, setReloadToDos] = useState(false);
 
   useEffect(() => {
     console.log("GETTING NEXT MILESTONE");
     MilestoneApiUtils.getNextMilestone(projectId)
       .then((res) => {
         setMilestone(res.data);
+        console.log("GETTING TODOs");
+        ToDoApiUtils.getMyToDos(res.data.id)
+          .then((res) => {
+            console.log(res);
+            setToDoList(res.data);
+          })
+          .catch((error) => {
+            console.log("ERROR: Cannot get myToDos");
+            console.log(error);
+            setToDoList([]);
+          });
       })
       .catch((error) => {
         console.log("ERROR: cannot get the next milestone");
         console.log(error);
+        setMilestone({});
+        setToDoList([]);
       });
   }, [projectId]);
 
   useEffect(() => {
     if (reloadToDos && milestone.id) {
       console.log("GETTING TODOs");
-      console.log(milestone);
       ToDoApiUtils.getMyToDos(milestone.id)
         .then((res) => {
           console.log(res);
@@ -36,6 +46,7 @@ const MyProjectToDos = ({ projectId }) => {
         .catch((error) => {
           console.log("ERROR: Cannot get myToDos");
           console.log(error);
+          setToDoList([]);
         });
 
       setReloadToDos(false);
@@ -49,7 +60,15 @@ const MyProjectToDos = ({ projectId }) => {
       </h3>
       <span className="MilestoneDate"> for {milestone.dueFor} </span>
       {toDoList.map((toDo) => {
-        return <ToDo id={toDo.id} title={toDo.title} tagList={toDo.tags} />;
+        console.log(toDo);
+        return (
+          <ToDo
+            id={toDo.id}
+            title={toDo.title}
+            tagList={toDo.tags}
+            done={toDo.done}
+          />
+        );
       })}
       <AddToDoForm milestoneId={milestone.id} setReloadToDos={setReloadToDos} />
     </>

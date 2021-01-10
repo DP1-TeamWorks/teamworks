@@ -66,7 +66,9 @@ public class ToDoController {
 	@PostMapping(value = "/api/toDos/markAsDone")
 	public ResponseEntity<String> markAsDone(HttpServletRequest r, @RequestParam(required = true) Integer toDoId) {
 		try {
-			toDoService.deleteToDoById(toDoId);
+			ToDo toDo = toDoService.findToDoById(toDoId);
+			toDo.setDone(true);
+			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {
