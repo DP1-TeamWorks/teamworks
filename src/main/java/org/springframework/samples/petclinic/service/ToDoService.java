@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.service;
 
-import java.lang.System.Logger;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
