@@ -32,7 +32,7 @@ public class BelongsServiceTest {
     void shouldFindBelongsWithCorrectId() {
         Belongs belongsTest = this.belongService.findBelongsById(1);
         assertThat(belongsTest.getDepartment().getName()).isEqualTo("Calidad");
-        assertThat(belongsTest.getIsDepartmentManager());
+        assertThat(belongsTest.getIsDepartmentManager()).isTrue();
     }
 
     @Test
@@ -75,13 +75,14 @@ public class BelongsServiceTest {
             this.departmentService.saveDepartment(dpt);
             this.userTWService.saveUser(user);
         } catch (DataAccessException ex) {
-            Logger.getLogger(BelongsServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ParticipationServiceTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         assertThat(belongs.getId()).isNotNull();
         assertThat(belongs.getUserTW().getId()).isEqualTo(user.getId());
         assertThat(belongs.getDepartment().getId()).isEqualTo(dpt.getId());
-
+        assertThat(dpt.getBelongs().contains(belongs)).isTrue();
+        assertThat(user.getBelongs().contains(belongs)).isTrue();
     }
 
     @Test
@@ -100,8 +101,8 @@ public class BelongsServiceTest {
     @Transactional
     void shouldDeleteBelongs() {
         belongService.deleteBelongsById(2);
-        Belongs team = this.belongService.findBelongsById(2);
-        assertThat(team).isNull();
+        Belongs belongs = this.belongService.findBelongsById(2);
+        assertThat(belongs).isNull();
     }
 
 }

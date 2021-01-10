@@ -54,7 +54,7 @@ public class Project extends BaseEntity {
 	@JsonIgnore
 	// @JsonManagedReference(value="project-participation")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
-	private List<Participation> participation;
+	private List<Participation> participations;
 
 	@JsonManagedReference(value = "project-tag")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)

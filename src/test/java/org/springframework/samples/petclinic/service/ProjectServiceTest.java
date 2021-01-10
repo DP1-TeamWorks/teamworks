@@ -42,12 +42,11 @@ public class ProjectServiceTest {
 	public void shouldInsertProjectIntoDatabaseAndGenerateId() {
 
 		Department department = departmentService.findDepartmentById(1);
-		int size=department.getProjects().size();
+		int size = department.getProjects().size();
 		Project project = new Project();
 		project.setName("Valorant");
 		project.setDescription("Juego de riot");
 		project.setDepartment(department);
-		
 
 		try {
 			this.projectService.saveProject(project);
@@ -57,12 +56,12 @@ public class ProjectServiceTest {
 		}
 		department.getProjects().add(project);
 		departmentService.saveDepartment(department);
- 		department = departmentService.findDepartmentById(1);
-		assertThat(department.getProjects().size() == size+1).isTrue();
+		department = departmentService.findDepartmentById(1);
+		assertThat(department.getProjects().size() == size + 1).isTrue();
 		assertThat(project.getId()).isNotNull();
 
 	}
-	
+
 	@Test
 	@Transactional
 	void shouldUpdateProject() {
@@ -71,23 +70,25 @@ public class ProjectServiceTest {
 		String newName = oldName + "X";
 
 		project.setName(newName);
-		this.projectService.saveProject(project);;
+		this.projectService.saveProject(project);
+		;
 
 		// retrieving new name from database
 		project = this.projectService.findProjectById(1);
 		;
 		assertThat(project.getName()).isEqualTo(newName);
 	}
-	
+
 	@Test
 	@Transactional
 	void shouldDeleteProject() {
 
-		projectService.deleteProjectById(2);;
+		projectService.deleteProjectById(2);
+		;
 		Project project = this.projectService.findProjectById(2);
 		assertThat(project).isNull();
 	}
-	
+
 	@Test
 	@Transactional
 	void shouldfindUserProjects() {
@@ -97,15 +98,14 @@ public class ProjectServiceTest {
 		project.setDescription("Juego de riot");
 		project.setDepartment(department);
 		this.projectService.saveProject(project);
-		
-		Participation participacion= new Participation();
-		UserTW user= userService.findUserById(1);
+
+		Participation participacion = new Participation();
+		UserTW user = userService.findUserById(1);
 		participacion.setUserTW(user);
 		participacion.setProject(project);
 		participationService.saveParticipation(participacion);
-		List<UserTW> listaUser=projectService.findProjectUsers(project.getId()).stream().collect(Collectors.toList());
+		List<UserTW> listaUser = projectService.findProjectUsers(project.getId()).stream().collect(Collectors.toList());
 		assertThat(listaUser.isEmpty()).isFalse();
 	}
-	
-	
+
 }

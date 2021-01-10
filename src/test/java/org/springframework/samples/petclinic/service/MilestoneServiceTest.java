@@ -58,7 +58,7 @@ class MilestoneServiceTest {
 		assertThat(milestone.getName()).isEqualTo("New Year objectives");
 
 	}
-	
+
 	@Test
 	void shouldFindNextMilestone() {
 		Project project = projectService.findProjectById(1);
@@ -66,9 +66,9 @@ class MilestoneServiceTest {
 		milestone.setName("Sprint 3");
 		milestone.setDueFor(LocalDate.now());
 		milestone.setProject(project);
-		
+
 		Milestone milestone2 = this.milestoneService.findNextMilestone(1);
-		
+
 		assertThat(milestone.getDueFor()).isBefore(milestone2.getDueFor());
 	}
 

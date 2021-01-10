@@ -82,11 +82,11 @@ class UserTWServiceTest {
 		assertThat(user).isNull();
 
 	}
-	
+
 	@Test
 	void shouldGetLoginUser() {
 		UserTW user = this.userTWService.findUserById(3);
-		UserTW user2 = this.userTWService.getLoginUser( "mariatorres@cyber", "12345678");
+		UserTW user2 = this.userTWService.getLoginUser("mariatorres@cyber", "12345678");
 		assertThat(user.getId()).isEqualTo(user2.getId());
 	}
 
