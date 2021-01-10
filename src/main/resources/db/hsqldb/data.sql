@@ -235,3 +235,48 @@ INSERT INTO
     todos(title, user_id, milestone_id)
 values
     ('Finish The toDos section', 2, 1);
+
+/*MESSAGES*/
+INSERT INTO
+    messages(timestamp, subject, text, read, sender_id)
+values
+    (
+        TO_DATE('18/04/2020', 'DD/MM/YYYY'),
+        'Hello World in TeamWorks',
+        'LOREM IPSUM DOLOR ET SI JFD KASDL EHRTWE DLFAJSDC LWKER HQLKWJEFHLS KD',
+        FALSE,
+        2
+    );
+
+INSERT INTO
+    messages(timestamp, subject, text, read, sender_id)
+values
+    (
+        TO_DATE('16/1/2020', 'DD/MM/YYYY'),
+        'Hello World in TeamWorks',
+        'LOREM IPSUM DOLOR ET SI JFD KASDL EHRTWE DLFAJSDC LWKER HQLKWJEFHLS KD',
+        FALSE,
+        2
+    );
+
+INSERT INTO
+    messages(timestamp, subject, text, read, sender_id)
+values
+    (
+        TO_DATE('14/05/2020', 'DD/MM/YYYY'),
+        'Hello World in TeamWorks',
+        'LOREM IPSUM DOLOR ET SI JFD KASDL EHRTWE DLFAJSDC LWKER HQLKWJEFHLS KD',
+        FALSE,
+        2
+    );
+
+INSERT INTO
+    messages(timestamp, subject, text, read, sender_id)
+values
+    (
+        TO_DATE('14/10/2020', 'DD/MM/YYYY'),
+        'Hello World in TeamWorks',
+        'LOREM IPSUM DOLOR ET SI JFD KASDL EHRTWE DLFAJSDC LWKER HQLKWJEFHLS KD',
+        FALSE,
+        2
+    );

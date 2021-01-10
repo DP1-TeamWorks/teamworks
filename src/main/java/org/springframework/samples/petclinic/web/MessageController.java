@@ -29,58 +29,58 @@ import org.springframework.web.server.ResponseStatusException;
 public class MessageController {
 	private final MessageService messageService;
 	private final UserTWService userService;
-		
+
 	@Autowired
 	public MessageController(MessageService messageService, UserTWService userService, TagService tagService) {
 		this.messageService = messageService;
 		this.userService = userService;
 	}
-	
-	@InitBinder 
+
+	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-	
+
 	@GetMapping(value = "/api/message/inbox")
 	public List<Message> getMyInboxMessages(HttpServletRequest r) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW user = userService.findUserById(userId);
-			List<Message> messageList = (messageService.findMessagesByUserId(user)).stream().collect(Collectors.toList());			
+			List<Message> messageList = (messageService.findMessagesByUserId(user)).stream()
+					.collect(Collectors.toList());
 			return messageList;
 		} catch (DataAccessException d) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't get inbox");
 
 		}
 	}
-	
-	
+
 	@GetMapping(value = "/api/message/sent")
 	public List<Message> getMySentMessages(HttpServletRequest r) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
-			List<Message> messageList = (messageService.findMessagesSentByUserId(userId)).stream().collect(Collectors.toList());
+			List<Message> messageList = (messageService.findMessagesSentByUserId(userId)).stream()
+					.collect(Collectors.toList());
 			return messageList;
 		} catch (DataAccessException d) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
 		}
 	}
-	
-	//This only gets the messages that you receive regarding one tag
+
+	// This only gets the messages that you receive regarding one tag
 	@GetMapping(value = "/api/message/bytag")
 	public List<Message> getMessagesByTag(@RequestBody HttpServletRequest r, @RequestBody(required = true) Tag tag) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW user = userService.findUserById(userId);
-			List<Message> messageList = (messageService.findMessagesByTag(user, tag)).stream().collect(Collectors.toList());
+			List<Message> messageList = (messageService.findMessagesByTag(user, tag)).stream()
+					.collect(Collectors.toList());
 			return messageList;
 		} catch (DataAccessException d) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
 		}
 	}
-	
-	
-	
+
 	@PostMapping(value = "api/message/new")
 	public ResponseEntity<String> newMessage(HttpServletRequest r, @RequestBody Message message) {
 		try {
@@ -88,16 +88,15 @@ public class MessageController {
 			UserTW sender = userService.findUserById(userId);
 			message.setSender(sender);
 			message.setRead(false);
-			
-			
+
 			List<UserTW> recipientList = new ArrayList<>();
-			for (int i=0; i<message.getRecipientsIds().size(); i++){
+			for (int i = 0; i < message.getRecipientsIds().size(); i++) {
 				UserTW recipient = userService.findUserById(message.getRecipientsIds().get(i));
 				recipientList.add(recipient);
-			}				
-			message.setRecipients(recipientList);	
-			//TODO set tags in message
-			
+			}
+			message.setRecipients(recipientList);
+			// TODO set tags in message
+
 			messageService.saveMessage(message);
 			return ResponseEntity.ok().build();
 
@@ -105,8 +104,7 @@ public class MessageController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
-	
+
 	@PostMapping(value = "api/message/reply")
 	public ResponseEntity<String> replyMessage(HttpServletRequest r, @RequestParam(required = true) Message message) {
 		try {
@@ -116,14 +114,14 @@ public class MessageController {
 			message.setRead(false);
 
 			List<UserTW> recipientList = new ArrayList<>();
-			for (int i=0; i<message.getRecipientsIds().size(); i++){
+			for (int i = 0; i < message.getRecipientsIds().size(); i++) {
 				UserTW recipient = userService.findUserById(message.getRecipientsIds().get(i));
 				recipientList.add(recipient);
-			}				
-			message.setRecipients(recipientList);	
+			}
+			message.setRecipients(recipientList);
 			message.setReplyTo(message);
-			//TODO set tags in message
-			
+			// TODO set tags in message
+
 			messageService.saveMessage(message);
 			return ResponseEntity.ok().build();
 
@@ -131,42 +129,41 @@ public class MessageController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
-	
+
 	@PostMapping(value = "api/message/forward")
-	public ResponseEntity<String> forwardMessage(HttpServletRequest r, @RequestParam(required = true) List<Integer> forwardList, Integer MessageId) {
+	public ResponseEntity<String> forwardMessage(HttpServletRequest r,
+			@RequestParam(required = true) List<Integer> forwardList, Integer MessageId) {
 		try {
 			Message message = messageService.findMessageById(MessageId);
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
 			message.setSender(sender);
-			
-			
+
 			List<UserTW> userList = new ArrayList<>();
-			for(int i=0;i<forwardList.size(); i++) {
+			for (int i = 0; i < forwardList.size(); i++) {
 				UserTW user = userService.findUserById(forwardList.get(i));
 				userList.add(user);
 			}
-			message.setRecipients(userList);	
+			message.setRecipients(userList);
 			message.setReplyTo(message);
-			
-			//TODO set tags in message
+
+			// TODO set tags in message
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
-	
+
 	@PostMapping(value = "/api/message/markAsRead")
 	public ResponseEntity<String> markAsRead(HttpServletRequest r, @RequestParam(required = true) Integer messageId) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW user = userService.findUserById(userId);
 			Message message = messageService.findMessageById(messageId);
-			if(message.getRecipients().contains(user)) {
+			if (message.getRecipients().contains(user)) {
 				message.setRead(true);
+				messageService.saveMessage(message);
 			} else {
 				return ResponseEntity.badRequest().build();
 			}

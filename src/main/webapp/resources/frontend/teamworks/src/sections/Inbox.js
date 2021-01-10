@@ -116,18 +116,21 @@ const Inbox = (props) => {
     },
   ]);
 
-
   useEffect(() => {
     MessageApiUtils.getMyInboxMessages()
       .then((res) => {
+        console.log("Getting Inbox Messages");
         setInboxMessages(res.data);
       })
       .catch((error) => {
         console.log("ERROR: cannot get inbox messages");
       });
 
+    console.log(inboxMessages);
+
     MessageApiUtils.getMySentMessages()
       .then((res) => {
+        console.log("Getting sent Messages");
         setSentMessages(res.data);
       })
       .catch((error) => {
@@ -136,7 +139,6 @@ const Inbox = (props) => {
   }, []);
 
   const [modalNewMessage, setModalNewMessage] = useState(false);
-
   const selectedMessages = () => {
     switch (selectedTab) {
       case "Inbox":
@@ -161,7 +163,11 @@ const Inbox = (props) => {
         setModalNewMessage={setModalNewMessage}
       />
       <Section className="Section--Lighter">
-        {modalNewMessage && <NewMessage ChangeModalNewMessage={()=> setModalNewMessage(!modalNewMessage)}/>}
+        {modalNewMessage && (
+          <NewMessage
+            ChangeModalNewMessage={() => setModalNewMessage(!modalNewMessage)}
+          />
+        )}
         <MessageList messages={selectedMessages()} />
       </Section>
     </div>

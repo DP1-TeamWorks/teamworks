@@ -26,63 +26,57 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "message")
+@Table(name = "messages")
 
 public class Message extends BaseEntity {
 	// Attributes
 	@NotNull
-	@Column(name = "timeStamp")
+	@Column(name = "timestamp")
 	@CreationTimestamp
-	LocalDate timeStamp;
-		
+	LocalDate timestamp;
+
+	@NotNull
 	@Column(name = "subject")
 	private String subject;
-	
+
+	@NotNull
 	@Column(name = "text")
 	private String text;
-	
+
+	@NotNull
 	@Column(name = "read")
 	private Boolean read;
-	
-	
+
 	@Transient
 	private List<String> recipientsEmail;
-		
+
 	@Transient
 	private List<Integer> recipientsIds;
-	
-	
-	//Relations
+
+	// Relations
 	@OneToOne(optional = true)
-    @JoinColumn(name = "reply_to")
-    private Message replyTo;
-	
-	
+	@JoinColumn(name = "reply_to")
+	private Message replyTo;
+
 	@ManyToOne(optional = false)
-    @JoinColumn(name = "sender")
-    @JsonIgnore
-    private UserTW sender;
-	
-	
+	@JoinColumn(name = "sender_id")
+	private UserTW sender;
+
 	@ManyToMany
 	@JoinColumn(name = "recipients")
-    private List<UserTW> recipients;
-	
-			
+	private List<UserTW> recipients;
+
 	@Column(name = "attatchments")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
 	private List<Attatchment> attatchments;
-		
+
 	@Transient
 	private List<Integer> tagList;
 
 	@ManyToMany
 	private List<Tag> tags;
-	
-	
 
 	@ManyToMany
 	private List<ToDo> toDos;
-	
-	
+
 }
