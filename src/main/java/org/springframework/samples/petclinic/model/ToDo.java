@@ -54,6 +54,8 @@ public class ToDo extends BaseEntity {
     @JsonIgnoreProperties("todos")
     private List<Tag> tags;
 
-    // TODO: Message Relation
+    @JsonIgnore
+    @ManyToMany
+    private List<Message> messages;
 
 }

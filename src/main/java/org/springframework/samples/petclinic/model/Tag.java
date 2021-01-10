@@ -51,6 +51,8 @@ public class Tag extends BaseEntity {
     @ManyToMany
     private List<ToDo> todos;
 
-    // TODO: Message Relation
+    @JsonIgnore
+    @ManyToMany
+    private List<Message> messages;
 
 }
