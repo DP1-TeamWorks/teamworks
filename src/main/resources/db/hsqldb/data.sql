@@ -97,6 +97,20 @@ values
         1,
         1
     );
+    
+INSERT INTO
+    users(name, lastname,joinDate email, password, role, team_id)
+values
+    (
+        'test',
+        'test',
+        TO_DATE('2021/01/10', 'DD/MM/YYYY'),
+        'testtest@test',
+        '$2a$10$7u6RA8ziDoj422Rw.WZX8OfqxfrKAA22gSWBNRrMrhWzg7O2UgqZO',
+        0,
+        2
+    );
+    
 
 /*DEPARTMENTS*/
 INSERT INTO
@@ -305,6 +319,7 @@ values
         TO_DATE('13/12/2021', 'DD/MM/YYYY'),
         1
     );
+    
 
 /*ToDoS*/
 INSERT INTO
