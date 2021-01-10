@@ -3,13 +3,13 @@ import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
 import Circle from "../tags/Circle";
 import ToDoCircle from "./ToDoCircle";
 
-const ToDo = ({ id, tagList, title }) => {
-  const [isDone, setIsDone] = useState(false);
+const ToDo = ({ id, tagList, title , done}) => {
+  console.log("AAAAAA" + done)
+  const [isDone, setIsDone] = useState(done);
   const [isDoneAnimation, setIsDoneAnimation] = useState(false);
 
   const markAsDone = () => {
     setIsDoneAnimation(true);
-    // TODO: fix the animation
     setTimeout(
       () =>
         ToDoApiUtils.markToDoAsDone(id)

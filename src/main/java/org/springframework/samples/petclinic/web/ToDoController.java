@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class ToDoController {
 	private final ToDoService toDoService;
 	private final UserTWService userService;
@@ -44,15 +46,24 @@ public class ToDoController {
 		return toDoService.findToDoByMilestoneAndUser(milestoneId, userId).stream().collect(Collectors.toList());
 	}
 
-	@PostMapping(value = "/api/toDos")
-	public ResponseEntity<String> postToDo(@RequestBody ToDo toDo, HttpServletRequest r,
+	@PostMapping(value = "/api/toDos/mine")
+	public ResponseEntity<String> createPersonalToDo(@RequestBody ToDo toDo, HttpServletRequest r,
 			@RequestParam(required = true) Integer milestoneId) {
+
+		Integer userId = (Integer) r.getSession().getAttribute("userId");
+		return createToDo(toDo, r, milestoneId, userId);
+
+	}
+
+	@PostMapping(value = "/api/toDos")
+	public ResponseEntity<String> createToDo(@RequestBody ToDo toDo, HttpServletRequest r,
+			@RequestParam(required = true) Integer milestoneId, @RequestParam(required = false) Integer userId) {
 		try {
-			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW user = userService.findUserById(userId);
 			Milestone milestone = milestoneService.findMilestoneById(milestoneId);
 			toDo.setAssignee(user);
 			toDo.setMilestone(milestone);
+			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {
@@ -63,12 +74,13 @@ public class ToDoController {
 	@PostMapping(value = "/api/toDos/markAsDone")
 	public ResponseEntity<String> markAsDone(HttpServletRequest r, @RequestParam(required = true) Integer toDoId) {
 		try {
-			toDoService.deleteToDoById(toDoId);
+			ToDo toDo = toDoService.findToDoById(toDoId);
+			toDo.setDone(true);
+			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-
 }

@@ -5,7 +5,7 @@ values
     ('Cybergroup', 'cyber');
 
 INSERT INTO
-    userTW(name, lastname, email, password, role, team_id)
+    users(name, lastname, email, password, role, team_id)
 values
     (
         'Johnny',
@@ -17,7 +17,7 @@ values
     );
 
 INSERT INTO
-    userTW(name, lastname, email, password, role, team_id)
+    users(name, lastname, email, password, role, team_id)
 values
     (
         'Julia',
@@ -29,7 +29,7 @@ values
     );
 
 INSERT INTO
-    userTW(name, lastname, email, password, role, team_id)
+    users(name, lastname, email, password, role, team_id)
 values
     (
         'Maria',
@@ -41,7 +41,7 @@ values
     );
 
 INSERT INTO
-    userTW(name, lastname, email, password, role, team_id)
+    users(name, lastname, email, password, role, team_id)
 values
     (
         'Luis',
@@ -53,7 +53,7 @@ values
     );
 
 INSERT INTO
-    userTW(name, lastname, email, password, role, team_id)
+    users(name, lastname, email, password, role, team_id)
 values
     (
         'Roman',
@@ -112,7 +112,7 @@ values
 
 /*PROJECTS*/
 INSERT INTO
-    project(name, description, department_id)
+    projects(name, description, department_id)
 values
     (
         'Networking Solutions',
@@ -121,7 +121,7 @@ values
     );
 
 INSERT INTO
-    project(name, description, department_id)
+    projects(name, description, department_id)
 values
     (
         'Netrunning School',
@@ -130,7 +130,7 @@ values
     );
 
 INSERT INTO
-    project(name, description, department_id)
+    projects(name, description, department_id)
 values
     (
         'School Project',
@@ -139,7 +139,7 @@ values
     );
 
 INSERT INTO
-    project(name, description, department_id)
+    projects(name, description, department_id)
 values
     (
         'Homemade Dishes',
@@ -148,7 +148,7 @@ values
     );
 
 INSERT INTO
-    project(name, description, department_id)
+    projects(name, description, department_id)
 values
     (
         '2ndStreet Butchers',
@@ -157,7 +157,7 @@ values
     );
 
 INSERT INTO
-    project(name, description, department_id)
+    projects(name, description, department_id)
 values
     (
         ' Hello You ',
@@ -166,7 +166,7 @@ values
     );
 
 INSERT INTO
-    project(name, description, department_id)
+    projects(name, description, department_id)
 values
     (
         ' 2ndStreet Bakery ',
@@ -175,23 +175,63 @@ values
     );
 
 INSERT INTO
-    participation(is_project_manager, user_id, project_id)
+    participations(is_project_manager, user_id, project_id)
 values
     (TRUE, 2, 1);
 
 INSERT INTO
-    participation(is_project_manager, user_id, project_id)
+    participations(is_project_manager, user_id, project_id)
 values
     (TRUE, 2, 2);
 
 INSERT INTO
-    participation(is_project_manager, user_id, project_id)
+    participations(is_project_manager, user_id, project_id)
 values
     (TRUE, 2, 3);
 
 INSERT INTO
-    participation(is_project_manager, user_id, project_id)
+    participations(is_project_manager, user_id, project_id)
 values
     (TRUE, 2, 4);
-    
-    
+
+/*TAGS*/
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Planning', '#EFCAC4', 1);
+
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Debugging', '#E19494', 1);
+
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Testing', '#B0D9CD', 1);
+
+/*MILESTONES*/
+INSERT INTO
+    milestones(name, due_for, project_id)
+values
+    (
+        'New Year objectives',
+        TO_DATE('13/12/2021', 'DD/MM/YYYY'),
+        1
+    );
+
+/*ToDoS*/
+INSERT INTO
+    todos(title, user_id, milestone_id)
+values
+    ('Mark this as done', 2, 1);
+
+INSERT INTO
+    todos(title, user_id, milestone_id)
+values
+    ('Mark this again ', 2, 1);
+
+INSERT INTO
+    todos(title, user_id, milestone_id)
+values
+    ('Finish The toDos section', 2, 1);

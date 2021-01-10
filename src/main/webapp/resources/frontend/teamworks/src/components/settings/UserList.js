@@ -10,7 +10,7 @@ const UserList = () => {
       <thead className="UserList__thead">
         <tr>
           <th>Full Name</th>
-          <th>E-mail Address</th>
+          <th>E-mail address</th>
           <th>Role</th>
           <th>Actions</th>
         </tr>

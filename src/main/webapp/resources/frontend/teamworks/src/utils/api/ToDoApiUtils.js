@@ -8,8 +8,8 @@ const ToDoApiUtils = {
     axios.get(API_URL + TODO_URL + "?milestoneId=" + milestoneId),
   getMyToDos: (milestoneId) =>
     axios.get(API_URL + TODO_URL + "/mine?milestoneId=" + milestoneId),
-  addNewToDo: (milestoneId, toDo) =>
-    axios.post(API_URL + TODO_URL + "?milestoneId=" + milestoneId, toDo),
+  addNewPersonalToDo: (milestoneId, toDo) =>
+    axios.post(API_URL + TODO_URL + "/mine?milestoneId=" + milestoneId, toDo),
   markToDoAsDone: (toDoId) =>
     axios.post(API_URL + TODO_URL + "/markAsDone?toDoId=" + toDoId),
 };

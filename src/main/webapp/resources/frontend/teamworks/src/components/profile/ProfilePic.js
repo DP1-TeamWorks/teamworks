@@ -1,9 +1,10 @@
 import "./Profile.css";
 
-const ProfilePic = (props) =>
+const ProfilePic = ({src, className, small, slim}) =>
 {
+    let picClass = small ? "ProfilePicHeader" : "ProfilePic";
     return (
-        <img className="ProfilePic" src={props.src}></img>
+        <img className={`${picClass} ${className??""}`} src={src} alt="Profile" ></img>
     )
 }
 

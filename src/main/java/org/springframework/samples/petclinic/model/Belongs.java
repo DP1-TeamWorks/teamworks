@@ -26,25 +26,24 @@ public class Belongs extends BaseEntity {
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate initialDate;
 
-	
 	@Column(name = "finalDate")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate finalDate;
 
 	@NotNull
-	@Column(name = "isDepartmentManager")
+	@Column(name = "is_department_manager")
 	private Boolean isDepartmentManager;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "userId")
+	@JoinColumn(name = "user_id")
 	@JsonIgnore
-	//@JsonBackReference(value="user-belongs")
+	// @JsonBackReference(value="user-belongs")
 	UserTW userTW;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "departmentId")
+	@JoinColumn(name = "department_id")
 	@JsonIgnore
-	//@JsonBackReference(value="department-belongs")
+	// @JsonBackReference(value="department-belongs")
 	Department department;
 
 }

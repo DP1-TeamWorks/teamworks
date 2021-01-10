@@ -28,20 +28,34 @@ public class BelongsService {
 	public void deleteBelongsById(Integer belongsId) throws DataAccessException {
 		belongsRepository.deleteById(belongsId);
 	}
+
 	@Transactional(readOnly = true)
 	public Belongs findBelongsById(Integer belongsId) throws DataAccessException {
 		return belongsRepository.findById(belongsId);
 	}
+
 	@Transactional(readOnly = true)
 	public Collection<Belongs> findBelongByUserIdAndDepartmentId(Integer userId, Integer departmentId) {
 		return belongsRepository.findBelongByUserAndDeparment(userId, departmentId);
 	}
+
+	@Transactional(readOnly = true)
+	public Collection<Belongs> findUserBelongs(Integer userId) {
+		return belongsRepository.findUserBelongs(userId);
+	}
+
 	@Transactional(readOnly = true)
 	public Belongs findCurrentBelongs(Integer userId, Integer departmentId) {
 		return belongsRepository.findCurrentBelongs(userId, departmentId);
 	}
+
 	@Transactional(readOnly = true)
-	public Collection<Department> findMyDepartments(Integer userId){
+	public Collection<Belongs> findCurrentUserBelongs(Integer userId) {
+		return belongsRepository.findCurrentUserBelongs(userId);
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Department> findMyDepartments(Integer userId) {
 		return belongsRepository.findMyDepartments(userId);
 	}
 

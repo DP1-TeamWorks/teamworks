@@ -1,9 +1,10 @@
 .Section {
   width: calc(100% - 320px);
-  height: calc(100% - 90px);
+  min-height: calc(100% - 90px);
   background-color: #161812;
   position: absolute;
   left: 320px;
+  top: 90px;
 }
 
 .Section--Lighter {
