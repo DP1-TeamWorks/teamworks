@@ -278,178 +278,46 @@ values
 INSERT INTO
     participations(is_project_manager, user_id, project_id)
 values
+    (TRUE, 2, 4);
+
+/*TAGS*/
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Planning', '#EFCAC4', 1);
+
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Debugging', '#E19494', 1);
+
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Testing', '#B0D9CD', 1);
+
+/*MILESTONES*/
+INSERT INTO
+    milestones(name, due_for, project_id)
+values
     (
-    	TRUE, 
-    	2, 
-    	4
+        'New Year objectives',
+        TO_DATE('13/12/2021', 'DD/MM/YYYY'),
+        1
     );
-    
-	/*MILESTONES*/	
 
-INSERT INTO milestones(name , dueFor, projectId)
+/*ToDoS*/
+INSERT INTO
+    todos(title, user_id, milestone_id)
 values
-	(
-		'Facture documentation', 
-		2021/03/01, 
-		1
-	);
-	
-	
-INSERT INTO milestones(name , dueFor, projectId)
-values
-	(
-		'Documentation', 
-		2021/03/03, 
-		3
-	);
-	
-INSERT INTO milestones(name , dueFor, projectId)
-values
-	(
-		'Diagram', 
-		2021/03/04, 
-		3
-	);
-	
-INSERT INTO milestones(name , dueFor, projectId)
-values
-	(
-		'Review the project', 
-		2021/03/05, 
-		3
-	);
-	
+    ('Mark this as done', 2, 1);
 
- /*TODOS*/
-  
-INSERT INTO toDo(title,milestoneId,userId)
+INSERT INTO
+    todos(title, user_id, milestone_id)
 values
-	(
-		'Point 1',
-		1,
-		1	
-	);
-	
-INSERT INTO toDo(title,milestoneId,userId)
+    ('Mark this again ', 2, 1);
+
+INSERT INTO
+    todos(title, user_id, milestone_id)
 values
-	(
-		'Point 2',
-		1,
-		2
-	);
-	
-INSERT INTO toDo(title,milestoneId,userId)
-values
-	(
-		'Point 3',
-		1,
-		3
-		
-	);
-	
-INSERT INTO toDo(title,milestoneId,userId)
-values
-	(
-		'Point 4',
-		1,
-		4
-		
-	);	
-	
-INSERT INTO toDo(title,milestoneId,userId)
-values
-	(
-		'Point 1',
-		2,
-		5
-		
-	);	
-INSERT INTO toDo(title,milestoneId,userId)
-values
-	(
-		'Point 2',
-		2,
-		6
-		
-	);	
-INSERT INTO toDo(title,milestoneId,userId)
-values
-	(
-		'Do diagram',
-		3,
-		5
-		
-	);	
-INSERT INTO toDo(title,milestoneId,userId)
-values
-	(
-		'Visual Diagram',
-		3,
-		6
-		
-	);	
-	
-INSERT INTO toDo(title,milestoneId,userId)
-values
-	(
-		'review documentation',
-		4,
-		5
-		
-	);	
-INSERT INTO toDo(title,milestoneId,userId)
-values
-	(
-		'review diagram',
-		4,
-		6
-		
-	);	
- /*TAGS*/
-INSERT INTO tags(title,color,projectId,)
-values
-	(
-		'Finished', 
-		'#A6F718' ,
-		1
-	); 
-	
-INSERT INTO tags(title,color,projectId,)
-values
-	(
-		'In process', 
-		'#F72C18' ,
-		1
-	); 
-	
-INSERT INTO tags(title,color,projectId,)
-values
-	(
-		'Review', 
-		'#35a9fc' ,
-		1
-	); 
-	
-INSERT INTO tags(title,color,projectId,)
-values
-	(
-		'Finished', 
-		'#A6F718' ,
-		3
-	); 
-	
-INSERT INTO tags(title,color,projectId,)
-values
-	(
-		'In process', 
-		'#F72C18' ,
-		3
-	); 
-	
-INSERT INTO tags(title,color,projectId,)
-values
-	(
-		'Review', 
-		'#35a9fc' ,
-		3
-	); 
+    ('Finish The toDos section', 2, 1);

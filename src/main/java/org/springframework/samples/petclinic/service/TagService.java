@@ -23,7 +23,7 @@ public class TagService {
     }
 
     @Transactional(readOnly = true)
-    public Tag findTagById(Integer tagId) {
+    public Tag findTagById(Integer tagId) throws DataAccessException {
         return tagRepository.findById(tagId);
     }
 

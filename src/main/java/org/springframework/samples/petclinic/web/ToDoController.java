@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class ToDoController {
 	private final ToDoService toDoService;
 	private final UserTWService userService;
@@ -45,7 +47,7 @@ public class ToDoController {
 	}
 
 	@PostMapping(value = "/api/toDos")
-	public ResponseEntity<String> postToDo(@RequestBody ToDo toDo, HttpServletRequest r,
+	public ResponseEntity<String> createToDo(@RequestBody ToDo toDo, HttpServletRequest r,
 			@RequestParam(required = true) Integer milestoneId) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
@@ -71,5 +73,4 @@ public class ToDoController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-
 }

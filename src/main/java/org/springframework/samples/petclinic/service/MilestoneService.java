@@ -68,8 +68,8 @@ public class MilestoneService {
 
 	@Transactional(readOnly = true)
 	public Milestone findNextMilestone(Integer projectId) throws DataAccessException {
-		return milestoneRepository.findNextMilestone(projectId).stream()
-				.filter(x -> x.getDueFor().isBefore(LocalDate.now())).sorted(Comparator.comparing(x -> x.getDueFor()))
+		return milestoneRepository.findMilestonesByProject(projectId).stream()
+				.filter(m -> m.getDueFor().isAfter(LocalDate.now())).sorted(Comparator.comparing(x -> x.getDueFor()))
 				.sorted(Collections.reverseOrder()).findFirst().get();
 	}
 

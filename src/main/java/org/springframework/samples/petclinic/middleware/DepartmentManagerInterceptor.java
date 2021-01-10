@@ -25,12 +25,12 @@ public class DepartmentManagerInterceptor extends HandlerInterceptorAdapter {
 		Integer userId = (Integer) req.getSession().getAttribute("userId");
 		Integer departmentId = Integer.valueOf(req.getParameter("departmentId"));
 		Belongs belongs = belongsService.findCurrentBelongs(userId, departmentId);
-		Boolean departmentManager = false;
+		Boolean isDepartmentManager = false;
 
 		if (belongs != null) {
-			departmentManager = belongs.getIsDepartmentManager();
+			isDepartmentManager = belongs.getIsDepartmentManager();
 		}
-		if (userTWService.findUserById(userId).getRole().equals(Role.team_owner) || departmentManager) {
+		if (userTWService.findUserById(userId).getRole().equals(Role.team_owner) || isDepartmentManager) {
 			return true;
 		} else {
 			res.sendError(403);

@@ -52,8 +52,8 @@ class AddToDoForm extends React.Component {
     this.setState({ inputs: { ...this.state.inputs, toDo: value } });
   };
 
-  apiRequestHandler = (toDo) => {
-    ToDoApiUtils.addNewToDo({toDo})
+  apiRequestHandler = (toDoTitle) => {
+    ToDoApiUtils.addNewToDo(this.props.milestoneId, { title: toDoTitle })
       .then((res) => {
         this.props.setReloadToDos(true);
       })
@@ -68,17 +68,17 @@ class AddToDoForm extends React.Component {
   submitHandler = (event) => {
     event.preventDefault();
     if (!this.hasErrors()) {
-      let toDo = this.state.inputs.toDo;
+      console.log("CREATING NEW TODO");
+      let toDoTitle = this.state.inputs.toDo;
       this.setState({ inputs: { ...this.state.inputs, toDo: "" } });
-      console.log(toDo)
-      this.apiRequestHandler(toDo);
+      this.apiRequestHandler(toDoTitle);
       event.target.reset();
     }
   };
 
   render() {
     return (
-      <form onSubmit={this.submitHandler} style={{ display: "inline-block" }}>
+      <form onSubmit={this.submitHandler}>
         <span className="ToDoAdd" onClick={null}>
           <FontAwesomeIcon icon={faPlus} style={{ color: "lightgray" }} />
         </span>{" "}
