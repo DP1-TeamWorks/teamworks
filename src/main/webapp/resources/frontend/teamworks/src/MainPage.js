@@ -11,17 +11,12 @@ const MainPage = () => {
     <Router>
       <Switch>
         <Route exact path="/">
-          <div className="App">
-            <Header />
-            <Inbox />
-          </div>
+          <Header />
+          <Inbox />
         </Route>
-
         <Route path="/settings">
-          <div className="App">
-            <Header />
-            <Settings />
-          </div>
+          <Header nosearchbar />
+          <Settings />
         </Route>
       </Switch>
     </Router>

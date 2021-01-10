@@ -1,0 +1,50 @@
+.GoBack {
+    color: #a6ce56;
+    margin-bottom: 20px;
+    text-decoration: none;
+    border-radius: 3px;
+    padding: 10px 20px;
+    display: inline-block;
+    width: fit-content;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 12px 30px;
+    color: #A7E32D;
+    font: inherit;
+    font-weight: 400 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.1s, box-shadow 0.1s;
+    user-select: none;
+    border: none;
+}
+
+.GoBack:hover {
+    background-color: #3e4632;
+}
+
+.GoBack:active {
+    box-shadow: inset 0 0 100px 100px rgba(0,0,0,0.25);
+}
+
+.GoBack:active, .GoBack:focus {
+    outline: none;
+}
+
+.GoBack--Anchored {
+    margin-bottom: 0;
+    margin-right: 30px;
+}
+
+.BackArrow {
+    margin-left: -15px;
+    color: #a6ce56 !important;
+    margin-bottom: -2px;
+}
+
+.GoBackText {
+    text-decoration: none;
+    color: #a6ce56;
+    font-size: smaller;
+}
