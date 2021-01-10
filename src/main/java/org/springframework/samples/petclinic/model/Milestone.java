@@ -12,11 +12,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+
 import org.springframework.format.annotation.DateTimeFormat;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,7 +35,6 @@ public class Milestone extends BaseEntity {
 	private String name;
 
 	@NotNull
-	@NotEmpty
 	@Column(name = "due_for")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate dueFor;

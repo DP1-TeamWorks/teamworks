@@ -39,7 +39,7 @@ values
         'Maria',
         'Torres',
         'mariatorres@cyber',
-        '123456789',
+        '$2a$10$7u6RA8ziDoj422Rw.WZX8OfqxfrKAA22gSWBNRrMrhWzg7O2UgqZO',
         1,
         1
     );
