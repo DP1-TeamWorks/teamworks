@@ -10,7 +10,7 @@ const GoBackButton = ({ path, darker, anchored }) =>
         <LinkButton className={`GoBack ${darker ? "Button--Darker" : ""} ${anchored ? "GoBack--Anchored" : ""}`} path={path}>
             <span className="GoBackText">
                 <FontAwesomeIcon icon={faArrowLeft} style={{ color: "#A6CE56" }} className="BackArrow" />
-                {"      "} GO BACK
+                GO BACK
             </span>
         </LinkButton>
     );
