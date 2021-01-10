@@ -8,6 +8,15 @@
     height: 40px;
 }
 
+.EditableField--Smaller {
+    width: 100%;
+}
+
+.EditableField--OnlyInput {
+    margin-bottom: 5px;
+    cursor: inherit;
+}
+
 .PenIcon {
     color: #a6ce5636;
     margin-left: 20px;
@@ -31,4 +40,8 @@
     position: absolute;
     right: 0;
     border-radius: 0;
+}
+
+.CopiedSpan {
+    margin-left: 20px;
 }

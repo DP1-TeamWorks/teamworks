@@ -6,10 +6,13 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.samples.petclinic.middleware.ProjectManagerInterceptor;
 import org.springframework.samples.petclinic.middleware.DepartmentManagerInterceptor;
 import org.springframework.samples.petclinic.middleware.LoginInterceptor;
+import org.springframework.samples.petclinic.middleware.ProjectEmployeeInterceptor;
 import org.springframework.samples.petclinic.middleware.TeamOwnerInterceptor;
 import org.springframework.samples.petclinic.service.BelongsService;
+import org.springframework.samples.petclinic.service.MilestoneService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.ProjectService;
+import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -27,6 +30,10 @@ public class WebConfig implements WebMvcConfigurer {
     UserTWService userTWService;
     @Autowired
     BelongsService belongsService;
+    @Autowired
+    MilestoneService milestoneService;
+    @Autowired
+    ToDoService toDoService;
 
     @Autowired
     ParticipationService participationService;
@@ -62,9 +69,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(
                 new ProjectManagerInterceptor(userTWService, belongsService, participationService, projectService))
                 .addPathPatterns("/api/tags").addPathPatterns("/api/projects/participation")
-                .addPathPatterns("api/milestones").excludePathPatterns("/api/milestones/next").order(3);
-
-        // TODO: project manager interceptor
-        // TODO: maybe ? team employee interceptor -ToDos
+                .addPathPatterns("api/toDos").addPathPatterns("api/milestones")
+                .excludePathPatterns("/api/milestones/next").order(3);
+        registry.addInterceptor(
+                new ProjectEmployeeInterceptor(userTWService, milestoneService, toDoService, participationService))
+                .addPathPatterns("/api/milestones/next").addPathPatterns("/api/toDos/markAsDone")
+                .addPathPatterns("/api/toDos/mine").order(4);
     }
 }

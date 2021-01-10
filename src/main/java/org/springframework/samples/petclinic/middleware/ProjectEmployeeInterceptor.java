@@ -20,16 +20,14 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 public class ProjectEmployeeInterceptor extends HandlerInterceptorAdapter {
     private final UserTWService userTWService;
     private final ParticipationService participationService;
-    private final ProjectService projectService;
     private final ToDoService toDoService;
     private final MilestoneService milestoneService;
 
     @Autowired
     public ProjectEmployeeInterceptor(UserTWService userTWService, MilestoneService milestoneService,
-            ToDoService toDoService, ParticipationService participationService, ProjectService projectService) {
+            ToDoService toDoService, ParticipationService participationService) {
         this.userTWService = userTWService;
         this.participationService = participationService;
-        this.projectService = projectService;
         this.toDoService = toDoService;
         this.milestoneService = milestoneService;
     }
@@ -37,18 +35,21 @@ public class ProjectEmployeeInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
         Integer userId = (Integer) req.getSession().getAttribute("userId");
-        Integer projectId = req.getParameter("projectId") == null ? (req.getParameter("milestoneId") == null
+        Integer projectId = req.getParameter("projectId") == null ? ((req.getParameter("milestoneId") == null)
                 ? toDoService.findToDoById(Integer.valueOf(req.getParameter("toDoId"))).getMilestone().getProject()
                         .getId()
                 : milestoneService.findMilestoneById(Integer.valueOf(req.getParameter("milestoneId"))).getProject()
                         .getId())
                 : Integer.valueOf(req.getParameter("projectId"));
         Participation participation = participationService.findCurrentParticipation(userId, projectId);
-        Boolean isToDoAsignee = req.getParameter("toDoId") != null ? true
-                : toDoService.findToDoById(Integer.valueOf(req.getParameter("toDoId"))).getAssignee().getId() == userId;
+        /*
+         * Boolean isToDoAsignee = req.getParameter("toDoId") != null ? true :
+         * toDoService.findToDoById(Integer.valueOf(req.getParameter("toDoId"))).
+         * getAssignee().getId() == userId;
+         */
         Boolean isProjectEmployee = participation != null;
 
-        if (isProjectEmployee && isToDoAsignee) {
+        if (isProjectEmployee) {
             return true;
         } else {
             res.sendError(403);

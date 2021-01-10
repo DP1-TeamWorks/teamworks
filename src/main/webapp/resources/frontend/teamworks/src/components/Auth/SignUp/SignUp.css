@@ -19,23 +19,6 @@
   padding: 50px;
 }
 
-.GoBack {
-  color: #a6ce56;
-  margin-bottom: 20px;
-  text-decoration: none;
-}
-
-.BackArrow {
-  margin-left: -15px;
-  color: #a6ce56 !important;
-}
-
-.GoBackText {
-  text-decoration: none;
-  color: #a6ce56;
-  font-size: smaller;
-}
-
 .PreviewWord {
   color: #a6ce56;
   margin-right: 20px;

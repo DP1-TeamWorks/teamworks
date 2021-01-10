@@ -32,6 +32,10 @@ public class ToDo extends BaseEntity {
     @Column(name = "title")
     String title;
 
+    @NotNull
+    @Column(name = "done")
+    Boolean done;
+
     // Relations
 
     @ManyToOne(optional = false)
