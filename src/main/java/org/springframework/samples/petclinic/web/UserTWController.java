@@ -74,6 +74,7 @@ public class UserTWController {
 	@PostMapping(value = "/api/userTW")
 	public ResponseEntity<String> postUser(HttpServletRequest r, @RequestBody UserTW user) {
 		try {
+			
 			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
 			Team team = teamService.findTeamById(teamId);
 			user.setTeam(team);
