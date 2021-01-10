@@ -309,6 +309,21 @@ INSERT INTO
     tags(title, color, project_id)
 values
     ('Testing', '#B0D9CD', 1);
+    
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Planning', '#EFCAC4', 3);
+
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('In progress', '#E19494', 3);
+
+INSERT INTO
+    tags(title, color, project_id)
+values
+    ('Checking', '#B0D9CD', 3);
 
 /*MILESTONES*/
 INSERT INTO
@@ -320,7 +335,14 @@ values
         1
     );
     
-
+INSERT INTO
+    milestones(name, due_for, project_id)
+values
+    (
+        'Project objectives',
+        TO_DATE('11/03/2021', 'DD/MM/YYYY'),
+        3
+    );
 /*ToDoS*/
 INSERT INTO
     todos(title, user_id, milestone_id)
@@ -336,3 +358,13 @@ INSERT INTO
     todos(title, user_id, milestone_id)
 values
     ('Finish The toDos section', 2, 1);
+    
+INSERT INTO
+    todos(title, user_id, milestone_id)
+values
+    ('Finish documentation', 3, 2);
+    
+INSERT INTO
+    todos(title, user_id, milestone_id)
+values
+    ('Finish diagram', 3, 2);
