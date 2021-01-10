@@ -35,16 +35,11 @@ public class ProjectService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Project> getProjectsByName(String name) throws DataAccessException{
-		return projectRepository.findByName(name);
-	}
-
-	@Transactional(readOnly = true)
 	public Project findProjectById(Integer projectId) throws DataAccessException {
 		return projectRepository.findById(projectId);
 	}
 	@Transactional(readOnly = true)
-	public Collection<UserTW>  findUserProjects(Integer projectId){
+	public Collection<UserTW>  findProjectUsers(Integer projectId){
 		return projectRepository.findProjectUsers(projectId);
 	}
 

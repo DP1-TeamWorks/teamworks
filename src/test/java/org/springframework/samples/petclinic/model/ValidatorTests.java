@@ -18,7 +18,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
  */
 class ValidatorTests {
 
-	private Validator createValidator() {
+	/*private Validator createValidator() {
 		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
 		localValidatorFactoryBean.afterPropertiesSet();
 		return localValidatorFactoryBean;
@@ -39,6 +39,6 @@ class ValidatorTests {
 		ConstraintViolation<Person> violation = constraintViolations.iterator().next();
 		assertThat(violation.getPropertyPath().toString()).isEqualTo("firstName");
 		assertThat(violation.getMessage()).isEqualTo("must not be empty");
-	}
+	}*/
 
 }
