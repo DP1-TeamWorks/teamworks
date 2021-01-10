@@ -20,45 +20,43 @@ import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 public class DepartmentServiceTest {
-    @Autowired
-    protected DepartmentService departmentService;
-    
-    @Test
-    @Transactional
-    public void shouldInsertDepartmentIntoDatabaseAndGenerateId() {
+	@Autowired
+	protected DepartmentService departmentService;
 
+	@Test
+	@Transactional
+	public void shouldInsertDepartmentIntoDatabaseAndGenerateId() {
 
-        Department departments = new Department();
-        departments.setName("Venta");
-        departments.setDescription("Funcion: vender....");
-        
-        departmentService.saveDepartment(departments);
-        try {
-                this.departmentService.saveDepartment(departments);
-            } catch (DataAccessException ex) {
-                Logger.getLogger(DepartmentServiceTest.class.getName()).log(Level.SEVERE, null, ex);
-            }
+		Department departments = new Department();
+		departments.setName("Venta");
+		departments.setDescription("Funcion: vender....");
 
-        assertThat(departments.getId()).isNotNull();
+		departmentService.saveDepartment(departments);
+		try {
+			this.departmentService.saveDepartment(departments);
+		} catch (DataAccessException ex) {
+			Logger.getLogger(DepartmentServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
-    }
-    
-    @Test
-  	void shouldFindDepartmentWithCorrectId() {
-  		Department department1 = this.departmentService.findDepartmentById(1);
-  		assertThat(department1.getName()).startsWith("Calidad");
-  		assertThat(department1.getDescription()).isEqualTo("Aseguro la ...");
+		assertThat(departments.getId()).isNotNull();
 
-  	}
-    
-    @Test
+	}
+
+	@Test
+	void shouldFindDepartmentWithCorrectId() {
+		Department department1 = this.departmentService.findDepartmentById(1);
+		assertThat(department1.getName()).startsWith("Calidad");
+		assertThat(department1.getDescription()).isEqualTo("Aseguro la ...");
+
+	}
+
+	@Test
 	@Transactional
 	void shouldDeleteDepartment() {
-    	
-    	departmentService.deleteDepartmentById(2);
+
+		departmentService.deleteDepartmentById(2);
 		Department department = this.departmentService.findDepartmentById(2);
 		assertThat(department).isNull();
 	}
-    
 
 }
