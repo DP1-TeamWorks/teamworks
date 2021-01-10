@@ -20,9 +20,9 @@ public class TeamServiceTest {
 
 	@Test
 	void shouldFindTeamWithCorrectId() {
-		Team team3 = this.teamService.findTeamById(2);
-		assertThat(team3.getName().equals("Nike"));
-		assertThat(team3.getIdentifier()).isEqualTo("nk");
+		Team team2 = this.teamService.findTeamById(2);
+		assertThat(team2.getName().equals("Nike"));
+		assertThat(team2.getIdentifier()).isEqualTo("nk");
 
 	}
 
@@ -34,7 +34,6 @@ public class TeamServiceTest {
 		team.setName("Ubisoft");
 		team.setIdentifier("ub");
 
-		teamService.saveTeam(team);
 		try {
 			this.teamService.saveTeam(team);
 		} catch (DataAccessException ex) {

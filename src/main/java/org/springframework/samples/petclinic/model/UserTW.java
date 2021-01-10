@@ -44,10 +44,15 @@ public class UserTW extends BaseEntity {
 	@Column(name = "email", unique = true)
 	String email;
 
+	@Getter(onMethod = @__(@JsonIgnore))
+	@Setter
 	@NotNull
 	@NotEmpty
 	@Column(name = "password")
 	String password;
+	public String getEncriptedPassword() {
+		return this.password;
+	}
 
 	String profileThumbUrl;
 
