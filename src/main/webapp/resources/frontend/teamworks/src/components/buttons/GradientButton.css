@@ -1,34 +1,40 @@
 .GradientButton {
-    height: 45px;
-    border-radius: 3px;
-    background: linear-gradient(45deg, #A6CE56, #D1EF7C);
-    padding: 0;
-    cursor: pointer;
-    color: #222;
-    padding: 12px 30px;
-    font: inherit;
-    font-weight: 600;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background 0.1s, box-shadow 0.1s;
-    user-select: none;
-    border: none;
+  height: 45px;
+  border-radius: 3px;
+  background: linear-gradient(45deg, #a6ce56, #d1ef7c);
+  padding: 0;
+  cursor: pointer;
+  color: #222;
+  padding: 12px 30px;
+  font: inherit;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.1s, box-shadow 0.1s;
+  user-select: none;
+  border: none;
 }
 
 .GradientButton:hover {
-    background: linear-gradient(45deg, #c7f171, #ddff7e);
+  background: linear-gradient(45deg, #c7f171, #ddff7e);
 }
 
 .GradientButton:active {
-    background: linear-gradient(45deg, #8bac48, #a3bb61);
+  background: linear-gradient(45deg, #8bac48, #a3bb61);
 }
 
 .GradientButton:focus {
-    outline: none;
+  outline: none;
 }
 
 .GradientButton:disabled {
-    background: #403f3f;
-    color: #555;
+  background: #403f3f;
+  color: #555;
+}
+
+.GradientButton--Spaced {
+  padding: 2px 30px;
+  margin: 6px;
+  width: 90%;
 }

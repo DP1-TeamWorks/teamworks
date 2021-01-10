@@ -35,22 +35,30 @@ public class ParticipationService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Participation> findParticipationByUserIdAndProjectId(Integer userId, Integer projectId) {
+	public Collection<Participation> findParticipationByUserIdAndProjectId(Integer userId, Integer projectId) throws DataAccessException {
 		return participationRepository.findParticipationByUserAndDeparment(userId, projectId);
 	}
-
 	@Transactional(readOnly = true)
-	public Participation findCurrentParticipation(Integer userId, Integer projectId) {
-		return participationRepository.findCurrentParticipation(userId, projectId);
+	public Collection<Participation> findUserParticipations(Integer userId) throws DataAccessException {
+		return participationRepository.findUserParticipations(userId);
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Project> findMyProjects(Integer userId) {
+	public Participation findCurrentParticipation(Integer userId, Integer projectId) throws DataAccessException {
+		return participationRepository.findCurrentParticipation(userId, projectId);
+	}
+	@Transactional(readOnly = true)
+	public Collection<Participation> findCurrentParticipationsUser(Integer userId) throws DataAccessException {
+		return participationRepository.findCurrentParticipationsUser(userId);
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Project> findMyProjects(Integer userId) throws DataAccessException {
 		return participationRepository.findMyProjects(userId);
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Project> findMyDepartemntProjects(Integer userId, Integer departmentId) {
+	public Collection<Project> findMyDepartemntProjects(Integer userId, Integer departmentId) throws DataAccessException {
 		return participationRepository.findMyDepartemntProjects(userId, departmentId);
 	}
 }

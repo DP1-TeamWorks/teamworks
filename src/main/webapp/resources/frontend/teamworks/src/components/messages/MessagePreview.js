@@ -1,14 +1,48 @@
 import React, { useState } from "react";
+import MessageApiUtils from "../../utils/api/MessageApiUtils";
 import Circle from "../projects/tags/Circle";
 import OpenedMessage from "./OpenedMessage";
-const MessagePreview = ({ msg }) => {
-  const [collapsed, setCollapsed] = useState(true);
-  const collapseMessage = () => {
-    setCollapsed(!collapsed);
+const MessagePreview = ({ msg, openMessage, setOpenMessage }) => {
+  const [read, setRead] = useState(msg.read);
+
+  const isOpen = () => {
+    return openMessage === msg.id;
   };
+
+  const reply = () => {
+    // TODO: Open the modal with predefined recipient
+  };
+
+  const forward = () => {
+    // TODO: Open the modal with predifined text message
+  };
+
+  const collapseMessage = () => {
+    isOpen() ? setOpenMessage("") : setOpenMessage(msg.id);
+    if (!msg.read) {
+      setRead(true);
+      MessageApiUtils.markMessageAsRead(msg.id)
+        .then((res) => {
+          setRead(true);
+        })
+        .catch((error) => {
+          console.log("ERROR: cannot mark the message as read");
+        });
+    }
+  };
+
   return (
     <>
-      <div className="MsgPreviewContainer" onClick={collapseMessage}>
+      <div
+        className={
+          isOpen()
+            ? "MsgPreviewContainer MsgPreviewContainer--Active"
+            : read
+            ? "MsgPreviewContainer MsgPreviewContainer--Read"
+            : "MsgPreviewContainer"
+        }
+        onClick={collapseMessage}
+      >
         <div className="SelectBox" />
         <h4 className="MsgTitle">
           {msg.sender.name} - {msg.sender.teamname}
@@ -25,10 +59,9 @@ const MessagePreview = ({ msg }) => {
         </h5>
       </div>
       <div
-        className="MsgContent"
-        style={{ maxHeight: collapsed ? "0px" : "none" }}
+        className={isOpen() ? "MsgContent" : "MsgContent MsgContent--Collapsed"}
       >
-        <OpenedMessage msg={msg} />
+        <OpenedMessage msg={msg} reply={reply} forward={forward} />
       </div>
     </>
   );
