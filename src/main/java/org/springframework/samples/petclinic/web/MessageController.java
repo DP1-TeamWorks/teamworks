@@ -81,7 +81,6 @@ public class MessageController {
 	
 	
 	
-	//CHANGE ALL INTO REQUEST BODY
 	@PostMapping(value = "api/message/new")
 	public ResponseEntity<String> newMessage(HttpServletRequest r, @RequestBody Message message) {
 		try {
@@ -95,12 +94,11 @@ public class MessageController {
 			for (int i=0; i<message.getRecipientsIds().size(); i++){
 				UserTW recipient = userService.findUserById(message.getRecipientsIds().get(i));
 				recipientList.add(recipient);
-			}
-					
-				
+			}				
 			message.setRecipients(recipientList);	
-			messageService.saveMessage(message);
+			//TODO set tags in message
 			
+			messageService.saveMessage(message);
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {
@@ -110,22 +108,23 @@ public class MessageController {
 	
 	
 	@PostMapping(value = "api/message/reply")
-	public ResponseEntity<String> replyMessage(HttpServletRequest r, @RequestParam(required = true) Integer messageId, @RequestParam(required = true)Message message,
-			@RequestParam(required = false) List<String> TodoIdList, @RequestParam(required = false) List<String> TagList) {
+	public ResponseEntity<String> replyMessage(HttpServletRequest r, @RequestParam(required = true) Message message) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
 			message.setSender(sender);
+			message.setRead(false);
+
+			List<UserTW> recipientList = new ArrayList<>();
+			for (int i=0; i<message.getRecipientsIds().size(); i++){
+				UserTW recipient = userService.findUserById(message.getRecipientsIds().get(i));
+				recipientList.add(recipient);
+			}				
+			message.setRecipients(recipientList);	
+			message.setReplyTo(message);
+			//TODO set tags in message
 			
-			//message.setRecipients(recipientList);			
-			if(TodoIdList != null) {
-				
-			} 
-			
-			//TODO REFERENCES TO-DO
-			//TODO isMarked Tag
-			
-			//messageService.saveMessage(message);
+			messageService.saveMessage(message);
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {
@@ -135,9 +134,23 @@ public class MessageController {
 	
 	
 	@PostMapping(value = "api/message/forward")
-	public ResponseEntity<String> forwardMessage(HttpServletRequest r, @RequestParam(required = true) Integer messageId) {
+	public ResponseEntity<String> forwardMessage(HttpServletRequest r, @RequestParam(required = true) List<Integer> forwardList, Integer MessageId) {
 		try {
-			//TODO
+			Message message = messageService.findMessageById(MessageId);
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			UserTW sender = userService.findUserById(userId);
+			message.setSender(sender);
+			
+			
+			List<UserTW> userList = new ArrayList<>();
+			for(int i=0;i<forwardList.size(); i++) {
+				UserTW user = userService.findUserById(forwardList.get(i));
+				userList.add(user);
+			}
+			message.setRecipients(userList);	
+			message.setReplyTo(message);
+			
+			//TODO set tags in message
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {
@@ -149,8 +162,14 @@ public class MessageController {
 	@PostMapping(value = "/api/message/markAsRead")
 	public ResponseEntity<String> markAsRead(HttpServletRequest r, @RequestParam(required = true) Integer messageId) {
 		try {
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			UserTW user = userService.findUserById(userId);
 			Message message = messageService.findMessageById(messageId);
-			message.setRead(true);
+			if(message.getRecipients().contains(user)) {
+				message.setRead(true);
+			} else {
+				return ResponseEntity.badRequest().build();
+			}
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException d) {
