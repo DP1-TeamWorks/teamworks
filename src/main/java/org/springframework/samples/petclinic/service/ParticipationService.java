@@ -38,10 +38,18 @@ public class ParticipationService {
 	public Collection<Participation> findParticipationByUserIdAndProjectId(Integer userId, Integer projectId) throws DataAccessException {
 		return participationRepository.findParticipationByUserAndDeparment(userId, projectId);
 	}
+	@Transactional(readOnly = true)
+	public Collection<Participation> findUserParticipations(Integer userId) throws DataAccessException {
+		return participationRepository.findUserParticipations(userId);
+	}
 
 	@Transactional(readOnly = true)
 	public Participation findCurrentParticipation(Integer userId, Integer projectId) throws DataAccessException {
 		return participationRepository.findCurrentParticipation(userId, projectId);
+	}
+	@Transactional(readOnly = true)
+	public Collection<Participation> findCurrentParticipationsUser(Integer userId) throws DataAccessException {
+		return participationRepository.findCurrentParticipationsUser(userId);
 	}
 
 	@Transactional(readOnly = true)

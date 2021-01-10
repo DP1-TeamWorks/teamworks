@@ -27,18 +27,21 @@ public class ParticipationController {
 	private final ParticipationService participationService;
 	private final UserTWService userTWService;
 	private final BelongsService belongsService;
+
 	@Autowired
-	public ParticipationController( ProjectService projectService,
-			ParticipationService participationService, UserTWService userTWService, BelongsService belongsService) {
+	public ParticipationController(ProjectService projectService, ParticipationService participationService,
+			UserTWService userTWService, BelongsService belongsService) {
 		this.projectService = projectService;
 		this.participationService = participationService;
 		this.userTWService = userTWService;
 		this.belongsService = belongsService;
 	}
+
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
+
 	@PostMapping(value = "/api/projects/participation")
 	public ResponseEntity<String> postParticipation(@RequestParam(required = true) Integer participationUserId,
 			@RequestParam(required = true) Integer projectId, @RequestParam(required = false) Boolean isProjectManager,
