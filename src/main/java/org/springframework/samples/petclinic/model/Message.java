@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -46,7 +47,7 @@ public class Message extends BaseEntity {
 	
 	@Transient
 	private List<String> recipientsEmail;
-	
+		
 	@Transient
 	private List<Integer> recipientsIds;
 	
@@ -63,18 +64,17 @@ public class Message extends BaseEntity {
     private UserTW sender;
 	
 	
-	@OneToMany
+	@ManyToMany
+	@JoinColumn(name = "recipients")
     private List<UserTW> recipients;
 	
-	
-    
-	
-		
+			
 	@Column(name = "attatchments")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
 	private List<Attatchment> attatchments;
 		
-	
+	@Transient
+	private List<Integer> tagList;
 
 	@ManyToMany
 	private List<Tag> tags;

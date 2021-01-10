@@ -12,9 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.Tag;
-import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.MessageService;
+import org.springframework.samples.petclinic.service.TagService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,9 +29,9 @@ import org.springframework.web.server.ResponseStatusException;
 public class MessageController {
 	private final MessageService messageService;
 	private final UserTWService userService;
-	
+		
 	@Autowired
-	public MessageController(MessageService messageService, UserTWService userService) {
+	public MessageController(MessageService messageService, UserTWService userService, TagService tagService) {
 		this.messageService = messageService;
 		this.userService = userService;
 	}
@@ -45,10 +45,11 @@ public class MessageController {
 	public List<Message> getMyInboxMessages(HttpServletRequest r) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
-			List<Message> messageList = (messageService.findMessagesByUserId(userId)).stream().collect(Collectors.toList());
+			UserTW user = userService.findUserById(userId);
+			List<Message> messageList = (messageService.findMessagesByUserId(user)).stream().collect(Collectors.toList());			
 			return messageList;
 		} catch (DataAccessException d) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't get inbox");
 
 		}
 	}
@@ -62,7 +63,6 @@ public class MessageController {
 			return messageList;
 		} catch (DataAccessException d) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
-
 		}
 	}
 	
@@ -71,12 +71,11 @@ public class MessageController {
 	public List<Message> getMessagesByTag(@RequestBody HttpServletRequest r, @RequestBody(required = true) Tag tag) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
-			Integer tagId = tag.getId();
-			List<Message> messageList = (messageService.findMessagesByTag(userId, tagId)).stream().collect(Collectors.toList());
+			UserTW user = userService.findUserById(userId);
+			List<Message> messageList = (messageService.findMessagesByTag(user, tag)).stream().collect(Collectors.toList());
 			return messageList;
 		} catch (DataAccessException d) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
-
 		}
 	}
 	
@@ -97,6 +96,8 @@ public class MessageController {
 				UserTW recipient = userService.findUserById(message.getRecipientsIds().get(i));
 				recipientList.add(recipient);
 			}
+					
+				
 			message.setRecipients(recipientList);	
 			messageService.saveMessage(message);
 			
@@ -106,6 +107,7 @@ public class MessageController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
+	
 	
 	@PostMapping(value = "api/message/reply")
 	public ResponseEntity<String> replyMessage(HttpServletRequest r, @RequestParam(required = true) Integer messageId, @RequestParam(required = true)Message message,

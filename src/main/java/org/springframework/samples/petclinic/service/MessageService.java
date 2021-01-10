@@ -5,6 +5,8 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Message;
+import org.springframework.samples.petclinic.model.Tag;
+import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +31,7 @@ public class MessageService {
 	}
 	
 	@Transactional
-	public Collection<Message> findMessagesByUserId(Integer userId) throws DataAccessException {
+	public Collection<Message> findMessagesByUserId(UserTW userId) throws DataAccessException {
 		return messageRepository.findMessagesByUserId(userId);
 	}
 	
@@ -44,8 +46,8 @@ public class MessageService {
 	}
 	
 	@Transactional
-	public Collection<Message> findMessagesByTag(Integer userId, Integer tagId) throws DataAccessException {
-		return messageRepository.findMessagesByTag(userId, tagId);
+	public Collection<Message> findMessagesByTag(UserTW user, Tag tag) throws DataAccessException {
+		return messageRepository.findMessagesByTag(user, tag);
 	}
 	
 	/*

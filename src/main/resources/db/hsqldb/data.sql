@@ -193,3 +193,5 @@ INSERT INTO
     participation(is_project_manager, user_id, project_id)
 values
     (TRUE, 2, 4);
+    
+    
