@@ -15,13 +15,19 @@ Se estima que este sprint conlleva un 75% del proyecto.
 - Se han integrado algunas de las historias implementadas.
 
 #### Documentación
+- Elaboración de la primera versión del documento de diseño
+- Revisión y actualización cuando procedía del documento de requisitos/análisis
+- Correspondientes actualizaciones en los issues en github
 
 #### Frontend
+- Desarrollo de una primera versión del frontend incluyendo casi todas las historias.
 
-### Backend
+#### Backend
+- Desarrollo de una primera versión del backend incluyendo un gran número de historias.
+- Tests de los controladores implementados hasta el momento.
 
 ### Análisis Retrospectivo
 
-![alt](https://github.com/gii-is-DP1/dp1-2020-g1-08/blob/master/sprints/)
+![individual](https://github.com/gii-is-DP1/dp1-2020-g1-08/blob/master/sprints/IndividualS3.png)
 
-![alt](https://github.com/gii-is-DP1/dp1-2020-g1-08/blob/master/sprints/)
+![grupal](https://github.com/gii-is-DP1/dp1-2020-g1-08/blob/master/sprints/GrupalS3.png)
