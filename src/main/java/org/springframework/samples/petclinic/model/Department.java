@@ -21,6 +21,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "departments")
 public class Department extends BaseEntity {
+	
+	  // Attributes
 
 	@NotNull
 	@NotEmpty
@@ -31,6 +33,8 @@ public class Department extends BaseEntity {
 	@NotEmpty
 	@Column(name = "description")
 	private String description;
+	
+	// Relations
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "team_id")

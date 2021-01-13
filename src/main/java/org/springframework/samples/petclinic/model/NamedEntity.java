@@ -30,6 +30,8 @@ import javax.validation.constraints.Size;
  */
 @MappedSuperclass
 public class NamedEntity extends BaseEntity {
+	
+	  // Attributes
 
 	@Size(min = 1, max = 50)
 	@NotBlank

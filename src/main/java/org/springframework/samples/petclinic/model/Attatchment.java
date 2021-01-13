@@ -22,11 +22,14 @@ import lombok.Setter;
 @Table(name = "attatchment")
 public class Attatchment extends BaseEntity {
 	
+	  // Attributes
+	
 	@NotNull
 	@NotEmpty
 	@Column(name = "url")
 	private String url;
 	
+	// Relations
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "message")

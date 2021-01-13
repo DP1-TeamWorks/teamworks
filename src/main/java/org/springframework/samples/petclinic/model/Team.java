@@ -22,6 +22,8 @@ import lombok.Setter;
 @Table(name = "teams")
 
 public class Team extends BaseEntity {
+	
+	  // Attributes
 
 	@NotNull
 	@NotEmpty

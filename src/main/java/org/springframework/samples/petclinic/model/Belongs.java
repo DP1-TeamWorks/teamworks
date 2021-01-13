@@ -20,6 +20,8 @@ import lombok.Setter;
 @Table(name = "belongs")
 
 public class Belongs extends BaseEntity {
+	
+	  // Attributes
 
 	@CreationTimestamp
 	@Column(name = "initialDate")
@@ -33,6 +35,8 @@ public class Belongs extends BaseEntity {
 	@NotNull
 	@Column(name = "is_department_manager")
 	private Boolean isDepartmentManager;
+	
+	// Relations
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")

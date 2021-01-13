@@ -26,6 +26,8 @@ import lombok.Setter;
 @Table(name = "milestones")
 
 public class Milestone extends BaseEntity {
+	
+	  // Attributes
 
 	@NotNull
 	@NotEmpty
@@ -37,6 +39,8 @@ public class Milestone extends BaseEntity {
 	@Column(name = "due_for")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate dueFor;
+	
+	// Relations
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "project_id")

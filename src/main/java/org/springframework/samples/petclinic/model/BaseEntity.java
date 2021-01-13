@@ -30,6 +30,7 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class BaseEntity {
+	  // Attributes
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

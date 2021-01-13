@@ -23,6 +23,8 @@ import lombok.Setter;
 @Table(name = "participations")
 
 public class Participation extends BaseEntity {
+	
+	  // Attributes
 
 	@CreationTimestamp
 	@Column(name = "initialDate")
@@ -36,6 +38,8 @@ public class Participation extends BaseEntity {
 	@NotNull
 	@Column(name = "isProjectManager")
 	private Boolean isProjectManager;
+	
+	// Relations
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "userId")

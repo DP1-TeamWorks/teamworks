@@ -29,6 +29,8 @@ import lombok.Setter;
 @Table(name = "users")
 
 public class UserTW extends BaseEntity {
+	
+	  // Attributes
 
 	@NotNull
 	@NotEmpty
@@ -58,6 +60,8 @@ public class UserTW extends BaseEntity {
 
 	@NotNull
 	Role role;
+	
+	// Relations
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "team_id")
