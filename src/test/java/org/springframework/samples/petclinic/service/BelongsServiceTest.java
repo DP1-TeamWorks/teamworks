@@ -50,7 +50,7 @@ public class BelongsServiceTest {
 
     @Test
     void shouldFindUserCurrentBelongsByUserId() {
-        List<Belongs> userBelongs = this.belongService.findCurrentBelongsUser(2).stream().collect(Collectors.toList());
+        List<Belongs> userBelongs = this.belongService.findCurrentUserBelongs(2).stream().collect(Collectors.toList());
         assertThat(userBelongs.size()).isEqualTo(3);
     }
 

@@ -53,37 +53,40 @@ public class ProjectController {
 	}
 
 	@GetMapping(value = "/api/projects")
-	public ResponseEntity<List<Project>> getProjects(@RequestParam(required = true) Integer departmentId,HttpServletRequest r) {
-		Integer userId=(Integer)r.getSession().getAttribute("userId");
-		UserTW user=userTWService.findUserById(userId);
-		Belongs currentBelongs=belongsService.findCurrentBelong(userId, departmentId);
-		//Revisa si perteneces 
-		if(user.getRole().equals(Role.team_owner)||currentBelongs!=null) {
+	public ResponseEntity<List<Project>> getProjects(@RequestParam(required = true) Integer departmentId,
+			HttpServletRequest r) {
+		Integer userId = (Integer) r.getSession().getAttribute("userId");
+		UserTW user = userTWService.findUserById(userId);
+		Belongs currentBelongs = belongsService.findCurrentBelongs(userId, departmentId);
+		// Revisa si perteneces
+		if (user.getRole().equals(Role.team_owner) || currentBelongs != null) {
 			List<Project> l = new ArrayList<>();
 			l = departmentService.findDepartmentById(departmentId).getProjects();
 			return ResponseEntity.ok(l);
-		}else {
+		} else {
 			return ResponseEntity.status(403).build();
 		}
-		
+
 	}
+
 	@GetMapping(value = "/api/project/details")
-	public ResponseEntity<Map<String,Object>> getProject(@RequestParam(required = true) Integer projectId,HttpServletRequest r) {
-		Integer userId=(Integer)r.getSession().getAttribute("userId");
-		UserTW user=userTWService.findUserById(userId);
-		Project project =projectService.findProjectById(projectId);
-		Belongs currentBelongs=belongsService.findCurrentBelong(userId, project.getDepartment().getId());
-		if(user.getRole().equals(Role.team_owner)||currentBelongs!=null) {
-			List<UserTW> users=projectService.findProjectUsers(project.getId()).stream().collect(Collectors.toList());
-			Map<String,Object> m=new HashMap<>();
-			m.put("members",users);
+	public ResponseEntity<Map<String, Object>> getProject(@RequestParam(required = true) Integer projectId,
+			HttpServletRequest r) {
+		Integer userId = (Integer) r.getSession().getAttribute("userId");
+		UserTW user = userTWService.findUserById(userId);
+		Project project = projectService.findProjectById(projectId);
+		Belongs currentBelongs = belongsService.findCurrentBelongs(userId, project.getDepartment().getId());
+		if (user.getRole().equals(Role.team_owner) || currentBelongs != null) {
+			List<UserTW> users = projectService.findUserProjects(project.getId()).stream().collect(Collectors.toList());
+			Map<String, Object> m = new HashMap<>();
+			m.put("members", users);
 			m.put("milestones", project.getMilestones());
 			m.put("tags", project.getTags());
 			return ResponseEntity.ok(m);
-		}else {
+		} else {
 			return ResponseEntity.status(403).build();
 		}
-		
+
 	}
 
 	@GetMapping(value = "/api/projects/mine")
@@ -122,7 +125,5 @@ public class ProjectController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-
-	
 
 }

@@ -25,6 +25,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "projects")
 public class Project extends BaseEntity {
+	
+	  // Attributes
 
 	@Column(name = "name")
 	@NotNull
@@ -39,6 +41,8 @@ public class Project extends BaseEntity {
 	@Column(name = "creationTimestamp")
 	@CreationTimestamp
 	private LocalDate creationTimestamp;
+	
+	// Relations
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "department_id")

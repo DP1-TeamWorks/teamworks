@@ -24,6 +24,7 @@ public interface DepartmentRepository extends Repository<Department, Integer> {
 
 	Collection<Department> findAll() throws DataAccessException;
 	
+	
 	@Query(value = "SELECT u.userTW FROM Belongs u WHERE u.department.id= :departmentId and u.finalDate=null")
 	public Collection<UserTW> findDepartmentUsers(@Param("departmentId") Integer departmentId);
 	 

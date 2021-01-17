@@ -37,7 +37,7 @@ const MessagePreview = ({ msg, openMessage, setOpenMessage }) => {
         className={
           isOpen()
             ? "MsgPreviewContainer MsgPreviewContainer--Active"
-            : read
+            : msg.read
             ? "MsgPreviewContainer MsgPreviewContainer--Read"
             : "MsgPreviewContainer"
         }
@@ -45,7 +45,7 @@ const MessagePreview = ({ msg, openMessage, setOpenMessage }) => {
       >
         <div className="SelectBox" />
         <h4 className="MsgTitle">
-          {msg.sender.name} - {msg.sender.teamname}
+          {msg.sender.name} {msg.sender.lastname} - {msg.sender.email}
         </h4>
         <h5 className="MsgSubject"> {msg.subject} </h5>
         <div style={{ float: "right" }}>
@@ -55,7 +55,7 @@ const MessagePreview = ({ msg, openMessage, setOpenMessage }) => {
           })}
         </div>
         <h5 className="MsgDateTime" style={{ float: "right" }}>
-          {msg.date} - {msg.time}
+          {msg.timestamp}
         </h5>
       </div>
       <div

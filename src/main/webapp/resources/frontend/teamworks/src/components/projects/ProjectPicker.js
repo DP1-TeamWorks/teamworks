@@ -68,7 +68,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
           {departmentList.map((dpt) => {
             return (
               <button
-                className="CollapsedDepartment"
+                className="CollapsedSelector"
                 onClick={() => handlePickDepartment(dpt)}
               >
                 {dpt.name}
@@ -80,7 +80,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
           {projectList.map((project) => {
             return (
               <button
-                className="CollapsedDepartment"
+                className="CollapsedSelector"
                 onClick={() => handlePickProject(project)}
               >
                 {project.name}

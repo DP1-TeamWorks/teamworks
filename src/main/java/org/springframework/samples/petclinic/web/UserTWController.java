@@ -39,11 +39,12 @@ public class UserTWController {
 	private final ParticipationService participationService;
 
 	@Autowired
-	public UserTWController(UserTWService userService, TeamService teamService,BelongsService belongsService,ParticipationService participationService) {
+	public UserTWController(UserTWService userService, TeamService teamService, BelongsService belongsService,
+			ParticipationService participationService) {
 		this.userService = userService;
 		this.teamService = teamService;
-		this.participationService=participationService;
-		this.belongsService=belongsService;
+		this.participationService = participationService;
+		this.belongsService = belongsService;
 	}
 
 	@InitBinder
@@ -58,17 +59,19 @@ public class UserTWController {
 		l = teamService.findTeamById(teamId).getUsers();
 		return l;
 	}
+
 	@GetMapping(value = "/api/userTW")
-	public Map<String,Object> getUser(HttpServletRequest r,Integer userId) {
-		Map<String,Object> m = new HashMap<>();
-		UserTW user=userService.findUserById(userId);
+	public Map<String, Object> getUser(HttpServletRequest r, Integer userId) {
+		Map<String, Object> m = new HashMap<>();
+		UserTW user = userService.findUserById(userId);
 		m.put("user", user);
-		List<Belongs> lb=belongsService.findUserBelongs(userId).stream().collect(Collectors.toList());
+		List<Belongs> lb = belongsService.findUserBelongs(userId).stream().collect(Collectors.toList());
 		m.put("currentDepartments", lb);
-		List<Participation> lp=participationService.findUserParticipations(userId).stream().collect(Collectors.toList());
+		List<Participation> lp = participationService.findUserParticipations(userId).stream()
+				.collect(Collectors.toList());
 		m.put("currentProjects", lp);
 		return m;
-		
+
 	}
 
 	@PostMapping(value = "/api/userTW")
@@ -100,14 +103,16 @@ public class UserTWController {
 		}
 
 	}
+
 	@GetMapping(value = "/api/userTW/credentials")
-	public Map<String,Object> getCredentials(HttpServletRequest r,Integer userId) {
-		Map<String,Object> m = new HashMap<>();
-		UserTW user=userService.findUserById(userId);
+	public Map<String, Object> getCredentials(HttpServletRequest r, Integer userId) {
+		Map<String, Object> m = new HashMap<>();
+		UserTW user = userService.findUserById(userId);
 		m.put("isTeamManager", user.getRole().equals(Role.team_owner));
-		List<Belongs> lb=belongsService.findCurrentBelongsUser(userId).stream().collect(Collectors.toList());
+		List<Belongs> lb = belongsService.findCurrentUserBelongs(userId).stream().collect(Collectors.toList());
 		m.put("currentDepartments", lb);
-		List<Participation> lp=participationService.findCurrentParticipationsUser(userId).stream().collect(Collectors.toList());
+		List<Participation> lp = participationService.findCurrentParticipationsUser(userId).stream()
+				.collect(Collectors.toList());
 		m.put("currentProjects", lp);
 		return m;
 	}
