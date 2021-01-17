@@ -29,28 +29,26 @@ public class TagServiceTest {
 	public void shouldInsertTagIntoDatabaseAndGenerateId() {
 
 		Project project = projectService.findProjectById(1);
-		Tag tags = new Tag();
-		tags.setTitle("In Process");
-		tags.setColor("#B0D9CD");
-		tags.setProject(project);
+		Tag tag = new Tag();
+		tag.setTitle("In Process");
+		tag.setColor("#B0D9CD");
+		tag.setProject(project);
 
-		tagService.saveTag(tags);
 		try {
-			this.tagService.saveTag(tags);
+			this.tagService.saveTag(tag);
 		} catch (DataAccessException ex) {
 			Logger.getLogger(TagServiceTest.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
-		assertThat(tags.getId()).isNotNull();
+		assertThat(tag.getId()).isNotNull();
 
 	}
 
 	@Test
-	void shouldFindDTagWithCorrectId() {
-		Tag tag1 = this.tagService.findTagById(4);
-		assertThat(tag1.getTitle()).startsWith("In Process");
-		assertThat(tag1.getColor()).isEqualTo("#B0D9CD");
-
+	void shouldFindTagWithCorrectId() {
+		Tag tag = this.tagService.findTagById(3);
+		assertThat(tag.getTitle()).isEqualTo("Testing");
+		assertThat(tag.getColor()).isEqualTo("#B0D9CD");
 	}
 
 	@Test
@@ -58,8 +56,8 @@ public class TagServiceTest {
 	void shouldDeleteTag() {
 
 		tagService.deleteTagById(2);
-		Tag tags = this.tagService.findTagById(2);
-		assertThat(tags).isNull();
+		Tag tag = this.tagService.findTagById(2);
+		assertThat(tag).isNull();
 	}
 
 }

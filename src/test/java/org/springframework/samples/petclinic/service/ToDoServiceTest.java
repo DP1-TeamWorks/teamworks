@@ -29,29 +29,30 @@ public class ToDoServiceTest {
 	@Transactional
 	public void shouldInsertToDoIntoDatabaseAndGenerateId() {
 
-		UserTW users = userService.findUserById(3);
-		Milestone milestone = milestonService.findMilestoneById(2);
-		ToDo todos = new ToDo();
-		todos.setTitle("Mark this as in progress");
-		todos.setAssignee(users);
-		todos.setMilestone(milestone);
+		UserTW user = userService.findUserById(2);
+		Milestone milestone = milestonService.findMilestoneById(1);
+		ToDo toDo = new ToDo();
+		toDo.setTitle("Mark this test as done");
+		toDo.setAssignee(user);
+		toDo.setMilestone(milestone);
 
-		toDoService.saveToDo(todos);
 		try {
-			this.toDoService.saveToDo(todos);
+			this.toDoService.saveToDo(toDo);
 		} catch (DataAccessException ex) {
 			Logger.getLogger(ToDoServiceTest.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
-		assertThat(todos.getId()).isNotNull();
+		assertThat(toDo.getId()).isNotNull();
+		assertThat(toDo.getAssignee()).isEqualTo(user);
+		assertThat(toDo.getMilestone()).isEqualTo(milestone);
 
 	}
 
 	@Test
 	void shouldFindDToDoWithCorrectId() {
-		ToDo todos1 = this.toDoService.findToDoById(1);
-		assertThat(todos1.getTitle()).startsWith("Mark this as done");
-		assertThat(todos1.getMilestone()).isEqualTo(1);
+		ToDo toDo = this.toDoService.findToDoById(1);
+		assertThat(toDo.getTitle()).isEqualTo("Mark this as done");
+		assertThat(toDo.getMilestone().getId()).isEqualTo(1);
 
 	}
 
@@ -59,9 +60,9 @@ public class ToDoServiceTest {
 	@Transactional
 	void shouldDeleteToDo() {
 
-		toDoService.deleteToDoById(4);
-		ToDo todos = this.toDoService.findToDoById(4);
-		assertThat(todos).isNull();
+		toDoService.deleteToDoById(3);
+		ToDo toDo = this.toDoService.findToDoById(3);
+		assertThat(toDo).isNull();
 	}
 
 }
