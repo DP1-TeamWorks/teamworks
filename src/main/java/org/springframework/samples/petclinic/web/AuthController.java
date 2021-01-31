@@ -88,7 +88,7 @@ public class AuthController {
 			return ResponseEntity.ok("Usuario y Team creado satisfactoriamente");
 
 		} catch (DataAccessException d) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body("alreadyexists");
 		}
 
 	}

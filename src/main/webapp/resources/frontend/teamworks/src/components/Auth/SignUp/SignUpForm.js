@@ -105,11 +105,20 @@ class SignUpForm extends React.Component {
         });
       })
       .catch((error) => {
-        console.log("API ERROR!");
-        console.log(error);
-        this.setState({
-          requestError: "We had a server problem",
-        });
+        if (error.response.data == "alreadyexists")
+        {
+          this.setState({
+            requestError: "There's already a team or user with that name.",
+          });
+        }
+        else
+        {
+          console.log("API ERROR!");
+          console.log(error);
+          this.setState({
+            requestError: "We had a server problem",
+          });
+        }
       });
   };
 
