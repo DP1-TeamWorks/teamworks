@@ -51,15 +51,15 @@ const MessagePreview = ({ msg, openMessage, setOpenMessage }) => {
           {msg.sender.name} {msg.sender.lastname} - {msg.sender.email}
         </h4>
         <h5 className="MsgSubject"> {msg.subject} </h5>
-        <div style={{ float: "right" }}>
-          {msg.tags.forEach((tag) => {
-            console.log(tag);
-            return <Circle color={tag.color} />;
-          })}
-        </div>
+        
         <h5 className="MsgDateTime" style={{ float: "right" }}>
           {msg.timestamp}
         </h5>
+        <div className="MsgTags" style={{ float: "right" }}>
+          {msg.tags.map((tag) => {
+            return <Circle color={tag.color} />;
+          })}
+        </div>
       </div>
       <div
         className={isOpen() ? "MsgContent" : "MsgContent MsgContent--Collapsed"}

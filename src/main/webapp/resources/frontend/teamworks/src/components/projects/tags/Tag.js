@@ -6,7 +6,7 @@ const Tag = ({ id, color, title }) => {
   const [noOpenedMessages, setNoOpenedMessages] = useState(123);
   // TODO: añadir estado a los mensajes para ver si estan leidos y actualizar cuando cambie
   useEffect(() => {
-    MessageApiUtils.getNumberOfNoOpenedMessages(id)
+    MessageApiUtils.getNumberOfNoReadMessagesByTag(id)
       .then((res) => {
         setNoOpenedMessages(res);
       })

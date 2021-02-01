@@ -29,11 +29,13 @@ import org.springframework.web.server.ResponseStatusException;
 public class MessageController {
 	private final MessageService messageService;
 	private final UserTWService userService;
+	private final TagService tagService;
 
 	@Autowired
 	public MessageController(MessageService messageService, UserTWService userService, TagService tagService) {
 		this.messageService = messageService;
 		this.userService = userService;
+		this.tagService = tagService;
 	}
 
 	@InitBinder
@@ -68,10 +70,11 @@ public class MessageController {
 	}
 
 	// This only gets the messages that you receive regarding one tag
-	@GetMapping(value = "/api/message/bytag")
-	public List<Message> getMessagesByTag(@RequestBody HttpServletRequest r, @RequestBody(required = true) Tag tag) {
+	@GetMapping(value = "/api/message/byTag")
+	public List<Message> getMessagesByTag(HttpServletRequest r, @RequestParam(required = true) Integer tagId) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			Tag tag = tagService.findTagById(tagId);
 			UserTW user = userService.findUserById(userId);
 			List<Message> messageList = (messageService.findMessagesByTag(user, tag)).stream()
 					.collect(Collectors.toList());

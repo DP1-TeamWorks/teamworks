@@ -7,8 +7,9 @@ const MessageApiUtils = {
   /*Inboxes*/
   getMyInboxMessages: () => ApiUtils.get(MESSAGE_URL + "/inbox"),
   getMySentMessages: () => ApiUtils.get(MESSAGE_URL + "/sent"),
-
-  getNumberOfNoOpenedMessages: (tagId) =>
+  getMyMessagesByTag: (tagId) =>
+    ApiUtils.get(MESSAGE_URL + "/byTag?tagId=" + tagId),
+  getNumberOfNoReadMessagesByTag: (tagId) =>
     ApiUtils.get(MESSAGE_URL + "/noOpened?tagId=" + tagId),
 
   /*Messages*/
@@ -20,10 +21,7 @@ const MessageApiUtils = {
     ),
   forwardMessage: (forwardList, repliedMessageId) =>
     ApiUtils.post(
-      MESSAGE_URL +
-        "?repliedMessageId=" +
-        repliedMessageId +
-        "&forward=true",
+      MESSAGE_URL + "?repliedMessageId=" + repliedMessageId + "&forward=true",
       forwardList
     ),
   markMessageAsRead: (messageId) =>
