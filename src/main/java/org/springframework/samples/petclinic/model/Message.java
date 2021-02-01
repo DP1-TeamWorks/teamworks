@@ -66,9 +66,9 @@ public class Message extends BaseEntity {
 	@JoinColumn(name = "recipients")
 	private List<UserTW> recipients;
 
-	@Column(name = "attatchments")
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
-	private List<Attatchment> attatchments;
+	@Column(name = "attachments")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "message")
+	private List<Attachment> attachments;
 
 	@Transient
 	private List<Integer> tagList;

@@ -1,8 +1,5 @@
 package org.springframework.samples.petclinic.model;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -19,10 +16,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "attatchment")
-public class Attatchment extends BaseEntity {
+@Table(name = "attachment")
+public class Attachment extends BaseEntity {
 	
-	  // Attributes
+	// Attributes
 	
 	@NotNull
 	@NotEmpty
@@ -32,7 +29,7 @@ public class Attatchment extends BaseEntity {
 	// Relations
 	
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "message")
+	@JoinColumn(name = "message_id")
 	@JsonIgnore
 	private Message message;
 	

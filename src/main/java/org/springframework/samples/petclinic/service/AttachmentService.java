@@ -2,25 +2,27 @@ package org.springframework.samples.petclinic.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Attatchment;
-import org.springframework.samples.petclinic.repository.AttatchmentRepository;
+import org.springframework.samples.petclinic.model.Attachment;
+import org.springframework.samples.petclinic.repository.AttachmentRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-public class AttatchmentService {
-	private AttatchmentRepository attatchmentRepository;
+@Service
+public class AttachmentService {
+	private AttachmentRepository attatchmentRepository;
 
 	@Autowired
-	public AttatchmentService(AttatchmentRepository attatchmentRepository) {
+	public AttachmentService(AttachmentRepository attatchmentRepository) {
 		this.attatchmentRepository = attatchmentRepository;
 	}
 
 	@Transactional
-	public void saveAttatchment(Attatchment attatchment) throws DataAccessException {
+	public void saveAttatchment(Attachment attatchment) throws DataAccessException {
 		attatchmentRepository.save(attatchment);
 	}
 
 	@Transactional(readOnly = true)
-	public Attatchment findAttatchmentById(Integer attatchmentId) throws DataAccessException {
+	public Attachment findAttatchmentById(Integer attatchmentId) throws DataAccessException {
 		return attatchmentRepository.findById(attatchmentId);
 	}
 
