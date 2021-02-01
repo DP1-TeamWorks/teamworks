@@ -11,7 +11,7 @@ values
         'Johnny',
         'Silverhand',
         'johnnysilverhand@cyber',
-        '123123123',
+        '$2a$10$0nvRQTbmAF3gLpwOs5Nc4ujS0FYMsQy1DI0eV9x03JDapfItsLw56',
         0,
         1
     );
@@ -23,7 +23,7 @@ values
         'Julia',
         'Fabra',
         'juliafabra@cyber',
-        '123456789',
+        '$2a$10$0nvRQTbmAF3gLpwOs5Nc4ujS0FYMsQy1DI0eV9x03JDapfItsLw56',
         1,
         1
     );
@@ -35,7 +35,7 @@ values
         'Maria',
         'Torres',
         'mariatorres@cyber',
-        '123456789',
+        '$2a$10$0nvRQTbmAF3gLpwOs5Nc4ujS0FYMsQy1DI0eV9x03JDapfItsLw56',
         1,
         1
     );
@@ -47,7 +47,7 @@ values
         'Luis',
         'Cumbrera',
         'luiscumbrera@cyber',
-        '123456789',
+        '$2a$10$0nvRQTbmAF3gLpwOs5Nc4ujS0FYMsQy1DI0eV9x03JDapfItsLw56',
         1,
         1
     );
@@ -59,7 +59,7 @@ values
         'Roman',
         'Calle',
         'romancalle@cyber',
-        '123456789',
+        '$2a$10$0nvRQTbmAF3gLpwOs5Nc4ujS0FYMsQy1DI0eV9x03JDapfItsLw56',
         1,
         1
     );
@@ -245,7 +245,7 @@ values
         'Hello World in TeamWorks',
         'LOREM IPSUM DOLOR ET SI JFD KASDL EHRTWE DLFAJSDC LWKER HQLKWJEFHLS KD',
         FALSE,
-        2
+        1
     );
 
 INSERT INTO
@@ -253,10 +253,10 @@ INSERT INTO
 values
     (
         TO_DATE('16/1/2020', 'DD/MM/YYYY'),
-        'Hello World in TeamWorks',
+        'Welcome to TeamWorks',
         'LOREM IPSUM DOLOR ET SI JFD KASDL EHRTWE DLFAJSDC LWKER HQLKWJEFHLS KD',
         FALSE,
-        2
+        1
     );
 
 INSERT INTO
@@ -264,6 +264,28 @@ INSERT INTO
 values
     (
         TO_DATE('14/05/2020', 'DD/MM/YYYY'),
+        'Hello World in TeamWorks',
+        'LOREM IPSUM DOLOR ET SI JFD KASDL EHRTWE DLFAJSDC LWKER HQLKWJEFHLS KD',
+        FALSE,
+        4
+    );
+
+INSERT INTO
+    messages(timestamp, subject, text, read, sender_id)
+values
+    (
+        TO_DATE('14/10/2020', 'DD/MM/YYYY'),
+        'Hello World in TeamWorks',
+        'LOREM IPSUM DOLOR ET SI JFD KASDL EHRTWE DLFAJSDC LWKER HQLKWJEFHLS KD',
+        TRUE,
+        3
+    );
+
+INSERT INTO
+    messages(timestamp, subject, text, read, sender_id)
+values
+    (
+        TO_DATE('14/10/2020', 'DD/MM/YYYY'),
         'Hello World in TeamWorks',
         'LOREM IPSUM DOLOR ET SI JFD KASDL EHRTWE DLFAJSDC LWKER HQLKWJEFHLS KD',
         FALSE,
@@ -277,6 +299,36 @@ values
         TO_DATE('14/10/2020', 'DD/MM/YYYY'),
         'Hello World in TeamWorks',
         'LOREM IPSUM DOLOR ET SI JFD KASDL EHRTWE DLFAJSDC LWKER HQLKWJEFHLS KD',
-        FALSE,
+        TRUE,
         2
     );
+
+INSERT INTO
+    MESSAGES_RECIPIENTS(message_id, recipients_id)
+values
+    (1, 2);
+
+INSERT INTO
+    MESSAGES_RECIPIENTS(message_id, recipients_id)
+values
+    (2, 2);
+
+INSERT INTO
+    MESSAGES_RECIPIENTS(message_id, recipients_id)
+values
+    (3, 2);
+
+INSERT INTO
+    MESSAGES_RECIPIENTS(message_id, recipients_id)
+values
+    (4, 2);
+
+INSERT INTO
+    MESSAGES_RECIPIENTS(message_id, recipients_id)
+values
+    (5, 3);
+
+INSERT INTO
+    MESSAGES_RECIPIENTS(message_id, recipients_id)
+values
+    (6, 1);
