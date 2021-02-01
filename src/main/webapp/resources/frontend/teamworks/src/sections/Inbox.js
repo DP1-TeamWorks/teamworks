@@ -120,7 +120,7 @@ const Inbox = (props) => {
     MessageApiUtils.getMyInboxMessages()
       .then((res) => {
         console.log("Getting Inbox Messages");
-        setInboxMessages(res.data);
+        setInboxMessages(res);
       })
       .catch((error) => {
         console.log("ERROR: cannot get inbox messages");
@@ -131,7 +131,7 @@ const Inbox = (props) => {
     MessageApiUtils.getMySentMessages()
       .then((res) => {
         console.log("Getting sent Messages");
-        setSentMessages(res.data);
+        setSentMessages(res);
       })
       .catch((error) => {
         console.log("ERROR: cannot get sent messages");
