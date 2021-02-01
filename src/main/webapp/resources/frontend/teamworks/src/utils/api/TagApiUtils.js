@@ -5,11 +5,11 @@ const PROJECT_URL = "/projects";
 const TagApiUtils = {
   /*TAGS*/
   getTags: (projectId) =>
-    axios.get(API_URL + PROJECT_URL + "/tags?projectId=" + projectId),
+    ApiUtils.get(PROJECT_URL + "/tags?projectId=" + projectId),
   addNewTag: (projectId, tag) =>
-    axios.post(API_URL + PROJECT_URL + "/tags?projectId=" + projectId, tag),
+    ApiUtils.post(PROJECT_URL + "/tags?projectId=" + projectId, tag),
   deleteTag: (tagId) =>
-    axios.delete(API_URL + PROJECT_URL + "/tags?tagId=" + tagId),
+    ApiUtils.delete(PROJECT_URL + "/tags?tagId=" + tagId),
 };
 
 export default TagApiUtils;

@@ -21,7 +21,7 @@ public class TeamOwnerInterceptor extends HandlerInterceptorAdapter {
 		Integer userId = (Integer) req.getSession().getAttribute("userId");
 		UserTW user = userTWService.findUserById(userId);
 
-		if (user.getRole().equals(Role.team_owner)) {
+		if (user != null && user.getRole().equals(Role.team_owner)) {
 			return true;
 		} else {
 			res.sendError(403);

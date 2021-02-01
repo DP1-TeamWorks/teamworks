@@ -1,17 +1,18 @@
 import axios from "axios";
 import { API_URL } from "../../config/config";
+import ApiUtils from "./ApiUtils";
 const TODO_URL = "/toDos";
 
 const ToDoApiUtils = {
   /*ToDos*/
   getToDos: (milestoneId) =>
-    axios.get(API_URL + TODO_URL + "?milestoneId=" + milestoneId),
+    ApiUtils.get(TODO_URL + "?milestoneId=" + milestoneId),
   getMyToDos: (milestoneId) =>
-    axios.get(API_URL + TODO_URL + "/mine?milestoneId=" + milestoneId),
+    ApiUtils.get(TODO_URL + "/mine?milestoneId=" + milestoneId),
   addNewPersonalToDo: (milestoneId, toDo) =>
-    axios.post(API_URL + TODO_URL + "/mine?milestoneId=" + milestoneId, toDo),
+    ApiUtils.post(TODO_URL + "/mine?milestoneId=" + milestoneId, toDo),
   markToDoAsDone: (toDoId) =>
-    axios.post(API_URL + TODO_URL + "/markAsDone?toDoId=" + toDoId),
+    ApiUtils.post(TODO_URL + "/markAsDone?toDoId=" + toDoId),
 };
 
 export default ToDoApiUtils;

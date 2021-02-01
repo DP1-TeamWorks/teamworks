@@ -14,7 +14,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   useEffect(() => {
     DepartmentApiUtils.getMyDepartments()
       .then((res) => {
-        setDepartmentList(res.data);
+        setDepartmentList(res);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the departments");
@@ -24,7 +24,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   useEffect(() => {
     ProjectApiUtils.getMyProjects(department.id)
       .then((res) => {
-        setProjectList(res.data);
+        setProjectList(res);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the projects");
@@ -40,7 +40,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
     setPickedDepartment(dpt);
     ProjectApiUtils.getMyProjects(dpt.id)
       .then((res) => {
-        setProjectList(res.data);
+        setProjectList(res);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the projects");

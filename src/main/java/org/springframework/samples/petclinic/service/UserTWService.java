@@ -54,7 +54,7 @@ public class UserTWService {
 	@Transactional(readOnly = true)
 	public UserTW getLoginUser(String email, String password) throws DataAccessException {
 		UserTW user = userRepository.findbyEmail(email);
-		if (user != null && password.equals(user.getPassword())) {
+		if (user != null && SecurityConfiguration.passwordEncoder().matches(password, user.getPassword())) {
 			return user;
 		} else {
 			return null;

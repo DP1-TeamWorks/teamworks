@@ -8,7 +8,7 @@ const Tag = ({ id, color, title }) => {
   useEffect(() => {
     MessageApiUtils.getNumberOfNoOpenedMessages(id)
       .then((res) => {
-        setNoOpenedMessages(res.data);
+        setNoOpenedMessages(res);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the number of no opened messages");

@@ -14,12 +14,12 @@ const MyProjectToDos = ({ projectId }) => {
     console.log("GETTING NEXT MILESTONE");
     MilestoneApiUtils.getNextMilestone(projectId)
       .then((res) => {
-        setMilestone(res.data);
+        setMilestone(res);
         console.log("GETTING TODOs");
-        ToDoApiUtils.getMyToDos(res.data.id)
+        ToDoApiUtils.getMyToDos(res.id)
           .then((res) => {
             console.log(res);
-            setToDoList(res.data);
+            setToDoList(res);
           })
           .catch((error) => {
             console.log("ERROR: Cannot get myToDos");
@@ -41,7 +41,7 @@ const MyProjectToDos = ({ projectId }) => {
       ToDoApiUtils.getMyToDos(milestone.id)
         .then((res) => {
           console.log(res);
-          setToDoList(res.data);
+          setToDoList(res);
         })
         .catch((error) => {
           console.log("ERROR: Cannot get myToDos");

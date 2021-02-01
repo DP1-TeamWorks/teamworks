@@ -40,44 +40,37 @@ public class TeamController {
 		dataBinder.setAllowedFields("id");
 	}
 
-	@GetMapping(value = "/api/teams")
-	public List<Team> getTeams(@RequestParam(required = false) String name) {
-		List<Team> list = new ArrayList<>();
-		if (name == null) {
-			list = teamService.getAllTeams().stream().collect(Collectors.toList());
-		} else {
-			list = teamService.findTeamByName(name).stream().collect(Collectors.toList());
-		}
-		return list;
-
+	@GetMapping(value = "/api/team")
+	public ResponseEntity<String> getTeamName(HttpServletRequest req) {
+	    Integer teamId = (Integer)req.getSession().getAttribute("teamId");
+	    String teamName = teamService.findTeamById(teamId).getName();
+	    return ResponseEntity.ok(teamName);
 	}
 
-	@PostMapping(value = "/api/teams")
-	public ResponseEntity<String> updateTeams(HttpServletRequest r, @RequestParam String name,
-			@RequestParam String identifier) {
+	@PostMapping(value = "/api/team")
+	public ResponseEntity<String> updateTeam(HttpServletRequest req, @RequestBody Team teamAttrs) {
 		try {
-			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
+		    String name = teamAttrs.getName();
+			Integer teamId = (Integer) req.getSession().getAttribute("teamId");
 			Team team = teamService.findTeamById(teamId);
-			if (name != null && identifier != null) {
-				team.setName(name);
-				team.setIdentifier(identifier);
-			} else if (name != null) {
-				team.setName(name);
-			} else if (identifier != null) {
-				team.setIdentifier(identifier);
-			} else {
-				return ResponseEntity.badRequest().build();
-			}
+			if (name != null)
+            {
+                team.setName(name);
+            }
+			else
+            {
+                return ResponseEntity.badRequest().build();
+            }
 			teamService.saveTeam(team);
 			return ResponseEntity.ok("Team update");
-
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
 		}
 	}
 
-	@DeleteMapping(value = "/api/teams")
-	public ResponseEntity<String> deleteTeams(@RequestParam(required = true) Integer teamId) {
+	@DeleteMapping(value = "/api/team")
+	public ResponseEntity<String> deleteTeam(HttpServletRequest req) {
+        Integer teamId = (Integer) req.getSession().getAttribute("teamId");
 		try {
 			teamService.deleteTeamById(teamId);
 			return ResponseEntity.ok("Team deleted");
