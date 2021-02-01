@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
 import lombok.Getter;
@@ -36,19 +37,22 @@ public class Tag extends BaseEntity {
     String color;
 
     // Relations
-
     @ManyToOne(optional = false)
-    @JoinColumn(name = "projects_id")
-    @JsonBackReference
+    @JoinColumn(name = "project_id")
+    @JsonBackReference(value = "project-tag")
     private Project project;
-    
-    
+
+    @JsonIgnore
+    // @JsonBackReference(value="milestone-tag")
     @ManyToMany
     private List<Milestone> milestones;
-    
-    @ManyToMany
-    private List<ToDo> toDos;
 
-    // TODO: Message Relation
+    @JsonIgnore
+    @ManyToMany
+    private List<ToDo> todos;
+
+    @JsonIgnore
+    @ManyToMany
+    private List<Message> messages;
 
 }

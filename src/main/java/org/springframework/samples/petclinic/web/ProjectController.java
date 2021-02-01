@@ -1,14 +1,25 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Project;
+import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.model.UserTW;
+import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
+import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.ProjectService;
+import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +33,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProjectController {
 	private final DepartmentService departmentService;
 	private final ProjectService projectService;
+	private final ParticipationService participationService;
+	private final UserTWService userTWService;
+	private final BelongsService belongsService;
 
 	@Autowired
-	public ProjectController(DepartmentService departmentService, ProjectService projectService) {
+	public ProjectController(DepartmentService departmentService, ProjectService projectService,
+			ParticipationService participationService, UserTWService userTWService, BelongsService belongsService) {
 		this.departmentService = departmentService;
 		this.projectService = projectService;
+		this.participationService = participationService;
+		this.userTWService = userTWService;
+		this.belongsService = belongsService;
 	}
 
 	@InitBinder
@@ -35,10 +53,50 @@ public class ProjectController {
 	}
 
 	@GetMapping(value = "/api/projects")
-	public List<Project> getProjects(@RequestParam(required = false) Integer departmentId) {
+	public ResponseEntity<List<Project>> getProjects(@RequestParam(required = true) Integer departmentId,
+			HttpServletRequest r) {
+		Integer userId = (Integer) r.getSession().getAttribute("userId");
+		UserTW user = userTWService.findUserById(userId);
+		Belongs currentBelongs = belongsService.findCurrentBelongs(userId, departmentId);
+		// Revisa si perteneces
+		if (user.getRole().equals(Role.team_owner) || currentBelongs != null) {
+			List<Project> l = new ArrayList<>();
+			l = departmentService.findDepartmentById(departmentId).getProjects();
+			return ResponseEntity.ok(l);
+		} else {
+			return ResponseEntity.status(403).build();
+		}
+
+	}
+
+	@GetMapping(value = "/api/project/details")
+	public ResponseEntity<Map<String, Object>> getProject(@RequestParam(required = true) Integer projectId,
+			HttpServletRequest r) {
+		Integer userId = (Integer) r.getSession().getAttribute("userId");
+		UserTW user = userTWService.findUserById(userId);
+		Project project = projectService.findProjectById(projectId);
+		Belongs currentBelongs = belongsService.findCurrentBelongs(userId, project.getDepartment().getId());
+		if (user.getRole().equals(Role.team_owner) || currentBelongs != null) {
+			List<UserTW> users = projectService.findUserProjects(project.getId()).stream().collect(Collectors.toList());
+			Map<String, Object> m = new HashMap<>();
+			m.put("members", users);
+			m.put("milestones", project.getMilestones());
+			m.put("tags", project.getTags());
+			return ResponseEntity.ok(m);
+		} else {
+			return ResponseEntity.status(403).build();
+		}
+
+	}
+
+	@GetMapping(value = "/api/projects/mine")
+	public List<Project> getMyProjects(HttpServletRequest r, @RequestParam(required = true) Integer departmentId) {
+
 		List<Project> l = new ArrayList<>();
-		l = departmentService.findDepartmentById(departmentId).getProjects();
+		Integer userId = (Integer) r.getSession().getAttribute("userId");
+		l = participationService.findMyDepartemntProjects(userId, departmentId).stream().collect(Collectors.toList());
 		return l;
+
 	}
 
 	@PostMapping(value = "/api/projects")
@@ -56,15 +114,16 @@ public class ProjectController {
 
 	}
 
+	// TODO: discutir departmentID (INTERCEPTOR)
 	@DeleteMapping(value = "/api/projects")
-	public ResponseEntity<String> deleteProjects(@RequestParam(required = true) Integer projectId) {
+	public ResponseEntity<String> deleteProjects(@RequestParam(required = true) Integer departmentId,
+			@RequestParam(required = true) Integer projectId) {
 		try {
 			projectService.deleteProjectById(projectId);
 			return ResponseEntity.ok("Project delete");
 		} catch (DataAccessException d) {
 			return ResponseEntity.notFound().build();
 		}
-
 	}
 
 }

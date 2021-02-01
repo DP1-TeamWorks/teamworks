@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.repository.UserTWRepository;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class UserTWService {
 	@Transactional(readOnly = true)
 	public UserTW getLoginUser(String email, String password) throws DataAccessException {
 		UserTW user = userRepository.findbyEmail(email);
-		if (user != null && user.getPassword().equals(password)) {
+		if (user != null && SecurityConfiguration.passwordEncoder().matches(password, user.getPassword())) {
 			return user;
 		} else {
 			return null;

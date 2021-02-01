@@ -7,15 +7,17 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
 import lombok.Getter;
@@ -24,9 +26,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "userTW")
+@Table(name = "users")
 
 public class UserTW extends BaseEntity {
+	
+	  // Attributes
 
 	@NotNull
 	@NotEmpty
@@ -56,15 +60,22 @@ public class UserTW extends BaseEntity {
 
 	@NotNull
 	Role role;
+	
+	// Relations
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "team_id")
-	@JsonBackReference("team-user")
+	@JsonBackReference("userteam")
 	private Team team;
-	@JsonManagedReference(value="user-belongs")
+
+	@JsonIgnore
+	// @JsonManagedReference(value="user-belongs")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userTW", orphanRemoval = true)
 	private List<Belongs> belongs;
-	@JsonManagedReference(value="user-participation")
+
+	@JsonIgnore
+	// @JsonManagedReference(value="user-participation")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userTW", orphanRemoval = true)
 	private List<Participation> participation;
+
 }

@@ -7,7 +7,7 @@ export default function Input({
   placeholder,
   styleClass,
   error,
-  changeHandler,
+  changeHandler
 }) {
   return (
     <>

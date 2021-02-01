@@ -6,12 +6,12 @@
   font-family: "Inter", sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 11pt;
   line-height: 20px;
   color: white;
 }
 
-html, #root {
+html,
+#root {
   width: 100%;
   height: 100%;
 }
@@ -33,7 +33,7 @@ input {
 
 mark {
   font-weight: 600;
-  color: #A6CE56;
+  color: #a6ce56;
   background: 0;
 }
 

@@ -10,6 +10,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 
 import lombok.Getter;
@@ -18,7 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "toDo")
+@Table(name = "todos")
 
 public class ToDo extends BaseEntity {
 
@@ -29,22 +32,30 @@ public class ToDo extends BaseEntity {
     @Column(name = "title")
     String title;
 
+    @NotNull
+    @Column(name = "done")
+    Boolean done;
+
     // Relations
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JsonIgnore
+    // @JsonBackReference
     private UserTW assignee;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "milestone_id")
-    @JsonBackReference(value="milestone-toDo")
+    @JsonIgnore
+    // @JsonBackReference(value="milestone-toDo")
     private Milestone milestone;
 
-    
-    @ManyToMany
+    @ManyToMany(mappedBy = "todos", targetEntity = Tag.class)
+    @JsonIgnoreProperties("todos")
     private List<Tag> tags;
 
-    // TODO: Message Relation
+    @JsonIgnore
+    @ManyToMany
+    private List<Message> messages;
 
 }

@@ -7,12 +7,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import lombok.Getter;
@@ -24,6 +26,8 @@ import lombok.Setter;
 @Table(name = "milestones")
 
 public class Milestone extends BaseEntity {
+	
+	  // Attributes
 
 	@NotNull
 	@NotEmpty
@@ -32,18 +36,26 @@ public class Milestone extends BaseEntity {
 
 	@NotNull
 	@NotEmpty
-	@Column(name = "dueFor")
+	@Column(name = "due_for")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate dueFor;
+	
+	// Relations
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "projects_id")
-	@JsonBackReference(value="project-milestone")
+	@JoinColumn(name = "project_id")
+	@JsonIgnore
+	// @JsonBackReference(value="project-milestone")
 	private Project project;
-	
-	@JsonManagedReference(value="milestone-toDo")
+
+	@JsonManagedReference(value = "milestone-toDo")
 	@Column(name = "toDos")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "milestone", orphanRemoval = true)
 	private List<ToDo> toDos;
+
+	@JsonIgnore
+	// @JsonManagedReference(value="milestone-tag")
+	@ManyToMany
+	private List<Tag> tags;
 
 }

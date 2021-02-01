@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
@@ -15,12 +16,12 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class LoginController {
+public class AuthController {
 	private final UserTWService userTWService;
 	private final TeamService teamService;
 
 	@Autowired
-	public LoginController(TeamService teamService, UserTWService userTWService) {
+	public AuthController(TeamService teamService, UserTWService userTWService) {
 		this.teamService = teamService;
 		this.userTWService = userTWService;
 	}
@@ -41,7 +42,7 @@ public class LoginController {
 				r.getSession().setAttribute("userId", user.getId());
 				r.getSession().setAttribute("teamId", user.getTeam().getId());
 
-				return ResponseEntity.accepted().body(user);
+				return ResponseEntity.accepted().build();
 
 			} else {
 				return ResponseEntity.badRequest().build();
@@ -51,7 +52,7 @@ public class LoginController {
 		}
 	}
 
-	@GetMapping(value = "/api/auth/logout")
+	@DeleteMapping(value = "/api/auth/logout")
 	public void logout(HttpServletRequest r) {
 		// Unset the session
 		r.getSession().invalidate();
@@ -74,7 +75,8 @@ public class LoginController {
 			UserTW user = new UserTW();
 			user.setName(name);
 			user.setLastname(lastname);
-			user.setPassword(password);
+			user.setPassword(SecurityConfiguration.passwordEncoder().encode(password));
+			System.out.println(user.getPassword());
 			user.setEmail(user.getName().toLowerCase() + user.getLastname().toLowerCase() + "@" + team.getIdentifier());
 			user.setRole(Role.team_owner);
 			user.setTeam(team);
@@ -86,7 +88,7 @@ public class LoginController {
 			return ResponseEntity.ok("Usuario y Team creado satisfactoriamente");
 
 		} catch (DataAccessException d) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body("alreadyexists");
 		}
 
 	}

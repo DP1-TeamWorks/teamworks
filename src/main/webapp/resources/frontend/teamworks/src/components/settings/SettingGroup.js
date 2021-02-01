@@ -12,10 +12,16 @@ const SettingGroup = (props) =>
     {
         title = <h3 className="SmallTitle">{props.name}</h3>
     }
+
+    let descriptionP;
+    if (props.description)
+    {
+        descriptionP = <p className="SettingGroup__P" dangerouslySetInnerHTML={{__html: props.description}}></p>
+    }
     return (
         <div className="EditableSettingGroup">
             {title}
-            <p className="SettingGroup__P" dangerouslySetInnerHTML={{__html: props.description}}></p>
+            {descriptionP}
             {props.children}
         </div>
     )

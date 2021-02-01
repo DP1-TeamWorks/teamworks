@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 
@@ -22,8 +23,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "project")
+@Table(name = "projects")
 public class Project extends BaseEntity {
+	
+	  // Attributes
 
 	@Column(name = "name")
 	@NotNull
@@ -35,20 +38,29 @@ public class Project extends BaseEntity {
 	@NotEmpty
 	private String description;
 
-	@Column(name = "creation_timestamp")
+	@Column(name = "creationTimestamp")
 	@CreationTimestamp
 	private LocalDate creationTimestamp;
+	
+	// Relations
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "department_id")
-	@JsonBackReference(value="department-project")
+	@JsonIgnore
+	// @JsonBackReference(value="department-project")
 	private Department department;
-	
-	@JsonManagedReference(value="project-milestone")
+
+	@JsonIgnore
+	// @JsonManagedReference(value="project-milestone")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
 	private List<Milestone> milestones;
-	
-	@JsonManagedReference(value="project-participation")
+
+	@JsonIgnore
+	// @JsonManagedReference(value="project-participation")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
 	private List<Participation> participation;
+
+	@JsonManagedReference(value = "project-tag")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
+	private List<Tag> tags;
 }

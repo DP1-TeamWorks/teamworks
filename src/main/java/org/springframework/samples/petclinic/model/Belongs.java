@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,29 +20,34 @@ import lombok.Setter;
 @Table(name = "belongs")
 
 public class Belongs extends BaseEntity {
+	
+	  // Attributes
 
 	@CreationTimestamp
 	@Column(name = "initialDate")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate initialDate;
 
-	
 	@Column(name = "finalDate")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate finalDate;
 
 	@NotNull
-	@Column(name = "isDepartmentManager")
+	@Column(name = "is_department_manager")
 	private Boolean isDepartmentManager;
+	
+	// Relations
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "userId")
-	@JsonBackReference(value="user-belongs")
+	@JoinColumn(name = "user_id")
+	@JsonIgnore
+	// @JsonBackReference(value="user-belongs")
 	UserTW userTW;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "departmentId")
-	@JsonBackReference(value="department-belongs")
+	@JoinColumn(name = "department_id")
+	@JsonIgnore
+	// @JsonBackReference(value="department-belongs")
 	Department department;
 
 }

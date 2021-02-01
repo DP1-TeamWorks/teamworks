@@ -4,8 +4,40 @@
     align-items: center;
     cursor: pointer;
     position: relative;
-    width: 300px;
     height: 40px;
+}
+
+.EditableField--Editing {
+    width: 300px;
+}
+
+.EditableField--Smaller {
+    width: 100%;
+}
+
+.EditableField--OnlyInput {
+    margin-bottom: 5px;
+    cursor: inherit;
+}
+
+.LoadingPlaceholder {
+    width: 300px;
+    height: 100%;
+    animation: placeholderPulse 0.5s ease;
+}
+
+@keyframes placeholderPulse {
+    0% {
+        background-color: #a6ce561a;
+    }
+
+    50% {
+        background-color: #a6ce5636;
+    }
+
+    100% {
+        background-color: #a6ce561a;
+    }
 }
 
 .PenIcon {
@@ -31,4 +63,12 @@
     position: absolute;
     right: 0;
     border-radius: 0;
+}
+
+.CopiedSpan {
+    margin-left: 20px;
+}
+
+.CopiedSpan--Error {
+    color: #ff4848;
 }
