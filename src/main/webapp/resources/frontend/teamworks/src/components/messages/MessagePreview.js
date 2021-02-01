@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MessageApiUtils from "../../utils/api/MessageApiUtils";
 import Circle from "../projects/tags/Circle";
 import OpenedMessage from "./OpenedMessage";
 const MessagePreview = ({ msg, openMessage, setOpenMessage }) => {
-  const [read, setRead] = useState(msg.read);
+  const [read, setRead] = useState();
+
+  useEffect(() => {
+    setRead(msg.read);
+  }, [msg]);
 
   const isOpen = () => {
     return openMessage === msg.id;
@@ -19,8 +23,7 @@ const MessagePreview = ({ msg, openMessage, setOpenMessage }) => {
 
   const collapseMessage = () => {
     isOpen() ? setOpenMessage("") : setOpenMessage(msg.id);
-    if (!msg.read) {
-      setRead(true);
+    if (!read) {
       MessageApiUtils.markMessageAsRead(msg.id)
         .then((res) => {
           setRead(true);
@@ -37,7 +40,7 @@ const MessagePreview = ({ msg, openMessage, setOpenMessage }) => {
         className={
           isOpen()
             ? "MsgPreviewContainer MsgPreviewContainer--Active"
-            : msg.read
+            : read
             ? "MsgPreviewContainer MsgPreviewContainer--Read"
             : "MsgPreviewContainer"
         }
