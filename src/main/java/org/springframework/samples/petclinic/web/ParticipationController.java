@@ -52,7 +52,7 @@ public class ParticipationController {
 					projectId);
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 			Project project = projectService.findProjectById(projectId);
-			Belongs belongs = belongsService.findCurrentBelongs(user.getId(), project.getDepartment().getId());
+			Belongs belongs = belongsService.findCurrentBelong(user.getId(), project.getDepartment().getId());
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
 			// Comprueba si existe una participacion
 			if (currentParticipation == null && belongs != null) {
@@ -85,7 +85,7 @@ public class ParticipationController {
 			Participation participation = participationService.findCurrentParticipation(participationUserId, projectId);
 			Project project = participation.getProject();
 			Boolean isDepartmentManager = belongsService
-					.findCurrentBelongs(user.getId(), project.getDepartment().getId()).getIsDepartmentManager();
+					.findCurrentBelong(user.getId(), project.getDepartment().getId()).getIsDepartmentManager();
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
 			Boolean isProjectManager = participation.getIsProjectManager();
 

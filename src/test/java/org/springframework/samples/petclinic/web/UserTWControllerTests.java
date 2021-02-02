@@ -1,38 +1,40 @@
 package org.springframework.samples.petclinic.web;
 
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.time.LocalDate;
+
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.UserTW;
-import org.springframework.samples.petclinic.service.VetService;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.given;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.samples.petclinic.service.AuthoritiesService;
-import org.springframework.samples.petclinic.service.OwnerService;
-import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.model.UserTW;
+import org.springframework.samples.petclinic.service.BelongsService;
+import org.springframework.samples.petclinic.service.ParticipationService;
+import org.springframework.samples.petclinic.service.TeamService;
+import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import org.springframework.test.web.servlet.MockMvc;
 
 /**
  * Test class for {@link OwnerController}
  *
- * @author Colin But
  */
 
 @WebMvcTest(controllers=UserTWController.class,
@@ -40,36 +42,44 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 		excludeAutoConfiguration= SecurityConfiguration.class)
 class UserTWControllerTests {
 
-	private static final int TEST_OWNER_ID = 6;
+	private static final int TEST_USER_ID = 6;
 
 	@Autowired
 	private UserTWController userController;
 
 	@MockBean
-	private OwnerService clinicService;
+	private UserTWService userService;
+
+	@MockBean
+	private TeamService teamService;
         
-        @MockBean
-	private UserService userService;
+    @MockBean
+	private BelongsService belongsService;
         
-        @MockBean
-        private AuthoritiesService authoritiesService; 
+    @MockBean
+    private ParticipationService participationService; 
 
 	@Autowired
 	private MockMvc mockMvc;
 
-	private UserTW george;
+	private UserTW paula;
 
 	@BeforeEach
 	void setup() {
 
-		george = new UserTW();
+		paula = new UserTW();
 		
-		george.setFirstName("George");
-		george.setLastName("Franklin");
-		george.setAddress("110 W. Liberty St.");
-		george.setCity("Madison");
-		george.setTelephone("6085551023");
-		given(this.clinicService.findUserById(TEST_OWNER_ID)).willReturn(george);
+		paula.setName("Paula");
+		paula.setLastname("Ruiz");
+		paula.setEmail("paularuiz@cyber");
+		paula.setPassword("123123123");
+		paula.setJoinDate(LocalDate.now());
+		paula.setRole(Role.team_owner);
+		//declarar relaciones ????
+		paula.setTeam(team);
+		
+		//given(this.clinicService.findUserById(TEST_OWNER_ID)).willReturn(paula);
+		given(this.teamService.findTeamById(TEST_USER_ID)).willReturn();
 
 	}
 
@@ -116,7 +126,7 @@ class UserTWControllerTests {
 	@WithMockUser(value = "spring")
         @Test
 	void testProcessFindFormSuccess() throws Exception {
-		given(this.clinicService.findOwnerByLastName("")).willReturn(Lists.newArrayList(george, new Owner()));
+		given(this.clinicService.findOwnerByLastName("")).willReturn(Lists.newArrayList(paula, new Owner()));
 
 		mockMvc.perform(get("/owners")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
 	}
@@ -124,7 +134,7 @@ class UserTWControllerTests {
 	@WithMockUser(value = "spring")
         @Test
 	void testProcessFindFormByLastName() throws Exception {
-		given(this.clinicService.findOwnerByLastName(george.getLastName())).willReturn(Lists.newArrayList(george));
+		given(this.clinicService.findOwnerByLastName(paula.getLastName())).willReturn(Lists.newArrayList(paula));
 
 		mockMvc.perform(get("/owners").param("lastName", "Franklin")).andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/owners/" + TEST_OWNER_ID));

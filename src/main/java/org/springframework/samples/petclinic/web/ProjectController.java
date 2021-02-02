@@ -75,7 +75,7 @@ public class ProjectController {
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
 		UserTW user = userTWService.findUserById(userId);
 		Project project = projectService.findProjectById(projectId);
-		Belongs currentBelongs = belongsService.findCurrentBelongs(userId, project.getDepartment().getId());
+		Belongs currentBelongs = belongsService.findCurrentBelong(userId, project.getDepartment().getId());
 		if (user.getRole().equals(Role.team_owner) || currentBelongs != null) {
 			List<UserTW> users = projectService.findUserProjects(project.getId()).stream().collect(Collectors.toList());
 			Map<String, Object> m = new HashMap<>();
