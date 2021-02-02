@@ -13,7 +13,7 @@ const options = [
   { value: 'vanilla', label: 'Vanilla' }
 ]
 
-const Options = ({ pickedProject, setPickedProject }) => {
+const NewMessageMultiSelect = ({ pickedProject, setPickedProject, name, placeholder }) => {
   const [departmentList, setDepartmentList] = useState([]);
   const [projectList, setProjectList] = useState([]);
 
@@ -29,7 +29,7 @@ const Options = ({ pickedProject, setPickedProject }) => {
       .catch((error) => {
         console.log("ERROR: cannot get the departments");
       });
-  }, []);
+  }, []); //mover al newmessage
 
   useEffect(() => {
     ProjectApiUtils.getMyProjects(department.id)
@@ -62,6 +62,14 @@ const Options = ({ pickedProject, setPickedProject }) => {
     setPickedProject(project);
     openOrClose();
   };
+
+  return (
+    <div className="InputContainer">
+        <p className="TitleNewMsg">{name}</p>
+        <Select options={options} styles={customStyles} name={name} placeholder={placeholder}
+        isMulti></Select>
+    </div>
+  );
 };
 
 
@@ -83,12 +91,5 @@ const customStyles = {
 }
 
 
-export default function NewMessageMultiSelect({name, placeholder}) {
-  return (
-    <div className="InputContainer">
-        <p className="TitleNewMsg">{name}</p>
-        <Select options={options} styles={customStyles} name={name} placeholder={placeholder}
-        isMulti></Select>
-    </div>
-  );
-};
+
+export default  NewMessageMultiSelect;
