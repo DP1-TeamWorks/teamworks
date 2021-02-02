@@ -50,6 +50,11 @@ public class MessageService {
 		return messageRepository.findMessagesByTag(user, tag);
 	}
 
+	@Transactional
+	public Collection<Message> findMessagesBySearch(UserTW user, String search) throws DataAccessException {
+		return messageRepository.findMessagesBySearch(user, search);
+	}
+
 	/*
 	 * @Transactional(readOnly = true) public Collection<Message> getAllMessages()
 	 * throws DataAccessException { return messageRepository.findAll(); }

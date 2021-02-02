@@ -70,7 +70,7 @@ public class MessageController {
 	}
 
 	@GetMapping(value = "/api/message/byTag")
-	public List<Message> getMessagesByTag(HttpServletRequest r, @RequestParam(required = true) Integer tagId) {
+	public List<Message> getMessagesByTag(HttpServletRequest r, @RequestParam(required = true) int tagId) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			Tag tag = tagService.findTagById(tagId);
@@ -83,8 +83,34 @@ public class MessageController {
 		}
 	}
 
+	@GetMapping(value = "/api/message/bySearch")
+	public List<Message> getMessagesByTag(HttpServletRequest r, @RequestParam(required = true) String search) {
+		try {
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			UserTW user = userService.findUserById(userId);
+			List<Message> messageList = (messageService.findMessagesBySearch(user, search)).stream()
+					.collect(Collectors.toList());
+			return messageList;
+		} catch (DataAccessException d) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
+		}
+	}
+
 	@GetMapping(value = "/api/message/noRead")
-	public Long getMySentMessages(HttpServletRequest r, @RequestParam(required = true) Integer tagId) {
+	public Long getNumberOfNotReadMessages(HttpServletRequest r) {
+		try {
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			UserTW user = userService.findUserById(userId);
+			Long notReadMessages = (messageService.findMessagesByUserId(user)).stream().filter(m -> !m.getRead())
+					.count();
+			return notReadMessages;
+		} catch (DataAccessException d) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
+		}
+	}
+
+	@GetMapping(value = "/api/message/noReadByTag")
+	public Long getNumberOfNotReadMessagesByTag(HttpServletRequest r, @RequestParam(required = true) int tagId) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			Tag tag = tagService.findTagById(tagId);

@@ -7,58 +7,59 @@ import Section from "./Section";
 
 const Inbox = (props) => {
   const [selectedTab, setSelectedTab] = useState("Inbox");
-  const [inboxMessages, setInboxMessages] = useState([]);
-  const [sentMessages, setSentMessages] = useState([]);
-  const [tagMessages, setTagMessages] = useState([]);
+  const [selectedMessages, setSelectedMessages] = useState([]);
+  const [nInboxMessages, setNInboxMessages] = useState([]);
 
   useEffect(() => {
-    MessageApiUtils.getMyInboxMessages()
+    MessageApiUtils.getNumberOfNotReadMessages()
       .then((res) => {
-        console.log("Getting Inbox Messages");
-        setInboxMessages(res);
+        console.log("Getting number of Inbox Messages");
+        setNInboxMessages(res);
       })
       .catch((error) => {
-        console.log("ERROR: cannot get inbox messages");
+        console.log("ERROR: cannot get number of inbox messages");
       });
 
-    MessageApiUtils.getMySentMessages()
-      .then((res) => {
-        console.log("Getting sent Messages");
-        setSentMessages(res);
-      })
-      .catch((error) => {
-        console.log("ERROR: cannot get sent messages");
-      });
-  }, []);
-
-  useEffect(() => {
-    MessageApiUtils.getMyMessagesByTag(selectedTab)
-      .then((res) => {
-        console.log("Getting Tag Messages");
-        setTagMessages(res);
-      })
-      .catch((error) => {
-        console.log("ERROR: cannot get tag messages");
-      });
+    switch (selectedTab) {
+      case "Inbox":
+        MessageApiUtils.getMyInboxMessages()
+          .then((res) => {
+            console.log("Getting Inbox Messages");
+            setSelectedMessages(res);
+          })
+          .catch((error) => {
+            console.log("ERROR: cannot get inbox messages");
+          });
+        break;
+      case "Sent":
+        MessageApiUtils.getMySentMessages()
+          .then((res) => {
+            console.log("Getting sent Messages");
+            setSelectedMessages(res);
+          })
+          .catch((error) => {
+            console.log("ERROR: cannot get sent messages");
+          });
+        break;
+      default:
+        MessageApiUtils.getMyMessagesByTag(selectedTab)
+          .then((res) => {
+            console.log("Getting Tag Messages");
+            setSelectedMessages(res);
+          })
+          .catch((error) => {
+            console.log("ERROR: cannot get tag messages");
+          });
+    }
   }, [selectedTab]);
 
   const [modalNewMessage, setModalNewMessage] = useState(false);
-  const selectedMessages = () => {
-    switch (selectedTab) {
-      case "Inbox":
-        return inboxMessages;
-      case "Sent":
-        return sentMessages;
-      default:
-        return tagMessages;
-    }
-  };
 
   return (
     <div className="Content">
       <InboxSidebar
-        numberOfInboxMessages={inboxMessages.filter((msg) => !msg.read).length}
-        numberOfSentMessages={sentMessages.filter((msg) => !msg.read).length}
+        numberOfInboxMessages={nInboxMessages}
+        numberOfSentMessages={""}
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
         modalNewMessage={modalNewMessage}
@@ -70,7 +71,7 @@ const Inbox = (props) => {
             ChangeModalNewMessage={() => setModalNewMessage(!modalNewMessage)}
           />
         )}
-        <MessageList messages={selectedMessages()} />
+        <MessageList messages={selectedMessages} />
       </Section>
     </div>
   );
