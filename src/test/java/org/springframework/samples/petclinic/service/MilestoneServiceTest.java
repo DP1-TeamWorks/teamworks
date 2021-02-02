@@ -1,10 +1,13 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +73,24 @@ class MilestoneServiceTest {
 		Milestone milestone2 = this.milestoneService.findNextMilestone(1);
 
 		assertThat(milestone.getDueFor()).isBefore(milestone2.getDueFor());
+	}
+	
+	
+	
+	//NEGATIVE USE CASE H12-E1
+	@Test
+	@Transactional
+	void shouldInsertMilestoneWithoutData() {
+
+		Project project = projectService.findProjectById(1);
+		Milestone milestone = new Milestone();
+		milestone.setProject(project);
+
+		assertThrows(ConstraintViolationException.class, ()-> {
+			this.milestoneService.saveMilestone(milestone);
+			});			
+
+		assertThat(milestone).isNotNull();
 	}
 
 }

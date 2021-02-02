@@ -1,14 +1,22 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Department;
+import org.springframework.samples.petclinic.model.Project;
+import org.springframework.samples.petclinic.model.Team;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +24,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class DepartmentServiceTest {
 	@Autowired
 	protected DepartmentService departmentService;
+	@Autowired
+	protected TeamService teamService;
 
 	@Test
 	@Transactional
 	public void shouldInsertDepartmentIntoDatabaseAndGenerateId() {
-
+		
+		Team team = teamService.findTeamById(1);
 		Department departments = new Department();
 		departments.setName("Venta");
 		departments.setDescription("Funcion: vender....");
+		departments.setTeam(team);
 
-		departmentService.saveDepartment(departments);
+		//departmentService.saveDepartment(departments);
 		try {
 			this.departmentService.saveDepartment(departments);
 		} catch (DataAccessException ex) {
@@ -35,6 +47,7 @@ public class DepartmentServiceTest {
 		assertThat(departments.getId()).isNotNull();
 
 	}
+	
 
 	@Test
 	void shouldFindDepartmentWithCorrectId() {
@@ -52,5 +65,39 @@ public class DepartmentServiceTest {
 		Department department = this.departmentService.findDepartmentById(2);
 		assertThat(department).isNull();
 	}
+	
+	
+	//NEGATIVE USE CASE H5-E1
+	@Test
+	@Transactional
+	void shouldInsertDepartmentWithoutData () {
+		Team team = teamService.findTeamById(1);
+		Department departmentNoData = new Department();
+		departmentNoData.setTeam(team);
+		assertThrows(ConstraintViolationException.class, ()-> {
+			departmentService.saveDepartment(departmentNoData);
+			});		
+	}	
+	
+	
+	//TODO: GUARDA CON VALORES NULOS
+	
+	//NEGATIVE USE CASE H9-E1
+	@Test
+	@Transactional
+	void shouldUpdateDeparment() {
+		Department department = departmentService.findDepartmentById(1);
+		department.setName(null);
+		try {
+			
+			departmentService.saveDepartment(department);
 
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+		//assertThrows(ConstraintViolationException.class, ()-> {
+
+			//this.departmentService.saveDepartment(department);
+			//});			
+	}
 }
