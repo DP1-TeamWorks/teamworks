@@ -18,6 +18,7 @@
 .EditableField--OnlyInput {
     margin-bottom: 5px;
     cursor: inherit;
+    width: 300px;
 }
 
 .LoadingPlaceholder {

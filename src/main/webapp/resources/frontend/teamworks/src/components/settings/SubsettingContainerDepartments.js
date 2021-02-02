@@ -6,14 +6,17 @@ import SidePaneElement from "./SidePaneElement";
 import UserList from "./UserList";
 import AddElementForm from "../forms/AddElementForm";
 
-const SubsettingContainerDepartments = () =>
+const SubsettingContainerDepartments = ({departments}) =>
 {
+  let SidepaneElements;
+  if (departments)
+  {
+    SidepaneElements = departments.map(dp => <SidePaneElement>{dp.name}</SidePaneElement>);
+  }
   return (
     <div className="SubsettingContainer">
       <div className="SubsettingSidePane">
-        <SidePaneElement selected>Software</SidePaneElement>
-        <SidePaneElement>Accounting</SidePaneElement>
-        <SidePaneElement>Distribution</SidePaneElement>
+        {SidepaneElements}
       </div>
       <div className="SettingGroupsContainer">
         <SettingGroup name="Department name" description="Shown in projects assigned to team members.">

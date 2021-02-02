@@ -5,8 +5,9 @@ const DEPARTMENT_URL = "/departments";
 
 const DepartmentApiUtils = {
   /*DEPARTMENTS*/
-  getDepartments: (projectId) => ApiUtils.get(DEPARTMENT_URL),
-  getMyDepartments: (projectId) => ApiUtils.get(DEPARTMENT_URL + "/mine"),
+  getDepartments: () => ApiUtils.get(DEPARTMENT_URL),
+  postDepartment: (department) => ApiUtils.post(DEPARTMENT_URL, department),
+  getMyDepartments: () => ApiUtils.get(DEPARTMENT_URL + "/mine"),
 };
 
 export default DepartmentApiUtils;

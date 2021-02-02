@@ -70,14 +70,15 @@ public class DepartmentController {
 		try {
 			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
 			Team team = teamService.findTeamById(teamId);
-
+            if (department.getDescription() == null)
+                department.setDescription("This is a brief description of the department");
 			department.setTeam(team);
 			departmentService.saveDepartment(department);
 
 			return ResponseEntity.ok("Department create");
 
 		} catch (DataAccessException d) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body("alreadyexists");
 		}
 	}
 
@@ -93,6 +94,6 @@ public class DepartmentController {
 		}
 	}
 
-	
+
 
 }

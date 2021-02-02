@@ -8,7 +8,10 @@ import { useEffect } from "react";
 const EditableField = ({value, inputType, smaller, editable, apiFunction, fieldName}) => {
   function onOkClicked() {
     if (!apiFunction || !fieldName)
+    {
+      setEditing(false);
       return;
+    }
     var postObj = {};
     postObj[fieldName] = currentVal;
     apiFunction(postObj).catch(() =>
