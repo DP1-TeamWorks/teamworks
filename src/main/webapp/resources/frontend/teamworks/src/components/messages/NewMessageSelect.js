@@ -7,7 +7,11 @@ import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
 import ProjectApiUtils from "../../utils/api/ProjectApiUtils";
 
 
-
+const options = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' }
+]
 
 const Options = ({ pickedProject, setPickedProject }) => {
   const [departmentList, setDepartmentList] = useState([]);
@@ -60,21 +64,33 @@ const Options = ({ pickedProject, setPickedProject }) => {
   };
 };
 
-export default function NewMessageInput({name}) {
+
+const customStyles = {
+  option: (provided, state) => ({
+    ...provided,
+    color: state.isSelected ? 'white' : '#222',
+  }),
+  control: (base, state) => ({
+    ...base,
+    background: "#262626",
+    borderRadius: 4,
+    // Overwrittes the different states of border
+    borderColor: "rgba(166, 206, 86, 0.8)",
+    // Removes weird border around container
+    boxShadow: state.isFocused ? null : null,
+    marginBottom: 10,
+    singleValue: ()=>({
+        color: "white",
+    })
+    }),
+}
+
+
+export default function NewMessageMultiSelect({name, placeholder}) {
   return (
     <div className="InputContainer">
         <p className="TitleNewMsg">{name}</p>
-        <Select options={Options} className="" isMulti theme={theme => ({
-      ...theme,
-      borderRadius: 5,
-      colors: {
-        ...theme.colors,
-        primary25: 'neutral60',
-        primary: 'neutral0',
-        primary50: "neutral50",
-      },
-    })}>
-        </Select>
+        <Select options={options} styles={customStyles} name={name} placeholder={placeholder}></Select>
     </div>
   );
 };
