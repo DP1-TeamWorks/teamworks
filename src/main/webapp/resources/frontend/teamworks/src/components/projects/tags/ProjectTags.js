@@ -17,11 +17,9 @@ const ProjectTags = ({ tagList, selectedTab, setSelectedTab }) => {
             isTag={true}
           >
             <Tag
+              id={tag.id}
               title={tag.title}
               color={tag.color}
-              selectedTab={selectedTab}
-              setSelectedTab={setSelectedTab}
-              noOpenedMessages={tag.noOpenedMessages}
             />
           </InboxSidebarTab>
         );

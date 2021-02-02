@@ -4,7 +4,7 @@ import Circle from "./Circle";
 
 const Tag = ({ id, color, title }) => {
   const [noOpenedMessages, setNoOpenedMessages] = useState(123);
-  // TODO: añadir estado a los mensajes para ver si estan leidos y actualizar cuando cambie
+  // TODO: actualizar cuando cambie
   useEffect(() => {
     MessageApiUtils.getNumberOfNoReadMessagesByTag(id)
       .then((res) => {

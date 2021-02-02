@@ -69,7 +69,6 @@ public class MessageController {
 		}
 	}
 
-	// This only gets the messages that you receive regarding one tag
 	@GetMapping(value = "/api/message/byTag")
 	public List<Message> getMessagesByTag(HttpServletRequest r, @RequestParam(required = true) Integer tagId) {
 		try {
@@ -79,6 +78,20 @@ public class MessageController {
 			List<Message> messageList = (messageService.findMessagesByTag(user, tag)).stream()
 					.collect(Collectors.toList());
 			return messageList;
+		} catch (DataAccessException d) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
+		}
+	}
+
+	@GetMapping(value = "/api/message/noRead")
+	public Long getMySentMessages(HttpServletRequest r, @RequestParam(required = true) Integer tagId) {
+		try {
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			Tag tag = tagService.findTagById(tagId);
+			UserTW user = userService.findUserById(userId);
+			Long notReadMessages = (messageService.findMessagesByTag(user, tag)).stream().filter(m -> !m.getRead())
+					.count();
+			return notReadMessages;
 		} catch (DataAccessException d) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
 		}

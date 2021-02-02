@@ -10,7 +10,7 @@ const MessageApiUtils = {
   getMyMessagesByTag: (tagId) =>
     ApiUtils.get(MESSAGE_URL + "/byTag?tagId=" + tagId),
   getNumberOfNoReadMessagesByTag: (tagId) =>
-    ApiUtils.get(MESSAGE_URL + "/noOpened?tagId=" + tagId),
+    ApiUtils.get(MESSAGE_URL + "/noRead?tagId=" + tagId),
 
   /*Messages*/
   newMessage: (message) => ApiUtils.post(MESSAGE_URL, message),

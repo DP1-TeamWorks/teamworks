@@ -347,3 +347,8 @@ INSERT INTO
     MESSAGES_TAGS(message_id, tags_id)
 values
     (3, 2);
+
+INSERT INTO
+    MESSAGES_TAGS(message_id, tags_id)
+values
+    (1, 1);
