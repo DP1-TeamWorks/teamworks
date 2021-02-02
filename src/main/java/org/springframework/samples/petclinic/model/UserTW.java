@@ -29,7 +29,13 @@ import lombok.Setter;
 @Table(name = "users")
 
 public class UserTW extends BaseEntity {
-	
+
+    public interface StrippedUser
+    {
+        Integer getId();
+        String getName();
+        String getLastname();
+    }
 	  // Attributes
 
 	@NotNull
@@ -60,7 +66,7 @@ public class UserTW extends BaseEntity {
 
 	@NotNull
 	Role role;
-	
+
 	// Relations
 
 	@ManyToOne(optional = false)

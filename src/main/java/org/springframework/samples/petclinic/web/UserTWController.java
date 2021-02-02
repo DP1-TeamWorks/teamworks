@@ -1,9 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,10 +50,9 @@ public class UserTWController {
 	}
 
 	@GetMapping(value = "/api/usersTW")
-	public List<UserTW> getUsers(HttpServletRequest r) {
-		List<UserTW> l = new ArrayList<>();
-		Integer teamId = (Integer) r.getSession().getAttribute("teamId");
-		l = teamService.findTeamById(teamId).getUsers();
+	public Collection<UserTW.StrippedUser> getUsers(HttpServletRequest r) {
+        Integer teamId = (Integer) r.getSession().getAttribute("teamId");
+		List<UserTW.StrippedUser> l = userService.findUsersByTeam(teamId).stream().collect(Collectors.toList());
 		return l;
 	}
 

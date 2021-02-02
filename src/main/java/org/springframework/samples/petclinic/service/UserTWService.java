@@ -38,16 +38,22 @@ public class UserTWService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<UserTW> findUserByLastName(String lastname) {
-		return userRepository.findByLastName(lastname);
+	public Collection<UserTW.StrippedUser> findUsersByTeam(Integer teamId) {
+
+	    return userRepository.findUsersByTeam(teamId);
 	}
+
+    @Transactional(readOnly = true)
+    public Collection<UserTW> findUserByLastName(String lastname) {
+        return userRepository.findByLastName(lastname);
+    }
 
 	public void deleteUserById(Integer userId) throws DataAccessException {
 		userRepository.deleteById(userId);
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<UserTW> getAllUsers() throws DataAccessException {
+	public Collection<UserTW.StrippedUser> getAllUsers() throws DataAccessException {
 		return userRepository.findAll();
 	}
 
