@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -14,6 +15,7 @@ import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.MilestoneService;
 import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.ToDoLimitMilestoneException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -56,7 +58,7 @@ public class ToDoController {
 	}
 
 	@PostMapping(value = "/api/toDos")
-	public ResponseEntity<String> createToDo(@RequestBody ToDo toDo, HttpServletRequest r,
+	public ResponseEntity<String> createToDo(@Valid @RequestBody ToDo toDo, HttpServletRequest r,
 			@RequestParam(required = true) Integer milestoneId, @RequestParam(required = false) Integer userId) {
 		try {
 			UserTW user = userService.findUserById(userId);
@@ -66,8 +68,8 @@ public class ToDoController {
 			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
-		} catch (DataAccessException d) {
-			return ResponseEntity.badRequest().build();
+		} catch (DataAccessException|ToDoLimitMilestoneException d) {
+			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 	}
 
@@ -79,8 +81,8 @@ public class ToDoController {
 			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
-		} catch (DataAccessException d) {
-			return ResponseEntity.badRequest().build();
+		} catch (DataAccessException|ToDoLimitMilestoneException d) {
+			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 	}
 }

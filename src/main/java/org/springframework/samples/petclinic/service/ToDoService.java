@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.repository.ToDoRepository;
+import org.springframework.samples.petclinic.validation.ToDoLimitMilestoneException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +20,14 @@ public class ToDoService {
         this.toDoRepository = toDoRepository;
     }
 
-    @Transactional
-    public void saveToDo(ToDo toDo) throws DataAccessException {
-        toDoRepository.save(toDo);
+    @Transactional(rollbackFor = ToDoLimitMilestoneException.class)
+    public void saveToDo(ToDo toDo) throws DataAccessException, ToDoLimitMilestoneException {
+    	if(toDo.getAssignee().getToDos().stream().filter(x->x.getMilestone()==toDo.getMilestone()).count()<7) {
+    		toDoRepository.save(toDo);
+    	}
+    	else {
+    		throw new ToDoLimitMilestoneException();
+    	}
     }
 
     @Transactional(readOnly = true)
