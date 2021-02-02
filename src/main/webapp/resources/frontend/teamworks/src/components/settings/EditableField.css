@@ -53,9 +53,13 @@
     top: 0;
     left: 0;
     background: none;
-    /* border: none; */
     padding-left: 20px;
     padding-right: 30px;
+}
+
+.EditingInput:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.8);
 }
 
 .EditingOkButton {

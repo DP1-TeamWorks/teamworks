@@ -4,64 +4,67 @@ import Button from "../buttons/Button";
 import AddUserForm from "../forms/AddUserForm";
 import UserList from "./UserList";
 import AddElementForm from "../forms/AddElementForm";
-import SubsettingContainerDepartments from "./SubsettingContainerDepartments";
+import DepartmentsContainer from "./DepartmentsContainer";
 import AddDepartmentForm from "../forms/AddDepartmentForm";
 import { useEffect, useState } from "react";
 import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
+import Spinner from "../spinner/Spinner";
 
 const DepartmentSettings = () =>
 {
 
-  const [updateCounter, setUpdateCounter] = useState(0);
+  function retrieveDepartments()
+  {
+    DepartmentApiUtils.getDepartments()
+      .then(dpts => setDepartments(dpts))
+      .catch((err) => console.error(err));
+  }
+
   const [departments, setDepartments] = useState(null);
   useEffect(() =>
   {
-    DepartmentApiUtils.getDepartments()
-    .then(dpts => setDepartments(dpts))
-    .catch((err) => console.err(err));
-  }, [updateCounter]);
+    retrieveDepartments();
+  }, []);
 
-  let manageDeparments;
-  if (departments)
+  let manageDepartments;
+  if (!departments)
   {
-    if (departments.length > 0)
-    {
-      manageDeparments = (
-        <SettingGroup
-          name="Manage departments"
-          description="Only showing departments you have management permissions on.">
-          <SubsettingContainerDepartments departments={departments} />
-        </SettingGroup>
-      );
-    }
-    else
-    {
-      manageDeparments = (
-        <SettingGroup
-          name="Manage departments"
-          description="There aren't any deparments yet.">
-        </SettingGroup>
-      );
-    }
-  }
-  else
-  {
-    manageDeparments = (
+    manageDepartments = (
       <SettingGroup
         name="Manage departments"
-        description="Loading deparments...">
+        description=" ">
+          <Spinner />
       </SettingGroup>
     );
   }
-    
+  else if (departments.length > 0)
+  {
+    manageDepartments = (
+      <SettingGroup
+        name="Manage departments"
+        description="Only showing departments you have management permissions on.">
+        <DepartmentsContainer departments={departments} onDepartmentDeleted={retrieveDepartments} />
+      </SettingGroup>
+    );
+  }
+  else
+  {
+    manageDepartments = (
+      <SettingGroup
+        name="Manage departments"
+        description="There aren't any deparments yet.">
+      </SettingGroup>
+    );
+  }
+
   return (
     <div className="SettingGroupsContainer">
       <SettingGroup
         name="Create new department"
         description="You will be able to add users once created.">
-        <AddDepartmentForm onDepartmentAdded={() => setUpdateCounter(updateCounter+1)} />
+        <AddDepartmentForm onDepartmentAdded={retrieveDepartments} />
       </SettingGroup>
-      {manageDeparments}
+      {manageDepartments}
     </div>
   );
 };

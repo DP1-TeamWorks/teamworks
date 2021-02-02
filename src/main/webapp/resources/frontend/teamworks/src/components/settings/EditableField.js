@@ -5,24 +5,30 @@ import "../forms/Forms.css";
 import GradientButton from "../buttons/GradientButton";
 import { useEffect } from "react";
 
-const EditableField = ({value, inputType, smaller, editable, apiFunction, fieldName}) => {
+const EditableField = ({value, inputType, smaller, editable, postFunction, fieldName, onUpdated}) => {
   function onOkClicked() {
-    if (!apiFunction || !fieldName)
+    if (!postFunction || !fieldName)
     {
       setEditing(false);
       return;
     }
     var postObj = {};
     postObj[fieldName] = currentVal;
-    apiFunction(postObj).catch(() =>
+    postFunction(postObj)
+    .catch(() =>
     {
       setErrored(true);
       setActualVal(actualVal); // set the old values back
       setCurrentVal(actualVal);
-      setTimeout(() => setErrored(false), 3000);
+      if (onUpdated)
+        onUpdated(actualVal);
+      setTimeout(() => setErrored(false), 5000);
     });
+    // Set values inmediately after update, dont wait for promise
     setActualVal(actualVal);
     setEditing(false);
+    if (onUpdated)
+      onUpdated(currentVal);
   }
 
   function enterEditingMode()
@@ -38,6 +44,20 @@ const EditableField = ({value, inputType, smaller, editable, apiFunction, fieldN
     }
   }
 
+  const [editing, setEditing] = useState(false);
+  const [actualVal, setActualVal] = useState(value);
+  const [currentVal, setCurrentVal] = useState(value);
+  const [loading, setLoading] = useState(!Boolean(value));
+  const [copied, setCopied] = useState(false);
+  const [errored, setErrored] = useState(null);
+
+  let textInput;
+  useEffect(() =>
+  {
+    if (editing)
+      textInput.focus();
+  }, [editing]);
+
   useEffect(() =>
   {
     if (value)
@@ -48,12 +68,7 @@ const EditableField = ({value, inputType, smaller, editable, apiFunction, fieldN
     }
   }, [value]);
 
-  const [editing, setEditing] = useState(false);
-  const [actualVal, setActualVal] = useState(value);
-  const [currentVal, setCurrentVal] = useState(value);
-  const [loading, setLoading] = useState(true);
-  const [copied, setCopied] = useState(false);
-  const [errored, setErrored] = useState(null);
+  
 
   if (editing) {
     return (
@@ -64,6 +79,7 @@ const EditableField = ({value, inputType, smaller, editable, apiFunction, fieldN
           defaultValue={currentVal}
           onChange={(e) => setCurrentVal(e.target.value)}
           onKeyDown={(e) => { if (e.key == "Enter") onOkClicked() }}
+          ref={(input) => textInput = input}
         />
         <GradientButton
           className="EditingOkButton"

@@ -13,7 +13,8 @@ class AddForm extends React.Component
       inputs: {},
       errors: {},
       requestError: "",
-      children: []
+      children: [],
+      isSubmitting: false
     };
     this.submitText = props.submitText ?? "Add element";
     this.postFunction = props.postFunction;
@@ -82,6 +83,7 @@ class AddForm extends React.Component
       });
       return;
     }
+    this.setState({ isSubmitting: true });
     this.postFunction(postObject)
       .then(() =>
       {
@@ -89,6 +91,7 @@ class AddForm extends React.Component
           inputs: {},
           errors: {},
           requestError: "",
+          isSubmitting: false
         });
       })
       .catch((error) =>
@@ -96,7 +99,8 @@ class AddForm extends React.Component
         console.error(error);
         const requestError = error.response.data === "alreadyexists" ? this.alreadyExistsErrorText : "Something went wrong";
         this.setState({
-          requestError: requestError
+          requestError: requestError,
+          isSubmitting: false
         });
       });
   };
@@ -166,6 +170,7 @@ class AddForm extends React.Component
           text={this.submitText}
           requestError={this.state.requestError}
           hasErrors={this.hasErrors()}
+          loading={this.state.isSubmitting}
         />
       </form>
     );

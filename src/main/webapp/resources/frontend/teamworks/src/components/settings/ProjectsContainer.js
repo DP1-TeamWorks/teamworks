@@ -8,7 +8,7 @@ import AddElementForm from "../forms/AddElementForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-const SubsettingContainerProjects = () =>
+const ProjectsContainer = () =>
 {
   return (
     <div className="SubsettingContainer">
@@ -50,4 +50,4 @@ const SubsettingContainerProjects = () =>
   );
 };
 
-export default SubsettingContainerProjects;
+export default ProjectsContainer;

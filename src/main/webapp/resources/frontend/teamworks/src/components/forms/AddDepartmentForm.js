@@ -25,7 +25,7 @@ const AddDepartmentForm = ({onDepartmentAdded}) =>
   return (
     <AddForm submitText="Add department" postFunction={addDepartment} alreadyExistsErrorText="There's already a department with that name.">
       <p className="InputTitle">Name</p>
-      <Input name="name" placeholder="Software Dpt." />
+      <Input name="name" placeholder="Software Dpt" />
       <p className="InputTitle">Description</p>
       <Input name="description" placeholder="A brief description" />
     </AddForm>
