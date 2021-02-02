@@ -7,7 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -25,13 +27,13 @@ public class Team extends BaseEntity {
 	
 	  // Attributes
 
-	@NotNull
 	@NotEmpty
+	@Size(min=1,max=25)
 	@Column(name = "name",unique=true)
 	String name;
 
-	@NotNull
 	@NotEmpty
+	@Size(min=1,max=25)
 	@Column(name = "identifier",unique=true)
 	String identifier;
 

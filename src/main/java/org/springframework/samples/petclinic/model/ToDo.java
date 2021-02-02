@@ -8,13 +8,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.sun.istack.NotNull;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,21 +26,20 @@ public class ToDo extends BaseEntity {
 
     // Attributes
 
-    @NotNull
-    @NotEmpty
+    @Size(min=1,max=25)
     @Column(name = "title")
+    @NotEmpty
     String title;
 
-    @NotNull
+    
     @Column(name = "done")
     Boolean done;
 
     // Relations
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "user_id")
-    @JsonIgnore
-    // @JsonBackReference
+
     private UserTW assignee;
 
     @ManyToOne(optional = false)
