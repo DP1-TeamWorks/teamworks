@@ -14,6 +14,7 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.ManyTeamOwnerException;
 import org.springframework.samples.petclinic.validation.TeamValidator;
 import org.springframework.samples.petclinic.validation.UserValidator;
 import org.springframework.validation.BindingResult;
@@ -106,8 +107,8 @@ public class AuthController {
 
 			
 
-		} catch (DataAccessException d) {
-			return ResponseEntity.badRequest().body("alreadyexists");
+		} catch (DataAccessException | ManyTeamOwnerException d) {
+			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 
 	}

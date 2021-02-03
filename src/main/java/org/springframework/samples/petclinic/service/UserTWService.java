@@ -5,8 +5,10 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.repository.UserTWRepository;
+import org.springframework.samples.petclinic.validation.ManyTeamOwnerException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +24,14 @@ public class UserTWService {
 	}
 
 	@Transactional
-	public void saveUser(UserTW user) throws DataAccessException {
+	public void saveUser(UserTW user) throws DataAccessException, ManyTeamOwnerException {
 		// user.setEnabled(true);
-		userRepository.save(user);
+		if(user.getRole().equals(Role.team_owner)&&user.getTeam().getUsers().stream().filter(x->x.getRole().equals(Role.team_owner)).findAny().isPresent()) {
+			throw new ManyTeamOwnerException();
+		}else {
+			userRepository.save(user);
+		}
+		
 	}
 
 	@Transactional(readOnly = true)
