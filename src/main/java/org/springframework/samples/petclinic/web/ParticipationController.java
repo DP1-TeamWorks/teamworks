@@ -16,12 +16,15 @@ import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.ProjectService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.ManyProjectManagerException;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@Controller
 public class ParticipationController {
 	private final ProjectService projectService;
 	private final ParticipationService participationService;
@@ -52,10 +55,11 @@ public class ParticipationController {
 					projectId);
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 			Project project = projectService.findProjectById(projectId);
+			Belongs currentBelongs = belongsService.findCurrentBelongs(participationUserId, project.getDepartment().getId());
 			Belongs belongs = belongsService.findCurrentBelongs(user.getId(), project.getDepartment().getId());
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
 			// Comprueba si existe una participacion
-			if (currentParticipation == null && belongs != null) {
+			if (currentParticipation == null && currentBelongs!=null && (belongs != null||isTeamOwner)) {
 				UserTW participationUser = userTWService.findUserById(participationUserId);
 				Participation participation = new Participation();
 				participation.setProject(project);
@@ -63,16 +67,16 @@ public class ParticipationController {
 				participation.setIsProjectManager(false);
 				// Solo puedes asignar el rol de project manager si eres teamOwner o
 				// departmentManager
-				if (isProjectManager != null && (belongs.getIsDepartmentManager() || isTeamOwner)) {
+				if (isProjectManager != null && (isTeamOwner || belongs.getIsDepartmentManager())) {
 					participation.setIsProjectManager(isProjectManager);
 				}
 				participationService.saveParticipation(participation);
 				return ResponseEntity.ok().build();
 			} else {
-				return ResponseEntity.badRequest().body("Ya existe una participacion");
+				return ResponseEntity.badRequest().body("Ya existe una participacion o el usuario no pertenece al departamento");
 			}
-		} catch (DataAccessException d) {
-			return ResponseEntity.badRequest().build();
+		} catch (DataAccessException|ManyProjectManagerException d) {
+			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 
 	}

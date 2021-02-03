@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.val;
 
 @RestController
 public class DepartmentController {
@@ -66,7 +69,7 @@ public class DepartmentController {
 	}
 
 	@PostMapping(value = "/api/departments")
-	public ResponseEntity<String> createDeparment(@RequestBody Department department, HttpServletRequest r) {
+	public ResponseEntity<String> createDeparment(@Valid @RequestBody Department department, HttpServletRequest r) {
 		try {
 			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
 			Team team = teamService.findTeamById(teamId);

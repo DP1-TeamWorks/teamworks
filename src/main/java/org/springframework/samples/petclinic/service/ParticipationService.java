@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.repository.ParticipationRepository;
+import org.springframework.samples.petclinic.validation.ManyProjectManagerException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +21,13 @@ public class ParticipationService {
 	}
 
 	@Transactional
-	public void saveParticipation(Participation participation) throws DataAccessException {
-		participationRepository.save(participation);
+	public void saveParticipation(Participation participation) throws DataAccessException, ManyProjectManagerException {
+		if(participation.getIsProjectManager()&&participation.getProject().getParticipation().stream().filter(x->x.getIsProjectManager()).findAny().isPresent()) {
+			throw new ManyProjectManagerException();
+		}else {
+			participationRepository.save(participation);
+		}
+		
 	}
 
 	@Transactional
