@@ -65,23 +65,24 @@ public class ToDoController {
 			Milestone milestone = milestoneService.findMilestoneById(milestoneId);
 			toDo.setAssignee(user);
 			toDo.setMilestone(milestone);
+			toDo.setDone(false);
 			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
-		} catch (DataAccessException|ToDoLimitMilestoneException d) {
+		} catch (DataAccessException | ToDoLimitMilestoneException d) {
 			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 	}
 
 	@PostMapping(value = "/api/toDos/markAsDone")
-	public ResponseEntity<String> markAsDone(HttpServletRequest r, @RequestParam(required = true) Integer toDoId) {
+	public ResponseEntity<String> markAsDone(HttpServletRequest r, @RequestParam(required = true) int toDoId) {
 		try {
 			ToDo toDo = toDoService.findToDoById(toDoId);
 			toDo.setDone(true);
 			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
-		} catch (DataAccessException|ToDoLimitMilestoneException d) {
+		} catch (DataAccessException | ToDoLimitMilestoneException d) {
 			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 	}

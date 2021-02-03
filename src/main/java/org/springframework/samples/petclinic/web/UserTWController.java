@@ -42,8 +42,9 @@ public class UserTWController {
 	private final TeamService teamService;
 	private final BelongsService belongsService;
 	private final ParticipationService participationService;
-	
+
 	private final UserValidator userValidator;
+
 	@Autowired
 	public UserTWController(UserTWService userService, TeamService teamService, BelongsService belongsService,
 			ParticipationService participationService, UserValidator userValidator) {
@@ -82,22 +83,22 @@ public class UserTWController {
 	}
 
 	@PostMapping(value = "/api/userTW")
-	public ResponseEntity<String> postUser(HttpServletRequest r, @RequestBody UserTW user,BindingResult errors) {
+	public ResponseEntity<String> postUser(HttpServletRequest r, @RequestBody UserTW user, BindingResult errors) {
 		try {
-			
+
 			userValidator.validate(user, errors);
-			if(!errors.hasErrors()) {
+			if (!errors.hasErrors()) {
 				Integer teamId = (Integer) r.getSession().getAttribute("teamId");
 				Team team = teamService.findTeamById(teamId);
 				user.setTeam(team);
-				user.setEmail(user.getName().toLowerCase() + user.getLastname().toLowerCase() + "@" + team.getIdentifier());
+				user.setEmail(
+						user.getName().toLowerCase() + user.getLastname().toLowerCase() + "@" + team.getIdentifier());
 				user.setPassword(SecurityConfiguration.passwordEncoder().encode(user.getPassword()));
 				userService.saveUser(user);
 				return ResponseEntity.ok("User Created");
-			}else {
+			} else {
 				return ResponseEntity.badRequest().body(errors.getAllErrors().toString());
 			}
-			
 
 		} catch (DataAccessException | ManyTeamOwnerException d) {
 			return ResponseEntity.badRequest().body(d.getMessage());

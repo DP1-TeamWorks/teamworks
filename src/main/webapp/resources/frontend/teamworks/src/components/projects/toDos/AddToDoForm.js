@@ -5,6 +5,8 @@ import Input from "../../forms/Input";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
+import SubmitButton from "../../forms/SubmitButton";
+import SubmitError from "../../forms/SubmitError";
 
 class AddToDoForm extends React.Component {
   constructor(props) {
@@ -53,15 +55,20 @@ class AddToDoForm extends React.Component {
   };
 
   apiRequestHandler = (toDoTitle) => {
-    ToDoApiUtils.addNewPersonalToDo(this.props.milestoneId, { title: toDoTitle })
+    ToDoApiUtils.addNewPersonalToDo(this.props.milestoneId, {
+      title: toDoTitle,
+      done: "false",
+    })
       .then((res) => {
         this.props.setReloadToDos(true);
       })
       .catch((error) => {
         console.log("ERROR: cannot add the new todo");
-        this.setState({
-          requestError: "Cannot add the new todo",
-        });
+        console.log(error.response);
+        if (error.response.data === "Many toDos assigned to milestone")
+          this.setState({
+            requestError: "Cannot add more toDos",
+          });
       });
   };
 
@@ -88,6 +95,7 @@ class AddToDoForm extends React.Component {
           changeHandler={this.changeHandler}
           error={this.state.errors.toDo}
         />
+        <SubmitError error={this.requestError !== "" && this.requestError} />
       </form>
     );
   }

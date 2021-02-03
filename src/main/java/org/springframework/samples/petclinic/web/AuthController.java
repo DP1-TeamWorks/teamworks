@@ -29,7 +29,8 @@ public class AuthController {
 	private final TeamValidator teamValidator;
 
 	@Autowired
-	public AuthController(TeamService teamService, UserTWService userTWService, UserValidator userValidator, TeamValidator teamValidator) {
+	public AuthController(TeamService teamService, UserTWService userTWService, UserValidator userValidator,
+			TeamValidator teamValidator) {
 		this.teamService = teamService;
 		this.userTWService = userTWService;
 		this.userValidator = userValidator;
@@ -69,7 +70,7 @@ public class AuthController {
 	}
 
 	@PostMapping(value = "/api/auth/signup")
-	public ResponseEntity<String> signUp(@RequestBody Map<String, String> b,BindingResult errors) {
+	public ResponseEntity<String> signUp(@RequestBody Map<String, String> b, BindingResult errors) {
 		try {
 			// Set up the team
 			String teamName = b.get("teamname");
@@ -78,7 +79,7 @@ public class AuthController {
 			team.setName(teamName);
 			team.setIdentifier(identifier);
 			teamValidator.validate(team, errors);
-			Boolean teamHasErrors=errors.hasErrors();
+			Boolean teamHasErrors = errors.hasErrors();
 
 			// Set up the team_owner
 			String name = b.get("username");
@@ -92,20 +93,16 @@ public class AuthController {
 			user.setTeam(team);
 			user.setPassword(password);
 			userValidator.validate(user, errors);
-			Boolean userHasErrors=errors.hasErrors();
+			Boolean userHasErrors = errors.hasErrors();
 			user.setPassword(SecurityConfiguration.passwordEncoder().encode(password));
-			if(teamHasErrors||userHasErrors) {
+			if (teamHasErrors || userHasErrors) {
 				return ResponseEntity.badRequest().body(errors.getAllErrors().toString());
-				
-			}else {
+			} else {
 				// Save Team & Team_Owner
 				teamService.saveTeam(team);
 				userTWService.saveUser(user);
 				return ResponseEntity.ok("Usuario y Team creado satisfactoriamente");
 			}
-			
-
-			
 
 		} catch (DataAccessException | ManyTeamOwnerException d) {
 			return ResponseEntity.badRequest().body(d.getMessage());

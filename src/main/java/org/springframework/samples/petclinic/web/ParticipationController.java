@@ -56,11 +56,12 @@ public class ParticipationController {
 					projectId);
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 			Project project = projectService.findProjectById(projectId);
-			Belongs currentBelongs = belongsService.findCurrentBelongs(participationUserId, project.getDepartment().getId());
+			Belongs currentBelongs = belongsService.findCurrentBelongs(participationUserId,
+					project.getDepartment().getId());
 			Belongs belongs = belongsService.findCurrentBelongs(user.getId(), project.getDepartment().getId());
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
 			// Comprueba si existe una participacion
-			if (currentParticipation == null && currentBelongs!=null && (belongs != null||isTeamOwner)) {
+			if (currentParticipation == null && currentBelongs != null && (belongs != null || isTeamOwner)) {
 				UserTW participationUser = userTWService.findUserById(participationUserId);
 				Participation participation = new Participation();
 				participation.setProject(project);
@@ -74,9 +75,10 @@ public class ParticipationController {
 				participationService.saveParticipation(participation);
 				return ResponseEntity.ok().build();
 			} else {
-				return ResponseEntity.badRequest().body("Ya existe una participacion o el usuario no pertenece al departamento");
+				return ResponseEntity.badRequest()
+						.body("Ya existe una participacion o el usuario no pertenece al departamento");
 			}
-		} catch (DataAccessException|ManyProjectManagerException | DateIncoherenceException d) {
+		} catch (DataAccessException | ManyProjectManagerException | DateIncoherenceException d) {
 			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 

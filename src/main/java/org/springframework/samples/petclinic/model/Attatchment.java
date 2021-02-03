@@ -19,18 +19,18 @@ import lombok.Setter;
 @Entity
 @Table(name = "attatchment")
 public class Attatchment extends BaseEntity {
-	
-	  // Attributes
-	
+
+	// Attributes
+
 	@NotBlank
 	@Column(name = "url")
 	private String url;
-	
+
 	// Relations
-	
+
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "message")
 	@JsonIgnore
 	private Message message;
-	
+
 }
