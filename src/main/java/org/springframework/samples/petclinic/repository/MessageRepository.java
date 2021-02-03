@@ -39,9 +39,7 @@ public interface MessageRepository extends Repository<Message, Integer> {
 	@Query(value = "SELECT m FROM Message m WHERE :userTW MEMBER OF m.recipients AND :tag MEMBER OF m.tags")
 	public Collection<Message> findMessagesByTag(@Param("userTW") UserTW userTW, @Param("tag") Tag tag);
 
-	@Query(value = "SELECT m FROM Message m WHERE :userTW MEMBER OF m.recipients AND ( :search MEMBER OF m.tags"
-			+ " OR m.sender.email LIKE :search" + " OR m.sender.name LIKE :search"
-			+ " OR m.sender.lastname LIKE :search" + " OR m.subject LIKE :search" + " OR m.text LIKE :search)")
-	public Collection<Message> findMessagesBySearch(UserTW user, String search);
+	@Query(value = "SELECT m FROM Message m WHERE :userTW MEMBER OF m.recipients AND (LOWER(m.sender.email) LIKE %:search% OR LOWER(m.sender.name) LIKE %:search% OR LOWER(m.sender.lastname) LIKE %:search% OR LOWER(m.subject) LIKE %:search% OR LOWER(m.text) LIKE %:search%)")
+	public Collection<Message> findMessagesBySearch(@Param("userTW") UserTW user, @Param("search") String search);
 
 }

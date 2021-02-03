@@ -84,15 +84,15 @@ public class MessageController {
 	}
 
 	@GetMapping(value = "/api/message/bySearch")
-	public List<Message> getMessagesByTag(HttpServletRequest r, @RequestParam(required = true) String search) {
+	public List<Message> getMessagesBySearch(HttpServletRequest r, @RequestParam(required = true) String search) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW user = userService.findUserById(userId);
-			List<Message> messageList = (messageService.findMessagesBySearch(user, search)).stream()
+			List<Message> messageList = (messageService.findMessagesBySearch(user, search.toLowerCase())).stream()
 					.collect(Collectors.toList());
 			return messageList;
 		} catch (DataAccessException d) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages" + d);
 		}
 	}
 
