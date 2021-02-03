@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,6 +33,7 @@ public class Team extends BaseEntity {
 	@Column(name = "name",unique=true)
 	String name;
 
+	@Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
 	@NotEmpty
 	@Size(min=1,max=25)
 	@Column(name = "identifier",unique=true)

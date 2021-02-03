@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -30,11 +31,13 @@ public class UserTW extends BaseEntity {
 	
 	  // Attributes
 	
+	@Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
 	@NotEmpty
 	@Size(min=1,max=25)
 	@Column(name = "name")
 	String name;
 	
+	@Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
 	@NotEmpty
 	@Size(min=1,max=120)
 	@Column(name = "lastname")

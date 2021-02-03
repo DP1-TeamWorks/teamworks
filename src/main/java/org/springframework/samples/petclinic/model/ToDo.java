@@ -26,7 +26,7 @@ public class ToDo extends BaseEntity {
 
     // Attributes
 
-    @Size(min=1,max=25)
+    @Size(min=1,max=200)
     @Column(name = "title")
     @NotEmpty
     String title;

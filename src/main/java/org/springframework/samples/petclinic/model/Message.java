@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -30,16 +31,16 @@ import lombok.Setter;
 
 public class Message extends BaseEntity {
 	// Attributes
-	@NotNull
+	
 	@Column(name = "timestamp")
 	@CreationTimestamp
 	LocalDate timestamp;
 
-	@NotNull
+	
 	@Column(name = "subject")
 	private String subject;
 
-	@NotNull
+	
 	@Column(name = "text")
 	private String text;
 

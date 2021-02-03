@@ -9,6 +9,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,9 +26,9 @@ import lombok.Setter;
 public class Tag extends BaseEntity {
 
     // Attributes
-
-    @NotNull
-    @NotEmpty
+	
+	@NotEmpty
+	@Size(min=1,max=200)
     @Column(name = "title")
     String title;
 
