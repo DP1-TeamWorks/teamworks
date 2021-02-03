@@ -16,6 +16,7 @@ import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.ProjectService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyProjectManagerException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -75,7 +76,7 @@ public class ParticipationController {
 			} else {
 				return ResponseEntity.badRequest().body("Ya existe una participacion o el usuario no pertenece al departamento");
 			}
-		} catch (DataAccessException|ManyProjectManagerException d) {
+		} catch (DataAccessException|ManyProjectManagerException | DateIncoherenceException d) {
 			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 

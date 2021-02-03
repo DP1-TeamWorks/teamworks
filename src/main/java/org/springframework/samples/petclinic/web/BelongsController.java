@@ -14,6 +14,8 @@ import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.DateIncoherenceException;
+import org.springframework.samples.petclinic.validation.ManyDepartmentManagerException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -69,7 +71,7 @@ public class BelongsController {
 				return ResponseEntity.badRequest().body("Ya existe un belongs");
 			}
 
-		} catch (DataAccessException d) {
+		} catch (DataAccessException | ManyDepartmentManagerException | DateIncoherenceException d) {
 			return ResponseEntity.badRequest().build();
 		}
 
@@ -91,7 +93,7 @@ public class BelongsController {
 				return ResponseEntity.status(403).build();
 			}
 
-		} catch (DataAccessException d) {
+		} catch (DataAccessException | ManyDepartmentManagerException | DateIncoherenceException d) {
 			return ResponseEntity.badRequest().build();
 		}
 
