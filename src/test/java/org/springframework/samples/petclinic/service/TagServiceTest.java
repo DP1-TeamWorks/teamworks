@@ -64,7 +64,7 @@ public class TagServiceTest {
 	}
 
 	
-	
+	//NEGATIVE USE CASE H14-E1
 	@Test
 	@Transactional
 	public void shouldInsertTagWithoutData() {
@@ -76,6 +76,5 @@ public class TagServiceTest {
 		assertThrows(ConstraintViolationException.class, ()-> {
 			tagService.saveTag(tag);
 			});			
-
 	}
 }
