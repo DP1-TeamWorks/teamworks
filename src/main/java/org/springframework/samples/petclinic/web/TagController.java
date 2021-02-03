@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.web;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -11,6 +12,7 @@ import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Tag;
 import org.springframework.samples.petclinic.service.ProjectService;
 import org.springframework.samples.petclinic.service.TagService;
+import org.springframework.samples.petclinic.validation.TagLimitProjectException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +45,7 @@ public class TagController {
     }
 
     @PostMapping(value = "/api/tags")
-    public ResponseEntity<String> createTag(HttpServletRequest r, @RequestBody Tag tag,
+    public ResponseEntity<String> createTag(HttpServletRequest r,@Valid @RequestBody Tag tag,
             @RequestParam(required = true) Integer projectId) {
         try {
             Project project = projectService.findProjectById(projectId);
@@ -51,8 +53,8 @@ public class TagController {
             tagService.saveTag(tag);
             return ResponseEntity.ok().build();
 
-        } catch (DataAccessException d) {
-            return ResponseEntity.badRequest().build();
+        } catch (DataAccessException | TagLimitProjectException d) {
+            return ResponseEntity.badRequest().body(d.getMessage());
         }
     }
 
