@@ -66,7 +66,7 @@ const NewMessageMultiSelect = ({ pickedProject, setPickedProject, name, placehol
   return (
     <div className="InputContainer">
         <p className="TitleNewMsg">{name}</p>
-        <Select options={options} styles={customStyles} name={name} placeholder={placeholder}
+        <Select options={options} styles={customStyles} name={name} placeholder={placeholder} 
         isMulti></Select>
     </div>
   );

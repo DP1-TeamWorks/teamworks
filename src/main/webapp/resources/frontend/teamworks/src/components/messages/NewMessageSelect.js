@@ -94,7 +94,7 @@ export default function NewMessageMultiSelect({name, placeholder}) {
   return (
     <div className="InputContainer">
         <p className="TitleNewMsg">{name}</p>
-        <Select options={options} styles={customStyles} name={name} placeholder={placeholder}></Select>
+        <Select options={options} styles={customStyles} placeholder={placeholder}></Select>
     </div>
   );
 };

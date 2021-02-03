@@ -13,6 +13,8 @@ import ProjectPicker from "../projects/ProjectPicker";
 //pickeddepartment useState
 //pickedProject useState
 
+
+
 class NewMessage extends React.Component {
   constructor(props) {
     super(props);
@@ -37,7 +39,7 @@ class NewMessage extends React.Component {
     const errors = Object.values(this.state.errors);
     const nInputs = Object.keys(this.state.inputs).length;
     let b =
-      errors.length < nInputs
+      errors.length < 2
         ? true
         : errors.some((e) => {
             return e !== "";
@@ -58,35 +60,7 @@ class NewMessage extends React.Component {
     });
     let errorMsg = "";
     switch (field) {
-      case "To":
-        if (value === "") {
-          errorMsg = "To required";
-        } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
-          errorMsg = "Invalid, use letters and numbers";
-        }
-        break;
-
-      case "Department":
-        if (!/^[A-Za-z0-9_-]*$/.test(value)) {
-          errorMsg = "Invalid, use letters and numbers";
-        }
-        break;
-      case "Project":
-        if (!/^[A-Za-z0-9_-]*$/.test(value)) {
-          errorMsg = "Invalid, use letters and numbers";
-        }
-        break;
-      case "Tags":
-        if (!/^[A-Za-z0-9_-]*$/.test(value)) {
-          errorMsg = "Invalid, use letters and numbers";
-        }
-        break;
       case "Subject":
-        if (!/^[A-Za-z0-9_-]*$/.test(value)) {
-          errorMsg = "Invalid, use letters and numbers";
-        }
-        break;
-      case "ToDos":
         if (!/^[A-Za-z0-9_-]*$/.test(value)) {
           errorMsg = "Invalid, use letters and numbers";
         }
@@ -104,8 +78,11 @@ class NewMessage extends React.Component {
   };
 
   changeHandler = (event) => {
+
+    console.log(event);
     let field = event.target.name;
     let value = event.target.value;
+    console.log(field + " - " + value);
     this.validate(field, value);
     this.setState({ inputs: { ...this.state.inputs, [field]: value } });
   };
@@ -114,18 +91,15 @@ class NewMessage extends React.Component {
     event.preventDefault();
     this.validateAll();
     if (!this.hasErrors()) {
-      let To = this.state.inputs.To;
-      let Department = this.state.inputs.Department;
-      let Project = this.state.inputs.Project;
-      let Tags = this.state.inputs.Tags;
       let Subject = this.state.inputs.Subject;
-      let Todos = this.state.inputs.Todos;
       let Message = this.state.inputs.Message;
     } else {
       console.log("There are errors in this form");
       console.log(this.state.errors);
     }
   };
+
+  
 
   render() {
     return (
@@ -141,26 +115,22 @@ class NewMessage extends React.Component {
             <NewMessageMultiSelect
               name="To"
               placeholder="Users"
-              error={this.state.errors.To}
               changeHandler={this.changeHandler}
             ></NewMessageMultiSelect>
             <div className="SecondLineFlex">
               <NewMessageSelect
                 name="Department"
                 placeholder="DPT"
-                error={this.state.errors.Department}
                 changeHandler={this.changeHandler}
               ></NewMessageSelect>
               <NewMessageSelect
                 name="Project"
                 placeholder="Project"
-                error={this.state.errors.Project}
                 changeHandler={this.changeHandler}
               ></NewMessageSelect>
               <NewMessageMultiSelect
                 name="Tags"
                 placeholder="Tags"
-                error={this.state.errors.Tags}
                 changeHandler={this.changeHandler}
               ></NewMessageMultiSelect>
             </div>
@@ -168,6 +138,7 @@ class NewMessage extends React.Component {
               <div className="NewMsgHeadLabel">
                 <span className="NewMsgHeadText">Subject</span>
                 <Input
+                  name="Subject"
                   styleClass="Input NewMsgHead InputNewMsg"
                   placeholder="How are you?"
                   error={this.state.errors.Subject}
@@ -176,7 +147,6 @@ class NewMessage extends React.Component {
                 <NewMessageMultiSelect
                   name="ToDos"
                   placeholder="ToDos"
-                  error={this.state.errors.ToDos}
                   changeHandler={this.changeHandler}
                 ></NewMessageMultiSelect>
               </div>
