@@ -332,3 +332,23 @@ INSERT INTO
     MESSAGES_RECIPIENTS(message_id, recipients_id)
 values
     (6, 1);
+
+INSERT INTO
+    MESSAGES_TAGS(message_id, tags_id)
+values
+    (2, 1);
+
+INSERT INTO
+    MESSAGES_TAGS(message_id, tags_id)
+values
+    (2, 3);
+
+INSERT INTO
+    MESSAGES_TAGS(message_id, tags_id)
+values
+    (3, 2);
+
+INSERT INTO
+    MESSAGES_TAGS(message_id, tags_id)
+values
+    (1, 1);
