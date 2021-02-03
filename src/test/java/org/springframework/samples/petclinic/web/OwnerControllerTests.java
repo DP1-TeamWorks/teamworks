@@ -1,12 +1,15 @@
 package org.springframework.samples.petclinic.web;
 
 import org.assertj.core.util.Lists;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.service.VetService;
+import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.model.UserTW;
+import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -42,10 +45,10 @@ class OwnerControllerTests {
 	private static final int TEST_OWNER_ID = 1;
 
 	@Autowired
-	private OwnerController ownerController;
+	private UserTWController userTWController;
 
 	@MockBean
-	private OwnerService clinicService;
+	private UserTWService UserTWService;
         
         @MockBean
 	private UserService userService;
@@ -56,18 +59,22 @@ class OwnerControllerTests {
 	@Autowired
 	private MockMvc mockMvc;
 
-	private Owner george;
+	private UserTW george;
 
 	@BeforeEach
 	void setup() {
 
-		george = new Owner();
+		george = new UserTW();
 		george.setId(TEST_OWNER_ID);
-		george.setFirstName("George");
-		george.setLastName("Franklin");
-		george.setAddress("110 W. Liberty St.");
-		george.setCity("Madison");
-		george.setTelephone("6085551023");
+		george.setName("George");
+		george.setLastname("Franklin");
+		george.setEmail("andrespuertas@cyber");
+		george.setPassword("123456789");
+		george.setRole(Role.employee);
+		george.setTeam(team);
+		
+		
+		
 		given(this.clinicService.findOwnerById(TEST_OWNER_ID)).willReturn(george);
 
 	}
