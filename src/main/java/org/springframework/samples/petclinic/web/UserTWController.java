@@ -22,6 +22,7 @@ import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.ManyTeamOwnerException;
 import org.springframework.samples.petclinic.validation.UserValidator;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
@@ -90,7 +91,6 @@ public class UserTWController {
 				Team team = teamService.findTeamById(teamId);
 				user.setTeam(team);
 				user.setEmail(user.getName().toLowerCase() + user.getLastname().toLowerCase() + "@" + team.getIdentifier());
-				user.setRole(Role.employee);
 				user.setPassword(SecurityConfiguration.passwordEncoder().encode(user.getPassword()));
 				userService.saveUser(user);
 				return ResponseEntity.ok("User Created");
@@ -99,8 +99,8 @@ public class UserTWController {
 			}
 			
 
-		} catch (DataAccessException d) {
-			return ResponseEntity.badRequest().build();
+		} catch (DataAccessException | ManyTeamOwnerException d) {
+			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 	}
 

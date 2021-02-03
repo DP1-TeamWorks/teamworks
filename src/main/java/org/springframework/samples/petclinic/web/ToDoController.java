@@ -49,7 +49,7 @@ public class ToDoController {
 	}
 
 	@PostMapping(value = "/api/toDos/mine")
-	public ResponseEntity<String> createPersonalToDo(@RequestBody ToDo toDo, HttpServletRequest r,
+	public ResponseEntity<String> createPersonalToDo(@Valid @RequestBody ToDo toDo, HttpServletRequest r,
 			@RequestParam(required = true) Integer milestoneId) {
 
 		Integer userId = (Integer) r.getSession().getAttribute("userId");

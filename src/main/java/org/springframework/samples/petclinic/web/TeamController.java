@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -27,12 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class TeamController {
 
 	private final TeamService teamService;
-	private final UserTWService userService;
-
 	@Autowired
 	public TeamController(TeamService teamService, UserTWService userService) {
 		this.teamService = teamService;
-		this.userService = userService;
 	}
 
 	@InitBinder
@@ -48,7 +46,7 @@ public class TeamController {
 	}
 
 	@PostMapping(value = "/api/team")
-	public ResponseEntity<String> updateTeam(HttpServletRequest req, @RequestBody Team teamAttrs) {
+	public ResponseEntity<String> updateTeam(HttpServletRequest req, @Valid @RequestBody Team teamAttrs) {
 		try {
 		    String name = teamAttrs.getName();
 			Integer teamId = (Integer) req.getSession().getAttribute("teamId");

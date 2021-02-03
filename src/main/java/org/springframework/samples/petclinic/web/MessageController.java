@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -69,7 +70,7 @@ public class MessageController {
 
 	// This only gets the messages that you receive regarding one tag
 	@GetMapping(value = "/api/message/bytag")
-	public List<Message> getMessagesByTag(@RequestBody HttpServletRequest r, @RequestBody(required = true) Tag tag) {
+	public List<Message> getMessagesByTag(HttpServletRequest r,@Valid @RequestBody(required = true) Tag tag) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW user = userService.findUserById(userId);
@@ -82,7 +83,7 @@ public class MessageController {
 	}
 
 	@PostMapping(value = "api/message/new")
-	public ResponseEntity<String> newMessage(HttpServletRequest r, @RequestBody Message message) {
+	public ResponseEntity<String> newMessage(HttpServletRequest r,@Valid @RequestBody Message message) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
@@ -106,7 +107,7 @@ public class MessageController {
 	}
 
 	@PostMapping(value = "api/message/reply")
-	public ResponseEntity<String> replyMessage(HttpServletRequest r, @RequestParam(required = true) Message message) {
+	public ResponseEntity<String> replyMessage(HttpServletRequest r, @Valid @RequestParam(required = true) Message message) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
