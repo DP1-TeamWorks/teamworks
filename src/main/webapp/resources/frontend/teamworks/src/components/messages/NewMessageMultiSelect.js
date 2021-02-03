@@ -13,7 +13,7 @@ const options = [
   { value: 'vanilla', label: 'Vanilla' }
 ]
 
-const NewMessageMultiSelect = ({ pickedProject, setPickedProject, name, placeholder }) => {
+const NewMessageMultiSelect = ({ pickedProject, setPickedProject, name, placeholder, options }) => {
   const [departmentList, setDepartmentList] = useState([]);
   const [projectList, setProjectList] = useState([]);
 

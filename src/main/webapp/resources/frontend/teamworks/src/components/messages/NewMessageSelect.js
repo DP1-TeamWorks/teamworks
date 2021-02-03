@@ -90,7 +90,7 @@ const customStyles = {
 }
 
 
-export default function NewMessageMultiSelect({name, placeholder}) {
+export default function NewMessageMultiSelect({name, placeholder, options}) {
   return (
     <div className="InputContainer">
         <p className="TitleNewMsg">{name}</p>

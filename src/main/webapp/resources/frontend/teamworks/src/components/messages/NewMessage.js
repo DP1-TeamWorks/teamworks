@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../forms/Input";
 import InboxSidebar from "../sidebar/InboxSidebar";
 import Inbox from "../../sections/Inbox";
@@ -8,11 +8,12 @@ import NewMessageSelect from "./NewMessageSelect";
 import NewMessageText from "./NewMessageText";
 import NewMessageSubject from "./NewMessageSubject";
 import ProjectPicker from "../projects/ProjectPicker";
+import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
+import ProjectApiUtils from "../../utils/api/ProjectApiUtils";
 
 //UseEffect que traiga usuarios
 //pickeddepartment useState
 //pickedProject useState
-
 
 
 class NewMessage extends React.Component {
@@ -34,6 +35,7 @@ class NewMessage extends React.Component {
 
     this.ChangeModalNewMessage = props.ChangeModalNewMessage;
   }
+
 
   hasErrors = () => {
     const errors = Object.values(this.state.errors);
@@ -79,10 +81,8 @@ class NewMessage extends React.Component {
 
   changeHandler = (event) => {
 
-    console.log(event);
     let field = event.target.name;
     let value = event.target.value;
-    console.log(field + " - " + value);
     this.validate(field, value);
     this.setState({ inputs: { ...this.state.inputs, [field]: value } });
   };
@@ -102,6 +102,64 @@ class NewMessage extends React.Component {
   
 
   render() {
+
+    const Options = ({ pickedProject, setPickedProject }) => {
+      const [departmentList, setDepartmentList] = useState([]);
+      const [projectList, setProjectList] = useState([]);
+      const [userList, setUserList] = useState([]);
+
+      const [department, setDepartment] = useState("DPT");
+      const [pickedDepartment, setPickedDepartment] = useState({});
+      const [opened, setOpened] = useState(false);
+    
+      useEffect(()=> {
+        
+      }, []);
+
+      useEffect(() => {
+        DepartmentApiUtils.getMyDepartments()
+          .then((res) => {
+            setDepartmentList(res);
+          })
+          .catch((error) => {
+            console.log("ERROR: cannot get the departments");
+          });
+      }, []);
+    
+      useEffect(() => {
+        ProjectApiUtils.getMyProjects(department.id)
+          .then((res) => {
+            setProjectList(res);
+          })
+          .catch((error) => {
+            console.log("ERROR: cannot get the projects");
+          });
+      }, []);
+    
+      const openOrClose = () => {
+        setOpened(!opened);
+      };
+    
+      const handlePickDepartment = (dpt) => {
+        console.log("GETTIN PROJECTS");
+        setPickedDepartment(dpt);
+        ProjectApiUtils.getMyProjects(dpt.id)
+          .then((res) => {
+            setProjectList(res);
+          })
+          .catch((error) => {
+            console.log("ERROR: cannot get the projects");
+          });
+      };
+    
+      const handlePickProject = (project) => {
+        setDepartment(pickedDepartment);
+        setPickedProject(project);
+        openOrClose();
+      };
+    };
+
+    
     return (
       <div className="NewMsgModal">
         <div className="NewMsgContainer">
@@ -122,10 +180,12 @@ class NewMessage extends React.Component {
                 name="Department"
                 placeholder="DPT"
                 changeHandler={this.changeHandler}
+                options = {Options.departmentList}
               ></NewMessageSelect>
               <NewMessageSelect
                 name="Project"
                 placeholder="Project"
+                options={this.projectList}
                 changeHandler={this.changeHandler}
               ></NewMessageSelect>
               <NewMessageMultiSelect
