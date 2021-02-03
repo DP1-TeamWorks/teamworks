@@ -1,11 +1,14 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,13 +54,12 @@ class MessageServiceTest {
 		} catch (DataAccessException ex) {
 			Logger.getLogger(MilestoneServiceTest.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
+		
 		assertThat(message.getId()).isNotNull();
 	}
 	
 	
 	@Test
-	@Transactional
 	void shouldFindMessageByTag() {
 		Tag tag = tagService.findTagById(1);
 		UserTW user = userTWService.findUserById(1);
@@ -67,6 +69,40 @@ class MessageServiceTest {
 	
 	
 	//TODO:
-	//NEGATIVE USE CASES:
+	//NEGATIVE USE CASE H21-E1
+	@Test
+	@Transactional
+	void shouldInsertMessageWithoutData() {
+		UserTW sender = userTWService.findUserById(1);
+		ArrayList<Integer> recipients = new ArrayList<>();
+		recipients.add(2);
+		
+		Message messageError = new Message();
+		messageError.setRecipientsIds(recipients);
+		messageError.setSender(sender);
+
+		assertThrows(ConstraintViolationException.class, ()-> {
+			messageService.saveMessage(messageError);
+			});
+	}
+	
+	//TODO: ADD ATTACHMENT BIGGER THAN THE LIMIT
+	@Test
+	@Transactional
+	void shouldReplyMessageWithoutData() {
+		UserTW sender = userTWService.findUserById(1);
+		ArrayList<Integer> recipients = new ArrayList<>();
+		recipients.add(2);
+		Message replyTo = messageService.findMessageById(1);
+		
+		Message messageError = new Message();
+		messageError.setReplyTo(replyTo);
+		messageError.setRecipientsIds(recipients);
+		messageError.setSender(sender);
+
+		assertThrows(ConstraintViolationException.class, ()-> {
+			messageService.saveMessage(messageError);
+			});
+	}
 
 }
