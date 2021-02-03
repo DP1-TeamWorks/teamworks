@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import MessageApiUtils from "../../utils/api/MessageApiUtils";
 import Circle from "../projects/tags/Circle";
 import OpenedMessage from "./OpenedMessage";
-const MessagePreview = ({ msg, openMessage, setOpenMessage }) => {
+const MessagePreview = ({ msg, openMessage, setOpenMessage, setReloadCounters }) => {
   const [read, setRead] = useState();
 
   useEffect(() => {
@@ -23,6 +23,7 @@ const MessagePreview = ({ msg, openMessage, setOpenMessage }) => {
 
   const collapseMessage = () => {
     isOpen() ? setOpenMessage("") : setOpenMessage(msg.id);
+    setReloadCounters(true);
     if (!read) {
       MessageApiUtils.markMessageAsRead(msg.id)
         .then((res) => {

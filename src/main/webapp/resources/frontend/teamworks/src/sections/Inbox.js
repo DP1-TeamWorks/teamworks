@@ -9,19 +9,22 @@ const Inbox = ({ search, setSearch }) => {
   const [selectedTab, setSelectedTab] = useState("Inbox");
   const [selectedMessages, setSelectedMessages] = useState([]);
   const [nInboxMessages, setNInboxMessages] = useState([]);
-
-  useEffect(() => {}, [search]);
+  const [reloadCounters, setReloadCounters] = useState(true);
 
   useEffect(() => {
-    MessageApiUtils.getNumberOfNotReadMessages()
-      .then((res) => {
-        console.log("Getting number of Inbox Messages");
-        setNInboxMessages(res);
-      })
-      .catch((error) => {
-        console.log("ERROR: cannot get number of inbox messages");
-      });
+    if (reloadCounters)
+      MessageApiUtils.getNumberOfNotReadMessages()
+        .then((res) => {
+          console.log("Getting number of Inbox Messages");
+          setNInboxMessages(res);
+        })
+        .catch((error) => {
+          console.log("ERROR: cannot get number of inbox messages");
+        });
+    setReloadCounters(false);
+  }, [reloadCounters]);
 
+  useEffect(() => {
     if (search !== "") {
       console.log(search);
       setSelectedTab("Search");
@@ -67,7 +70,7 @@ const Inbox = ({ search, setSearch }) => {
             });
       }
     }
-  }, [selectedTab, search]);
+  }, [selectedTab, search, reloadCounters]);
 
   const [modalNewMessage, setModalNewMessage] = useState(false);
 
@@ -76,6 +79,8 @@ const Inbox = ({ search, setSearch }) => {
       <InboxSidebar
         numberOfInboxMessages={nInboxMessages}
         numberOfSentMessages={""}
+        reloadCounters={reloadCounters}
+        setReloadCounters={setReloadCounters}
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
         modalNewMessage={modalNewMessage}
@@ -87,7 +92,10 @@ const Inbox = ({ search, setSearch }) => {
             ChangeModalNewMessage={() => setModalNewMessage(!modalNewMessage)}
           />
         )}
-        <MessageList messages={selectedMessages} />
+        <MessageList
+          setReloadCounters={setReloadCounters}
+          messages={selectedMessages}
+        />
       </Section>
     </div>
   );

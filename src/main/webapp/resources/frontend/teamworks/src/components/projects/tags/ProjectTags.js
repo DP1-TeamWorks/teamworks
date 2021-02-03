@@ -4,7 +4,13 @@ import InboxSidebarTab from "../../sidebar/InboxSidebarTab";
 
 import "./Tags.css";
 
-const ProjectTags = ({ tagList, selectedTab, setSelectedTab }) => {
+const ProjectTags = ({
+  tagList,
+  selectedTab,
+  setSelectedTab,
+  reloadCounters,
+  setReloadCounters,
+}) => {
   return (
     <>
       <h3 className="SidebarSectionTitle">Tags</h3>
@@ -20,6 +26,8 @@ const ProjectTags = ({ tagList, selectedTab, setSelectedTab }) => {
               id={tag.id}
               title={tag.title}
               color={tag.color}
+              reloadCounters={reloadCounters}
+              setReloadCounters={setReloadCounters}
             />
           </InboxSidebarTab>
         );
