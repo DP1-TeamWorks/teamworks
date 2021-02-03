@@ -3,6 +3,8 @@ package org.springframework.samples.petclinic.web;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,9 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.TeamValidator;
+import org.springframework.samples.petclinic.validation.UserValidator;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +24,15 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 	private final UserTWService userTWService;
 	private final TeamService teamService;
+	private final UserValidator userValidator;
+	private final TeamValidator teamValidator;
 
 	@Autowired
-	public AuthController(TeamService teamService, UserTWService userTWService) {
+	public AuthController(TeamService teamService, UserTWService userTWService, UserValidator userValidator, TeamValidator teamValidator) {
 		this.teamService = teamService;
 		this.userTWService = userTWService;
+		this.userValidator = userValidator;
+		this.teamValidator = teamValidator;
 	}
 
 	@InitBinder
@@ -59,7 +68,7 @@ public class AuthController {
 	}
 
 	@PostMapping(value = "/api/auth/signup")
-	public ResponseEntity<String> signUp(@RequestBody Map<String, String> b) {
+	public ResponseEntity<String> signUp(@RequestBody Map<String, String> b,BindingResult errors) {
 		try {
 			// Set up the team
 			String teamName = b.get("teamname");
@@ -67,6 +76,8 @@ public class AuthController {
 			Team team = new Team();
 			team.setName(teamName);
 			team.setIdentifier(identifier);
+			teamValidator.validate(team, errors);
+			Boolean teamHasErrors=errors.hasErrors();
 
 			// Set up the team_owner
 			String name = b.get("username");
@@ -75,17 +86,25 @@ public class AuthController {
 			UserTW user = new UserTW();
 			user.setName(name);
 			user.setLastname(lastname);
-			user.setPassword(SecurityConfiguration.passwordEncoder().encode(password));
-			System.out.println(user.getPassword());
 			user.setEmail(user.getName().toLowerCase() + user.getLastname().toLowerCase() + "@" + team.getIdentifier());
 			user.setRole(Role.team_owner);
 			user.setTeam(team);
+			user.setPassword(password);
+			userValidator.validate(user, errors);
+			Boolean userHasErrors=errors.hasErrors();
+			user.setPassword(SecurityConfiguration.passwordEncoder().encode(password));
+			if(teamHasErrors||userHasErrors) {
+				return ResponseEntity.badRequest().body(errors.getAllErrors().toString());
+				
+			}else {
+				// Save Team & Team_Owner
+				teamService.saveTeam(team);
+				userTWService.saveUser(user);
+				return ResponseEntity.ok("Usuario y Team creado satisfactoriamente");
+			}
+			
 
-			// Save Team & Team_Owner
-			teamService.saveTeam(team);
-			userTWService.saveUser(user);
-
-			return ResponseEntity.ok("Usuario y Team creado satisfactoriamente");
+			
 
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().body("alreadyexists");
