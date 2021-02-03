@@ -10,7 +10,7 @@ export default function NewMessageSubject({ name }) {
         styleClass="Input NewMsgHead InputNewMsg"
         placeholder="How are you?"
       ></Input>
-      <NewMessageMultiSelect name="todos" placeholder="ToDos"></NewMessageMultiSelect>
+      <NewMessageMultiSelect name="ToDos" placeholder="ToDos"></NewMessageMultiSelect>
     </div>
   );
 }

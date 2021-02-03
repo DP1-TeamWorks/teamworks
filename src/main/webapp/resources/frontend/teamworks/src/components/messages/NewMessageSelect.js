@@ -68,7 +68,7 @@ const Options = ({ pickedProject, setPickedProject }) => {
 const customStyles = {
   option: (provided, state) => ({
     ...provided,
-    color: state.isSelected ? 'white' : '#222',
+    color:'#a6ce56',
   }),
   control: (base, state) => ({
     ...base,
@@ -82,6 +82,10 @@ const customStyles = {
     singleValue: ()=>({
         color: "white",
     })
+    }),
+    menu: base => ({
+      ...base,
+      backgroundColor: "#292d22",
     }),
 }
 

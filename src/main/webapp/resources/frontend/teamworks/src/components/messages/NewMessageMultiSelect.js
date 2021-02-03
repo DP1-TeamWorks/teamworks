@@ -76,7 +76,7 @@ const NewMessageMultiSelect = ({ pickedProject, setPickedProject, name, placehol
 const customStyles = {
   option: (provided, state) => ({
     ...provided,
-    color: state.isSelected ? 'red' : '#222',
+    color:'#a6ce56',
   }),
   control: (base, state) => ({
     ...base,
@@ -88,6 +88,26 @@ const customStyles = {
     boxShadow: state.isFocused ? null : null,
     marginBottom: 10,
     }),
+
+  dropdownIndicator: (base)=> ({
+    ...base,
+    fill: "#a6ce56",
+    stroke: "#a6ce56",
+  }),
+  menu: base => ({
+    ...base,
+    backgroundColor: "#292d22",
+  }),
+  multiValue: base=>({
+    ...base,
+    backgroundColor: "#a6ce56",
+  }),
+  multiValueLabel: base =>({
+    ...base,
+    color: "white",
+  })
+
+
 }
 
 
