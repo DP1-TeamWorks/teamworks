@@ -48,8 +48,12 @@ public class Message extends BaseEntity {
 	private Boolean read;
 
 	@Transient
-	private List<String> recipientsEmail;
+	private List<String> recipientsEmails;
+	
+	@Transient
+	private List<String> Todos;
 
+	
 	@Transient
 	private List<Integer> recipientsIds;
 

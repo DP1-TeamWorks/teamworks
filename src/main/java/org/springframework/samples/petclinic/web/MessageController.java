@@ -122,7 +122,8 @@ public class MessageController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
 		}
 	}
-
+	
+	//@Valid
 	@PostMapping(value = "api/message/new")
 	public ResponseEntity<String> newMessage(HttpServletRequest r, @RequestBody Message message) {
 		try {
@@ -130,10 +131,10 @@ public class MessageController {
 			UserTW sender = userService.findUserById(userId);
 			message.setSender(sender);
 			message.setRead(false);
-
+			
 			List<UserTW> recipientList = new ArrayList<>();
-			for (int i = 0; i < message.getRecipientsIds().size(); i++) {
-				UserTW recipient = userService.findUserById(message.getRecipientsIds().get(i));
+			for (int i = 0; i < message.getRecipientsEmails().size(); i++) {
+				UserTW recipient = userService.findByEmail(message.getRecipientsEmails().get(i));
 				recipientList.add(recipient);
 			}
 			message.setRecipients(recipientList);
