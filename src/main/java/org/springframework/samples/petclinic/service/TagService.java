@@ -26,6 +26,11 @@ public class TagService {
     public Tag findTagById(Integer tagId) throws DataAccessException {
         return tagRepository.findById(tagId);
     }
+    
+    @Transactional(readOnly = true)
+    public Tag findTagByName(String tagName) throws DataAccessException {
+        return tagRepository.findByName(tagName);
+    }
 
     @Transactional(readOnly = true)
     public void deleteTagById(Integer tagId) throws DataAccessException {

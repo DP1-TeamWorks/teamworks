@@ -51,12 +51,19 @@ public class Message extends BaseEntity {
 	private List<String> recipientsEmails;
 	
 	@Transient
-	private List<String> Todos;
-
+	private List<String> ListOfTags;
+	
+	@Transient
+	private List<String> ListOfToDos;
 	
 	@Transient
 	private List<Integer> recipientsIds;
 
+	@Transient
+	private List<Integer> tagList;
+
+	
+	
 	// Relations
 	@OneToOne(optional = true)
 	@JoinColumn(name = "reply_to")
@@ -73,9 +80,6 @@ public class Message extends BaseEntity {
 	@Column(name = "attatchments")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
 	private List<Attatchment> attatchments;
-
-	@Transient
-	private List<Integer> tagList;
 
 	@ManyToMany
 	private List<Tag> tags;
