@@ -11,24 +11,26 @@ import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Role;
-import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.ProjectService;
-import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.samples.petclinic.validation.IdParentIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyProjectManagerException;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
+@RestController
 public class ParticipationController {
 	private final ProjectService projectService;
 	private final ParticipationService participationService;
@@ -55,8 +57,9 @@ public class ParticipationController {
 			@RequestParam(required = false) Boolean willBeProjectManager, HttpServletRequest r) {
 
 		try {
+			log.info("Creando participacion entre el user con id "+participationUserId+" y el proyecto con id "+projectId);
+			
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
-
 			Project project = projectService.findProjectById(projectId);
 			Participation userCurrentParticipation = participationService.findCurrentParticipation(participationUserId,
 					projectId);
@@ -64,13 +67,13 @@ public class ParticipationController {
 					project.getDepartment().getId());
 
 			Participation managerParticipation = participationService.findCurrentParticipation(user.getId(), projectId);
-
+			log.info("Comprobando que el proyecto y el usuario pertenecen al mismo team");
 			if (project.getDepartment().getTeam().equals(user.getTeam()))
 				throw new IdParentIncoherenceException("Team", "Project");
-
+			log.info("Comprobando que el usuario pertenzca al departamento del proyecto");
 			if (userCurrentBelongs == null)
 				throw new IdParentIncoherenceException("Department", "User");
-
+			log.info("Comprobando que el usuario no tiene ninguna participacion actual");
 			if (userCurrentParticipation == null) {
 				UserTW participationUser = userTWService.findUserById(participationUserId);
 				Participation participation = new Participation();
@@ -86,14 +89,18 @@ public class ParticipationController {
 						participationService.saveParticipation(managerParticipation);
 					}
 				}
+				log.info("Guardando participacion");
 				participationService.saveParticipation(participation);
+				log.info("Participacion guardada con exito");
 				return ResponseEntity.ok().build();
 			} else {
+				log.error("Existe ya una participacion");
 				return ResponseEntity.badRequest()
-						.body("Ya existe una participacion o el usuario no pertenece al departamento");
+						.body("Ya existe una participacion");
 			}
 		} catch (DataAccessException | ManyProjectManagerException | DateIncoherenceException
 				| IdParentIncoherenceException d) {
+			log.error("Error: "+d.getMessage());
 			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 
@@ -103,6 +110,7 @@ public class ParticipationController {
 	public ResponseEntity<String> deleteParticipation(@RequestParam(required = true) Integer participationUserId,
 			@RequestParam(required = true) Integer projectId, HttpServletRequest r) {
 		try {
+			log.info("Borrando participacion entre el user con id "+participationUserId+" y el proyecto con id "+projectId);
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 			Participation participation = participationService.findCurrentParticipation(participationUserId, projectId);
 			Project project = participation.getProject();
@@ -110,12 +118,15 @@ public class ParticipationController {
 					.findCurrentBelongs(user.getId(), project.getDepartment().getId()).getIsDepartmentManager();
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
 			Boolean isProjectManager = participation.getIsProjectManager();
-
+			log.info("Comprobando que el usuario tiene permisos");
 			if (isProjectManager == false || (isDepartmentManager || isTeamOwner)) {
 				participation.setFinalDate(LocalDate.now());
+				log.info("Borrando participacion");
 				participationService.saveParticipation(participation);
+				log.info("Participacion borrada correctamente");
 				return ResponseEntity.ok("Participation delete");
 			} else {
+				log.error("");
 				return ResponseEntity.status(403).build();
 			}
 

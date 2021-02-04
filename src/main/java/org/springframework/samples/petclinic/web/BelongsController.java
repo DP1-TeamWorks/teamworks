@@ -54,45 +54,43 @@ public class BelongsController {
 			@RequestParam(required = false) Boolean isDepartmentManager, HttpServletRequest r) {
 
 		try {
-			log.info("Obteniendo el current belongs del usuario logeado");
+			log.info("Creando belongs entre el usuario con id "+belongUserId+" y el departeamento con id: "+departmentId);
 			Belongs currentBelongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
-			log.info("Obteniendo el usuario logeado");
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
-			log.info("Comprobando si el usuario es teamOwner");
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
-			log.info("Obteniendo el departamento");
 			Department department = departmentService.findDepartmentById(departmentId);
-			log.info("Obteniendo el usuario dle que se quiere crear el belongs");
 			UserTW belonguser = userTWService.findUserById(belongUserId);
-
+			log.info("Comprobando si el usuario pertenece al team");
 			if (!belonguser.getTeam().equals(user.getTeam())) {
-				log.error("El user no pertenece al team");
 				throw new IdParentIncoherenceException("Team", "User");
 			}
-
+			log.info("Comprobando que el departamente pertence al team");
 			if (user.getTeam().equals(department.getTeam())) {
-				log.error("El departamento no pertenece al team");
 				throw new IdParentIncoherenceException("Team", "Department");
 			}
-
+			log.info("Comprobando que no tiene ningun belongs actual");
 			if (currentBelongs == null) {
 				UserTW belongUser = userTWService.findUserById(belongUserId);
 				Belongs belongs = new Belongs();
 				belongs.setDepartment(department);
 				belongs.setUserTW(belongUser);
 				belongs.setIsDepartmentManager(false);
-
+				
 				if (isDepartmentManager != null && isTeamOwner) {
 					belongs.setIsDepartmentManager(isDepartmentManager);
 				}
+				log.info("Guardando belongs");
 				belongsService.saveBelongs(belongs);
+				log.info("Belongs guardado correctamente");
 				return ResponseEntity.ok().build();
 			} else {
+				log.error("Ya existe un belongs");
 				return ResponseEntity.badRequest().body("Ya existe un belongs");
 			}
 
 		} catch (DataAccessException | ManyDepartmentManagerException | DateIncoherenceException
 				| IdParentIncoherenceException d) {
+			log.error("Error: "+d.getMessage());
 			return ResponseEntity.badRequest().build();
 		}
 
@@ -103,19 +101,24 @@ public class BelongsController {
 	public ResponseEntity<String> deleteBelongs(@RequestParam(required = true) Integer belongUserId,
 			Integer departmentId, HttpServletRequest r) {
 		try {
+			log.info("Borrando belongs entre el usuario con id "+belongUserId+" y el departeamento con id: "+departmentId);
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
 			Belongs belongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
+			log.info("Comprobando que no es departemnt manager o eres team owner");
 			if (belongs.getIsDepartmentManager() == false || isTeamOwner) {
 				belongs.setFinalDate(LocalDate.now());
 				belongsService.saveBelongs(belongs);
+				log.info("Belongs borrado correctamente");
 				return ResponseEntity.ok().build();
 			} else {
+				log.error("El usuario no tiene permisos");
 				return ResponseEntity.status(403).build();
 			}
 
 		} catch (DataAccessException | ManyDepartmentManagerException | DateIncoherenceException d) {
-			return ResponseEntity.badRequest().build();
+			log.error("Error:"+d.getMessage());
+			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 
 	}
