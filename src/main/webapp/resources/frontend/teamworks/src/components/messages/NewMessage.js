@@ -180,7 +180,7 @@ class NewMessage extends React.Component {
                 name="Department"
                 placeholder="DPT"
                 changeHandler={this.changeHandler}
-                options = {Options.departmentList}
+                options = {this.departmentList}
               ></NewMessageSelect>
               <NewMessageSelect
                 name="Project"
