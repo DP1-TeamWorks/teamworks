@@ -45,6 +45,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class UserTWControllerTests {
 
 	private static final int TEST_USER_ID = 6;
+	private static final int TEST_TEAM_ID = 777;
 
 	@Autowired
 	private UserTWController userController;
@@ -85,14 +86,15 @@ class UserTWControllerTests {
 		paula.setTeam(equipo);
 		
 		//given(this.clinicService.findUserById(TEST_OWNER_ID)).willReturn(paula);
-		given(this.teamService.findTeamById(TEST_USER_ID)).willReturn(equipo);
-
+		given(this.userService.findUserById(TEST_USER_ID)).willReturn(paula);
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(equipo);
+		
 	}
 
 	@WithMockUser(value = "spring")
     @Test
 	void testInitCreationForm() throws Exception {
-		mockMvc.perform(get("/owners/new")).andExpect(status().isOk()).andExpect(model().attributeExists("owner"))
+		mockMvc.perform(post("/api/userTW")).andExpect(status().isOk()).andExpect(model().attributeExists("owner"))
 				.andExpect(view().name("owners/createOrUpdateOwnerForm"));
 	}
 
