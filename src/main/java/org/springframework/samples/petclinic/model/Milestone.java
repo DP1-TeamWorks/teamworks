@@ -33,11 +33,11 @@ public class Milestone extends BaseEntity {
 
 	@NotEmpty
 	@Size(min=1,max=25)
-	@Column(name = "name", unique = true)
+	@Column(name = "name")
 	private String name;
 
 	
-	@NotEmpty
+	@NotNull
 	@Column(name = "due_for")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate dueFor;

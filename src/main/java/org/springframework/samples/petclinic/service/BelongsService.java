@@ -26,9 +26,9 @@ public class BelongsService {
 		if (belongs.getIsDepartmentManager() && belongs.getDepartment().getBelongs().stream()
 				.filter(x -> x.getIsDepartmentManager() == true).findAny().isPresent()) {
 			throw new ManyDepartmentManagerException();
-		} else if (!belongs.getInitialDate().isBefore(belongs.getFinalDate())) {
+		} /*else if (belongs.getInitialDate().equals(null)||(!belongs.getInitialDate().isBefore(belongs.getFinalDate()))) {
 			throw new DateIncoherenceException();
-		} else {
+		} */else {
 			belongsRepository.save(belongs);
 		}
 

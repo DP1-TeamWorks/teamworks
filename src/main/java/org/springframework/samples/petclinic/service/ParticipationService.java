@@ -25,9 +25,9 @@ public class ParticipationService {
 	public void saveParticipation(Participation participation) throws DataAccessException, ManyProjectManagerException, DateIncoherenceException {
 		if(participation.getIsProjectManager()&&participation.getProject().getParticipation().stream().filter(x->x.getIsProjectManager()).findAny().isPresent()) {
 			throw new ManyProjectManagerException();
-		}else if(!participation.getInitialDate().isBefore(participation.getFinalDate())){
+		}/*else if(!participation.getInitialDate().isBefore(participation.getFinalDate())){
 			throw new DateIncoherenceException();
-		}
+		}*/
 		else {
 			participationRepository.save(participation);
 		}
