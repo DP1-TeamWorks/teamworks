@@ -1,19 +1,24 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Milestone;
+import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.MilestoneService;
 import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.IdParentIncoherenceException;
+import org.springframework.samples.petclinic.validation.ToDoLimitMilestoneException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -47,7 +52,7 @@ public class ToDoController {
 	}
 
 	@PostMapping(value = "/api/toDos/mine")
-	public ResponseEntity<String> createPersonalToDo(@RequestBody ToDo toDo, HttpServletRequest r,
+	public ResponseEntity<String> createPersonalToDo(@Valid @RequestBody ToDo toDo, HttpServletRequest r,
 			@RequestParam(required = true) Integer milestoneId) {
 
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
@@ -56,31 +61,37 @@ public class ToDoController {
 	}
 
 	@PostMapping(value = "/api/toDos")
-	public ResponseEntity<String> createToDo(@RequestBody ToDo toDo, HttpServletRequest r,
+	public ResponseEntity<String> createToDo(@Valid @RequestBody ToDo toDo, HttpServletRequest r,
 			@RequestParam(required = true) Integer milestoneId, @RequestParam(required = false) Integer userId) {
 		try {
+			
 			UserTW user = userService.findUserById(userId);
 			Milestone milestone = milestoneService.findMilestoneById(milestoneId);
+			if (user.getParticipation().stream().map(Participation::getProject)
+					.anyMatch(p -> p.equals(milestone.getProject())))
+				throw new IdParentIncoherenceException("Project", "User");
+
 			toDo.setAssignee(user);
 			toDo.setMilestone(milestone);
+			toDo.setDone(false);
 			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
-		} catch (DataAccessException d) {
-			return ResponseEntity.badRequest().build();
+		} catch (DataAccessException | ToDoLimitMilestoneException | IdParentIncoherenceException d) {
+			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 	}
 
 	@PostMapping(value = "/api/toDos/markAsDone")
-	public ResponseEntity<String> markAsDone(HttpServletRequest r, @RequestParam(required = true) Integer toDoId) {
+	public ResponseEntity<String> markAsDone(HttpServletRequest r, @RequestParam(required = true) int toDoId) {
 		try {
 			ToDo toDo = toDoService.findToDoById(toDoId);
 			toDo.setDone(true);
 			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
-		} catch (DataAccessException d) {
-			return ResponseEntity.badRequest().build();
+		} catch (DataAccessException | ToDoLimitMilestoneException d) {
+			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 	}
 }

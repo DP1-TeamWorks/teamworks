@@ -7,7 +7,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -24,14 +27,15 @@ import lombok.Setter;
 public class Team extends BaseEntity {
 	
 	  // Attributes
-
-	@NotNull
+	@Pattern(regexp ="^[A-Za-zÀ-ÿ0-9\\u00f1\\u00d1_-]*$")
 	@NotEmpty
+	@Size(min=1,max=25)
 	@Column(name = "name",unique=true)
 	String name;
 
-	@NotNull
+	@Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
 	@NotEmpty
+	@Size(min=1,max=25)
 	@Column(name = "identifier",unique=true)
 	String identifier;
 

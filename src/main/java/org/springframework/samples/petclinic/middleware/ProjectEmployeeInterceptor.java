@@ -4,15 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Participation;
-import org.springframework.samples.petclinic.model.Project;
-import org.springframework.samples.petclinic.model.Role;
-import org.springframework.samples.petclinic.model.ToDo;
-import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.MilestoneService;
 import org.springframework.samples.petclinic.service.ParticipationService;
-import org.springframework.samples.petclinic.service.ProjectService;
 import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -43,8 +37,9 @@ public class ProjectEmployeeInterceptor extends HandlerInterceptorAdapter {
                 : Integer.valueOf(req.getParameter("projectId"));
         Participation participation = participationService.findCurrentParticipation(userId, projectId);
         /*
-         * Boolean isToDoAsignee = req.getParameter("toDoId") != null ? true :
-         * toDoService.findToDoById(Integer.valueOf(req.getParameter("toDoId"))).
+         * Se podría plantear q solo puediera marcar el todo como done el asignado, pero
+         * no es necesario: Boolean isToDoAsignee = req.getParameter("toDoId") != null ?
+         * true : toDoService.findToDoById(Integer.valueOf(req.getParameter("toDoId"))).
          * getAssignee().getId() == userId;
          */
         Boolean isProjectEmployee = participation != null;

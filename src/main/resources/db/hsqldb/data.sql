@@ -222,19 +222,19 @@ values
 
 /*ToDoS*/
 INSERT INTO
-    todos(title, user_id, milestone_id)
+    todos(title, done, user_id, milestone_id)
 values
-    ('Mark this as done', 2, 1);
+    ('Mark this as done', FALSE, 2, 1);
 
 INSERT INTO
-    todos(title, user_id, milestone_id)
+    todos(title, done, user_id, milestone_id)
 values
-    ('Mark this again ', 2, 1);
+    ('Mark this again ', FALSE, 2, 1);
 
 INSERT INTO
-    todos(title, user_id, milestone_id)
+    todos(title, done, user_id, milestone_id)
 values
-    ('Finish The toDos section', 2, 1);
+    ('Finish The toDos section', FALSE, 2, 1);
 
 /*MESSAGES*/
 INSERT INTO

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -124,7 +125,7 @@ public class MessageController {
 	}
 
 	@PostMapping(value = "api/message/new")
-	public ResponseEntity<String> newMessage(HttpServletRequest r, @RequestBody Message message) {
+	public ResponseEntity<String> newMessage(HttpServletRequest r, @Valid @RequestBody Message message) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
@@ -148,7 +149,8 @@ public class MessageController {
 	}
 
 	@PostMapping(value = "api/message/reply")
-	public ResponseEntity<String> replyMessage(HttpServletRequest r, @RequestParam(required = true) Message message) {
+	public ResponseEntity<String> replyMessage(HttpServletRequest r,
+			@Valid @RequestParam(required = true) Message message) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
