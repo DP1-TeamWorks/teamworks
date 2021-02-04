@@ -17,16 +17,17 @@ import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.samples.petclinic.validation.IdParentIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyDepartmentManagerException;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
-@Controller
+@RestController
 public class BelongsController {
 
 	private final DepartmentService departmentService;
@@ -63,17 +64,17 @@ public class BelongsController {
 			Department department = departmentService.findDepartmentById(departmentId);
 			log.info("Obteniendo el usuario dle que se quiere crear el belongs");
 			UserTW belonguser = userTWService.findUserById(belongUserId);
-			
-			if(!belonguser.getTeam().equals(user.getTeam())) {
+
+			if (!belonguser.getTeam().equals(user.getTeam())) {
 				log.error("El user no pertenece al team");
 				throw new IdParentIncoherenceException("Team", "User");
 			}
-			
-			if(user.getTeam().equals(department.getTeam())) {
+
+			if (user.getTeam().equals(department.getTeam())) {
 				log.error("El departamento no pertenece al team");
 				throw new IdParentIncoherenceException("Team", "Department");
 			}
-			
+
 			if (currentBelongs == null) {
 				UserTW belongUser = userTWService.findUserById(belongUserId);
 				Belongs belongs = new Belongs();
@@ -90,7 +91,8 @@ public class BelongsController {
 				return ResponseEntity.badRequest().body("Ya existe un belongs");
 			}
 
-		} catch (DataAccessException | ManyDepartmentManagerException | DateIncoherenceException | IdParentIncoherenceException d) {
+		} catch (DataAccessException | ManyDepartmentManagerException | DateIncoherenceException
+				| IdParentIncoherenceException d) {
 			return ResponseEntity.badRequest().build();
 		}
 
