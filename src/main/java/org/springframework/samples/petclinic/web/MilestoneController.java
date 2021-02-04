@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 @RestController
 public class MilestoneController {
 	private final MilestoneService milestoneService;
@@ -40,13 +43,14 @@ public class MilestoneController {
 
 	@GetMapping(value = "/api/milestones/next")
 	public Milestone getNextMilestone(@RequestParam(required = true) Integer projectId) {
+		log.info("Obteniendo milestone más próxima del proyecto con id: "+projectId);
 		return milestoneService.findNextMilestone(projectId);
 	}
 
 	@GetMapping(value = "/api/milestones")
 	public List<Milestone> getMilestones(@RequestParam(required = false) String name) {
 		List<Milestone> l = new ArrayList<>();
-
+		log.info("Obteniendo todas las milestones");
 		l = milestoneService.getAllMilestone().stream().collect(Collectors.toList());
 
 		return l;
@@ -57,12 +61,16 @@ public class MilestoneController {
 			@Valid @RequestBody Milestone milestone) {
 
 		try {
+			log.info("Milestone validada correctamente");
 			Project project = projectService.findProjectById(projectId);
-
+			log.info("Añadiendo milestone al proyecto");
 			milestone.setProject(project);
+			log.info("Guradando milestone");
 			milestoneService.saveMilestone(milestone);
+			log.info("Milestone guradad correctamente");
 			return ResponseEntity.ok("Milestone create");
 		} catch (DataAccessException d) {
+			log.error("Error: "+d.getMessage());
 			return ResponseEntity.badRequest().build();
 		}
 
@@ -71,9 +79,12 @@ public class MilestoneController {
 	@DeleteMapping(value = "/api/milestones")
 	public ResponseEntity<String> deleteMilestones(@RequestParam(required = true) Integer milestoneId) {
 		try {
+			log.info("Borrando milestone con id: " +milestoneId);
 			milestoneService.deleteMilestonetById(milestoneId);
+			log.info("Milestone borrada correctamente");
 			return ResponseEntity.ok("Milestone delete");
 		} catch (DataAccessException d) {
+			log.error("Error: "+d.getMessage());
 			return ResponseEntity.notFound().build();
 		}
 

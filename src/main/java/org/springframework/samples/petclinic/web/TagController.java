@@ -22,6 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
 @RestController
 public class TagController {
     private final TagService tagService;
@@ -40,7 +44,8 @@ public class TagController {
 
     @GetMapping(value = "/api/tags")
     public List<Tag> getTagsByProjectId(HttpServletRequest r, @RequestParam(required = true) Integer projectId) {
-        Project project = projectService.findProjectById(projectId);
+        log.info("Obteniendo tags del proyecto con id: "+projectId);
+    	Project project = projectService.findProjectById(projectId);
         return project.getTags();
     }
 
@@ -48,12 +53,17 @@ public class TagController {
     public ResponseEntity<String> createTag(HttpServletRequest r,@Valid @RequestBody Tag tag,
             @RequestParam(required = true) Integer projectId) {
         try {
+        	log.info("Tag validad con exito");
             Project project = projectService.findProjectById(projectId);
+            log.info("Añadiendo tag al proyecto");
             tag.setProject(project);
+            log.info("Guardando tag");
             tagService.saveTag(tag);
+            log.info("Tag guardada correctamente");
             return ResponseEntity.ok().build();
 
         } catch (DataAccessException | TagLimitProjectException d) {
+        	log.error("Error: "+d.getMessage());
             return ResponseEntity.badRequest().body(d.getMessage());
         }
     }
@@ -61,10 +71,13 @@ public class TagController {
     @DeleteMapping(value = "/api/tags")
     public ResponseEntity<String> deleteTagById(HttpServletRequest r, @RequestParam(required = true) Integer tagId) {
         try {
+        	log.info("Borrando tag con id: "+tagId);
             tagService.deleteTagById(tagId);
+            log.info("Tag borrada correctamente");
             return ResponseEntity.ok().build();
 
         } catch (DataAccessException d) {
+        	log.error("Error: "+d.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
