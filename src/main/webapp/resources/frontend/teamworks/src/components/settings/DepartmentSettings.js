@@ -2,7 +2,7 @@ import SettingGroup from "./SettingGroup";
 import EditableField from "./EditableField";
 import Button from "../buttons/Button";
 import AddUserForm from "../forms/AddUserForm";
-import UserList from "./UserList";
+import UserList from "./DepartmentMemberList";
 import AddElementForm from "../forms/AddElementForm";
 import DepartmentsContainer from "./DepartmentsContainer";
 import AddDepartmentForm from "../forms/AddDepartmentForm";

@@ -2,18 +2,55 @@
     width: 100%;
     max-width: 900px;
     background: #262626;
+    padding: 5px 5px;
+    border-collapse: collapse;
 }
 
 .UserList__thead {
-    border-bottom: solid 1px #444;
     background: #434343;
 }
 
 .UserList th {
     text-align: left;
     font-weight: 600;
+    padding: 10px 0;
+    padding-right: 20px;
+}
+
+.UserList th:first-child {
+    min-width: 200px;
+    padding-left: 10px;
 }
 
 .UserList td {
     padding: 10px 0;
+    padding-right: 20px;
+}
+
+.UserList td:first-child {
+    padding-left: 10px;
+}
+
+.NameColumn {
+    cursor: pointer;
+}
+
+.ActionStrip {
+    opacity: 0;
+}
+
+.UserList tr:hover > .ActionStrip {
+    opacity: 1;
+}
+
+.ActionButton {
+    cursor: pointer;
+}
+
+.ActionButton:not(:last-child) {
+    margin-right: 20px;
+}
+
+.ActionButton:hover {
+    color:#f5ffe0;
 }

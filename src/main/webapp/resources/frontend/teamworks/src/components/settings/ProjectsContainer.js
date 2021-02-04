@@ -3,7 +3,7 @@ import EditableField from "./EditableField";
 import Button from "../buttons/Button";
 import "./SubsettingContainer.css";
 import SidePaneElement from "./SidePaneElement";
-import UserList from "./UserList";
+import UserList from "./DepartmentMemberList";
 import AddElementForm from "../forms/AddElementForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";

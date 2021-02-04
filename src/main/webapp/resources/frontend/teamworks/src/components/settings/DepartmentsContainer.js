@@ -3,9 +3,9 @@ import EditableField from "./EditableField";
 import Button from "../buttons/Button";
 import "./SubsettingContainer.css";
 import SidePaneElement from "./SidePaneElement";
-import UserList from "./UserList";
+import DepartmentMemberList from "./DepartmentMemberList";
 import AddElementForm from "../forms/AddElementForm";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
 import DepartmentSettings from "./DepartmentSettings";
 import Spinner from "../spinner/Spinner";
@@ -19,7 +19,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
     if (name !== myDepartments[selectedIndex].name)
     {
       // Update department object
-      setDepartments(Object.values({
+      setMyDepartments(Object.values({
         ...myDepartments,
         [selectedIndex]:
         {
@@ -60,16 +60,27 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
 
   function onUserAdded()
   {
+    fetchDepartmentMembers();
+  }
 
-    
+  function fetchDepartmentMembers()
+  {
+    if (departmentMembers != null)
+      setDepartmentMembers(null);
+    DepartmentApiUtils.getMembersFromDepartment(myDepartments[selectedIndex].id)
+    .then(data => setDepartmentMembers(data))
+    .catch(err => console.error(err));
   }
 
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [myDepartments, setDepartments] = useState(departments);
+  const [myDepartments, setMyDepartments] = useState(departments);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [departmentMembers, setDepartmentMembers] = useState(null);
 
-  if (myDepartments.length !== departments.length)
-    setDepartments(departments);
+  useEffect(() => fetchDepartmentMembers(), [selectedIndex, myDepartments])
+
+  if (myDepartments.length !== departments.length) // When the department property is changed
+    setMyDepartments(departments);
 
   if (!myDepartments)
   {
@@ -97,20 +108,56 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
         {SidepaneElements}
       </div>
       <div className="SettingGroupsContainer">
-        <SettingGroup name="Department name" description="Shown in projects assigned to team members.">
-          <EditableField key={selectedIndex} id="department-name" value={currentDepartment.name} fieldName="name" postFunction={updateDepartment} onUpdated={onDepartmentNameUpdated} />
+        <SettingGroup
+          name="Department name"
+          description="Shown in projects assigned to team members.">
+          <EditableField
+            key={selectedIndex}
+            id="department-name"
+            value={currentDepartment.name}
+            fieldName="name"
+            postFunction={updateDepartment}
+            onUpdated={onDepartmentNameUpdated} />
         </SettingGroup>
-        <SettingGroup name="Description" description="A brief description for the responsibilities of the department.">
-          <EditableField key={selectedIndex} smaller id="department-description" value={currentDepartment.description} fieldName="description" postFunction={updateDepartment} />
+        <SettingGroup
+          name="Description"
+          description="A brief description for the responsibilities of the department.">
+          <EditableField
+            key={selectedIndex}
+            smaller
+            id="department-description"
+            value={currentDepartment.description}
+            fieldName="description"
+            postFunction={updateDepartment} />
         </SettingGroup>
-        <SettingGroup name="Add user to department" description="Start typing their name below.">
-          <AddUserToForm key={currentDepartment.name} onUserAdded={onUserAdded} departmentId={currentDepartment.id} submitText={`Add to ${currentDepartment.name}`} attributeName="Full Name" attributePlaceholder="Harvey Specter" />
+        <SettingGroup
+          name="Add user to department"
+          description="Start typing their name below.">
+          <AddUserToForm
+            key={currentDepartment.name}
+            onUserAdded={onUserAdded}
+            departmentId={currentDepartment.id}
+            submitText={`Add to ${currentDepartment.name}`}
+            attributeName="Full Name"
+            attributePlaceholder="Harvey Specter" />
         </SettingGroup>
-        <SettingGroup name="Members" description="Department members are shown below. Click on an user to see their history.">
-          <UserList key={selectedIndex} />
+        <SettingGroup
+          name="Members"
+          description="Department members are shown below. Click on an user to see their history.">
+          <DepartmentMemberList
+            key={selectedIndex}
+            departmentId={currentDepartment.id}
+            loading={departmentMembers == null}
+            members={departmentMembers} 
+            onListUpdated={fetchDepartmentMembers} />
         </SettingGroup>
-        <SettingGroup danger name="Delete department" description="Deletes the department, as well as its associated members and projects. <br>This action cannot be undone.">
-          <Button className="Button--red" onClick={onDepartmentDeleteClicked}>
+        <SettingGroup
+          danger
+          name="Delete department"
+          description="Deletes the department, as well as its associated members and projects. <br>This action cannot be undone.">
+          <Button
+            className="Button--red"
+            onClick={onDepartmentDeleteClicked}>
             {isDeleting ? <Spinner red /> : "Delete department"}
           </Button>
         </SettingGroup>

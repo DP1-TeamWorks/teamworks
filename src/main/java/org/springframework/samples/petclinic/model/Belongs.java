@@ -65,4 +65,9 @@ public class Belongs extends BaseEntity {
         return userTW.getLastname();
     }
 
+    public String getEmail()
+    {
+        return userTW.getEmail();
+    }
+
 }

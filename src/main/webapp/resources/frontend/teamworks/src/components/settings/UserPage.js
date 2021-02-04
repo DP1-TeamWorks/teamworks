@@ -3,9 +3,9 @@ import GoBackButton from "../buttons/GoBackButton";
 import ProfileHeader from "../profile/ProfileHeader";
 import EditableField from "./EditableField";
 import SettingGroup from "./SettingGroup";
-import UserList from "./UserList";
+import UserList from "./DepartmentMemberList";
 
-const UserPage = ({ match: { params: { userId } }, backPath }) =>
+const UserPage = ({ match: { params: { userId } } }) =>
 {
     return (
         <>
@@ -14,7 +14,7 @@ const UserPage = ({ match: { params: { userId } }, backPath }) =>
                 src="/default_pfp.png"
                 role="Team Manager"
                 name={`User ${userId}`}>
-                <GoBackButton darker anchored path={backPath} />
+                <GoBackButton darker anchored />
             </ProfileHeader>
             <div className="SettingGroupsContainer">
                 <SettingGroup name="Name">
