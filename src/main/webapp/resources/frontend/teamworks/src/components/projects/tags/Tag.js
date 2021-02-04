@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import MessageApiUtils from "../../../utils/api/MessageApiUtils";
 import Circle from "./Circle";
 
-const Tag = ({ id, color, title }) => {
-  const [noOpenedMessages, setNoOpenedMessages] = useState(123);
-  // TODO: añadir estado a los mensajes para ver si estan leidos y actualizar cuando cambie
+const Tag = ({ id, color, title, reloadCounters, setReloadCounters }) => {
+  const [noOpenedMessages, setNoOpenedMessages] = useState(0);
   useEffect(() => {
-    MessageApiUtils.getNumberOfNoOpenedMessages(id)
+    MessageApiUtils.getNumberOfNoReadMessagesByTag(id)
       .then((res) => {
         setNoOpenedMessages(res);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the number of no opened messages");
       });
-  }, [id]);
+    setReloadCounters(false);
+  }, [id, reloadCounters]);
   return (
     <>
       <Circle color={color} /> <span>{title} </span>{" "}

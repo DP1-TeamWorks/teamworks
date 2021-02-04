@@ -9,6 +9,8 @@ import GradientButton from "../buttons/GradientButton";
 const InboxSidebar = ({
   numberOfInboxMessages,
   numberOfSentMessages,
+  reloadCounters,
+  setReloadCounters,
   selectedTab,
   setSelectedTab,
   setModalNewMessage,
@@ -46,6 +48,8 @@ const InboxSidebar = ({
         tagList={pickedProject.tags}
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
+        reloadCounters={reloadCounters}
+        setReloadCounters={setReloadCounters}
       />
       <MyProjectToDos projectId={pickedProject.id} />
     </Sidebar>
