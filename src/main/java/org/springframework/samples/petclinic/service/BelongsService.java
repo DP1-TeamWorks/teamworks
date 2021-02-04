@@ -8,6 +8,8 @@ import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.repository.BelongsRepository;
+import org.springframework.samples.petclinic.validation.DateIncoherenceException;
+import org.springframework.samples.petclinic.validation.ManyDepartmentManagerException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +23,16 @@ public class BelongsService {
 	}
 
 	@Transactional
-	public void saveBelongs(Belongs belongs) throws DataAccessException {
-		belongsRepository.save(belongs);
+	public void saveBelongs(Belongs belongs) throws DataAccessException, ManyDepartmentManagerException, DateIncoherenceException {
+		if (belongs.getIsDepartmentManager() && belongs.getDepartment().getBelongs().stream()
+				.filter(x -> x.getIsDepartmentManager() == true).findAny().isPresent()) {
+			throw new ManyDepartmentManagerException();
+		} else if (!belongs.getInitialDate().isBefore(belongs.getFinalDate())) {
+			throw new DateIncoherenceException();
+		} else {
+			belongsRepository.save(belongs);
+		}
+
 	}
 
 	@Transactional

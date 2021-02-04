@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -45,10 +46,11 @@ public class DepartmentController {
 		l = teamService.findTeamById(teamId).getDepartments();
 		return l;
 	}
+
 	@GetMapping(value = "/api/department/users")
-	public List<UserTW> getTeamUser(HttpServletRequest r,@RequestParam(required=true) Integer departmentId) {
+	public List<UserTW> getTeamUser(HttpServletRequest r, @RequestParam(required = true) Integer departmentId) {
 		List<UserTW> l = new ArrayList<>();
-		l=departmentService.findDepartmentUsers(departmentId).stream().collect(Collectors.toList());
+		l = departmentService.findDepartmentUsers(departmentId).stream().collect(Collectors.toList());
 		return l;
 	}
 
@@ -60,7 +62,7 @@ public class DepartmentController {
 	}
 
 	@PostMapping(value = "/api/departments")
-	public ResponseEntity<String> createDepartment(@RequestBody Department department, HttpServletRequest r) {
+	public ResponseEntity<String> createDeparment(@Valid @RequestBody Department department, HttpServletRequest r) {
 		try {
 			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
 			Team team = teamService.findTeamById(teamId);
@@ -114,7 +116,5 @@ public class DepartmentController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-
-
 
 }

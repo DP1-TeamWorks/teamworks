@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -29,11 +30,13 @@ import org.springframework.web.server.ResponseStatusException;
 public class MessageController {
 	private final MessageService messageService;
 	private final UserTWService userService;
+	private final TagService tagService;
 
 	@Autowired
 	public MessageController(MessageService messageService, UserTWService userService, TagService tagService) {
 		this.messageService = messageService;
 		this.userService = userService;
+		this.tagService = tagService;
 	}
 
 	@InitBinder
@@ -67,11 +70,11 @@ public class MessageController {
 		}
 	}
 
-	// This only gets the messages that you receive regarding one tag
-	@GetMapping(value = "/api/message/bytag")
-	public List<Message> getMessagesByTag(@RequestBody HttpServletRequest r, @RequestBody(required = true) Tag tag) {
+	@GetMapping(value = "/api/message/byTag")
+	public List<Message> getMessagesByTag(HttpServletRequest r, @RequestParam(required = true) int tagId) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			Tag tag = tagService.findTagById(tagId);
 			UserTW user = userService.findUserById(userId);
 			List<Message> messageList = (messageService.findMessagesByTag(user, tag)).stream()
 					.collect(Collectors.toList());
@@ -81,8 +84,48 @@ public class MessageController {
 		}
 	}
 
+	@GetMapping(value = "/api/message/bySearch")
+	public List<Message> getMessagesBySearch(HttpServletRequest r, @RequestParam(required = true) String search) {
+		try {
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			UserTW user = userService.findUserById(userId);
+			List<Message> messageList = (messageService.findMessagesBySearch(user, search.toLowerCase())).stream()
+					.collect(Collectors.toList());
+			return messageList;
+		} catch (DataAccessException d) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages" + d);
+		}
+	}
+
+	@GetMapping(value = "/api/message/noRead")
+	public Long getNumberOfNotReadMessages(HttpServletRequest r) {
+		try {
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			UserTW user = userService.findUserById(userId);
+			Long notReadMessages = (messageService.findMessagesByUserId(user)).stream().filter(m -> !m.getRead())
+					.count();
+			return notReadMessages;
+		} catch (DataAccessException d) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
+		}
+	}
+
+	@GetMapping(value = "/api/message/noReadByTag")
+	public Long getNumberOfNotReadMessagesByTag(HttpServletRequest r, @RequestParam(required = true) int tagId) {
+		try {
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			Tag tag = tagService.findTagById(tagId);
+			UserTW user = userService.findUserById(userId);
+			Long notReadMessages = (messageService.findMessagesByTag(user, tag)).stream().filter(m -> !m.getRead())
+					.count();
+			return notReadMessages;
+		} catch (DataAccessException d) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
+		}
+	}
+
 	@PostMapping(value = "api/message/new")
-	public ResponseEntity<String> newMessage(HttpServletRequest r, @RequestBody Message message) {
+	public ResponseEntity<String> newMessage(HttpServletRequest r, @Valid @RequestBody Message message) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
@@ -106,7 +149,8 @@ public class MessageController {
 	}
 
 	@PostMapping(value = "api/message/reply")
-	public ResponseEntity<String> replyMessage(HttpServletRequest r, @RequestParam(required = true) Message message) {
+	public ResponseEntity<String> replyMessage(HttpServletRequest r,
+			@Valid @RequestParam(required = true) Message message) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
