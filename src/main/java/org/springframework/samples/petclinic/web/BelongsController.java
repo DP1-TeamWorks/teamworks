@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Controller
 public class BelongsController {
 
@@ -51,18 +53,24 @@ public class BelongsController {
 			@RequestParam(required = false) Boolean isDepartmentManager, HttpServletRequest r) {
 
 		try {
-			
+			log.info("Obteniendo el current belongs del usuario logeado");
 			Belongs currentBelongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
+			log.info("Obteniendo el usuario logeado");
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
+			log.info("Comprobando si el usuario es teamOwner");
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
+			log.info("Obteniendo el departamento");
 			Department department = departmentService.findDepartmentById(departmentId);
+			log.info("Obteniendo el usuario dle que se quiere crear el belongs");
 			UserTW belonguser = userTWService.findUserById(belongUserId);
 			
 			if(!belonguser.getTeam().equals(user.getTeam())) {
+				log.error("El user no pertenece al team");
 				throw new IdParentIncoherenceException("Team", "User");
 			}
 			
 			if(user.getTeam().equals(department.getTeam())) {
+				log.error("El departamento no pertenece al team");
 				throw new IdParentIncoherenceException("Team", "Department");
 			}
 			
