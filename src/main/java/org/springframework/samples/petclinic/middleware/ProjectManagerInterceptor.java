@@ -8,6 +8,7 @@ import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.ProjectService;
@@ -32,6 +33,7 @@ public class ProjectManagerInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
 		Integer userId = (Integer) req.getSession().getAttribute("userId");
+		UserTW user = userTWService.findUserById(userId);
 		Integer projectId = Integer.valueOf(req.getParameter("projectId"));
 		Participation participation = participationService.findCurrentParticipation(userId, projectId);
 		Project project = projectService.findProjectById(projectId);
@@ -44,8 +46,8 @@ public class ProjectManagerInterceptor extends HandlerInterceptorAdapter {
 		if (belongs != null) {
 			isDepartmentManager = belongs.getIsDepartmentManager();
 		}
-		if (userTWService.findUserById(userId).getRole().equals(Role.team_owner) || isDepartmentManager
-				|| isProjectManager) {
+		if (user.getTeam().equals(project.getDepartment().getTeam()) && user.getRole().equals(Role.team_owner)
+				|| isDepartmentManager || isProjectManager) {
 			return true;
 		} else {
 			res.sendError(403);
