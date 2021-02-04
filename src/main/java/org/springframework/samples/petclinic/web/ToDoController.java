@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Milestone;
+import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.MilestoneService;
 import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.IdParentIncoherenceException;
 import org.springframework.samples.petclinic.validation.ToDoLimitMilestoneException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,13 +67,17 @@ public class ToDoController {
 			
 			UserTW user = userService.findUserById(userId);
 			Milestone milestone = milestoneService.findMilestoneById(milestoneId);
+			if (user.getParticipation().stream().map(Participation::getProject)
+					.anyMatch(p -> p.equals(milestone.getProject())))
+				throw new IdParentIncoherenceException("Project", "User");
+
 			toDo.setAssignee(user);
 			toDo.setMilestone(milestone);
 			toDo.setDone(false);
 			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
-		} catch (DataAccessException | ToDoLimitMilestoneException d) {
+		} catch (DataAccessException | ToDoLimitMilestoneException | IdParentIncoherenceException d) {
 			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 	}

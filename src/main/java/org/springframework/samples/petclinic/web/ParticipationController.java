@@ -11,12 +11,15 @@ import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.ProjectService;
+import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.validation.DateIncoherenceException;
+import org.springframework.samples.petclinic.validation.IdParentIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyProjectManagerException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -48,20 +51,27 @@ public class ParticipationController {
 
 	@PostMapping(value = "/api/projects/participation")
 	public ResponseEntity<String> postParticipation(@RequestParam(required = true) Integer participationUserId,
-			@RequestParam(required = true) Integer projectId, @RequestParam(required = false) Boolean isProjectManager,
-			HttpServletRequest r) {
+			@RequestParam(required = true) Integer projectId,
+			@RequestParam(required = false) Boolean willBeProjectManager, HttpServletRequest r) {
 
 		try {
-			Participation currentParticipation = participationService.findCurrentParticipation(participationUserId,
-					projectId);
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
+
 			Project project = projectService.findProjectById(projectId);
-			Belongs currentBelongs = belongsService.findCurrentBelongs(participationUserId,
+			Participation userCurrentParticipation = participationService.findCurrentParticipation(participationUserId,
+					projectId);
+			Belongs userCurrentBelongs = belongsService.findCurrentBelongs(participationUserId,
 					project.getDepartment().getId());
-			Belongs belongs = belongsService.findCurrentBelongs(user.getId(), project.getDepartment().getId());
-			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
-			// Comprueba si existe una participacion
-			if (currentParticipation == null && currentBelongs != null && (belongs != null || isTeamOwner)) {
+
+			Participation managerParticipation = participationService.findCurrentParticipation(user.getId(), projectId);
+
+			if (project.getDepartment().getTeam().equals(user.getTeam()))
+				throw new IdParentIncoherenceException("Team", "Project");
+
+			if (userCurrentBelongs == null)
+				throw new IdParentIncoherenceException("Department", "User");
+
+			if (userCurrentParticipation == null) {
 				UserTW participationUser = userTWService.findUserById(participationUserId);
 				Participation participation = new Participation();
 				participation.setProject(project);
@@ -69,8 +79,12 @@ public class ParticipationController {
 				participation.setIsProjectManager(false);
 				// Solo puedes asignar el rol de project manager si eres teamOwner o
 				// departmentManager
-				if (isProjectManager != null && (isTeamOwner || belongs.getIsDepartmentManager())) {
-					participation.setIsProjectManager(isProjectManager);
+				if (willBeProjectManager != null) {
+					participation.setIsProjectManager(willBeProjectManager);
+					if (managerParticipation != null) {
+						managerParticipation.setIsProjectManager(!willBeProjectManager);
+						participationService.saveParticipation(managerParticipation);
+					}
 				}
 				participationService.saveParticipation(participation);
 				return ResponseEntity.ok().build();
@@ -78,7 +92,8 @@ public class ParticipationController {
 				return ResponseEntity.badRequest()
 						.body("Ya existe una participacion o el usuario no pertenece al departamento");
 			}
-		} catch (DataAccessException | ManyProjectManagerException | DateIncoherenceException d) {
+		} catch (DataAccessException | ManyProjectManagerException | DateIncoherenceException
+				| IdParentIncoherenceException d) {
 			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 

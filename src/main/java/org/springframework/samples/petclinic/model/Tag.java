@@ -15,7 +15,6 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,9 +27,9 @@ import lombok.Setter;
 public class Tag extends BaseEntity {
 
     // Attributes
-	
-	@NotEmpty
-	@Size(min=1,max=200)
+
+    @NotEmpty
+    @Size(min = 1, max = 200)
     @Column(name = "title")
     String title;
 
