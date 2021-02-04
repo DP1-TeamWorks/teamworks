@@ -23,6 +23,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.ParticipationService;
@@ -63,11 +64,14 @@ class UserTWControllerTests {
 	private MockMvc mockMvc;
 
 	private UserTW paula;
+	
+	private Team equipo;
 
 	@BeforeEach
 	void setup() {
 
 		paula = new UserTW();
+		equipo = new Team();
 		
 		paula.setName("Paula");
 		paula.setLastname("Ruiz");
@@ -75,16 +79,17 @@ class UserTWControllerTests {
 		paula.setPassword("123123123");
 		paula.setJoinDate(LocalDate.now());
 		paula.setRole(Role.team_owner);
+		
 		//declarar relaciones ????
-		paula.setTeam(team);
+		paula.setTeam(equipo);
 		
 		//given(this.clinicService.findUserById(TEST_OWNER_ID)).willReturn(paula);
-		given(this.teamService.findTeamById(TEST_USER_ID)).willReturn();
+		given(this.teamService.findTeamById(TEST_USER_ID)).willReturn(equipo);
 
 	}
 
 	@WithMockUser(value = "spring")
-        @Test
+    @Test
 	void testInitCreationForm() throws Exception {
 		mockMvc.perform(get("/owners/new")).andExpect(status().isOk()).andExpect(model().attributeExists("owner"))
 				.andExpect(view().name("owners/createOrUpdateOwnerForm"));
@@ -102,7 +107,7 @@ class UserTWControllerTests {
 	}
 
 	@WithMockUser(value = "spring")
-        @Test
+    @Test
 	void testProcessCreationFormHasErrors() throws Exception {
 		mockMvc.perform(post("/owners/new")
 							.with(csrf())
@@ -117,14 +122,14 @@ class UserTWControllerTests {
 	}
 
 	@WithMockUser(value = "spring")
-        @Test
+    @Test
 	void testInitFindForm() throws Exception {
 		mockMvc.perform(get("/owners/find")).andExpect(status().isOk()).andExpect(model().attributeExists("owner"))
 				.andExpect(view().name("owners/findOwners"));
 	}
 
 	@WithMockUser(value = "spring")
-        @Test
+    @Test
 	void testProcessFindFormSuccess() throws Exception {
 		given(this.clinicService.findOwnerByLastName("")).willReturn(Lists.newArrayList(paula, new Owner()));
 

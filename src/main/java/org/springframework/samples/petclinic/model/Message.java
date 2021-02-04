@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -36,10 +37,12 @@ public class Message extends BaseEntity {
 	LocalDate timestamp;
 
 	@NotNull
+	@NotEmpty
 	@Column(name = "subject")
 	private String subject;
 
 	@NotNull
+	@NotEmpty
 	@Column(name = "text")
 	private String text;
 
