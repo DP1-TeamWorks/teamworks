@@ -14,7 +14,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   useEffect(() => {
     DepartmentApiUtils.getMyDepartments()
       .then((res) => {
-        setDepartmentList(res.data);
+        setDepartmentList(res);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the departments");
@@ -24,7 +24,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   useEffect(() => {
     ProjectApiUtils.getMyProjects(department.id)
       .then((res) => {
-        setProjectList(res.data);
+        setProjectList(res);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the projects");
@@ -40,7 +40,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
     setPickedDepartment(dpt);
     ProjectApiUtils.getMyProjects(dpt.id)
       .then((res) => {
-        setProjectList(res.data);
+        setProjectList(res);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the projects");
@@ -54,7 +54,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   };
 
   return (
-    <>
+    <div style={{ display: departmentList<=0 ? "none": "" }}>
       <h3 className="SidebarSectionTitle">Project</h3>
 
       <button className="PickerBox" onClick={openOrClose}>
@@ -89,7 +89,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
           })}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

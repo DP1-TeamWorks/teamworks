@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -101,7 +103,7 @@ public class ProjectController {
 
 	@PostMapping(value = "/api/projects")
 	public ResponseEntity<String> postProjects(@RequestParam(required = true) Integer departmentId,
-			@RequestBody Project project) {
+			@Valid @RequestBody Project project) {
 
 		try {
 			Department depar = departmentService.findDepartmentById(departmentId);

@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -31,12 +32,13 @@ public class Milestone extends BaseEntity {
 	
 	  // Attributes
 
-	@NotNull
 	@NotEmpty
+	@Size(min=1,max=25)
 	@Column(name = "name", unique = true)
 	private String name;
 
-	@NotNull
+	
+	@NotEmpty
 	@Column(name = "due_for")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate dueFor;

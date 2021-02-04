@@ -60,7 +60,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/api/**")
+        registry.addInterceptor(new LoginInterceptor(userTWService)).addPathPatterns("/api/**")
                 .excludePathPatterns("/api/auth/login").excludePathPatterns("/api/auth/signup").order(0);
         registry.addInterceptor(new TeamOwnerInterceptor(userTWService)).addPathPatterns("/api/teams/**")
                 .addPathPatterns("/api/userTW/**").addPathPatterns("/api/departments").order(1);

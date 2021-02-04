@@ -11,12 +11,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 import org.hibernate.annotations.CreationTimestamp;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.sun.istack.NotNull;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,12 +28,12 @@ public class Project extends BaseEntity {
 	  // Attributes
 
 	@Column(name = "name")
-	@NotNull
 	@NotEmpty
+	@Size(min=1,max=25)
 	private String name;
 
 	@Column(name = "description")
-	@NotNull
+	@Size(min=1,max=3000)
 	@NotEmpty
 	private String description;
 

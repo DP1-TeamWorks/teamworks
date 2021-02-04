@@ -1,15 +1,16 @@
 import axios from "axios";
 import { API_URL } from "../../config/config";
+import ApiUtils from "./ApiUtils";
 const AUTH_URL = "/auth";
 
 const AuthApiUtils = {
   login: (credentials) =>
-    axios.post(API_URL + AUTH_URL + "/login", credentials),
-  islogged: () => axios.get(API_URL + AUTH_URL + "/islogged"),
+    ApiUtils.post(AUTH_URL + "/login", credentials, false),
+  islogged: () => ApiUtils.get(AUTH_URL + "/islogged", false),
   signup: (signUpProps) =>
-    axios.post(API_URL + AUTH_URL + "/signup", signUpProps),
-  check: () => axios.get(API_URL + AUTH_URL),
-  logout: () => axios.delete(API_URL + AUTH_URL + "/logout"),
+    ApiUtils.post(AUTH_URL + "/signup", signUpProps, false),
+  check: () => ApiUtils.get(AUTH_URL, false),
+  logout: () => ApiUtils.delete(AUTH_URL + "/logout", false),
 };
 
 export default AuthApiUtils;
