@@ -18,6 +18,9 @@ public class TeamValidator implements Validator{
 		if(team.getName().length()<1||team.getName().length()>25) {
 			errors.rejectValue("name", "The name size must be between 1 and 25");
 		}
+		if(!team.getName().matches("^[A-Za-zÀ-ÿ0-9\\u00f1\\u00d1_-]*$")) {
+			errors.rejectValue("name", "Wrong name format");
+		}
 		
 		if(team.getIdentifier().length()<1||team.getIdentifier().length()>120) {
 			errors.rejectValue("identifier", "The Identifier size must be between 1 and 120");

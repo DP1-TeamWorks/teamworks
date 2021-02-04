@@ -70,16 +70,23 @@ public class UserTWController {
 
 	@GetMapping(value = "/api/userTW")
 	public Map<String, Object> getUser(HttpServletRequest r, Integer userId) {
-		Map<String, Object> m = new HashMap<>();
+		Integer teamId =(Integer) r.getSession().getAttribute("teamId");
 		UserTW user = userService.findUserById(userId);
-		m.put("user", user);
-		List<Belongs> lb = belongsService.findUserBelongs(userId).stream().collect(Collectors.toList());
-		m.put("currentDepartments", lb);
-		List<Participation> lp = participationService.findUserParticipations(userId).stream()
-				.collect(Collectors.toList());
-		m.put("currentProjects", lp);
-		return m;
-
+		Map<String, Object> m = new HashMap<>();
+		if(user.getTeam().getId().equals(teamId)) {
+			m.put("user", user);
+			List<Belongs> lb = belongsService.findUserBelongs(userId).stream().collect(Collectors.toList());
+			m.put("currentDepartments", lb);
+			List<Participation> lp = participationService.findUserParticipations(userId).stream()
+					.collect(Collectors.toList());
+			m.put("currentProjects", lp);
+			return m;
+		}
+		else {
+			return m;
+		}
+		
+		
 	}
 
 	@PostMapping(value = "/api/userTW")
@@ -119,8 +126,11 @@ public class UserTWController {
 
 	@GetMapping(value = "/api/userTW/credentials")
 	public Map<String, Object> getCredentials(HttpServletRequest r, Integer userId) {
+		Integer teamId =(Integer) r.getSession().getAttribute("teamId");
 		Map<String, Object> m = new HashMap<>();
 		UserTW user = userService.findUserById(userId);
+		if(user.getTeam().getId().equals(teamId)) {
+			
 		m.put("isTeamManager", user.getRole().equals(Role.team_owner));
 		List<Belongs> lb = belongsService.findCurrentUserBelongs(userId).stream().collect(Collectors.toList());
 		m.put("currentDepartments", lb);
@@ -128,6 +138,9 @@ public class UserTWController {
 				.collect(Collectors.toList());
 		m.put("currentProjects", lp);
 		return m;
+		}else {
+			return m;
+		}
 	}
 
 }

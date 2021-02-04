@@ -15,6 +15,7 @@ import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.validation.DateIncoherenceException;
+import org.springframework.samples.petclinic.validation.IdParentIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyDepartmentManagerException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -50,12 +51,22 @@ public class BelongsController {
 			@RequestParam(required = false) Boolean isDepartmentManager, HttpServletRequest r) {
 
 		try {
-
+			
 			Belongs currentBelongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
+			Department department = departmentService.findDepartmentById(departmentId);
+			UserTW belonguser = userTWService.findUserById(belongUserId);
+			
+			if(!belonguser.getTeam().equals(user.getTeam())) {
+				throw new IdParentIncoherenceException("Team", "User");
+			}
+			
+			if(user.getTeam().equals(department.getTeam())) {
+				throw new IdParentIncoherenceException("Team", "Department");
+			}
+			
 			if (currentBelongs == null) {
-				Department department = departmentService.findDepartmentById(departmentId);
 				UserTW belongUser = userTWService.findUserById(belongUserId);
 				Belongs belongs = new Belongs();
 				belongs.setDepartment(department);
@@ -71,7 +82,7 @@ public class BelongsController {
 				return ResponseEntity.badRequest().body("Ya existe un belongs");
 			}
 
-		} catch (DataAccessException | ManyDepartmentManagerException | DateIncoherenceException d) {
+		} catch (DataAccessException | ManyDepartmentManagerException | DateIncoherenceException | IdParentIncoherenceException d) {
 			return ResponseEntity.badRequest().build();
 		}
 

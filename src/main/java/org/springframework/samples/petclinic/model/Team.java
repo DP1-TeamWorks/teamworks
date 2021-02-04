@@ -27,7 +27,7 @@ import lombok.Setter;
 public class Team extends BaseEntity {
 	
 	  // Attributes
-
+	@Pattern(regexp ="^[A-Za-zÀ-ÿ0-9\\u00f1\\u00d1_-]*$")
 	@NotEmpty
 	@Size(min=1,max=25)
 	@Column(name = "name",unique=true)
