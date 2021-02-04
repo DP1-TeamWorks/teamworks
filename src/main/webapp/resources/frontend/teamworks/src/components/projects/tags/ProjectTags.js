@@ -13,7 +13,7 @@ const ProjectTags = ({
 }) => {
   return (
     <>
-      <h3 className="SidebarSectionTitle">Tags</h3>
+      <h3 style={{ display: tagList<=0 ? "none": "inline-block" }} className="SidebarSectionTitle">Tags</h3>
       {tagList.map((tag) => {
         return (
           <InboxSidebarTab
