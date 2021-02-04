@@ -33,6 +33,22 @@ const ApiUtils = {
         reject(err);
       })
     });
+  },
+  delete:(url, reloadOnUnauthorized = true) =>
+  {
+    return new Promise((resolve, reject) =>
+    {
+      axios.delete(API_URL + url)
+      .then((res) => resolve(res.data))
+      .catch((err) =>
+      {
+        if (err.response.status === 403 && reloadOnUnauthorized)
+        {
+          window.location.replace('/') // unauthorized. redirect to login 
+        }
+        reject(err);
+      })
+    });
   }
 };
 
