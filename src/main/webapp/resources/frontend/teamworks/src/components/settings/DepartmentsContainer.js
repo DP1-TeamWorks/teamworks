@@ -9,13 +9,14 @@ import { useState } from 'react';
 import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
 import DepartmentSettings from "./DepartmentSettings";
 import Spinner from "../spinner/Spinner";
+import AddUserToForm from "../forms/AddUserToForm";
 
 const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
 {
 
   function onDepartmentNameUpdated(name)
   {
-    if (name != myDepartments[selectedIndex].name)
+    if (name !== myDepartments[selectedIndex].name)
     {
       // Update department object
       setDepartments(Object.values({
@@ -57,6 +58,12 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
     return DepartmentApiUtils.updateDepartment(updatedDepartment)
   }
 
+  function onUserAdded()
+  {
+
+    
+  }
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [myDepartments, setDepartments] = useState(departments);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -96,11 +103,11 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
         <SettingGroup name="Description" description="A brief description for the responsibilities of the department.">
           <EditableField key={selectedIndex} smaller id="department-description" value={currentDepartment.description} fieldName="description" postFunction={updateDepartment} />
         </SettingGroup>
-        <SettingGroup name="Add user to department" description="Type their name below.">
-          <AddElementForm submitText="Add to Software" attributeName="Full Name" attributePlaceholder="Harvey Specter" />
+        <SettingGroup name="Add user to department" description="Start typing their name below.">
+          <AddUserToForm key={currentDepartment.name} onUserAdded={onUserAdded} departmentId={currentDepartment.id} submitText={`Add to ${currentDepartment.name}`} attributeName="Full Name" attributePlaceholder="Harvey Specter" />
         </SettingGroup>
         <SettingGroup name="Members" description="Department members are shown below. Click on an user to see their history.">
-          <UserList />
+          <UserList key={selectedIndex} />
         </SettingGroup>
         <SettingGroup danger name="Delete department" description="Deletes the department, as well as its associated members and projects. <br>This action cannot be undone.">
           <Button className="Button--red" onClick={onDepartmentDeleteClicked}>

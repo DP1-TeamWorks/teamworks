@@ -36,7 +36,8 @@ public class UserTW extends BaseEntity {
         String getName();
         String getLastname();
     }
-	  // Attributes
+
+    // Attributes
 
 	@NotNull
 	@NotEmpty

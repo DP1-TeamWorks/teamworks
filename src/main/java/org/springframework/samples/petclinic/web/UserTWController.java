@@ -49,14 +49,14 @@ public class UserTWController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping(value = "/api/usersTW")
+	@GetMapping(value = "/api/users")
 	public Collection<UserTW.StrippedUser> getUsers(HttpServletRequest r) {
         Integer teamId = (Integer) r.getSession().getAttribute("teamId");
 		List<UserTW.StrippedUser> l = userService.findUsersByTeam(teamId).stream().collect(Collectors.toList());
 		return l;
 	}
 
-	@GetMapping(value = "/api/userTW")
+	@GetMapping(value = "/api/user")
 	public Map<String, Object> getUser(HttpServletRequest r, Integer userId) {
 		Map<String, Object> m = new HashMap<>();
 		UserTW user = userService.findUserById(userId);
@@ -70,7 +70,7 @@ public class UserTWController {
 
 	}
 
-	@PostMapping(value = "/api/userTW")
+	@PostMapping(value = "/api/user")
 	public ResponseEntity<String> postUser(HttpServletRequest r, @RequestBody UserTW user) {
 		try {
 			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
@@ -87,7 +87,7 @@ public class UserTWController {
 		}
 	}
 
-	@DeleteMapping(value = "/api/userTW")
+	@DeleteMapping(value = "/api/user")
 	public ResponseEntity<String> deleteUser(@RequestParam(required = true) Integer userId) {
 		try {
 			userService.deleteUserById(userId);
@@ -99,7 +99,7 @@ public class UserTWController {
 
 	}
 
-	@GetMapping(value = "/api/userTW/credentials")
+	@GetMapping(value = "/api/user/credentials")
 	public Map<String, Object> getCredentials(HttpServletRequest r, Integer userId) {
 		Map<String, Object> m = new HashMap<>();
 		UserTW user = userService.findUserById(userId);

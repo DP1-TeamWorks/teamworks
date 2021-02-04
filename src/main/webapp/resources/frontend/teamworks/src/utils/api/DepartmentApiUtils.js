@@ -10,6 +10,7 @@ const DepartmentApiUtils = {
   updateDepartment: (department) => ApiUtils.patch(DEPARTMENT_URL, department),
   deleteDepartment: (id) => ApiUtils.delete(DEPARTMENT_URL + "/" + id),
   getMyDepartments: () => ApiUtils.get(DEPARTMENT_URL + "/mine"),
+  addUserToDepartment: (departmentId, userId) => ApiUtils.post(DEPARTMENT_URL + `/belongs?departmentId=${departmentId}&belongUserId=${userId}`)
 };
 
 export default DepartmentApiUtils;

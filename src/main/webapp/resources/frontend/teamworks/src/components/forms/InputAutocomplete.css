@@ -1,0 +1,21 @@
+.SuggestionsContainer {
+    background-color: #222;
+    margin-top: 80px;
+    width: 100%;
+    box-shadow: 0 0 2px #2226;
+}
+
+.SuggestionsList {
+    padding-left: 0;
+}
+
+.Suggestion {
+    list-style-type: none;
+    padding: 0;
+    cursor: pointer;
+    padding: 10px 20px;
+}
+
+.Suggestion:hover {
+    background-color: #444;
+}

@@ -36,6 +36,5 @@ public class DepartmentManagerInterceptor extends HandlerInterceptorAdapter {
 			res.sendError(403);
 			return false;
 		}
-
 	}
 }

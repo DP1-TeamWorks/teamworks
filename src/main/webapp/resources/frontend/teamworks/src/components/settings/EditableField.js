@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 const EditableField = ({value, inputType, smaller, editable, postFunction, fieldName, onUpdated}) => {
   function onOkClicked() {
-    if (!postFunction || !fieldName)
+    if (!postFunction || !fieldName || actualVal == currentVal)
     {
       setEditing(false);
       return;
@@ -56,7 +56,7 @@ const EditableField = ({value, inputType, smaller, editable, postFunction, field
   {
     if (editing)
       textInput.focus();
-  }, [editing]);
+  }, [editing, textInput]);
 
   useEffect(() =>
   {
@@ -74,11 +74,11 @@ const EditableField = ({value, inputType, smaller, editable, postFunction, field
     return (
       <div className={`EditableField EditableField--Editing ${smaller ? "EditableField--Smaller" : ""}`}>
         <input
-          className="Input EditingInput"
+          className="Input EditingInput EditingInput--MinusButton"
           type={inputType ?? "text"}
           defaultValue={currentVal}
           onChange={(e) => setCurrentVal(e.target.value)}
-          onKeyDown={(e) => { if (e.key == "Enter") onOkClicked() }}
+          onKeyDown={(e) => { if (e.key === "Enter") onOkClicked() }}
           ref={(input) => textInput = input}
         />
         <GradientButton

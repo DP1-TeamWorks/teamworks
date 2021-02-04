@@ -1,7 +1,7 @@
 .UserList {
     width: 100%;
     max-width: 900px;
-    background: #343434;
+    background: #262626;
 }
 
 .UserList__thead {
@@ -12,4 +12,8 @@
 .UserList th {
     text-align: left;
     font-weight: 600;
+}
+
+.UserList td {
+    padding: 10px 0;
 }

@@ -60,7 +60,7 @@ public class DepartmentController {
 	}
 
 	@PostMapping(value = "/api/departments")
-	public ResponseEntity<String> createDeparment(@RequestBody Department department, HttpServletRequest r) {
+	public ResponseEntity<String> createDepartment(@RequestBody Department department, HttpServletRequest r) {
 		try {
 			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
 			Team team = teamService.findTeamById(teamId);
@@ -85,6 +85,10 @@ public class DepartmentController {
             if (dbDepartment == null)
                 return ResponseEntity.badRequest().build();
 
+            // TODO Validate department
+         /*   if (department.getName() == "" || department.getDescription() == "")
+                return ResponseEntity.badRequest().build();*/
+
             if (department.getName() != null)
                 dbDepartment.setName(department.getName());
             if (department.getDescription() != null)
@@ -95,7 +99,7 @@ public class DepartmentController {
             return ResponseEntity.ok("Department updated");
 
         } catch (DataAccessException d) {
-            return ResponseEntity.badRequest().body("alreadyexists");
+            return ResponseEntity.badRequest().body("invalid id");
         }
     }
 

@@ -10,7 +10,7 @@ const ApiUtils = {
       .then((res) => resolve(res.data))
       .catch((err) =>
       {
-        if (err.response.status === 403 && reloadOnUnauthorized)
+        if (err.response?.status === 403 && reloadOnUnauthorized)
         {
           window.location.reload() // unauthorized. refresh? 
         }
@@ -26,7 +26,7 @@ const ApiUtils = {
       .then((res) => resolve(res.data))
       .catch((err) =>
       {
-        if (err.response.status === 403 && reloadOnUnauthorized)
+        if (err.response?.status === 403 && reloadOnUnauthorized)
         {
           window.location.replace('/') // unauthorized. redirect to login 
         }
@@ -42,7 +42,7 @@ const ApiUtils = {
       .then((res) => resolve(res.data))
       .catch((err) =>
       {
-        if (err.response.status === 403 && reloadOnUnauthorized)
+        if (err.response?.status === 403 && reloadOnUnauthorized)
         {
           window.location.replace('/') // unauthorized. redirect to login 
         }
@@ -58,7 +58,7 @@ const ApiUtils = {
       .then((res) => resolve(res.data))
       .catch((err) =>
       {
-        if (err.response.status === 403 && reloadOnUnauthorized)
+        if (err.response?.status === 403 && reloadOnUnauthorized)
         {
           window.location.replace('/'); // unauthorized. redirect to login 
         }

@@ -1,9 +1,11 @@
 package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +17,9 @@ import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+@RestController
 public class BelongsController {
 
 	private final DepartmentService departmentService;
@@ -39,7 +39,23 @@ public class BelongsController {
 		dataBinder.setDisallowedFields("id");
 	}
 
+
 	// Belongs Requests
+
+    @GetMapping(value="/api/departments/belongs")
+    public ResponseEntity<Collection<Belongs>> getBelongsFromDepartment(@RequestParam(required = true) Integer departmentId, HttpServletRequest r)
+    {
+        try
+        {
+            Collection<Belongs> belongs = belongsService.findCurrentBelongsInDepartment(departmentId);
+            return ResponseEntity.ok(belongs);
+        } catch (DataAccessException e)
+        {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+
 	@PostMapping(value = "/api/departments/belongs")
 	public ResponseEntity<String> createBelongs(@RequestParam(required = true) Integer belongUserId,
 			@RequestParam(required = true) Integer departmentId,
@@ -49,7 +65,7 @@ public class BelongsController {
 
 			Belongs currentBelongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
-			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
+			//Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
 			if (currentBelongs == null) {
 				Department department = departmentService.findDepartmentById(departmentId);
 				UserTW belongUser = userTWService.findUserById(belongUserId);
@@ -58,13 +74,22 @@ public class BelongsController {
 				belongs.setUserTW(belongUser);
 				belongs.setIsDepartmentManager(false);
 
-				if (isDepartmentManager != null && isTeamOwner) {
-					belongs.setIsDepartmentManager(isDepartmentManager);
+				if (isDepartmentManager != null && isDepartmentManager)
+				{
+				    Department dp = departmentService.findDepartmentById(departmentId);
+				    belongs.setIsDepartmentManager(true);
+                    Belongs departmentManagerBelongs = belongsService.findCurrentDepartmentManager(departmentId);
+                    if (departmentManagerBelongs != null)
+                    {
+                        // they're department manager. since there can only be one, they will lose privileges
+                        departmentManagerBelongs.setFinalDate(LocalDate.now());
+                        belongsService.saveBelongs(departmentManagerBelongs);
+                    }
 				}
 				belongsService.saveBelongs(belongs);
 				return ResponseEntity.ok().build();
 			} else {
-				return ResponseEntity.badRequest().body("Ya existe un belongs");
+				return ResponseEntity.badRequest().body("alreadyexists");
 			}
 
 		} catch (DataAccessException d) {
@@ -92,6 +117,5 @@ public class BelongsController {
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
 		}
-
 	}
 }

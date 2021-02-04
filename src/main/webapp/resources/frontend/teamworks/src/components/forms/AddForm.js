@@ -1,8 +1,8 @@
 import React from "react";
-import AuthApiUtils from "../../utils/api/AuthApiUtils";
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
 import "./AddUserForm.css";
+import InputAutocompleteUser from "./InputAutocompleteUser";
 
 class AddForm extends React.Component
 {
@@ -14,26 +14,24 @@ class AddForm extends React.Component
       errors: {},
       requestError: "",
       children: [],
-      isSubmitting: false
+      isSubmitting: false,
+      autocompleteVal: null
     };
     this.submitText = props.submitText ?? "Add element";
     this.postFunction = props.postFunction;
     this.children = props.children;
     this.alreadyExistsErrorText = props.alreadyExistsErrorText ?? "An element with the same name already exists.";
+    this.disabled = props.disabled;
+    this.onAutocompleteSelected = props.onAutocompleteSelected;
   }
 
   hasErrors = () =>
   {
     const errors = Object.values(this.state.errors);
-    const nInputs = Object.keys(this.state.inputs).length;
-    let b =
-      errors.length < nInputs
-        ? true
-        : errors.some((e) =>
-        {
-          return e !== "";
-        });
-    return b;
+    return errors.some((e) =>
+    {
+      return e !== "";
+    });
   };
 
   validateAll = () =>
@@ -121,27 +119,48 @@ class AddForm extends React.Component
     }
   };
 
+  onAutocomplete = (field, value) =>
+  {
+    this.setState({autocompleteVal: value, inputs: { ...this.state.inputs, [field]: value }})
+    if (this.onAutocompleteSelected)
+      this.onAutocompleteSelected(field, value);
+  };
+
   processChildren()
   {
     let inputs = {}
     const inputChildren = React.Children.map(this.children, child =>
       {
-        if (React.isValidElement(child) && child.type === Input)
+        if (React.isValidElement(child))
         {
-          let name = child.props.name;
-          let placeholder = child.props.placeholder;
-          inputs[name] = this.state.inputs[name] ?? '';
-          return (
-            <div className="EditableField EditableField--OnlyInput">
-              <Input
-                name={name}
-                styleClass="Input EditingInput"
-                placeholder={placeholder}
-                value={this.state.inputs[name]??''}
-                error={this.state.errors[name]??''}
-                changeHandler={this.changeHandler} />
-            </div>
-          );
+          if (child.type === Input)
+          {
+            let name = child.props.name;
+            let placeholder = child.props.placeholder;
+            inputs[name] = this.state.inputs[name] ?? '';
+            return (
+              <div className="EditableField EditableField--OnlyInput">
+                <Input
+                  name={name}
+                  styleClass="Input EditingInput"
+                  placeholder={placeholder}
+                  value={this.state.inputs[name]??''}
+                  error={this.state.errors[name]??''}
+                  changeHandler={this.changeHandler} />
+              </div>
+            );
+          } else if (child.type === InputAutocompleteUser)
+          {
+            let name = child.props.name;
+            inputs[name] = this.state.inputs[name] ?? '';
+            if (!this.state.autocompleteVal)
+              this.setState({autocompleteVal: -1}); // there's an autocompleted child so we set the state accordingly
+            return React.cloneElement(child, 
+              {
+                onUserSelected: this.onAutocomplete,
+                val: this.state.inputs[name]??''
+              });
+          }
         }
         return child;
       });
@@ -169,7 +188,7 @@ class AddForm extends React.Component
           reducedsize
           text={this.submitText}
           requestError={this.state.requestError}
-          hasErrors={this.hasErrors()}
+          hasErrors={this.hasErrors() || (this.state.autocompleteVal && this.state.autocompleteVal === -1)}
           loading={this.state.isSubmitting}
         />
       </form>
