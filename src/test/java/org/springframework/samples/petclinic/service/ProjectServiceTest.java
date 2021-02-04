@@ -107,5 +107,21 @@ public class ProjectServiceTest {
 		List<UserTW> listaUser = projectService.findProjectUsers(project.getId()).stream().collect(Collectors.toList());
 		assertThat(listaUser.isEmpty()).isFalse();
 	}
+	
+	//NEGATIVE USE CASE H9-E1
+	@Test
+	@Transactional
+	void negshouldUpdateProject() {
+		Project project = projectService.findProjectById(1);
+		project.setName(null);
+		try {
+			
+			this.projectService.saveProject(project);
+
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+				
+	}
 
 }

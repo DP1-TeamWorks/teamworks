@@ -16,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Project;
+import org.springframework.samples.petclinic.model.Tag;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,5 +100,20 @@ public class DepartmentServiceTest {
 
 			//this.departmentService.saveDepartment(department);
 			//});			
+	}
+
+	void shouldUpdateDeparment() {
+		Department department = departmentService.findDepartmentById(1);
+		String oldName = department.getName();
+		String newName = oldName + "X";
+
+		department.setName(newName);
+		this.departmentService.saveDepartment(department);
+		;
+
+		// retrieving new name from database
+		department = this.departmentService.findDepartmentById(1);
+		;
+		assertThat(department.getName()).isEqualTo(newName);
 	}
 }

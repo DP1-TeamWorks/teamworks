@@ -2,13 +2,15 @@ package org.springframework.samples.petclinic.web;
 
 import org.assertj.core.util.Lists;
 
+
 import org.springframework.samples.petclinic.service.TeamService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.model.Owner;
+import org.springframework.samples.petclinic.model.Department;
+import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
@@ -26,8 +28,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.BelongsService;
+import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.ParticipationService;
+import org.springframework.samples.petclinic.service.ProjectService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -48,12 +52,12 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @WebMvcTest(controllers=UserTWController.class,
 		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 		excludeAutoConfiguration= SecurityConfiguration.class)
-class UserTWControllerTests2 {
+class DepartmentControllerTest {
 
-	private static final int TEST_USER_ID = 10;
+	private static final int TEST_Dept_ID = 10;
 
 	@Autowired
-	private UserTWController userTWController;
+	private DepartmentController departmentController;
 
 	@MockBean
 	private UserTWService UserTWService;
@@ -62,39 +66,38 @@ class UserTWControllerTests2 {
 	private TeamService teamService;
         
     @MockBean
-	private BelongsService belongsService;
+	private ProjectService projectService;
         
     @MockBean
-    private ParticipationService participationService; 
-        
+    private DepartmentService departmentService; 
   
 
 	@Autowired
 	private MockMvc mockMvc;
 
-	private UserTW george;
+	private Department Caliidad;
 	
 	private Team equipo;
+	
+	private Project projects;
 
 	@BeforeEach
 	void setup() {
-		george = new UserTW();
+		Caliidad = new Department();
 		equipo = new Team();
+		projects = new Project();
 
-		george = new UserTW();
-		george.setId(TEST_USER_ID);
-		george.setName("George");
-		george.setLastname("Franklin");
-		george.setEmail("andrespuertas@cyber");
-		george.setPassword("123456789");
+		Caliidad = new Department();
+		Caliidad.setId(TEST_Dept_ID);
+		Caliidad.setName("Caliidad");
+		Caliidad.setProjects(projects);
+		Caliidad.setTeam(equipo);
+	
 	//	george.setRole(Role.employee);
 	
-		george.setJoinDate(LocalDate.now());
-		george.setRole(Role.team_owner);
-		george.setTeam(equipo);
-		
 		//given(this.clinicService.findUserById(TEST_OWNER_ID)).willReturn(george);
-		given(this.teamService.findTeamById(TEST_USER_ID)).willReturn(equipo);
+		given(this.projectService.findProjectById(TEST_Dept_ID)).willReturn(projects);
+		given(this.teamService.findTeamById(TEST_Dept_ID)).willReturn(equipo);
 		
 		
 		
@@ -183,7 +186,7 @@ class UserTWControllerTests2 {
         @WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateOwnerFormSuccess() throws Exception {
-		mockMvc.perform(post("/owners/{ownerId}/edit", TEST_User_ID)
+		mockMvc.perform(post("/owners/{ownerId}/edit", TEST_USERS_ID)
 							.with(csrf())
 							.param("firstName", "Joe")
 							.param("lastName", "Bloggs")
