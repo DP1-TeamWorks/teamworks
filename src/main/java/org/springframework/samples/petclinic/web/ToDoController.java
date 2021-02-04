@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 public class ToDoController {
 	private final ToDoService toDoService;
@@ -47,6 +49,8 @@ public class ToDoController {
 
 	@GetMapping(value = "/api/toDos/mine")
 	public List<ToDo> getMyToDos(@RequestParam(required = true) Integer milestoneId, HttpServletRequest r) {
+		log.info("Obteniendo los toDos del user con id: " + r.getSession().getAttribute("userId"));
+
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
 		return toDoService.findToDoByMilestoneAndUser(milestoneId, userId).stream().collect(Collectors.toList());
 	}
@@ -54,9 +58,16 @@ public class ToDoController {
 	@PostMapping(value = "/api/toDos/mine")
 	public ResponseEntity<String> createPersonalToDo(@Valid @RequestBody ToDo toDo, HttpServletRequest r,
 			@RequestParam(required = true) Integer milestoneId) {
+		try {
+			log.info("Creando un toDo para el user con id: " + r.getSession().getAttribute("userId")
+					+ " en la milestone con id: " + milestoneId);
 
-		Integer userId = (Integer) r.getSession().getAttribute("userId");
-		return createToDo(toDo, r, milestoneId, userId);
+			Integer userId = (Integer) r.getSession().getAttribute("userId");
+			return createToDo(toDo, r, milestoneId, userId);
+		} catch (DataAccessException d) {
+			log.error("Error: " + d.getMessage());
+			return ResponseEntity.badRequest().body(d.getMessage());
+		}
 
 	}
 
@@ -64,7 +75,8 @@ public class ToDoController {
 	public ResponseEntity<String> createToDo(@Valid @RequestBody ToDo toDo, HttpServletRequest r,
 			@RequestParam(required = true) Integer milestoneId, @RequestParam(required = false) Integer userId) {
 		try {
-			
+			log.info("Creando un toDo para el user con id: " + userId + " en la milestone con id: " + milestoneId);
+
 			UserTW user = userService.findUserById(userId);
 			Milestone milestone = milestoneService.findMilestoneById(milestoneId);
 			if (user.getParticipation().stream().map(Participation::getProject)
@@ -74,10 +86,14 @@ public class ToDoController {
 			toDo.setAssignee(user);
 			toDo.setMilestone(milestone);
 			toDo.setDone(false);
+
+			log.info("Guardando el todo");
 			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException | ToDoLimitMilestoneException | IdParentIncoherenceException d) {
+
+			log.error("Error: " + d.getMessage());
 			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 	}
@@ -85,12 +101,18 @@ public class ToDoController {
 	@PostMapping(value = "/api/toDos/markAsDone")
 	public ResponseEntity<String> markAsDone(HttpServletRequest r, @RequestParam(required = true) int toDoId) {
 		try {
+			log.info("El usuario con id: " + r.getSession().getAttribute("userId") + " esta marcando el todo con id: "
+					+ toDoId + " como completado");
+
 			ToDo toDo = toDoService.findToDoById(toDoId);
 			toDo.setDone(true);
+
+			log.info("Guardando el todo");
 			toDoService.saveToDo(toDo);
 			return ResponseEntity.ok().build();
 
 		} catch (DataAccessException | ToDoLimitMilestoneException d) {
+			log.error("Error: " + d.getMessage());
 			return ResponseEntity.badRequest().body(d.getMessage());
 		}
 	}
