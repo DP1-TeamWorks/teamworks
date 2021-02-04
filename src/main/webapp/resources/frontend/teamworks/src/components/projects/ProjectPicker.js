@@ -54,7 +54,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   };
 
   return (
-    <>
+    <div style={{ display: departmentList<=0 ? "none": "" }}>
       <h3 className="SidebarSectionTitle">Project</h3>
 
       <button className="PickerBox" onClick={openOrClose}>
@@ -89,7 +89,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
           })}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
