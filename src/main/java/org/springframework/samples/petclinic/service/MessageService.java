@@ -29,12 +29,12 @@ public class MessageService {
 	public Message findMessageById(Integer messageId) throws DataAccessException {
 		return messageRepository.findById(messageId);
 	}
-	
+
 	@Transactional
 	public Collection<Message> findMessagesByUserId(UserTW userId) throws DataAccessException {
 		return messageRepository.findMessagesByUserId(userId);
 	}
-	
+
 	@Transactional
 	public Collection<Message> findMessagesSentByUserId(Integer userId) throws DataAccessException {
 		return messageRepository.findMessagesSentByUserId(userId);
@@ -44,16 +44,19 @@ public class MessageService {
 	public void deleteMessageById(Integer messageId) throws DataAccessException {
 		messageRepository.deleteById(messageId);
 	}
-	
+
 	@Transactional
 	public Collection<Message> findMessagesByTag(UserTW user, Tag tag) throws DataAccessException {
 		return messageRepository.findMessagesByTag(user, tag);
 	}
-	
-	/*
-	@Transactional(readOnly = true)
-	public Collection<Message> getAllMessages() throws DataAccessException {
-		return messageRepository.findAll();
+
+	@Transactional
+	public Collection<Message> findMessagesBySearch(UserTW user, String search) throws DataAccessException {
+		return messageRepository.findMessagesBySearch(user, search);
 	}
-	*/
+
+	/*
+	 * @Transactional(readOnly = true) public Collection<Message> getAllMessages()
+	 * throws DataAccessException { return messageRepository.findAll(); }
+	 */
 }

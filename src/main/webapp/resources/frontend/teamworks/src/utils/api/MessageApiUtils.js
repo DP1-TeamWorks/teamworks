@@ -7,9 +7,13 @@ const MessageApiUtils = {
   /*Inboxes*/
   getMyInboxMessages: () => ApiUtils.get(MESSAGE_URL + "/inbox"),
   getMySentMessages: () => ApiUtils.get(MESSAGE_URL + "/sent"),
-
-  getNumberOfNoOpenedMessages: (tagId) =>
-    ApiUtils.get(MESSAGE_URL + "/noOpened?tagId=" + tagId),
+  getMyMessagesByTag: (tagId) =>
+    ApiUtils.get(MESSAGE_URL + "/byTag?tagId=" + tagId),
+  getMyMessagesBySearch: (search) =>
+    ApiUtils.get(MESSAGE_URL + "/bySearch?search=" + search),
+  getNumberOfNotReadMessages: () => ApiUtils.get(MESSAGE_URL + "/noRead"),
+  getNumberOfNoReadMessagesByTag: (tagId) =>
+    ApiUtils.get(MESSAGE_URL + "/noReadByTag?tagId=" + tagId),
 
   /*Messages*/
   newMessage: (message) => ApiUtils.post(MESSAGE_URL, message),
@@ -20,10 +24,7 @@ const MessageApiUtils = {
     ),
   forwardMessage: (forwardList, repliedMessageId) =>
     ApiUtils.post(
-      MESSAGE_URL +
-        "?repliedMessageId=" +
-        repliedMessageId +
-        "&forward=true",
+      MESSAGE_URL + "?repliedMessageId=" + repliedMessageId + "&forward=true",
       forwardList
     ),
   markMessageAsRead: (messageId) =>
