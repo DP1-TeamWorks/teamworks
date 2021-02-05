@@ -39,6 +39,11 @@ public class UserTWService {
 	public UserTW findUserById(Integer userId) {
 		return userRepository.findById(userId);
 	}
+	
+	@Transactional(readOnly = true)
+	public UserTW findByEmail(String userEmail) {
+		return userRepository.findByEmail(userEmail);
+	}
 
 	@Transactional(readOnly = true)
 	public Collection<UserTW> findUserByName(String name) {
@@ -61,7 +66,7 @@ public class UserTWService {
 
 	@Transactional(readOnly = true)
 	public UserTW getLoginUser(String email, String password) throws DataAccessException {
-		UserTW user = userRepository.findbyEmail(email);
+		UserTW user = userRepository.findByEmail(email);
 		if (user != null && SecurityConfiguration.passwordEncoder().matches(password, user.getPassword())) {
 			return user;
 		} else {

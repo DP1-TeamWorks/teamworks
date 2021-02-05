@@ -13,9 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.Tag;
+import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.MessageService;
 import org.springframework.samples.petclinic.service.TagService;
+import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +33,14 @@ public class MessageController {
 	private final MessageService messageService;
 	private final UserTWService userService;
 	private final TagService tagService;
+	private final ToDoService toDoService;
 
 	@Autowired
-	public MessageController(MessageService messageService, UserTWService userService, TagService tagService) {
+	public MessageController(MessageService messageService, UserTWService userService, TagService tagService, ToDoService toDoService) {
 		this.messageService = messageService;
 		this.userService = userService;
 		this.tagService = tagService;
+		this.toDoService = toDoService;
 	}
 
 	@InitBinder
@@ -123,22 +127,41 @@ public class MessageController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
 		}
 	}
-
+	
+	//@Valid delante de requestbody
 	@PostMapping(value = "api/message/new")
 	public ResponseEntity<String> newMessage(HttpServletRequest r, @Valid @RequestBody Message message) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
 			message.setSender(sender);
+			
 			message.setRead(false);
-
+			
 			List<UserTW> recipientList = new ArrayList<>();
-			for (int i = 0; i < message.getRecipientsIds().size(); i++) {
-				UserTW recipient = userService.findUserById(message.getRecipientsIds().get(i));
+			for (int i = 0; i < message.getRecipientsEmails().size(); i++) {
+				UserTW recipient = userService.findByEmail(message.getRecipientsEmails().get(i));
 				recipientList.add(recipient);
 			}
 			message.setRecipients(recipientList);
+			
 			// TODO set tags in message
+			List<Tag> tagList = new ArrayList<>();
+			for (int i = 0; i < message.getListOfTags().size(); i++) {
+				//FIND TAG BY NAME
+				Tag tag = tagService.findTagByName(message.getListOfTags().get(i));
+				tagList.add(tag);
+			}
+			if(tagList!= null) message.setTags(tagList);
+			
+			// TODO set todos in message
+			List<ToDo> toDoList = new ArrayList<>();
+			for (int i = 0; i < message.getListOfToDos().size(); i++) {
+				//FIND ToDo BY NAME
+				//ToDo toDo = toDoService.findToDoByName(message.getListOfToDos().get(i));
+				//toDoList.add(toDo);
+			}			
+			if(toDoList!= null) message.setToDos(toDoList);
 
 			messageService.saveMessage(message);
 			return ResponseEntity.ok().build();
