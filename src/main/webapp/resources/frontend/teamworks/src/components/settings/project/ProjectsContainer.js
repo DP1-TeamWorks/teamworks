@@ -1,12 +1,11 @@
-import SettingGroup from "./SettingGroup";
-import EditableField from "./EditableField";
-import Button from "../buttons/Button";
-import "./SubsettingContainer.css";
-import SidePaneElement from "./SidePaneElement";
-import UserList from "./DepartmentMemberList";
-import AddElementForm from "../forms/AddElementForm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Button from "../../buttons/Button";
+import AddElementForm from "../../forms/AddElementForm";
+import EditableField from "../EditableField";
+import SettingGroup from "../SettingGroup";
+import SidePaneElement from "../SidePaneElement";
+import "../SubsettingContainer.css";
 
 const ProjectsContainer = () =>
 {
@@ -33,14 +32,14 @@ const ProjectsContainer = () =>
           <AddElementForm submitText="Add to ColorLounge" attributeName="Full Name" attributePlaceholder="Harvey Specter" />
         </SettingGroup>
         <SettingGroup name="Members" description="Current project members are shown below. Click on an user to see their history.">
-          <UserList />
+          {/* <UserList /> */}
         </SettingGroup>
         <SettingGroup name="Milestones" description="Click on a milestone below to manage it.">
-          <UserList />
+          {/* <UserList /> */}
         </SettingGroup>
         <SettingGroup name="Tags" description="Click on a tag to manage it.">
           <AddElementForm submitText="Add tag" attributeName="Tag name" attributePlaceholder="Documentation" />
-          <UserList />
+          {/* <UserList /> */}
         </SettingGroup>
         <SettingGroup danger name="Delete project" description="Deletes the project, as well as its associated members, tags and tasks. <br>This action cannot be undone.">
           <Button className="Button--red">Delete project</Button>

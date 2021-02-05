@@ -1,12 +1,8 @@
-import SettingGroup from "./SettingGroup";
-import EditableField from "./EditableField";
-import Button from "../buttons/Button";
-import AddUserForm from "../forms/AddUserForm";
-import "./UserList.css";
-import "../../FontStyles.css";
-import Spinner from "../spinner/Spinner";
 import { Link } from "react-router-dom";
-import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
+import "../../../FontStyles.css";
+import DepartmentApiUtils from "../../../utils/api/DepartmentApiUtils";
+import Spinner from "../../spinner/Spinner";
+import "../UserList.css";
 
 const DepartmentMemberList = ({departmentId, members, loading, onListUpdated}) => {
 

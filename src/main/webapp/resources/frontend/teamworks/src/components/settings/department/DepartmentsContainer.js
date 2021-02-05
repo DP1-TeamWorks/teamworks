@@ -1,15 +1,13 @@
-import SettingGroup from "./SettingGroup";
-import EditableField from "./EditableField";
-import Button from "../buttons/Button";
-import "./SubsettingContainer.css";
-import SidePaneElement from "./SidePaneElement";
-import DepartmentMemberList from "./DepartmentMemberList";
-import AddElementForm from "../forms/AddElementForm";
 import { useEffect, useState } from 'react';
-import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
-import DepartmentSettings from "./DepartmentSettings";
-import Spinner from "../spinner/Spinner";
-import AddUserToDepartment from "../forms/AddUserToDepartmentForm";
+import DepartmentApiUtils from "../../../utils/api/DepartmentApiUtils";
+import Button from "../../buttons/Button";
+import AddUserToDepartment from "../../forms/AddUserToDepartmentForm";
+import Spinner from "../../spinner/Spinner";
+import EditableField from "../EditableField";
+import SettingGroup from "../SettingGroup";
+import SidePaneElement from "../SidePaneElement";
+import DepartmentMemberList from "./DepartmentMemberList";
+import "../SubsettingContainer.css";
 
 const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
 {

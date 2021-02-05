@@ -1,4 +1,4 @@
-import SettingGroup from "./SettingGroup";
+import SettingGroup from "../SettingGroup";
 import ProjectsContainer from "./ProjectsContainer";
 
 const ProjectSettings = () =>
