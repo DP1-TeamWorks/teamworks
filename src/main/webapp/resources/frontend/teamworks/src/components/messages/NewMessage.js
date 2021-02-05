@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
 import ProjectApiUtils from "../../utils/api/ProjectApiUtils";
+import TagApiUtils from "../../utils/api/TagApiUtils";
+import ToDoApiUtils from "../../utils/api/ToDoApiUtils";
 import UserApiUtils from "../../utils/api/UserApiUtils";
 import NewMessageForm from "./NewMessageForm";
 
@@ -12,10 +13,11 @@ const NewMessage = ({ ChangeModalNewMessage }) => {
   const [departmentList, setDepartmentList] = useState([]);
   const [projectList, setProjectList] = useState([]);
   const [mailOptions, setMailOptions] = useState([{}]);
+  const [toDoOptions, setToDoOptions] = useState([{}]);
+  const [tagOptions, setTagOptions] = useState([{}]);
 
   const [department, setDepartment] = useState("DPT");
   const [pickedDepartment, setPickedDepartment] = useState({});
-  const [opened, setOpened] = useState(false);
 
   useEffect(() => {
     UserApiUtils.getMyTeamUsers()
@@ -25,55 +27,44 @@ const NewMessage = ({ ChangeModalNewMessage }) => {
           console.log(user);
           return { label: user.name + " - " + user.email, value: user.email };
         });
-        console.log(mailList);
         setMailOptions(mailList);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the users mails");
       });
+
+    ToDoApiUtils.getAllMyToDos()
+      .then((res) => {
+        console.log("Getting user toDos");
+        let toDoList = res.map((toDo) => {
+          console.log(toDo);
+          return { label: toDo.title, value: toDo.id };
+        });
+        setToDoOptions(toDoList);
+
+        console.log(toDoList);
+      })
+      .catch((error) => {
+        console.log("ERROR: cannot get the user's todos");
+      });
+
+    TagApiUtils.getAllMyTags()
+      .then((res) => {
+        console.log("Getting user mails");
+        let tagList = res.map((proyect) => {
+          console.log(proyect);
+          return proyect.tags.map((tag) => {
+            return { label: tag.title, value: tag.id };
+          });
+        });
+        setTagOptions(tagList);
+      })
+      .catch((error) => {
+        console.log("ERROR: cannot get the user's tags");
+      });
   }, [ChangeModalNewMessage]);
 
-  useEffect(() => {
-    DepartmentApiUtils.getMyDepartments()
-      .then((res) => {
-        setDepartmentList(res);
-      })
-      .catch((error) => {
-        console.log("ERROR: cannot get the departments");
-      });
-  }, []);
-
-  useEffect(() => {
-    ProjectApiUtils.getMyProjects(department.id)
-      .then((res) => {
-        setProjectList(res);
-      })
-      .catch((error) => {
-        console.log("ERROR: cannot get the projects");
-      });
-  }, []);
-
-  const openOrClose = () => {
-    setOpened(!opened);
-  };
-
-  const handlePickDepartment = (dpt) => {
-    console.log("GETTIN PROJECTS");
-    setPickedDepartment(dpt);
-    ProjectApiUtils.getMyProjects(dpt.id)
-      .then((res) => {
-        setProjectList(res);
-      })
-      .catch((error) => {
-        console.log("ERROR: cannot get the projects");
-      });
-  };
-
-  const handlePickProject = (project) => {
-    setDepartment(pickedDepartment);
-    //setPickedProject(project);
-    openOrClose();
-  };
+  useEffect(() => {}, [ChangeModalNewMessage]);
 
   return (
     <div className="NewMsgModal">
@@ -87,6 +78,9 @@ const NewMessage = ({ ChangeModalNewMessage }) => {
         <NewMessageForm
           key={JSON.stringify(mailOptions)}
           mailOptions={mailOptions}
+          toDoOptions={toDoOptions}
+          tagOptions={tagOptions}
+          ChangeModalNewMessage={ChangeModalNewMessage}
         />
       </div>
     </div>

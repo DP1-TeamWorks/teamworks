@@ -51,6 +51,12 @@ public class ToDoController {
 		return toDoService.findToDoByMilestoneAndUser(milestoneId, userId).stream().collect(Collectors.toList());
 	}
 
+	@GetMapping(value = "/api/toDos/mine/all")
+	public List<ToDo> getAllMyToDos(HttpServletRequest r) {
+		Integer userId = (Integer) r.getSession().getAttribute("userId");
+		return toDoService.findToDoByUser(userId).stream().collect(Collectors.toList());
+	}
+
 	@PostMapping(value = "/api/toDos/mine")
 	public ResponseEntity<String> createPersonalToDo(@Valid @RequestBody ToDo toDo, HttpServletRequest r,
 			@RequestParam(required = true) Integer milestoneId) {

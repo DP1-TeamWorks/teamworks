@@ -9,7 +9,7 @@ export default function NewMessageText({name, changeHandler}) {
                 name={name}
                 className="Input NewMsgBody InputNewMsg"
                 form="NewMsgForm"
-                onChange={changeHandler}
+                onChange={(e) => changeHandler(name, e.target.value)}
               ></textarea>
             </div>
   );

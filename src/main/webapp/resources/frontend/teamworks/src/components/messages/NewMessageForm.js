@@ -13,8 +13,6 @@ class NewMessageForm extends React.Component {
     this.state = {
       inputs: {
         To: "",
-        Department: "",
-        Project: "",
         Tags: "",
         Subject: "",
         ToDos: "",
@@ -26,6 +24,7 @@ class NewMessageForm extends React.Component {
 
     this.ChangeModalNewMessage = props.ChangeModalNewMessage;
     this.mailOptions = props.mailOptions;
+    this.toDoOptions = props.toDoOptions;
     console.log(this.mailOptions);
   }
 
@@ -76,26 +75,23 @@ class NewMessageForm extends React.Component {
     this.setState({ inputs: { ...this.state.inputs, [field]: value } });
   };
 
-  multiselectChangeHandler = (event) => {
-    console.log(event);
-    let auxList = [...this.state.inputs.To].push(event[0].value);
-    this.setState({ inputs: { ...this.state.inputs, to: auxList } });
-    console.log(auxList);
-  };
-
-  apiRequestHandler = (to, subject, text) => {
+  apiRequestHandler = (to, subject, text, toDos, tags) => {
     console.log("Sending: ");
     console.log({
       recipientsEmails: to,
       subject: subject,
       text: text,
       read: false,
+      toDoList: toDos !== "" ? toDos : [],
+      tagList: tags !== "" ? tags : [],
     });
     MessageApiUtils.newMessage({
       recipientsEmails: to,
       subject: subject,
       text: text,
       read: false,
+      toDoList: toDos !== "" ? toDos : [],
+      tagList: tags !== "" ? tags : [],
     })
       .then(() => {
         console.log("Mensaje enviado");
@@ -112,7 +108,10 @@ class NewMessageForm extends React.Component {
       let to = this.state.inputs.To;
       let subject = this.state.inputs.Subject;
       let text = this.state.inputs.Message;
-      this.apiRequestHandler(to, subject, text);
+      let toDos = this.state.inputs.ToDos;
+      let tags = this.state.inputs.Tags;
+      this.apiRequestHandler(to, subject, text, toDos);
+      this.ChangeModalNewMessage();
     } else {
       console.log("There are errors in this form");
       console.log(this.state.errors);
@@ -135,10 +134,11 @@ class NewMessageForm extends React.Component {
             changeHandler={this.changeHandler}
           ></NewMessageMultiSelect>
           <NewMessageMultiSelect
-              name="ToDos"
-              placeholder="ToDos"
-              changeHandler={this.changeHandler}
-            ></NewMessageMultiSelect>
+            name="ToDos"
+            placeholder="ToDos"
+            options={this.toDoOptions}
+            changeHandler={this.changeHandler}
+          ></NewMessageMultiSelect>
         </div>
         <div className="NewMsg">
           <div className="NewMsgHeadLabel">

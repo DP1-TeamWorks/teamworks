@@ -1,17 +1,21 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.Collection;
 import java.util.List;
-
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Tag;
+import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.ProjectService;
 import org.springframework.samples.petclinic.service.TagService;
+import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.validation.TagLimitProjectException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,15 +26,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 public class TagController {
+
     private final TagService tagService;
     private final ProjectService projectService;
+    private final UserTWService userTWService;
 
     @Autowired
-    public TagController(TagService tagService, ProjectService projectService) {
+    public TagController(
+        TagService tagService,
+        ProjectService projectService,
+        UserTWService userTWService
+    ) {
         this.tagService = tagService;
         this.projectService = projectService;
+        this.userTWService = userTWService;
     }
 
     @InitBinder
@@ -39,34 +51,58 @@ public class TagController {
     }
 
     @GetMapping(value = "/api/tags")
-    public List<Tag> getTagsByProjectId(HttpServletRequest r, @RequestParam(required = true) Integer projectId) {
+    public List<Tag> getTagsByProjectId(
+        HttpServletRequest r,
+        @RequestParam(required = true) Integer projectId
+    ) {
         Project project = projectService.findProjectById(projectId);
         return project.getTags();
     }
 
+    @GetMapping(value = "/api/tags/mine/all")
+    public List<Tag> getAllMyTags(HttpServletRequest r) {
+        UserTW user = userTWService.findUserById(
+            (Integer) r.getSession().getAttribute("userId")
+        );
+
+        List<Tag> tags = user
+            .getParticipation()
+            .stream()
+            .filter(p -> p.getFinalDate() == null)
+            .map(Participation::getProject)
+            .map(Project::getTags);
+
+        log.info(tags);
+
+        return tags;
+    }
+
     @PostMapping(value = "/api/tags")
-    public ResponseEntity<String> createTag(HttpServletRequest r,@Valid @RequestBody Tag tag,
-            @RequestParam(required = true) Integer projectId) {
+    public ResponseEntity<String> createTag(
+        HttpServletRequest r,
+        @Valid @RequestBody Tag tag,
+        @RequestParam(required = true) Integer projectId
+    ) {
         try {
             Project project = projectService.findProjectById(projectId);
             tag.setProject(project);
             tagService.saveTag(tag);
             return ResponseEntity.ok().build();
-
         } catch (DataAccessException | TagLimitProjectException d) {
             return ResponseEntity.badRequest().body(d.getMessage());
         }
     }
 
     @DeleteMapping(value = "/api/tags")
-    public ResponseEntity<String> deleteTagById(HttpServletRequest r, @RequestParam(required = true) Integer tagId) {
+    public ResponseEntity<String> deleteTagById(
+        HttpServletRequest r,
+        @RequestParam(required = true) Integer tagId
+    ) {
         try {
             tagService.deleteTagById(tagId);
             return ResponseEntity.ok().build();
-
         } catch (DataAccessException d) {
             return ResponseEntity.badRequest().build();
         }
     }
-
 }

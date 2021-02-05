@@ -41,8 +41,14 @@ public class ToDoService {
     }
 
     @Transactional(readOnly = true)
+    public Collection<ToDo> findToDoByUser(Integer userId) {
+        return toDoRepository.findToDoByUser(userId);
+    }
+
+    @Transactional(readOnly = true)
     public Collection<ToDo> findToDoByMilestoneAndUser(Integer milestoneId, Integer userId) {
         return toDoRepository.findToDoByMilestoneAndUser(milestoneId, userId);
     }
+    
 
 }
