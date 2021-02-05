@@ -1,5 +1,5 @@
 import SettingGroup from "./SettingGroup";
-import SubsettingContainerProjects from "./SubsettingContainerProjects";
+import ProjectsContainer from "./ProjectsContainer";
 
 const ProjectSettings = () =>
 {
@@ -8,7 +8,7 @@ const ProjectSettings = () =>
       <SettingGroup
         name="Manage projects"
         description="Only showing projects you have management permissions on.">
-        <SubsettingContainerProjects />
+        <ProjectsContainer />
       </SettingGroup>
     </div>
   );

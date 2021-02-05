@@ -16,16 +16,15 @@ public interface TeamRepository extends Repository<Team, Integer> {
     void deleteById(Integer teamId) throws DataAccessException;
 
     public Team findById(Integer id);
-    
-    
+
+
 
     @Query("SELECT u FROM Team u WHERE u.name LIKE :name%")
     public Collection<Team> findByName(@Param("name") String name);
-    
+
 
     @Query("SELECT u FROM Team u WHERE u.identifier LIKE :identifier%")
     public Collection<Team> findByidentifier(@Param("identifier") String identifier);
-    
 
     public Collection<Team> findAll() throws DataAccessException;
 }

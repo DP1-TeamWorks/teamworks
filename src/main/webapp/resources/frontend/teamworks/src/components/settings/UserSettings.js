@@ -2,7 +2,7 @@ import SettingGroup from "./SettingGroup";
 import EditableField from "./EditableField";
 import Button from "../buttons/Button";
 import AddUserForm from "../forms/AddUserForm";
-import UserList from "./UserList";
+//import UserList from "./UserList";
 
 const UserSettings = () => {
   return (
@@ -15,7 +15,7 @@ const UserSettings = () => {
       <SettingGroup
         name="User list"
         description="Registered users are shown below:">
-        <UserList />
+        {/* <UserList /> */}
       </SettingGroup>
     </div>
   );

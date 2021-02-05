@@ -20,7 +20,7 @@ import lombok.Setter;
 @Table(name = "belongs")
 
 public class Belongs extends BaseEntity {
-	
+
 	  // Attributes
 
 	@CreationTimestamp
@@ -35,7 +35,7 @@ public class Belongs extends BaseEntity {
 	@NotNull
 	@Column(name = "is_department_manager")
 	private Boolean isDepartmentManager;
-	
+
 	// Relations
 
 	@ManyToOne(optional = false)
@@ -49,5 +49,25 @@ public class Belongs extends BaseEntity {
 	@JsonIgnore
 	// @JsonBackReference(value="department-belongs")
 	Department department;
+
+	public Integer getUserId()
+    {
+        return userTW.getId();
+    }
+
+    public String getName()
+    {
+        return userTW.getName();
+    }
+
+    public String getLastName()
+    {
+        return userTW.getLastname();
+    }
+
+    public String getEmail()
+    {
+        return userTW.getEmail();
+    }
 
 }
