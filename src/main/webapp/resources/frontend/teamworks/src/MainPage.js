@@ -7,12 +7,13 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./sections/Section.css";
 
 const MainPage = () => {
+  const [search, setSearch] = useState("");
   return (
     <Router>
       <Switch>
         <Route exact path="/">
-          <Header />
-          <Inbox />
+          <Header handleSearch={setSearch} />
+          <Inbox search={search} setSearch={setSearch} />
         </Route>
         <Route path="/settings">
           <Header nosearchbar />

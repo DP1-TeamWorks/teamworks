@@ -5,158 +5,82 @@ import InboxSidebar from "../components/sidebar/InboxSidebar";
 import MessageApiUtils from "../utils/api/MessageApiUtils";
 import Section from "./Section";
 
-const Inbox = (props) => {
+const Inbox = ({ search, setSearch }) => {
   const [selectedTab, setSelectedTab] = useState("Inbox");
-  const [inboxMessages, setInboxMessages] = useState([
-    {
-      id: 9,
-      sender: { name: "Johnny Depp", teamname: "Pearson" },
-      subject: "Welcome to TeamWorks",
-      date: "02/12/2020",
-      time: "19:23",
-      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
-      tags: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Planning", color: "#DDFFDD" },
-      ],
-      text:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      id: 4,
-      sender: { name: "Johnny Depp", teamname: "Pearson" },
-      subject: "Welcome to TeamWorks",
-      date: "02/12/2020",
-      time: "19:23",
-      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
-      tags: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Planning", color: "#DDFFDD" },
-      ],
-      text:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      id: 2,
-      sender: { name: "Johnny Depp", teamname: "Pearson" },
-      subject: "Welcome to TeamWorks",
-      date: "02/12/2020",
-      time: "19:23",
-      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
-      tags: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Planning", color: "#DDFFDD" },
-      ],
-      text:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      id: 1,
-      sender: { name: "Johnny Depp", teamname: "Pearson" },
-      subject: "Welcome to TeamWorks",
-      date: "02/12/2020",
-      time: "19:23",
-      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
-      tags: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Planning", color: "#DDFFDD" },
-      ],
-      text:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-  ]);
-  const [sentMessages, setSentMessages] = useState([
-    {
-      id: 4,
-      sender: { name: "Kevin Depp", teamname: "Stark" },
-      subject: "Welcome to TeamWorks",
-      date: "02/12/2020",
-      time: "19:23",
-      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
-      tags: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Planning", color: "#DDFFDD" },
-      ],
-    },
-    {
-      id: 77,
-      sender: { name: "Kevin Depp", teamname: "Stark" },
-      subject: "Welcome to TeamWorks",
-      date: "02/12/2020",
-      time: "19:23",
-      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
-      tags: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Planning", color: "#DDFFDD" },
-      ],
-    },
-    {
-      id: 45,
-      sender: { name: "Kevin Depp", teamname: "Stark" },
-      subject: "Welcome to TeamWorks",
-      date: "02/12/2020",
-      time: "19:23",
-      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
-      tags: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Planning", color: "#DDFFDD" },
-      ],
-    },
-    {
-      id: 13,
-      sender: { name: "Kevin Depp", teamname: "Stark" },
-      subject: "Welcome to TeamWorks",
-      date: "02/12/2020",
-      time: "19:23",
-      recipients: [{ name: "Mark" }, { name: "Adam" }, { name: "John" }],
-      tags: [
-        { title: "Planning", color: "#FFD703" },
-        { title: "Planning", color: "#DDFFDD" },
-      ],
-    },
-  ]);
+  const [selectedMessages, setSelectedMessages] = useState([]);
+  const [nInboxMessages, setNInboxMessages] = useState([]);
+  const [reloadCounters, setReloadCounters] = useState(true);
 
   useEffect(() => {
-    MessageApiUtils.getMyInboxMessages()
-      .then((res) => {
-        console.log("Getting Inbox Messages");
-        setInboxMessages(res);
-      })
-      .catch((error) => {
-        console.log("ERROR: cannot get inbox messages");
-      });
+    if (reloadCounters)
+      MessageApiUtils.getNumberOfNotReadMessages()
+        .then((res) => {
+          console.log("Getting number of Inbox Messages");
+          setNInboxMessages(res);
+        })
+        .catch((error) => {
+          console.log("ERROR: cannot get number of inbox messages");
+        });
+    setReloadCounters(false);
+  }, [reloadCounters]);
 
-    console.log(inboxMessages);
-
-    MessageApiUtils.getMySentMessages()
-      .then((res) => {
-        console.log("Getting sent Messages");
-        setSentMessages(res);
-      })
-      .catch((error) => {
-        console.log("ERROR: cannot get sent messages");
-      });
-  }, []);
+  useEffect(() => {
+    if (search !== "") {
+      console.log(search);
+      setSelectedTab("Search");
+      MessageApiUtils.getMyMessagesBySearch(search)
+        .then((res) => {
+          console.log("Getting searched Messages");
+          setSelectedMessages(res);
+        })
+        .catch((error) => {
+          console.log("ERROR: cannot get the searched messages");
+        });
+      setSearch("");
+    } else {
+      switch (selectedTab) {
+        case "Inbox":
+          MessageApiUtils.getMyInboxMessages()
+            .then((res) => {
+              console.log("Getting Inbox Messages");
+              setSelectedMessages(res);
+            })
+            .catch((error) => {
+              console.log("ERROR: cannot get inbox messages");
+            });
+          break;
+        case "Sent":
+          MessageApiUtils.getMySentMessages()
+            .then((res) => {
+              console.log("Getting sent Messages");
+              setSelectedMessages(res);
+            })
+            .catch((error) => {
+              console.log("ERROR: cannot get sent messages");
+            });
+          break;
+        default:
+          MessageApiUtils.getMyMessagesByTag(selectedTab)
+            .then((res) => {
+              console.log("Getting Tag Messages");
+              setSelectedMessages(res);
+            })
+            .catch((error) => {
+              console.log("ERROR: cannot get tag messages");
+            });
+      }
+    }
+  }, [selectedTab, search, reloadCounters]);
 
   const [modalNewMessage, setModalNewMessage] = useState(false);
-  const selectedMessages = () => {
-    switch (selectedTab) {
-      case "Inbox":
-        return inboxMessages;
-      case "Sent":
-        return sentMessages;
-      default:
-        return inboxMessages.filter((msg) => {
-          /*TODO:Filter the messages by tag}*/
-        });
-    }
-  };
 
   return (
     <div className="Content">
       <InboxSidebar
-        numberOfInboxMessages={inboxMessages.filter((msg) => !msg.read).length}
-        numberOfSentMessages={sentMessages.filter((msg) => !msg.read).length}
+        numberOfInboxMessages={nInboxMessages}
+        numberOfSentMessages={""}
+        reloadCounters={reloadCounters}
+        setReloadCounters={setReloadCounters}
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
         modalNewMessage={modalNewMessage}
@@ -168,7 +92,10 @@ const Inbox = (props) => {
             ChangeModalNewMessage={() => setModalNewMessage(!modalNewMessage)}
           />
         )}
-        <MessageList messages={selectedMessages()} />
+        <MessageList
+          setReloadCounters={setReloadCounters}
+          messages={selectedMessages}
+        />
       </Section>
     </div>
   );

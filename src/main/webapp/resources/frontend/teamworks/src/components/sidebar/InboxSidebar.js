@@ -9,13 +9,15 @@ import GradientButton from "../buttons/GradientButton";
 const InboxSidebar = ({
   numberOfInboxMessages,
   numberOfSentMessages,
+  reloadCounters,
+  setReloadCounters,
   selectedTab,
   setSelectedTab,
   setModalNewMessage,
   modalNewMessage,
 }) => {
   const [pickedProject, setPickedProject] = useState({
-    name: "Pick a project",
+    name: "Any",
     id: 9999999999999999999,
     tags: [],
   });
@@ -42,12 +44,18 @@ const InboxSidebar = ({
         pickedProject={pickedProject}
         setPickedProject={setPickedProject}
       />
-      <ProjectTags
-        tagList={pickedProject.tags}
-        selectedTab={selectedTab}
-        setSelectedTab={setSelectedTab}
-      />
-      <MyProjectToDos projectId={pickedProject.id} />
+      {pickedProject.name !== "Any" && (
+        <ProjectTags
+          tagList={pickedProject.tags}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
+          reloadCounters={reloadCounters}
+          setReloadCounters={setReloadCounters}
+        />
+      )}
+      {pickedProject.name !== "Any" && (
+        <MyProjectToDos projectId={pickedProject.id} />
+      )}
     </Sidebar>
   );
 };

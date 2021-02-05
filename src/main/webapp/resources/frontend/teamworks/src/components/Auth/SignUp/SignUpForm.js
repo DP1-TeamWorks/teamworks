@@ -47,31 +47,47 @@ class SignUpForm extends React.Component {
       case "teamname":
         if (value === "") {
           errorMsg = "TeamName required";
-        } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
+        } else if (!/^[A-Za-zÀ-ÿ0-9\u00f1\u00d1_-]*$/.test(value)) {
           errorMsg = "Invalid, use letters and numbers";
+        } else if (value.length > 25) {
+          errorMsg = "The name is too long";
         }
         break;
       case "identifier":
         if (value === "") {
           errorMsg = "Identifier required";
-        } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
+        } else if (!/^[A-Za-zÀ-ÿ\u00f1\u00d1_-]*$/.test(value)) {
           errorMsg = "Invalid, use letters and numbers";
+        } else if (value.length > 25) {
+          errorMsg = "The identifier is too long";
         }
         break;
       case "username":
         if (value === "") {
           errorMsg = "Username required";
-        } else if (!/^[A-Za-z0-9_-]*$/.test(value)) {
+        } else if (!/^[A-Za-zÀ-ÿ\u00f1\u00d1]*$/.test(value)) {
           errorMsg = "Invalid, use letters and numbers";
+        } else if (value.length > 25) {
+          errorMsg = "The name is too long";
+        }
+        break;
+      case "lastname":
+        if (value === "") {
+          errorMsg = "Lastname required";
+        } else if (!/^[A-Za-zÀ-ÿ\u00f1\u00d1]*$/.test(value)) {
+          errorMsg = "Invalid, use letters and numbers";
+        } else if (value.length > 120) {
+          errorMsg = "The name is too long";
         }
         break;
       case "password":
         if (value === "") {
           errorMsg = "Password required";
         } else if (value.length < 8) {
-          errorMsg = "Passwords are larger";
+          errorMsg = "Passwords must be larger";
+        } else if (value.length > 25) {
+          errorMsg = "The password is too long";
         }
-
         break;
       default:
     }
@@ -97,22 +113,19 @@ class SignUpForm extends React.Component {
     })
       .then((res) => {
         console.log("Signed Up, redirecting to login");
-        // TODO: Fix this
         const mail = `${username.toLowerCase()}${lastname.toLowerCase()}@${identifier}`;
-        AuthApiUtils.login({mail, password}).then(() =>
-        {
+        AuthApiUtils.login({ mail, password }).then(() => {
           window.location.replace("/");
         });
       })
       .catch((error) => {
-        if (error.response.data == "alreadyexists")
-        {
+        console.log("AAAA" + error)
+        console.log(error.response)
+        if (error.response.data.includes("constraint")) {
           this.setState({
-            requestError: "There's already a team or user with that name.",
+            requestError: "There's already a team or identifier with that name.",
           });
-        }
-        else
-        {
+        } else {
           console.log("API ERROR!");
           console.log(error);
           this.setState({

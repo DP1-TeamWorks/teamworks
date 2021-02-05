@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Tag;
 import org.springframework.samples.petclinic.repository.TagRepository;
+import org.springframework.samples.petclinic.validation.TagLimitProjectException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +19,14 @@ public class TagService {
     }
 
     @Transactional
-    public void saveTag(Tag tag) throws DataAccessException {
-        tagRepository.save(tag);
+    public void saveTag(Tag tag) throws DataAccessException, TagLimitProjectException {
+    	if(tag.getProject().getTags().size()>5) {
+    		throw new TagLimitProjectException();
+    	}
+    	else {
+    		tagRepository.save(tag);
+    	}
+        
     }
 
     @Transactional(readOnly = true)
