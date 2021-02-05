@@ -10,9 +10,9 @@ const ApiUtils = {
       .then((res) => resolve(res.data))
       .catch((err) =>
       {
-        if (err.response.status === 403 && reloadOnUnauthorized)
+        if (err.response?.status === 403 && reloadOnUnauthorized)
         {
-          window.location.reload() // unauthorized. refresh? 
+          window.location.replace('/'); // unauthorized. refresh? 
         }
         reject(err);
       })
@@ -26,15 +26,31 @@ const ApiUtils = {
       .then((res) => resolve(res.data))
       .catch((err) =>
       {
-        if (err.response.status === 403 && reloadOnUnauthorized)
+        if (err.response?.status === 403 && reloadOnUnauthorized)
         {
-          window.location.replace('/') // unauthorized. redirect to login 
+          window.location.replace('/'); // unauthorized. redirect to login 
         }
         reject(err);
       })
     });
   },
-  delete:(url, reloadOnUnauthorized = true) =>
+  patch: (url, updateObject, reloadOnUnauthorized = true) =>
+  {
+    return new Promise((resolve, reject) =>
+    {
+      axios.patch(API_URL + url, updateObject)
+      .then((res) => resolve(res.data))
+      .catch((err) =>
+      {
+        if (err.response?.status === 403 && reloadOnUnauthorized)
+        {
+          window.location.replace('/'); // unauthorized. redirect to login 
+        }
+        reject(err);
+      })
+    });
+  },
+  delete: (url, reloadOnUnauthorized = true) =>
   {
     return new Promise((resolve, reject) =>
     {
@@ -42,9 +58,9 @@ const ApiUtils = {
       .then((res) => resolve(res.data))
       .catch((err) =>
       {
-        if (err.response.status === 403 && reloadOnUnauthorized)
+        if (err.response?.status === 403 && reloadOnUnauthorized)
         {
-          window.location.replace('/') // unauthorized. redirect to login 
+          window.location.replace('/'); // unauthorized. redirect to login 
         }
         reject(err);
       })

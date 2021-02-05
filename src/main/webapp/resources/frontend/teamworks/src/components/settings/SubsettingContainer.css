@@ -7,6 +7,7 @@
 
 .SubsettingSidePane {
     width: 200px;
+    min-width: 150px;
     background-color: #222;
     border-radius: 0px 2px 0px 2px;
 }

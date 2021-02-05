@@ -13,7 +13,7 @@ public interface UserTWRepository extends Repository<UserTW, Integer> {
     /**
      * Save a <code>NewUser</code> to the data store, either inserting or updating
      * it.
-     * 
+     *
      * @param user the <code>Owner</code> to save
      * @see BaseEntity#isNew
      */
@@ -30,7 +30,10 @@ public interface UserTWRepository extends Repository<UserTW, Integer> {
     @Query("SELECT u FROM UserTW u WHERE u.lastname LIKE :lastname%")
     public Collection<UserTW> findByLastName(@Param("lastname") String lastname);
 
-    public Collection<UserTW> findAll() throws DataAccessException;
+    @Query("SELECT u FROM UserTW u WHERE u.team.id = :teamId")
+    public Collection<UserTW.StrippedUser> findUsersByTeam(@Param("teamId") Integer teamId);
+
+    public Collection<UserTW.StrippedUser> findAll() throws DataAccessException;
 
     @Query("SELECT u FROM UserTW u WHERE u.email = :email")
     public UserTW findByEmail(@Param("email") String email);

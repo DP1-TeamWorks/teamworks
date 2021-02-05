@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
+import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.repository.BelongsRepository;
 import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyDepartmentManagerException;
@@ -23,14 +24,17 @@ public class BelongsService {
 
 	@Transactional
 	public void saveBelongs(Belongs belongs) throws DataAccessException, ManyDepartmentManagerException, DateIncoherenceException {
-		if (belongs.getIsDepartmentManager() && belongs.getDepartment().getBelongs().stream()
-				.filter(x -> x.getIsDepartmentManager() == true).findAny().isPresent()) {
+		if (belongs.getFinalDate() == null && belongs.getIsDepartmentManager() && belongs.getDepartment().getBelongs().stream()
+            .anyMatch(x -> x.getIsDepartmentManager() == true && x.getFinalDate() == null)) {
 			throw new ManyDepartmentManagerException();
-		} else if (!belongs.getInitialDate().isBefore(belongs.getFinalDate())) {
-			throw new DateIncoherenceException();
-		} else {
-			belongsRepository.save(belongs);
+		} else if (belongs.getFinalDate() != null)
+		{
+		    if (belongs.getInitialDate() == null || (!belongs.getInitialDate().equals(belongs.getFinalDate()) && !belongs.getInitialDate().isBefore(belongs.getFinalDate())))
+            {
+                throw new DateIncoherenceException();
+            }
 		}
+		belongsRepository.save(belongs);
 
 	}
 
@@ -68,5 +72,17 @@ public class BelongsService {
 	public Collection<Department> findMyDepartments(Integer userId) {
 		return belongsRepository.findMyDepartments(userId);
 	}
+
+	@Transactional(readOnly = true)
+    public Belongs findCurrentDepartmentManager(Integer departmentId)
+    {
+        return belongsRepository.findCurrentDepartmentManager(departmentId);
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<Belongs> findCurrentBelongsInDepartment(Integer departmentId)
+    {
+        return belongsRepository.findCurrentBelongsInDepartment(departmentId);
+    }
 
 }

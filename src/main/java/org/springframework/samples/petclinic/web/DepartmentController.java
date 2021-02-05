@@ -18,13 +18,7 @@ import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class DepartmentController {
@@ -72,22 +66,50 @@ public class DepartmentController {
 		try {
 			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
 			Team team = teamService.findTeamById(teamId);
-
+            if (department.getDescription() == null)
+                department.setDescription("This is a brief description of the department");
 			department.setTeam(team);
 			departmentService.saveDepartment(department);
 
 			return ResponseEntity.ok("Department create");
 
 		} catch (DataAccessException d) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body("alreadyexists");
 		}
 	}
 
-	@DeleteMapping(value = "/api/departments")
-	public ResponseEntity<String> deleteDeparment(@RequestParam(required = true) Integer departmentId,
+    @PatchMapping(value = "/api/departments")
+    public ResponseEntity<String> updateDepartment(@RequestBody Department department, HttpServletRequest r) {
+        try {
+            Integer teamId = (Integer) r.getSession().getAttribute("teamId");
+            Team team = teamService.findTeamById(teamId);
+            Department dbDepartment = departmentService.findDepartmentById(department.getId());
+            if (dbDepartment == null)
+                return ResponseEntity.badRequest().build();
+
+            // TODO Validate department
+         /*   if (department.getName() == "" || department.getDescription() == "")
+                return ResponseEntity.badRequest().build();*/
+
+            if (department.getName() != null)
+                dbDepartment.setName(department.getName());
+            if (department.getDescription() != null)
+                dbDepartment.setDescription(department.getDescription());
+
+            departmentService.saveDepartment(dbDepartment);
+
+            return ResponseEntity.ok("Department updated");
+
+        } catch (DataAccessException d) {
+            return ResponseEntity.badRequest().body("invalid id");
+        }
+    }
+
+	@DeleteMapping(value = "/api/departments/{id}")
+	public ResponseEntity<String> deleteDeparment(@PathVariable( required = true) Integer id,
 			HttpServletRequest r) {
 		try {
-			departmentService.deleteDepartmentById(departmentId);
+			departmentService.deleteDepartmentById(id);
 			return ResponseEntity.ok("Department delete");
 
 		} catch (DataAccessException d) {

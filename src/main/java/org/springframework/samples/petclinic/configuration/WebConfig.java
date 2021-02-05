@@ -8,12 +8,7 @@ import org.springframework.samples.petclinic.middleware.DepartmentManagerInterce
 import org.springframework.samples.petclinic.middleware.LoginInterceptor;
 import org.springframework.samples.petclinic.middleware.ProjectEmployeeInterceptor;
 import org.springframework.samples.petclinic.middleware.TeamOwnerInterceptor;
-import org.springframework.samples.petclinic.service.BelongsService;
-import org.springframework.samples.petclinic.service.MilestoneService;
-import org.springframework.samples.petclinic.service.ParticipationService;
-import org.springframework.samples.petclinic.service.ProjectService;
-import org.springframework.samples.petclinic.service.ToDoService;
-import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.service.*;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -26,17 +21,25 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     GenericIdToEntityConverter idToEntityConverter;
+
     @Autowired
     UserTWService userTWService;
+
     @Autowired
     BelongsService belongsService;
+
+    @Autowired
+    DepartmentService departmentService;
+
     @Autowired
     MilestoneService milestoneService;
+
     @Autowired
     ToDoService toDoService;
 
     @Autowired
     ParticipationService participationService;
+
     @Autowired
     ProjectService projectService;
 
@@ -64,7 +67,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/api/auth/login").excludePathPatterns("/api/auth/signup").order(0);
         registry.addInterceptor(new TeamOwnerInterceptor(userTWService)).addPathPatterns("/api/teams/**")
                 .addPathPatterns("/api/userTW/**").addPathPatterns("/api/departments").order(1);
-        registry.addInterceptor(new DepartmentManagerInterceptor(userTWService, belongsService))
+        registry.addInterceptor(new DepartmentManagerInterceptor(userTWService, belongsService, departmentService))
                 .addPathPatterns("/api/projects").addPathPatterns("/api/departments/belongs").order(2);
         registry.addInterceptor(
                 new ProjectManagerInterceptor(userTWService, belongsService, participationService, projectService))

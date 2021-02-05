@@ -20,6 +20,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                              HttpServletResponse res, Object handler) throws Exception {
 
         Integer userId = (Integer)req.getSession().getAttribute("userId");
+        if (userId == null)
+        {
+            res.sendError(403);
+            return false;
+        }
         // We need to query the user in case it was deleted
         UserTW user = userTWService.findUserById(userId);
         if (user == null)

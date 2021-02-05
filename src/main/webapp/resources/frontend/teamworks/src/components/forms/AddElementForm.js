@@ -64,8 +64,8 @@ class AddElementForm extends React.Component {
     this.setState({ inputs: { ...this.state.inputs, [field]: value } });
   };
 
-  apiRequestHandler = (teamname, identifier, firstname, lastname, password) => {
-    AuthApiUtils.signup({
+  apiRequestHandler = (postObject) => {
+/*    AuthApiUtils.signup({
       teamname,
       identifier,
       firstname,
@@ -86,26 +86,16 @@ class AddElementForm extends React.Component {
         this.setState({
           requestError: "We had a server problem",
         });
-      });
+      });*/
   };
 
   submitHandler = (event) => {
     event.preventDefault();
     this.validateAll();
     if (!this.hasErrors()) {
-      let teamname = this.state.inputs.teamname;
-      let identifier = this.state.inputs.identifier;
-      let username = this.state.inputs.username;
-      let lastname = this.state.inputs.lastname;
-      let password = this.state.inputs.password;
-      //Call API request in order to receive the user for the session
-      this.apiRequestHandler(
-        teamname,
-        identifier,
-        username,
-        lastname,
-        password
-      );
+      let postObject = this.state.inputs;
+      //Call API request
+      this.apiRequestHandler(postObject);
     } else {
       console.log("There are errors in this form");
       console.log(this.state.errors);
