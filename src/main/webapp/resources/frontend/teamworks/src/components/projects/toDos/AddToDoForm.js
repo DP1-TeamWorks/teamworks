@@ -48,8 +48,7 @@ class AddToDoForm extends React.Component {
     });
   };
 
-  changeHandler = (event) => {
-    let value = event.target.value;
+  changeHandler = (field, value) => {
     this.validate(value);
     this.setState({ inputs: { ...this.state.inputs, toDo: value } });
   };
