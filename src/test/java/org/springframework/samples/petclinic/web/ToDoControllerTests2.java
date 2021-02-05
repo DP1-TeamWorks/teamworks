@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.web;
 
 import static org.hamcrest.Matchers.hasProperty;
 
-
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -29,17 +28,16 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Milestone;
-import org.springframework.samples.petclinic.model.Tag;
 import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.MilestoneService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.ProjectService;
-import org.springframework.samples.petclinic.service.TagService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
@@ -55,71 +53,67 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  */
 
-@WebMvcTest(controllers=UserTWController.class,
-		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
-		excludeAutoConfiguration= SecurityConfiguration.class)
-class TagControllerTests {
+@WebMvcTest(controllers = UserTWController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
+class ToDoControllerTests2 {
 
 	private static final int TEST_USER_ID = 1;
-	private static final int TEST_DEPARTMENT_ID= 3;
-	private static final int TEST_PROJECT_ID = 3;
-	
+	private static final int TEST_MILESTONE_ID = 3;
+	private static final int TEST_TODO_ID = 3;
 
 	@MockBean
 	private UserTWService UserTWService;
 	@MockBean
-	private TagService tagService;
-	@MockBean
 	private ProjectService projectService;
-        
-    @MockBean
+
+	@MockBean
 	private TeamService teamService;
-    @MockBean
-    private  BelongsService belongsService;
-    @MockBean
-    private  ParticipationService participationService;
-    @MockBean
-    private  MilestoneService mileStoneService;
-    @MockBean
-    private  ToDoService toDoService;
-    @MockBean
-    private  DepartmentService departmentService;
-    @Autowired
-    private WebApplicationContext wac;
+	@MockBean
+	private BelongsService belongsService;
+	@MockBean
+	private ParticipationService participationService;
+	@MockBean
+	private MilestoneService mileStoneService;
+	@MockBean
+	private ToDoService toDoService;
+	@MockBean
+	private DepartmentService departmentService;
+	@Autowired
+	private WebApplicationContext wac;
 	@Autowired
 	private MockMvc mockMvc;
-	@Autowired
-	private TagController tagController;
-	
-	private Tag test;
+
+	private Project ServicerTests;
+
 	private Team team;
+	private UserTW user;
 	private Department department;
-	//private Milestone milestones;
-	//private Tag tags;
-	
+	private ToDo finish;
+	private Milestone milestone;
+//	private Tag tags;
+
 	protected MockHttpSession mockSession;
+
 	@BeforeEach
 	void setup() {
-		
-		test = new Tag();
-		test.setId(TEST_PROJECT_ID);
-		test.se("NUserTWServicerTests");
-		test.setDescription("Teach netrunning skills!");
-		test.setDepartment(department);
-		
-	
-		
-		mockSession.setAttribute("departmentId",TEST_DEPARTMENT_ID);
 
+		finish = new ToDo();
+		finish.setId(TEST_TODO_ID);
+		finish.setTitle("Finish The toDos section");
+		finish.setAssignee(user);
+		finish.setMilestone(milestone);
+//		finish.setTags(tags);
+
+		mockSession.setAttribute("userId", TEST_USER_ID);
+		mockSession.setAttribute("milestoneId", TEST_MILESTONE_ID);
 
 	}
 
 	@WithMockUser(value = "spring")
-    @Test
+	@Test
 	void testInitCreationForm() throws Exception {
-		ObjectMapper objectMapper =new ObjectMapper();
-		String ServicerTestsjson = objectMapper.writeValueAsString(Servicer);
-		mockMvc.perform(post("/api/projects").session(mockSession).content(ServicerTestsjson)).andExpect(status().is(200));
+		ObjectMapper objectMapper = new ObjectMapper();
+		String finishTestsjson = objectMapper.writeValueAsString(finish);
+		mockMvc.perform(post("/api/toDos").session(mockSession).content(finishTestsjson)).andExpect(status().is(200));
 	}
 	/*
 	@WithMockUser(value = "spring")
