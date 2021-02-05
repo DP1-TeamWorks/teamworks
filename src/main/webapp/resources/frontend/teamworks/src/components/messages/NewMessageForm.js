@@ -129,23 +129,16 @@ class NewMessageForm extends React.Component {
           options={this.mailOptions}
         ></NewMessageMultiSelect>
         <div className="SecondLineFlex">
-          <NewMessageSelect
-            name="Department"
-            placeholder="DPT"
-            changeHandler={this.changeHandler}
-            options={this.props.departmentOptions}
-          ></NewMessageSelect>
-          <NewMessageSelect
-            name="Project"
-            placeholder="Project"
-            options={this.projectList}
-            changeHandler={this.changeHandler}
-          ></NewMessageSelect>
           <NewMessageMultiSelect
             name="Tags"
             placeholder="Tags"
             changeHandler={this.changeHandler}
           ></NewMessageMultiSelect>
+          <NewMessageMultiSelect
+              name="ToDos"
+              placeholder="ToDos"
+              changeHandler={this.changeHandler}
+            ></NewMessageMultiSelect>
         </div>
         <div className="NewMsg">
           <div className="NewMsgHeadLabel">
@@ -157,11 +150,6 @@ class NewMessageForm extends React.Component {
               error={this.state.errors.Subject}
               changeHandler={this.changeHandler}
             ></Input>
-            <NewMessageMultiSelect
-              name="ToDos"
-              placeholder="ToDos"
-              changeHandler={this.changeHandler}
-            ></NewMessageMultiSelect>
           </div>
 
           <NewMessageText

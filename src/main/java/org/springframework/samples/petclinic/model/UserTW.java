@@ -34,6 +34,7 @@ public class UserTW extends BaseEntity {
         Integer getId();
         String getName();
         String getLastname();
+		String getEmail();
     }
 
     // Attributes
@@ -51,12 +52,9 @@ public class UserTW extends BaseEntity {
 	@Column(name = "lastname")
 	String lastname;
 
-	
-	
 	@Column(name = "email", unique = true)
 	String email;
 
-	
 	@Column(name = "password")
 	String password;
 
