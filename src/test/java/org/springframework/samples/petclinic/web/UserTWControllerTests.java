@@ -1,19 +1,8 @@
 package org.springframework.samples.petclinic.web;
 
-import static org.hamcrest.Matchers.hasProperty;
-
-import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.time.LocalDate;
-
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,32 +17,24 @@ import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
-import org.springframework.samples.petclinic.service.MilestoneService;
-import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.TeamService;
-import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Test class for {@link OwnerController}
+ * Test class for {@link UserTWController}
  *
  */
 
-@WebMvcTest(controllers=UserTWController.class,
+@WebMvcTest(controllers = UserTWController.class,
 		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 		excludeAutoConfiguration= SecurityConfiguration.class)
 class UserTWControllerTests {
 
 	private static final int TEST_USER_ID = 1;
 	private static final int TEST_TEAM_ID = 3;
-	
-
 	@MockBean
 	private UserTWService UserTWService;
         
@@ -61,21 +42,17 @@ class UserTWControllerTests {
 	private TeamService teamService;
     @MockBean
     private  BelongsService belongsService;
-    @MockBean
-    private  ParticipationService participationService;
-    @MockBean
-    private  MilestoneService mileStoneService;
-    @MockBean
-    private  ToDoService toDoService;
-    @Autowired
-    private WebApplicationContext wac;
+    
+   
 	@Autowired
 	private MockMvc mockMvc;
-
+	@Autowired
+	private ObjectMapper objectMapper;
+	
 	private UserTW george;
 	
 	private Team team;
-	
+	@Autowired
 	protected MockHttpSession mockSession;
 	@BeforeEach
 	void setup() {
@@ -89,17 +66,17 @@ class UserTWControllerTests {
 		george.setRole(Role.employee);
 		team=new Team();
 		george.setTeam(team);
-		
+		mockSession.setAttribute("userId",TEST_USER_ID);
 		mockSession.setAttribute("teamId",TEST_TEAM_ID);
 		given(this.UserTWService.findUserById(TEST_USER_ID)).willReturn(george);
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(team);
+		
 
 	}
 
-	@WithMockUser(value = "spring")
+	
     @Test
 	void testInitCreationForm() throws Exception {
-		ObjectMapper objectMapper =new ObjectMapper();
 		String georgejson = objectMapper.writeValueAsString(george);
 		mockMvc.perform(post("/api/userTW").session(mockSession).content(georgejson)).andExpect(status().is(200));
 	}
