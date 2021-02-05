@@ -128,7 +128,7 @@ INSERT INTO
     projects(name, description, department_id)
 values
     (
-        'Netrunning School',
+        'NUserTWControllerTests.java',
         'Teach netrunning skills!',
         1
     );

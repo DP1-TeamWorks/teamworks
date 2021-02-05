@@ -19,6 +19,8 @@ import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
@@ -26,6 +28,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
@@ -40,6 +43,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
@@ -55,7 +59,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 class DepartmentControllerTest {
 
 	private static final int TEST_Dept_ID = 10;
-
+	private static final int TEST_TEAM_ID = 4;
 	@Autowired
 	private DepartmentController departmentController;
 
@@ -80,6 +84,8 @@ class DepartmentControllerTest {
 	private Team equipo;
 	
 	private Project projects;
+	
+	protected MockHttpSession mockSession;
 
 	@BeforeEach
 	void setup() {
@@ -90,26 +96,25 @@ class DepartmentControllerTest {
 		Caliidad = new Department();
 		Caliidad.setId(TEST_Dept_ID);
 		Caliidad.setName("Caliidad");
-		Caliidad.setProjects(projects);
+		
 		Caliidad.setTeam(equipo);
-	
-	//	george.setRole(Role.employee);
-	
-		//given(this.clinicService.findUserById(TEST_OWNER_ID)).willReturn(george);
-		given(this.projectService.findProjectById(TEST_Dept_ID)).willReturn(projects);
+		mockSession.setAttribute("teamId",TEST_TEAM_ID);
+
 		given(this.teamService.findTeamById(TEST_Dept_ID)).willReturn(equipo);
 		
-		
+
 		
 
 	}
 
 	@WithMockUser(value = "spring")
-        @Test
+    @Test
 	void testInitCreationForm() throws Exception {
-		mockMvc.perform(get("/api/usersTW")).andExpect(status().isOk()).andExpect(model().attributeExists("user"))
-				.andExpect(view().name("users/createOrUpdateOwnerForm"));
+		ObjectMapper objectMapper =new ObjectMapper();
+		String Caliidadjson = objectMapper.writeValueAsString(Caliidad);
+		mockMvc.perform(post("/api/departments").session(mockSession).content(Caliidadjson)).andExpect(status().is(200));
 	}
+	/*
 
 	@WithMockUser(value = "spring")
         @Test
@@ -223,5 +228,5 @@ class DepartmentControllerTest {
 				.andExpect(model().attribute("owner", hasProperty("telephone", is("6085551023"))))
 				.andExpect(view().name("owners/ownerDetails"));
 	}
-
+*/
 }
