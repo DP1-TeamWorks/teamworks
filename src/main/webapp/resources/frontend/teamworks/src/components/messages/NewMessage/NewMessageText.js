@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Input from "../forms/Input";
 
 export default function NewMessageText({name, changeHandler}) {
   return (

@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Input from "../forms/Input";
-import GradientButton from "../buttons/GradientButton";
+import Input from "../../forms/Input";
+import GradientButton from "../../buttons/GradientButton";
 import NewMessageMultiSelect from "./NewMessageMultiSelect";
-import NewMessageSelect from "./NewMessageSelect";
 import NewMessageText from "./NewMessageText";
-import MessageApiUtils from "../../utils/api/MessageApiUtils";
-import NewMessageSubject from "./NewMessageSubject";
+import MessageApiUtils from "../../../utils/api/MessageApiUtils";
 
 class NewMessageForm extends React.Component {
   constructor(props) {

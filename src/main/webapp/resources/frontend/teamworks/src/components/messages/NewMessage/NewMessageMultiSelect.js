@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Input from "../forms/Input";
-import ProjectPicker from "../projects/ProjectPicker";
 import Select from "react-select";
-import AsyncSelect from "react-select/async";
-import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
-import ProjectApiUtils from "../../utils/api/ProjectApiUtils";
 
 const NewMessageMultiSelect = ({
   name,

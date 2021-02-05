@@ -8,7 +8,7 @@ const OpenedMessage = ({ msg, reply, forward }) => {
         <span style={{ fontWeight: "bold" }}>
           Sent to{" "}
           {msg.recipients.map((r) => {
-            return <b> {r.name} </b>; // TODO: habría q controlar que seamos nosotros mismos el recipient
+            return <b> {r.name + msg.recipients.indexOf(r) === msg.recipients.length ? "":","} </b>; // TODO: habría q controlar que seamos nosotros mismos el recipient
           })}
         </span>
       </div>
@@ -16,10 +16,10 @@ const OpenedMessage = ({ msg, reply, forward }) => {
         <text>{msg.text}</text>
       </div>
       <div className="MsgContentButtons">
-        <GradientButton onClick={null} className="GradientButton--Spaced">
+        <GradientButton onClick={reply} className="GradientButton--Spaced">
           Reply
         </GradientButton>
-        <GradientButton onClick={null} className="GradientButton--Spaced">
+        <GradientButton onClick={forward} className="GradientButton--Spaced">
           Forward
         </GradientButton>
       </div>
