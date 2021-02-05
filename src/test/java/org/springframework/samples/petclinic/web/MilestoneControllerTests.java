@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.servlet.jsp.tagext.Tag;
 
@@ -31,6 +32,7 @@ import org.springframework.samples.petclinic.model.Milestone;
 import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
@@ -44,6 +46,7 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
+//import org.springframework.samples.petclinic.model.Tag;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -53,7 +56,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 
 @WebMvcTest(controllers = UserTWController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
-class MilestonesControllerTests {
+class MilestoneControllerTests {
 
 	private static final int TEST_MILESTONE_ID = 1;
 
@@ -87,8 +90,8 @@ class MilestonesControllerTests {
 	private Team team;
 	private Department department;
 
-	// private Milestone milestones;
-	// private Tag tags;
+	 private List<ToDo> todos;
+	 private List<org.springframework.samples.petclinic.model.Tag> tags;
 
 	protected MockHttpSession mockSession;
 
@@ -100,7 +103,8 @@ class MilestonesControllerTests {
 		objectives.setName("School Objectives");
 		objectives.setDueFor(LocalDate.now());
 		objectives.setProject(project);
-
+		objectives.setTags(tags);
+		objectives.setToDos(todos);
 		mockSession.setAttribute("projectId", TEST_PROJECT_ID);
 
 	}

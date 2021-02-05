@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.servlet.jsp.tagext.Tag;
 
@@ -54,7 +55,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 
 @WebMvcTest(controllers = UserTWController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
-class ToDoControllerTests2 {
+class ToDoControllerTests {
 
 	private static final int TEST_USER_ID = 1;
 	private static final int TEST_MILESTONE_ID = 3;
@@ -89,7 +90,7 @@ class ToDoControllerTests2 {
 	private Department department;
 	private ToDo finish;
 	private Milestone milestone;
-//	private Tag tags;
+	private List<org.springframework.samples.petclinic.model.Tag> tags;
 
 	protected MockHttpSession mockSession;
 
@@ -101,7 +102,7 @@ class ToDoControllerTests2 {
 		finish.setTitle("Finish The toDos section");
 		finish.setAssignee(user);
 		finish.setMilestone(milestone);
-//		finish.setTags(tags);
+		finish.setTags(tags);
 
 		mockSession.setAttribute("userId", TEST_USER_ID);
 		mockSession.setAttribute("milestoneId", TEST_MILESTONE_ID);
