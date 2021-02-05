@@ -53,7 +53,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
   {
     // Add id for the API call
     updatedDepartment.id = myDepartments[selectedIndex].id;
-    return DepartmentApiUtils.updateDepartment(updatedDepartment)
+    return DepartmentApiUtils.updateDepartment(updatedDepartment);
   }
 
   function onUserAdded()
@@ -98,7 +98,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
     SidepaneElements.push(<SidePaneElement key={i} selected={i === selectedIndex} onClick={() => setSelectedIndex(i)}>{dpt.name}</SidePaneElement>);
   }
 
-  let currentDepartment = myDepartments[selectedIndex];
+  const currentDepartment = myDepartments[selectedIndex];
 
   return (
     <div className="SubsettingContainer">
@@ -111,7 +111,6 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
           description="Shown in projects assigned to team members.">
           <EditableField
             key={selectedIndex}
-            id="department-name"
             value={currentDepartment.name}
             fieldName="name"
             postFunction={updateDepartment}
@@ -123,7 +122,6 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
           <EditableField
             key={selectedIndex}
             smaller
-            id="department-description"
             value={currentDepartment.description}
             fieldName="description"
             postFunction={updateDepartment} />

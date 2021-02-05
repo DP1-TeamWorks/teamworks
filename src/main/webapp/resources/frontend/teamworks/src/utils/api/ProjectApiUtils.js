@@ -4,10 +4,9 @@ const PROJECT_URL = "/projects";
 
 const ProjectApiUtils = {
   /*PROJECT*/
-  getProjects: (departmentId) => axios.get(PROJECT_URL),
-  getMyProjects: (departmentId) =>
-    ApiUtils.get(PROJECT_URL + "/mine?departmentId=" + departmentId),
-
+  getProjects: (departmentId) => ApiUtils.get(PROJECT_URL + `?departmentId=${departmentId}`),
+  getMyProjects: (departmentId) => ApiUtils.get(PROJECT_URL + "/mine?departmentId=" + departmentId),
+  postProject: (departmentId, project) => ApiUtils.post(PROJECT_URL + `?departmentId=${departmentId}`, project),
   /*MILESTONES*/
   getNextMilestone: (projectId) =>
     ApiUtils.get(PROJECT_URL + "/milestones"),
