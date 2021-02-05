@@ -36,5 +36,5 @@ public interface UserTWRepository extends Repository<UserTW, Integer> {
     public Collection<UserTW.StrippedUser> findAll() throws DataAccessException;
 
     @Query("SELECT u FROM UserTW u WHERE u.email = :email")
-    public UserTW findbyEmail(@Param("email") String email);
+    public UserTW findByEmail(@Param("email") String email);
 }

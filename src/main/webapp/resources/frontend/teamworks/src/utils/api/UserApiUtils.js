@@ -1,11 +1,12 @@
 import axios from "axios";
 import { API_URL } from "../../config/config";
 import ApiUtils from "./ApiUtils";
-const USER_URL = "/user";
+const USER_URL = "/usersTW";
 const USERS_URL = "/users";
 
 const UserApiUtils = {
-  /*USER*/
+  getMyTeamUsers: () =>
+    ApiUtils.get(USER_URL),
   getAllUsers: () => ApiUtils.get(USERS_URL)
 };
 
