@@ -17,7 +17,7 @@ const NewMessageMultiSelect = ({
       <p className="TitleNewMsg">{name}</p>
       <Select
         options={options}
-        onChange={(e) => {changeHandler(name, e.map(mail => {return mail.value}) )}}
+        onChange={(e) => {changeHandler(name, e.map(x => {return x.value}) )}}
         styles={customStyles}
         name={name}
         placeholder={placeholder}

@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Milestone;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.ToDo;
+import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.MilestoneService;
 import org.springframework.samples.petclinic.service.ToDoService;
@@ -52,28 +54,28 @@ public class ToDoController {
 	}
 
 	@GetMapping(value = "/api/toDos/mine/all")
-	public List<ToDo> getAllMyToDos(HttpServletRequest r) {
+	public Map<String, List<ToDo>> getAllMyToDosByProject(HttpServletRequest r) {
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
-		return toDoService.findToDoByUser(userId).stream().collect(Collectors.toList());
+		return toDoService.findToDoByUser(userId).stream()
+				.collect(Collectors.groupingBy(todo -> todo.getMilestone().getProject().getName()));
 	}
 
 	@PostMapping(value = "/api/toDos/mine")
-	public ResponseEntity<String> createPersonalToDo(@Valid @RequestBody ToDo toDo, HttpServletRequest r,
+	public ResponseEntity<String> createPersonalToDo(HttpServletRequest r, @Valid @RequestBody ToDo toDo,
 			@RequestParam(required = true) Integer milestoneId) {
 
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
-		return createToDo(toDo, r, milestoneId, userId);
-
+		return createToDo(toDo, r, milestoneId, userId, true);
 	}
 
 	@PostMapping(value = "/api/toDos")
 	public ResponseEntity<String> createToDo(@Valid @RequestBody ToDo toDo, HttpServletRequest r,
-			@RequestParam(required = true) Integer milestoneId, @RequestParam(required = false) Integer userId) {
+			@RequestParam(required = true) Integer milestoneId, @RequestParam(required = false) Integer userId,
+			Boolean mine) {
 		try {
-			
 			UserTW user = userService.findUserById(userId);
 			Milestone milestone = milestoneService.findMilestoneById(milestoneId);
-			if (user.getParticipation().stream().map(Participation::getProject)
+			if (!mine && user.getParticipation().stream().map(Participation::getProject)
 					.anyMatch(p -> p.equals(milestone.getProject())))
 				throw new IdParentIncoherenceException("Project", "User");
 

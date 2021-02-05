@@ -1,8 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -38,12 +36,8 @@ public class MessageController {
     private final ToDoService toDoService;
 
     @Autowired
-    public MessageController(
-        MessageService messageService,
-        UserTWService userService,
-        TagService tagService,
-        ToDoService toDoService
-    ) {
+    public MessageController(MessageService messageService, UserTWService userService, TagService tagService,
+            ToDoService toDoService) {
         this.messageService = messageService;
         this.userService = userService;
         this.tagService = tagService;
@@ -60,15 +54,11 @@ public class MessageController {
         try {
             Integer userId = (Integer) r.getSession().getAttribute("userId");
             UserTW user = userService.findUserById(userId);
-            List<Message> messageList =
-                (messageService.findMessagesByUserId(user)).stream()
+            List<Message> messageList = (messageService.findMessagesByUserId(user)).stream()
                     .collect(Collectors.toList());
             return messageList;
         } catch (DataAccessException d) {
-            throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Can't get inbox"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't get inbox");
         }
     }
 
@@ -76,61 +66,38 @@ public class MessageController {
     public List<Message> getMySentMessages(HttpServletRequest r) {
         try {
             Integer userId = (Integer) r.getSession().getAttribute("userId");
-            List<Message> messageList =
-                (messageService.findMessagesSentByUserId(userId)).stream()
+            List<Message> messageList = (messageService.findMessagesSentByUserId(userId)).stream()
                     .collect(Collectors.toList());
             return messageList;
         } catch (DataAccessException d) {
-            throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Can't find messages"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
         }
     }
 
     @GetMapping(value = "/api/message/byTag")
-    public List<Message> getMessagesByTag(
-        HttpServletRequest r,
-        @RequestParam(required = true) int tagId
-    ) {
+    public List<Message> getMessagesByTag(HttpServletRequest r, @RequestParam(required = true) int tagId) {
         try {
             Integer userId = (Integer) r.getSession().getAttribute("userId");
             Tag tag = tagService.findTagById(tagId);
             UserTW user = userService.findUserById(userId);
-            List<Message> messageList =
-                (messageService.findMessagesByTag(user, tag)).stream()
+            List<Message> messageList = (messageService.findMessagesByTag(user, tag)).stream()
                     .collect(Collectors.toList());
             return messageList;
         } catch (DataAccessException d) {
-            throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Can't find messages"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
         }
     }
 
     @GetMapping(value = "/api/message/bySearch")
-    public List<Message> getMessagesBySearch(
-        HttpServletRequest r,
-        @RequestParam(required = true) String search
-    ) {
+    public List<Message> getMessagesBySearch(HttpServletRequest r, @RequestParam(required = true) String search) {
         try {
             Integer userId = (Integer) r.getSession().getAttribute("userId");
             UserTW user = userService.findUserById(userId);
-            List<Message> messageList =
-                (
-                    messageService.findMessagesBySearch(
-                        user,
-                        search.toLowerCase()
-                    )
-                ).stream()
+            List<Message> messageList = (messageService.findMessagesBySearch(user, search.toLowerCase())).stream()
                     .collect(Collectors.toList());
             return messageList;
         } catch (DataAccessException d) {
-            throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Can't find messages" + d
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages" + d);
         }
     }
 
@@ -139,46 +106,30 @@ public class MessageController {
         try {
             Integer userId = (Integer) r.getSession().getAttribute("userId");
             UserTW user = userService.findUserById(userId);
-            Long notReadMessages =
-                (messageService.findMessagesByUserId(user)).stream()
-                    .filter(m -> !m.getRead())
+            Long notReadMessages = (messageService.findMessagesByUserId(user)).stream().filter(m -> !m.getRead())
                     .count();
             return notReadMessages;
         } catch (DataAccessException d) {
-            throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Can't find messages"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
         }
     }
 
     @GetMapping(value = "/api/message/noReadByTag")
-    public Long getNumberOfNotReadMessagesByTag(
-        HttpServletRequest r,
-        @RequestParam(required = true) int tagId
-    ) {
+    public Long getNumberOfNotReadMessagesByTag(HttpServletRequest r, @RequestParam(required = true) int tagId) {
         try {
             Integer userId = (Integer) r.getSession().getAttribute("userId");
             Tag tag = tagService.findTagById(tagId);
             UserTW user = userService.findUserById(userId);
-            Long notReadMessages =
-                (messageService.findMessagesByTag(user, tag)).stream()
-                    .filter(m -> !m.getRead())
+            Long notReadMessages = (messageService.findMessagesByTag(user, tag)).stream().filter(m -> !m.getRead())
                     .count();
             return notReadMessages;
         } catch (DataAccessException d) {
-            throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Can't find messages"
-            );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
         }
     }
 
     @PostMapping(value = "api/message")
-    public ResponseEntity<String> newMessage(
-        HttpServletRequest r,
-        @Valid @RequestBody Message message
-    ) {
+    public ResponseEntity<String> newMessage(HttpServletRequest r, @Valid @RequestBody Message message) {
         try {
             log.info("Creating new message: " + message.toString());
             Integer userId = (Integer) r.getSession().getAttribute("userId");
@@ -187,29 +138,20 @@ public class MessageController {
             message.setRead(false);
 
             log.info("Setting the recipient list");
-            List<UserTW> recipientList = message
-                .getRecipientsEmails()
-                .stream()
-                .map(mail -> userService.findByEmail(mail))
-                .collect(Collectors.toList());
+            List<UserTW> recipientList = message.getRecipientsEmails().stream()
+                    .map(mail -> userService.findByEmail(mail)).collect(Collectors.toList());
             message.setRecipients(recipientList);
 
             log.info("Setting the todo list");
             log.info("ToDoList: " + message.getToDoList().toString());
-            List<ToDo> toDoList = message
-                .getToDoList()
-                .stream()
-                .map(toDoId -> toDoService.findToDoById(toDoId))
-                .collect(Collectors.toList());
+            List<ToDo> toDoList = message.getToDoList().stream().map(toDoId -> toDoService.findToDoById(toDoId))
+                    .collect(Collectors.toList());
             log.info("ToDoList: " + toDoList.toString());
             message.setToDos(toDoList);
 
             log.info("Setting the tag list");
-            List<Tag> tagList = message
-                .getTagList()
-                .stream()
-                .map(tagId -> tagService.findTagById(tagId))
-                .collect(Collectors.toList());
+            List<Tag> tagList = message.getTagList().stream().map(tagId -> tagService.findTagById(tagId))
+                    .collect(Collectors.toList());
             message.setTags(tagList);
 
             log.info("Saving the message");
@@ -222,11 +164,8 @@ public class MessageController {
     }
 
     @PostMapping(value = "api/message/reply")
-    public ResponseEntity<String> replyMessage(
-        HttpServletRequest r,
-        @Valid @RequestParam(required = true) Message message,
-        @RequestParam(required = true) Integer replyId
-    ) {
+    public ResponseEntity<String> replyMessage(HttpServletRequest r,
+            @Valid @RequestParam(required = true) Message message, @RequestParam(required = true) Integer replyId) {
         try {
             message.setReplyTo(message);
 
@@ -240,11 +179,8 @@ public class MessageController {
     }
 
     @PostMapping(value = "api/message/forward")
-    public ResponseEntity<String> forwardMessage(
-        HttpServletRequest r,
-        @RequestParam(required = true) List<Integer> forwardList,
-        Integer MessageId
-    ) {
+    public ResponseEntity<String> forwardMessage(HttpServletRequest r,
+            @RequestParam(required = true) List<Integer> forwardList, Integer MessageId) {
         try {
             // TODO set tags in message
             return ResponseEntity.ok().build();
@@ -254,10 +190,7 @@ public class MessageController {
     }
 
     @PostMapping(value = "/api/message/markAsRead")
-    public ResponseEntity<String> markAsRead(
-        HttpServletRequest r,
-        @RequestParam(required = true) Integer messageId
-    ) {
+    public ResponseEntity<String> markAsRead(HttpServletRequest r, @RequestParam(required = true) Integer messageId) {
         try {
             Integer userId = (Integer) r.getSession().getAttribute("userId");
             UserTW user = userService.findUserById(userId);

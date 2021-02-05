@@ -25,6 +25,7 @@ class NewMessageForm extends React.Component {
     this.ChangeModalNewMessage = props.ChangeModalNewMessage;
     this.mailOptions = props.mailOptions;
     this.toDoOptions = props.toDoOptions;
+    this.tagOptions = props.tagOptions;
     console.log(this.mailOptions);
   }
 
@@ -110,7 +111,7 @@ class NewMessageForm extends React.Component {
       let text = this.state.inputs.Message;
       let toDos = this.state.inputs.ToDos;
       let tags = this.state.inputs.Tags;
-      this.apiRequestHandler(to, subject, text, toDos);
+      this.apiRequestHandler(to, subject, text, toDos, tags);
       this.ChangeModalNewMessage();
     } else {
       console.log("There are errors in this form");
@@ -132,6 +133,7 @@ class NewMessageForm extends React.Component {
             name="Tags"
             placeholder="Tags"
             changeHandler={this.changeHandler}
+            options={this.tagOptions}
           ></NewMessageMultiSelect>
           <NewMessageMultiSelect
             name="ToDos"
