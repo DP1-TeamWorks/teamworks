@@ -119,8 +119,6 @@ class SignUpForm extends React.Component {
         });
       })
       .catch((error) => {
-        console.log("AAAA" + error)
-        console.log(error.response)
         if (error.response.data.includes("constraint")) {
           this.setState({
             requestError: "There's already a team or identifier with that name.",

@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 public class MessageController {
 	private final MessageService messageService;
@@ -36,7 +40,8 @@ public class MessageController {
 	private final ToDoService toDoService;
 
 	@Autowired
-	public MessageController(MessageService messageService, UserTWService userService, TagService tagService, ToDoService toDoService) {
+	public MessageController(MessageService messageService, UserTWService userService, TagService tagService,
+			ToDoService toDoService) {
 		this.messageService = messageService;
 		this.userService = userService;
 		this.tagService = tagService;
@@ -127,42 +132,19 @@ public class MessageController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find messages");
 		}
 	}
-	
-	//@Valid delante de requestbody
-	@PostMapping(value = "api/message/new")
+
+	// @Valid delante de requestbody
+	@PostMapping(value = "api/message")
 	public ResponseEntity<String> newMessage(HttpServletRequest r, @Valid @RequestBody Message message) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
 			message.setSender(sender);
-			
 			message.setRead(false);
-			
-			List<UserTW> recipientList = new ArrayList<>();
-			for (int i = 0; i < message.getRecipientsEmails().size(); i++) {
-				UserTW recipient = userService.findByEmail(message.getRecipientsEmails().get(i));
-				recipientList.add(recipient);
-			}
+			log.info("Setting the recipient list of: " + message.toString());
+			List<UserTW> recipientList = message.getRecipientsEmails().stream()
+					.map(mail -> userService.findByEmail(mail)).collect(Collectors.toList());
 			message.setRecipients(recipientList);
-			
-			// TODO set tags in message
-			List<Tag> tagList = new ArrayList<>();
-			for (int i = 0; i < message.getListOfTags().size(); i++) {
-				//FIND TAG BY NAME
-				Tag tag = tagService.findTagByName(message.getListOfTags().get(i));
-				tagList.add(tag);
-			}
-			if(tagList!= null) message.setTags(tagList);
-			
-			// TODO set todos in message
-			List<ToDo> toDoList = new ArrayList<>();
-			for (int i = 0; i < message.getListOfToDos().size(); i++) {
-				//FIND ToDo BY NAME
-				//ToDo toDo = toDoService.findToDoByName(message.getListOfToDos().get(i));
-				//toDoList.add(toDo);
-			}			
-			if(toDoList!= null) message.setToDos(toDoList);
-
 			messageService.saveMessage(message);
 			return ResponseEntity.ok().build();
 
