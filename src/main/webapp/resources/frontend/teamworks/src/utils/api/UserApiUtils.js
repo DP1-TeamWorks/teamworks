@@ -6,7 +6,7 @@ const USERS_URL = "/users";
 
 const UserApiUtils = {
   getMyTeamUsers: () =>
-    ApiUtils.get(USER_URL),
+    ApiUtils.get(USERS_URL),
   getAllUsers: () => ApiUtils.get(USERS_URL)
 };
 

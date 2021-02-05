@@ -22,6 +22,7 @@ const NewMessage = ({ ChangeModalNewMessage }) => {
       .then((res) => {
         console.log("Getting user mails");
         let mailList = res.map((user) => {
+          console.log(user);
           return { label: user.name + " - " + user.email, value: user.email };
         });
         console.log(mailList);
