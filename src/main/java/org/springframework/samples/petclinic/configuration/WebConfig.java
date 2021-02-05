@@ -25,7 +25,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 public class WebConfig implements WebMvcConfigurer {
 	@Autowired
     GenericIdToEntityConverter idToEntityConverter;
-    
+
     @Autowired
     UserTWService userTWService;
     @Autowired
