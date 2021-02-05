@@ -26,7 +26,7 @@ public class UserTWService {
 	@Transactional(rollbackFor = ManyTeamOwnerException.class)
 	public void saveUser(UserTW user) throws DataAccessException, ManyTeamOwnerException {
 		// user.setEnabled(true);
-		if (user.getRole().equals(Role.team_owner) && user.getTeam().getUsers().stream()
+		if (user.getTeam().getUsers() != null && user.getRole().equals(Role.team_owner) && user.getTeam().getUsers().stream()
 				.filter(x -> x.getRole().equals(Role.team_owner)).findAny().isPresent()) {
 			throw new ManyTeamOwnerException();
 		} else {

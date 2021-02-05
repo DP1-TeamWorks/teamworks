@@ -26,14 +26,12 @@ const InputAutocompleteUser = ({ name, placeholder, onUserSelected, val, onChang
 
     function onChange(event, { newValue })
     {
-        setValue(newValue);
+        onChangeHandler(name, newValue);
         if (selectedUserId !== -1)
         {
             setSelectedUserId(-1);
             if (onUserSelected)
-                onUserSelected(name, -1);
-            if (onChangeHandler)
-                onChangeHandler(newValue);
+                onUserSelected(name, newValue, -1);
         }
     }
 
@@ -50,19 +48,18 @@ const InputAutocompleteUser = ({ name, placeholder, onUserSelected, val, onChang
     function onSuggestionSelected(event, {suggestion})
     {
         if (onUserSelected)
-            onUserSelected(name, suggestion.id);
+            onUserSelected(name, getSuggestionValue(suggestion), suggestion.id);
         setSelectedUserId(suggestion.id);
     }
 
     function onBlur()
     {
         if (selectedUserId === -1)
-            setValue("");
+            onChangeHandler(name, "");
     }
 
     const [users, setUsers] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState(-1);
-    const [value, setValue] = useState(val);
     const [suggestions, setSuggestions] = useState([]);
 
     useEffect(() =>
@@ -75,7 +72,7 @@ const InputAutocompleteUser = ({ name, placeholder, onUserSelected, val, onChang
     const inputProps = {
         name,
         placeholder,
-        value,
+        value: val,
         onChange,
         onBlur,
         className: "Input EditingInput",
@@ -85,7 +82,8 @@ const InputAutocompleteUser = ({ name, placeholder, onUserSelected, val, onChang
     {
         container: 'SuggestionsContainer',
         suggestionsList: 'SuggestionsList',
-        suggestion: 'Suggestion'
+        suggestion: 'Suggestion',
+        suggestionHighlighted: 'Suggestion--Highlighted'
     }
 
     return (

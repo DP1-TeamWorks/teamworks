@@ -66,34 +66,40 @@ public class BelongsController {
 			@RequestParam(required = false) Boolean isDepartmentManager, HttpServletRequest r) {
 
 		try {
-			
+
 			Belongs currentBelongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
 			Department department = departmentService.findDepartmentById(departmentId);
 			UserTW belonguser = userTWService.findUserById(belongUserId);
-			
+
 			if(!belonguser.getTeam().equals(user.getTeam())) {
 				throw new IdParentIncoherenceException("Team", "User");
 			}
-			
-			if(user.getTeam().equals(department.getTeam())) {
+
+			if(!user.getTeam().equals(department.getTeam())) {
 				throw new IdParentIncoherenceException("Team", "Department");
 			}
-			
-			if (currentBelongs == null) {
+
+			if (currentBelongs == null || (isDepartmentManager != null && currentBelongs.getIsDepartmentManager() != isDepartmentManager)) {
 				UserTW belongUser = userTWService.findUserById(belongUserId);
 				Belongs belongs = new Belongs();
 				belongs.setDepartment(department);
 				belongs.setUserTW(belongUser);
 				belongs.setIsDepartmentManager(false);
+				if (currentBelongs != null)
+                {
+                    // End the the previous belongs
+                    currentBelongs.setFinalDate(LocalDate.now());
+                    belongsService.saveBelongs(currentBelongs);
+                }
 
 				if (isDepartmentManager != null && isDepartmentManager)
 				{
 				    Department dp = departmentService.findDepartmentById(departmentId);
 				    belongs.setIsDepartmentManager(true);
                     Belongs departmentManagerBelongs = belongsService.findCurrentDepartmentManager(departmentId);
-                    if (departmentManagerBelongs != null)
+                    if (departmentManagerBelongs != null && departmentManagerBelongs.getUserTW().equals(user))
                     {
                         // they're department manager. since there can only be one, they will lose privileges
                         departmentManagerBelongs.setFinalDate(LocalDate.now());
@@ -103,6 +109,7 @@ public class BelongsController {
 				belongsService.saveBelongs(belongs);
 				return ResponseEntity.ok().build();
 			} else {
+			    // there's already a belongs for that user
 				return ResponseEntity.badRequest().body("alreadyexists");
 			}
 
@@ -120,13 +127,16 @@ public class BelongsController {
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
 			Belongs belongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
-			if (belongs.getIsDepartmentManager() == false || isTeamOwner) {
-				belongs.setFinalDate(LocalDate.now());
-				belongsService.saveBelongs(belongs);
-				return ResponseEntity.ok().build();
-			} else {
-				return ResponseEntity.status(403).build();
-			}
+			// Authority is sorted out in the interceptor so we only do minimal checks here
+			if (belongs != null)
+            {
+                belongs.setFinalDate(LocalDate.now());
+                belongsService.saveBelongs(belongs);
+                return ResponseEntity.ok().build();
+            } else
+            {
+                return ResponseEntity.badRequest().build();
+            }
 
 		} catch (DataAccessException | ManyDepartmentManagerException | DateIncoherenceException d) {
 			return ResponseEntity.badRequest().build();

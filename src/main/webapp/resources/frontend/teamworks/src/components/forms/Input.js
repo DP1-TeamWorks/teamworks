@@ -19,7 +19,7 @@ export default function Input({
         type={type}
         name={name}
         value={value}
-        onChange={changeHandler}
+        onChange={(e) => changeHandler(name, e.target.value)}
         style={{
           border: error && error !== "" ? "1px solid #e32d2d" : "",
         }}

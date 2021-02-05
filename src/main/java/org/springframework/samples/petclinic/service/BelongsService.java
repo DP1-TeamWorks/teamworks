@@ -24,14 +24,17 @@ public class BelongsService {
 
 	@Transactional
 	public void saveBelongs(Belongs belongs) throws DataAccessException, ManyDepartmentManagerException, DateIncoherenceException {
-		if (belongs.getIsDepartmentManager() && belongs.getDepartment().getBelongs().stream()
-				.filter(x -> x.getIsDepartmentManager() == true).findAny().isPresent()) {
+		if (belongs.getFinalDate() == null && belongs.getIsDepartmentManager() && belongs.getDepartment().getBelongs().stream()
+            .anyMatch(x -> x.getIsDepartmentManager() == true && x.getFinalDate() == null)) {
 			throw new ManyDepartmentManagerException();
-		} else if (!belongs.getInitialDate().isBefore(belongs.getFinalDate())) {
-			throw new DateIncoherenceException();
-		} else {
-			belongsRepository.save(belongs);
+		} else if (belongs.getFinalDate() != null)
+		{
+		    if (belongs.getInitialDate() == null || (!belongs.getInitialDate().equals(belongs.getFinalDate()) && !belongs.getInitialDate().isBefore(belongs.getFinalDate())))
+            {
+                throw new DateIncoherenceException();
+            }
 		}
+		belongsRepository.save(belongs);
 
 	}
 

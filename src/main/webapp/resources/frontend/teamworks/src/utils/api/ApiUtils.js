@@ -12,7 +12,7 @@ const ApiUtils = {
       {
         if (err.response?.status === 403 && reloadOnUnauthorized)
         {
-          window.location.reload() // unauthorized. refresh? 
+          window.location.replace('/'); // unauthorized. refresh? 
         }
         reject(err);
       })
@@ -28,7 +28,7 @@ const ApiUtils = {
       {
         if (err.response?.status === 403 && reloadOnUnauthorized)
         {
-          window.location.replace('/') // unauthorized. redirect to login 
+          window.location.replace('/'); // unauthorized. redirect to login 
         }
         reject(err);
       })
@@ -44,7 +44,7 @@ const ApiUtils = {
       {
         if (err.response?.status === 403 && reloadOnUnauthorized)
         {
-          window.location.replace('/') // unauthorized. redirect to login 
+          window.location.replace('/'); // unauthorized. redirect to login 
         }
         reject(err);
       })

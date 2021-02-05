@@ -16,6 +16,7 @@
     padding: 10px 20px;
 }
 
-.Suggestion:hover {
+.Suggestion:hover, .Suggestion--Highlighted {
     background-color: #444;
 }
+

@@ -36,7 +36,12 @@ const DepartmentMemberList = ({departmentId, members, loading, onListUpdated}) =
 
   function onRemoveClicked(member)
   {
-
+    if (window.confirm(`Are you sure to remove ${member.name} ${member.lastName} from the team?`))
+    {
+      DepartmentApiUtils.removeUserFromDepartment(departmentId, member.userId)
+      .then(() => onListUpdated())
+      .catch(err => console.error(err));
+    }
   }
 
   if (loading)

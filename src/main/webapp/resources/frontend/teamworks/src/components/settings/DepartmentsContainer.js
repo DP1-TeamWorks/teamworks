@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
 import DepartmentSettings from "./DepartmentSettings";
 import Spinner from "../spinner/Spinner";
-import AddUserToForm from "../forms/AddUserToForm";
+import AddUserToDepartment from "../forms/AddUserToDepartmentForm";
 
 const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
 {
@@ -133,7 +133,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
         <SettingGroup
           name="Add user to department"
           description="Start typing their name below.">
-          <AddUserToForm
+          <AddUserToDepartment
             key={currentDepartment.name}
             onUserAdded={onUserAdded}
             departmentId={currentDepartment.id}
@@ -143,7 +143,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
         </SettingGroup>
         <SettingGroup
           name="Members"
-          description="Department members are shown below. Click on an user to see their history.">
+          description="Click on a user to see their profile and hover to show available actions.">
           <DepartmentMemberList
             key={selectedIndex}
             departmentId={currentDepartment.id}

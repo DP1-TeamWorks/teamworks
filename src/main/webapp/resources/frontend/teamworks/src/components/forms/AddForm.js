@@ -27,6 +27,8 @@ class AddForm extends React.Component
 
   hasErrors = () =>
   {
+    if (Object.values(this.state.inputs).some(x => !x)) // If at least one empty we can't submit the form. for now all fields will be mandatory
+      return true;
     const errors = Object.values(this.state.errors);
     return errors.some((e) =>
     {
@@ -62,10 +64,8 @@ class AddForm extends React.Component
     });
   };
 
-  changeHandler = (event) =>
+  changeHandler = (field, value) =>
   {
-    let field = event.target.name;
-    let value = event.target.value;
     this.validate(field, value);
     this.setState({ inputs: { ...this.state.inputs, [field]: value } });
   };
@@ -119,9 +119,9 @@ class AddForm extends React.Component
     }
   };
 
-  onAutocomplete = (field, value) =>
+  onAutocomplete = (field, textValue, value) =>
   {
-    this.setState({autocompleteVal: value, inputs: { ...this.state.inputs, [field]: value }})
+    this.setState({autocompleteVal: value, inputs: { ...this.state.inputs, [field]: textValue }})
     if (this.onAutocompleteSelected)
       this.onAutocompleteSelected(field, value);
   };
@@ -158,6 +158,7 @@ class AddForm extends React.Component
             return React.cloneElement(child, 
               {
                 onUserSelected: this.onAutocomplete,
+                onChangeHandler: this.changeHandler,
                 val: this.state.inputs[name]??''
               });
           }

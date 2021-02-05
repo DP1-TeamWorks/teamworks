@@ -8,7 +8,7 @@ import UserApiUtils from "../../utils/api/UserApiUtils";
 import InputAutocompleteUser from "./InputAutocompleteUser";
 import { useRef } from "react";
 
-const AddUserToForm = ({ onUserAdded, submitText, departmentId }) =>
+const AddUserToDepartment = ({ onUserAdded, submitText, departmentId }) =>
 {
   function onUserSelected(field, userId)
   {
@@ -40,4 +40,4 @@ const AddUserToForm = ({ onUserAdded, submitText, departmentId }) =>
   );
 };
 
-export default AddUserToForm;
+export default AddUserToDepartment;

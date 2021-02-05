@@ -13,13 +13,17 @@ const DepartmentApiUtils = {
   getMyDepartments: () => ApiUtils.get(DEPARTMENT_URL + "/mine"),
   addUserToDepartment: (departmentId, userId, departmentManager) => 
   {
-    if (departmentManager)
+    if (departmentManager !== undefined)
     {
       return ApiUtils.post(DEPARTMENT_URL + BELONGS_URL + `?departmentId=${departmentId}&belongUserId=${userId}&isDepartmentManager=${departmentManager}`);
     } else
     {
       return ApiUtils.post(DEPARTMENT_URL + BELONGS_URL + `?departmentId=${departmentId}&belongUserId=${userId}`);
     }
+  },
+  removeUserFromDepartment: (departmentId, userId) => 
+  {
+    return ApiUtils.delete(DEPARTMENT_URL + BELONGS_URL + `?departmentId=${departmentId}&belongUserId=${userId}`);
   },
   getMembersFromDepartment: (departmentId) => ApiUtils.get(DEPARTMENT_URL + BELONGS_URL + `?departmentId=${departmentId}`)
 };
