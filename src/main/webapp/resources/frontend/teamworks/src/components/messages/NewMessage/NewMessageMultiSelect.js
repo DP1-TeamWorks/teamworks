@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Select from "react-select";
 
 const NewMessageMultiSelect = ({
@@ -6,14 +6,21 @@ const NewMessageMultiSelect = ({
   placeholder,
   options,
   changeHandler,
-  className
+  className,
 }) => {
   return (
     <div className={`InputContainer ${className}`}>
       <p className="TitleNewMsg">{name}</p>
       <Select
         options={options}
-        onChange={(e) => {changeHandler(name, e.map(x => {return x.value}) )}}
+        onChange={(e) => {
+          changeHandler(
+            name,
+            e.map((x) => {
+              return x.value;
+            })
+          );
+        }}
         styles={customStyles}
         name={name}
         placeholder={placeholder}
@@ -51,13 +58,11 @@ const customStyles = {
   multiValue: (base) => ({
     ...base,
     backgroundColor: "#a6ce56",
-    
   }),
-  valueContainer: (base) =>({
+  valueContainer: (base) => ({
     ...base,
     flexDirection: "row",
-    flexWrap: "nowrap"
-    
+    flexWrap: "nowrap",
   }),
   multiValueLabel: (base) => ({
     ...base,

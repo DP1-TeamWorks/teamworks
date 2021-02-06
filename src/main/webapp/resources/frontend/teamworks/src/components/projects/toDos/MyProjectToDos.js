@@ -9,6 +9,7 @@ const MyProjectToDos = ({ projectId }) => {
   const [milestone, setMilestone] = useState({});
   const [toDoList, setToDoList] = useState([]);
   const [reloadToDos, setReloadToDos] = useState(false);
+  const [tooManyToDos, setToManyToDos] = useState(toDoList.length > 6);
   console.log(milestone);
 
   useEffect(() => {
@@ -54,6 +55,10 @@ const MyProjectToDos = ({ projectId }) => {
     }
   }, [milestone, reloadToDos]);
 
+  useEffect(() => {
+    setToManyToDos(toDoList.filter((t) => !t.done).length > 6);
+  }, [toDoList]);
+
   return (
     <div style={{ display: Object.keys(milestone).length === 0 ? "none" : "" }}>
       <h3 className="SidebarSectionTitle" style={{ display: "inline-block" }}>
@@ -64,6 +69,7 @@ const MyProjectToDos = ({ projectId }) => {
         console.log(toDo);
         return (
           <ToDo
+            key={toDo.id}
             id={toDo.id}
             title={toDo.title}
             tagList={toDo.tags}
@@ -71,7 +77,12 @@ const MyProjectToDos = ({ projectId }) => {
           />
         );
       })}
-      <AddToDoForm milestoneId={milestone.id} setReloadToDos={setReloadToDos} />
+      {!tooManyToDos && (
+        <AddToDoForm
+          milestoneId={milestone.id}
+          setReloadToDos={setReloadToDos}
+        />
+      )}
     </div>
   );
 };

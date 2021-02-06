@@ -18,6 +18,7 @@ class AddToDoForm extends React.Component {
       errors: {},
       requestError: "",
     };
+    this.disable = props.shouldDisable;
   }
 
   hasErrors = () => {
@@ -38,11 +39,9 @@ class AddToDoForm extends React.Component {
     });
 
     let errorMsg = "";
-    if (value === "") {
-      errorMsg = "ToDo required";
-    } else if (value.length > 14) {
-      errorMsg = "Too Long toDo";
-    }
+    if (value === "") errorMsg = "ToDo required";
+    else if (value.length > 14) errorMsg = "Too Long toDo";
+
     this.setState({
       errors: { ...this.state.errors, toDo: errorMsg },
     });
@@ -88,13 +87,16 @@ class AddToDoForm extends React.Component {
         <span className="ToDoAdd" onClick={null}>
           <FontAwesomeIcon icon={faPlus} style={{ color: "lightgray" }} />
         </span>{" "}
-        <Input
-          placeholder="Add new ToDo ..."
-          styleClass="InputNewToDo"
-          changeHandler={this.changeHandler}
-          error={this.state.errors.toDo}
-        />
-        <SubmitError error={this.requestError !== "" && this.requestError} />
+        {!this.shouldDisable && (
+          <Input
+            hide={this.nOfToDos === 7}
+            placeholder="Add new ToDo ..."
+            styleClass="InputNewToDo"
+            changeHandler={this.changeHandler}
+            error={this.state.errors.toDo}
+          />
+        )}
+        <SubmitError error={this.requestError} />
       </form>
     );
   }

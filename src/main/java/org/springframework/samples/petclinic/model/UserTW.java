@@ -27,8 +27,11 @@ public class UserTW extends BaseEntity {
 
     public interface StrippedUser {
         Integer getId();
+
         String getName();
+
         String getLastname();
+
         String getEmail();
     }
 
@@ -71,20 +74,12 @@ public class UserTW extends BaseEntity {
 
     @JsonIgnore
     // @JsonManagedReference(value="user-belongs")
-    @OneToMany(
-        cascade = CascadeType.ALL,
-        mappedBy = "userTW",
-        orphanRemoval = true
-    )
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userTW", orphanRemoval = true)
     private List<Belongs> belongs;
 
     @JsonIgnore
     // @JsonManagedReference(value="user-participation")
-    @OneToMany(
-        cascade = CascadeType.ALL,
-        mappedBy = "userTW",
-        orphanRemoval = true
-    )
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userTW", orphanRemoval = true)
     private List<Participation> participation;
 
     @JsonIgnore

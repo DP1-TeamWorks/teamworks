@@ -17,11 +17,9 @@ const OpenedMessage = ({ msg }) => {
       .then((res) => {
         console.log("Getting user mails");
         let mailList = res.map((user) => {
-          console.log(user);
           return { label: user.name + " - " + user.email, value: user.email };
         });
         setForwardOptions(mailList);
-        console.log(mailList);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the users mails");
@@ -38,7 +36,7 @@ const OpenedMessage = ({ msg }) => {
           })}
         </span>
       </div>
-      <div className="MsgContentText">{msg.text}</div>
+      <div className="MsgContentText">{msg.text.replace("\n", "<br>")}</div>
       <div className="MsgContentButtons">
         <GradientButton
           onClick={() => {
