@@ -19,4 +19,7 @@ public interface TagRepository extends Repository<Tag, Integer> {
     
     @Query("SELECT u FROM Tag u WHERE u.title LIKE :title%")
     public Collection<Tag> findByTitle(@Param("title") String title);
+    
+    @Query("SELECT u FROM Tag u WHERE u.title LIKE :title")
+    public Tag findByName(@Param("title") String title);
 }

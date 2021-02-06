@@ -7,7 +7,9 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   const [departmentList, setDepartmentList] = useState([]);
   const [projectList, setProjectList] = useState([]);
 
-  const [department, setDepartment] = useState("DPT");
+  // TODO: Save picked department and fix this. correctly request departments at the beginning
+  // NO HACER UNA REQUEST CON UNDEFINED!
+  const [department, setDepartment] = useState(null);
   const [pickedDepartment, setPickedDepartment] = useState({});
   const [opened, setOpened] = useState(false);
 
@@ -22,6 +24,8 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   }, []);
 
   useEffect(() => {
+    if (department === null)
+      return;
     ProjectApiUtils.getMyProjects(department.id)
       .then((res) => {
         setProjectList(res);
@@ -54,11 +58,11 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   };
 
   return (
-    <>
+    <div style={{ display: departmentList<=0 ? "none": "" }}>
       <h3 className="SidebarSectionTitle">Project</h3>
 
       <button className="PickerBox" onClick={openOrClose}>
-        {department.name} - {pickedProject.name}
+        {department?.name} - {pickedProject?.name}
       </button>
       <div
         className="CollapsedDPTPicker"
@@ -89,7 +93,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
           })}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

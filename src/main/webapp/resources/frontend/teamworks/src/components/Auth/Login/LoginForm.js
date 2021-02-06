@@ -66,9 +66,7 @@ class LoginForm extends React.Component {
     });
   };
 
-  changeHandler = (event) => {
-    let field = event.target.name;
-    let value = event.target.value;
+  changeHandler = (field, value) => {
     this.validate(field, value);
     this.setState({ inputs: { ...this.state.inputs, [field]: value } });
   };
