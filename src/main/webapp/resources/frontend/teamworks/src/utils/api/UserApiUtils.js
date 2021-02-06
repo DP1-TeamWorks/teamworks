@@ -1,5 +1,3 @@
-import axios from "axios";
-import { API_URL } from "../../config/config";
 import ApiUtils from "./ApiUtils";
 const USER_URL = "/usersTW";
 const USERS_URL = "/users";

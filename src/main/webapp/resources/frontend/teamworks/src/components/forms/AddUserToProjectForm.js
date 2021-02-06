@@ -1,21 +1,21 @@
 import React, { useRef } from "react";
-import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
+import ProjectApiUtils from "../../utils/api/ProjectApiUtils";
 import AddForm from "./AddForm";
 import "./AddUserForm.css";
 import InputAutocompleteUser from "./InputAutocompleteUser";
 
-const AddUserToDepartment = ({ onUserAdded, submitText, departmentId }) =>
+const AddUserToProject = ({ onUserAdded, submitText, projectId }) =>
 {
   function onUserSelected(field, userId)
   {
     selectedUser.current = userId;
   }
 
-  function addUserToDepartment()
+  function addUserToProject()
   {
     return new Promise((resolve, reject) =>
     {
-      DepartmentApiUtils.addUserToDepartment(departmentId, selectedUser.current)
+      ProjectApiUtils.addUserToProject(projectId, selectedUser.current)
         .then(() => 
         {
           resolve();
@@ -29,11 +29,11 @@ const AddUserToDepartment = ({ onUserAdded, submitText, departmentId }) =>
   const selectedUser = useRef(-1);
 
   return (
-    <AddForm hasAutocomplete submitText={submitText} postFunction={addUserToDepartment} alreadyExistsErrorText="That user is already a member in this department." onAutocompleteSelected={onUserSelected}>
+    <AddForm hasAutocomplete submitText={submitText} postFunction={addUserToProject} alreadyExistsErrorText="That user is already a project member." onAutocompleteSelected={onUserSelected}>
       <p className="InputTitle">Full Name</p>
       <InputAutocompleteUser key={selectedUser} name="name" placeholder="Harvey Specter"/>
     </AddForm>
   );
 };
 
-export default AddUserToDepartment;
+export default AddUserToProject;

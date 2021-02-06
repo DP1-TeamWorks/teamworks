@@ -1,12 +1,10 @@
-import React from "react";
-import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
-import Input from "../../forms/Input";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
-import SubmitButton from "../../forms/SubmitButton";
+import Input from "../../forms/Input";
 import SubmitError from "../../forms/SubmitError";
+
 
 class AddToDoForm extends React.Component {
   constructor(props) {
