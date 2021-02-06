@@ -30,6 +30,7 @@ class MessageServiceTest {
 	@Autowired
 	protected TagService tagService;
 	
+	//TODO: UPDATE WITH NEW MESSAGE CONTROLLER
 	
 	@Test
 	@Transactional
