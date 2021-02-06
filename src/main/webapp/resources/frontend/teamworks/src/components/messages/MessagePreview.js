@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import MessageApiUtils from "../../utils/api/MessageApiUtils";
 import Circle from "../projects/tags/Circle";
 import OpenedMessage from "./OpenedMessage";
-const MessagePreview = ({ msg, openMessage, setOpenMessage, setReloadCounters }) => {
+const MessagePreview = ({
+  msg,
+  openMessage,
+  setOpenMessage,
+  setReloadCounters,
+}) => {
   const [read, setRead] = useState();
 
   useEffect(() => {
@@ -49,10 +54,12 @@ const MessagePreview = ({ msg, openMessage, setOpenMessage, setReloadCounters })
       >
         <div className="SelectBox" />
         <h4 className="MsgTitle">
-          {msg.sender.name} {msg.sender.lastname} - {msg.sender.email}
+          {msg.sender.name ? msg.sender.name : "Usuario"}{" "}
+          {msg.sender.lastname ? msg.sender.lastname : "Eliminado"} -{" "}
+          {msg.sender.email ? msg.sender.email : "deleted@user"}
         </h4>
         <h5 className="MsgSubject"> {msg.subject} </h5>
-        
+
         <h5 className="MsgDateTime" style={{ float: "right" }}>
           {msg.timestamp}
         </h5>
