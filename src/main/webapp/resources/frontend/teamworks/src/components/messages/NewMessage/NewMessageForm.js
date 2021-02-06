@@ -123,12 +123,14 @@ class NewMessageForm extends React.Component {
             placeholder="Tags"
             changeHandler={this.changeHandler}
             options={this.tagOptions}
+            className="InputContainer2"
           ></NewMessageMultiSelect>
           <NewMessageMultiSelect
             name="ToDos"
             placeholder="ToDos"
             options={this.toDoOptions}
             changeHandler={this.changeHandler}
+            className="InputContainer2"
           ></NewMessageMultiSelect>
         </div>
         <div className="NewMsg">
