@@ -3,6 +3,7 @@
     flex-direction: row;
     background-color: #333;
     border-radius: 2px;
+    min-height: 500px;
 }
 
 .SubsettingSidePane {
@@ -41,6 +42,10 @@
 
 .SidePaneElement--Highlighted {
     background-color: #444;
+}
+
+.SidePaneElement--ReducedPadding {
+    padding: 5px;
 }
 
 .AddIcon {

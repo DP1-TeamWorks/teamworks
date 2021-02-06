@@ -1,22 +1,20 @@
-import SettingGroup from "./SettingGroup";
-import EditableField from "./EditableField";
-import Button from "../buttons/Button";
-import "./SubsettingContainer.css";
-import SidePaneElement from "./SidePaneElement";
-import DepartmentMemberList from "./DepartmentMemberList";
-import AddElementForm from "../forms/AddElementForm";
 import { useEffect, useState } from 'react';
-import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
-import DepartmentSettings from "./DepartmentSettings";
-import Spinner from "../spinner/Spinner";
-import AddUserToDepartment from "../forms/AddUserToDepartmentForm";
+import DepartmentApiUtils from "../../../utils/api/DepartmentApiUtils";
+import Button from "../../buttons/Button";
+import AddUserToDepartment from "../../forms/AddUserToDepartmentForm";
+import Spinner from "../../spinner/Spinner";
+import EditableField from "../EditableField";
+import SettingGroup from "../SettingGroup";
+import SidePaneElement from "../SidePaneElement";
+import DepartmentMemberList from "./DepartmentMemberList";
+import "../SubsettingContainer.css";
 
 const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
 {
 
-  function onDepartmentNameUpdated(name)
+  function onDepartmentAttributeUpdated(field, value)
   {
-    if (name !== myDepartments[selectedIndex].name)
+    if (value !== myDepartments[selectedIndex][field])
     {
       // Update department object
       setMyDepartments(Object.values({
@@ -24,7 +22,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
         [selectedIndex]:
         {
           ...myDepartments[selectedIndex],
-          name: name
+          [field]: value
         }
       }));
     }
@@ -48,14 +46,13 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
           console.error(err);
         });
     }
-
   }
 
   function updateDepartment(updatedDepartment)
   {
     // Add id for the API call
     updatedDepartment.id = myDepartments[selectedIndex].id;
-    return DepartmentApiUtils.updateDepartment(updatedDepartment)
+    return DepartmentApiUtils.updateDepartment(updatedDepartment);
   }
 
   function onUserAdded()
@@ -100,7 +97,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
     SidepaneElements.push(<SidePaneElement key={i} selected={i === selectedIndex} onClick={() => setSelectedIndex(i)}>{dpt.name}</SidePaneElement>);
   }
 
-  let currentDepartment = myDepartments[selectedIndex];
+  const currentDepartment = myDepartments[selectedIndex];
 
   return (
     <div className="SubsettingContainer">
@@ -113,11 +110,10 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
           description="Shown in projects assigned to team members.">
           <EditableField
             key={selectedIndex}
-            id="department-name"
             value={currentDepartment.name}
             fieldName="name"
             postFunction={updateDepartment}
-            onUpdated={onDepartmentNameUpdated} />
+            onUpdated={onDepartmentAttributeUpdated} />
         </SettingGroup>
         <SettingGroup
           name="Description"
@@ -125,10 +121,10 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
           <EditableField
             key={selectedIndex}
             smaller
-            id="department-description"
             value={currentDepartment.description}
             fieldName="description"
-            postFunction={updateDepartment} />
+            postFunction={updateDepartment}
+            onUpdated={onDepartmentAttributeUpdated} />
         </SettingGroup>
         <SettingGroup
           name="Add user to department"
@@ -137,9 +133,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
             key={currentDepartment.name}
             onUserAdded={onUserAdded}
             departmentId={currentDepartment.id}
-            submitText={`Add to ${currentDepartment.name}`}
-            attributeName="Full Name"
-            attributePlaceholder="Harvey Specter" />
+            submitText={`Add to ${currentDepartment.name}`} />
         </SettingGroup>
         <SettingGroup
           name="Members"
