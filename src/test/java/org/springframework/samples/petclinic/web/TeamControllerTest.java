@@ -1,11 +1,13 @@
 package org.springframework.samples.petclinic.web;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +37,7 @@ excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classe
 @ContextConfiguration(classes = {TestWebConfig.class, SecurityConfiguration.class})
 @Import(TeamController.class)
 public class TeamControllerTest {
-	
+		
 	private static final int TEST_TEAM_ID = 12;
 
 	@MockBean
@@ -88,22 +90,18 @@ public class TeamControllerTest {
 	}
 	
 	@Test
-	void testUpdateTeamNull() throws Exception {
-		atomatic.setName(null);
+	void testDeleteTeam() throws Exception {
+		
 		//atomatic.setIdentifier("ATOMUPDATED");
 		String atomaticupdated = objectMapper.writeValueAsString(atomatic);
 		mockMvc.perform(post("/api/team").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
-		.andExpect(status().isOk())
-		.andExpect(status().is(200));	
-		
-		mockMvc.perform(get("/api/team").session(mockSession))
-		.andExpect(status().is(200))
-		.andExpect(content().string("AtomaticUpdated"));
+		.andExpect(status().isBadRequest());
 	}
 	
+	//TODO NO FUNCIONA DEL TOODO
 	@Test
 	void testGetTeamNameUpdated() throws Exception {
-		mockMvc.perform(get("/api/team").session(mockSession))
-		.andExpect(content().string("Atomatic"));
+		mockMvc.perform(delete("/api/team").session(mockSession))
+		.andExpect(status().is(200));
 	}
 }
