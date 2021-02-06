@@ -2,7 +2,7 @@ import { withRouter } from "react-router-dom";
 import Button from "./Button";
 import GradientButton from "./GradientButton";
 
-const LinkButton = ({history, path, children, className, gradient, back}) =>
+const LinkButton = ({history, path, children, className, gradient, back, reset}) =>
 {
     function onButtonClicked()
     {
