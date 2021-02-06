@@ -51,7 +51,7 @@ public class UserTWService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<UserTW.StrippedUser> findUsersByTeam(Integer teamId) {
+	public Collection<UserTW> findUsersByTeam(Integer teamId) {
 
 	    return userRepository.findUsersByTeam(teamId);
 	}
@@ -66,7 +66,7 @@ public class UserTWService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<UserTW.StrippedUser> getAllUsers() throws DataAccessException {
+	public Collection<UserTW> getAllUsers() throws DataAccessException {
 		return userRepository.findAll();
 	}
 
