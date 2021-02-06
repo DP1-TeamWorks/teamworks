@@ -44,6 +44,10 @@
     background-color: #444;
 }
 
+.SidePaneElement--ReducedPadding {
+    padding: 5px;
+}
+
 .AddIcon {
     margin-right: 10px;
     margin-bottom: -1px;

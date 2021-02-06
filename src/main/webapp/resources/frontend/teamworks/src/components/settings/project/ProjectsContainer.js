@@ -9,15 +9,21 @@ import SettingGroup from "../SettingGroup";
 import SidePaneElement from "../SidePaneElement";
 import "../SubsettingContainer.css";
 import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
+import Spinner from "../../spinner/Spinner";
+import AddUserToProject from "../../forms/AddUserToProjectForm";
+import ProjectMemberList from "./ProjectMemberList";
 
-const ProjectsContainer = ({ departments, onProjectAdded }) =>
+const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
 {
 
   const [departmentIndex, setDepartmentIndex] = useState(0);
   const [projectIndex, setProjectIndex] = useState(0);
   const [myDepartments, setMyDepartments] = useState(departments);
+  const [isAddLoading, setIsAddLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [departmentMembers, setDepartmentMembers] = useState(null);
+  const [projectMembers, setProjectMembers] = useState(null);
+
+  useEffect(() => fetchProjectMembers(), [departmentIndex, projectIndex, myDepartments])
 
   function generateNewProjectName(projects)
   {
@@ -37,11 +43,15 @@ const ProjectsContainer = ({ departments, onProjectAdded }) =>
 
   function createProject()
   {
+    if (isAddLoading)
+      return;
+    
     const dpt = myDepartments[departmentIndex]
     const project = {
       name: generateNewProjectName(dpt.projects),
       description: "This is a brief description."
     }
+    setIsAddLoading(true);
     ProjectApiUtils.postProject(dpt.id, project)
     .then(() => 
     {
@@ -51,15 +61,37 @@ const ProjectsContainer = ({ departments, onProjectAdded }) =>
     .catch(err => console.error(err));
   }
 
-  function onProjectNameUpdated(name)
+  function onProjectAttributeUpdated(field, value)
   {
-    if (name !== myDepartments[departmentIndex].projects[projectIndex].name)
+    if (value !== myDepartments[departmentIndex].projects[projectIndex][field])
     {
-      myDepartments[departmentIndex].projects[projectIndex].name = name;
+      myDepartments[departmentIndex].projects[projectIndex][field] = value;
       // Trigger update
       setMyDepartments(Object.values({
         ...myDepartments
       }));
+    }
+  }
+
+  function onProjectDeleteClicked()
+  {
+    if (window.confirm("Are you sure to delete this project and its associated data? This action cannot be undone."))
+    {
+      const dpt = myDepartments[departmentIndex];
+      setIsDeleting(true);
+      ProjectApiUtils.deleteProject(dpt.id, dpt.projects[projectIndex].id)
+        .then(() =>
+        {
+          setIsDeleting(false);
+          window.scrollTo(0, 0);
+          if (onProjectDeleted)
+            onProjectDeleted();
+        })
+        .catch((err) => 
+        {
+          setIsDeleting(false);
+          console.error(err);
+        });
     }
   }
 
@@ -68,11 +100,34 @@ const ProjectsContainer = ({ departments, onProjectAdded }) =>
     // Add id for the API call
     const dpt = myDepartments[departmentIndex];
     updatedProject.id = dpt.projects[projectIndex].id;
-    return ProjectApiUtils.postProject(dpt.id, updatedProject);
+    return ProjectApiUtils.updateProject(dpt.id, updatedProject.id, updatedProject);
   }
+
+  function onUserAdded()
+  {
+    fetchProjectMembers();
+  }
+
+  function fetchProjectMembers()
+  {
+    if (projectMembers != null)
+      setProjectMembers(null);
+    if (myDepartments[departmentIndex].projects[projectIndex])
+    {
+      const projectId = myDepartments[departmentIndex].projects[projectIndex].id;
+      ProjectApiUtils.getMembersFromProject(projectId)
+      .then(data => setProjectMembers(data))
+      .catch(err => console.error(err));
+    } else 
+    {
+      setProjectMembers(null);
+    }
+  }
+
 
   if (JSON.stringify(myDepartments) !== JSON.stringify(departments)) // When the department property is changed 
   {
+    setIsAddLoading(false);
     setMyDepartments(departments);
     return;
   }
@@ -94,14 +149,17 @@ const ProjectsContainer = ({ departments, onProjectAdded }) =>
     return <SidePaneElement key={i} selected={i === projectIndex} onClick={() => setProjectIndex(i)}>{x.name}</SidePaneElement>;
   });
 
-  
-
   let Content;
   if (projects.length === 0)
   {
     Content = <p>There are no projects in this department. Click on "Add new project" to create a new one.</p>
   } else
   {
+    if (projectIndex >= projects.length)
+      {
+        setProjectIndex(0);
+        return;
+      }
     const currentProject = projects[projectIndex];
     Content = (
       <>
@@ -113,7 +171,7 @@ const ProjectsContainer = ({ departments, onProjectAdded }) =>
             value={currentProject.name} 
             fieldName="name"
             postFunction={updateProject}
-            onUpdated={onProjectNameUpdated} />
+            onUpdated={onProjectAttributeUpdated} />
         </SettingGroup>
         <SettingGroup
           name="Description"
@@ -123,20 +181,27 @@ const ProjectsContainer = ({ departments, onProjectAdded }) =>
             key={`${departmentIndex}-${projectIndex}`}
             fieldName="description"
             value={currentProject.description}
-            postFunction={updateProject} />
+            postFunction={updateProject}
+            onUpdated={onProjectAttributeUpdated} />
         </SettingGroup>
         <SettingGroup
           name="Add user to project"
           description="Type their name below. They must be a department member.">
-          <AddElementForm
-            submitText="Add to ColorLounge"
-            attributeName="Full Name"
-            attributePlaceholder="Harvey Specter" />
+          <AddUserToProject
+            key={currentProject.name}
+            onUserAdded={onUserAdded}
+            projectId={currentProject.id}
+            submitText={`Add to ${currentProject.name}`} />
         </SettingGroup>
         <SettingGroup
           name="Members"
-          description="Current project members are shown below. Click on an user to see their history.">
-          {/* <UserList /> */}
+          description="Click on a user to see their profile and hover to show available actions.">
+          <ProjectMemberList
+            key={`${departmentIndex}-${projectIndex}`}
+            projectId={currentProject.id}
+            loading={projectMembers == null}
+            members={projectMembers} 
+            onListUpdated={fetchProjectMembers} />
         </SettingGroup>
         <SettingGroup
           name="Milestones"
@@ -157,25 +222,39 @@ const ProjectsContainer = ({ departments, onProjectAdded }) =>
           name="Delete project"
           description="Deletes the project, as well as its associated members, tags and tasks. <br>This action cannot be undone.">
           <Button
-            className="Button--red">
-            Delete project
+            className="Button--red"
+            onClick={onProjectDeleteClicked}>
+            {isDeleting ? <Spinner red /> : "Delete project"}
         </Button>
         </SettingGroup>
       </>
     );
   }
+
+  let addBtn;
+  if (isAddLoading)
+  {
+    addBtn = <Spinner />
+  } else
+  {
+    addBtn = (
+      <>
+        <FontAwesomeIcon
+          icon={faPlus}
+          className="AddIcon" />
+        Add new project
+      </>);
+  }
+
   return (
     <div className="SubsettingContainer">
       <div className="SubsettingSidePane">
         {DepartmentElements}
       </div>
       <div className="SubsettingSidePane SubsettingSidePane--Second">
-        <SidePaneElement onClick={createProject}
-          highlighted>
-          <FontAwesomeIcon
-            icon={faPlus}
-            className="AddIcon" />
-          Add new project
+        <SidePaneElement reducedpadding={isAddLoading} onClick={createProject}
+          highlighted elementDiv={isAddLoading}>
+          {addBtn}
           </SidePaneElement>
         {ProjectElements}
       </div>

@@ -12,9 +12,9 @@ import "../SubsettingContainer.css";
 const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
 {
 
-  function onDepartmentNameUpdated(name)
+  function onDepartmentAttributeUpdated(field, value)
   {
-    if (name !== myDepartments[selectedIndex].name)
+    if (value !== myDepartments[selectedIndex][field])
     {
       // Update department object
       setMyDepartments(Object.values({
@@ -22,7 +22,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
         [selectedIndex]:
         {
           ...myDepartments[selectedIndex],
-          name: name
+          [field]: value
         }
       }));
     }
@@ -46,7 +46,6 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
           console.error(err);
         });
     }
-
   }
 
   function updateDepartment(updatedDepartment)
@@ -114,7 +113,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
             value={currentDepartment.name}
             fieldName="name"
             postFunction={updateDepartment}
-            onUpdated={onDepartmentNameUpdated} />
+            onUpdated={onDepartmentAttributeUpdated} />
         </SettingGroup>
         <SettingGroup
           name="Description"
@@ -124,7 +123,8 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
             smaller
             value={currentDepartment.description}
             fieldName="description"
-            postFunction={updateDepartment} />
+            postFunction={updateDepartment}
+            onUpdated={onDepartmentAttributeUpdated} />
         </SettingGroup>
         <SettingGroup
           name="Add user to department"
@@ -133,9 +133,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
             key={currentDepartment.name}
             onUserAdded={onUserAdded}
             departmentId={currentDepartment.id}
-            submitText={`Add to ${currentDepartment.name}`}
-            attributeName="Full Name"
-            attributePlaceholder="Harvey Specter" />
+            submitText={`Add to ${currentDepartment.name}`} />
         </SettingGroup>
         <SettingGroup
           name="Members"

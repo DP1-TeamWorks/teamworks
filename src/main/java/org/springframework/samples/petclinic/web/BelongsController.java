@@ -89,14 +89,13 @@ public class BelongsController {
 				belongs.setIsDepartmentManager(false);
 				if (currentBelongs != null)
                 {
-                    // End the the previous belongs
+                    // End the previous belongs
                     currentBelongs.setFinalDate(LocalDate.now());
                     belongsService.saveBelongs(currentBelongs);
                 }
 
 				if (isDepartmentManager != null && isDepartmentManager)
 				{
-				    Department dp = departmentService.findDepartmentById(departmentId);
 				    belongs.setIsDepartmentManager(true);
                     Belongs departmentManagerBelongs = belongsService.findCurrentDepartmentManager(departmentId);
                     if (departmentManagerBelongs != null && departmentManagerBelongs.getUserTW().equals(user))

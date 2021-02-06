@@ -51,7 +51,7 @@ const ProjectSettings = () =>
           name="Manage projects"
           description="Only showing projects you have management permissions on.">
         </SettingGroup>
-        <ProjectsContainer departments={departments} onProjectAdded={retrieveDepartments} />;
+        <ProjectsContainer departments={departments} onProjectAdded={retrieveDepartments} onProjectDeleted={retrieveDepartments} />
       </div>
     );
   }

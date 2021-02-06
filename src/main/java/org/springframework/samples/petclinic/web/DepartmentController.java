@@ -81,8 +81,6 @@ public class DepartmentController {
     @PatchMapping(value = "/api/departments")
     public ResponseEntity<String> updateDepartment(@RequestBody Department department, HttpServletRequest r) {
         try {
-            Integer teamId = (Integer) r.getSession().getAttribute("teamId");
-            Team team = teamService.findTeamById(teamId);
             Department dbDepartment = departmentService.findDepartmentById(department.getId());
             if (dbDepartment == null)
                 return ResponseEntity.badRequest().build();
