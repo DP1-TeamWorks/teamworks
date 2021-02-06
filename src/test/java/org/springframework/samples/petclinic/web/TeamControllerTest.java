@@ -2,8 +2,10 @@ package org.springframework.samples.petclinic.web;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.TestWebConfig;
 import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
@@ -59,16 +62,48 @@ public class TeamControllerTest {
 		atomatic.setName("Atomatic");
 		atomatic.setIdentifier("ATOM");
 		mockSession.setAttribute("teamId",TEST_TEAM_ID);
-		
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(atomatic);		
 	}
 	
 	@Test
 	void testGetTeamName() throws Exception {
-		String atomaticjson = objectMapper.writeValueAsString(atomatic);
 		mockMvc.perform(get("/api/team").session(mockSession))
-		.andExpect(status().isOk());
-		//.andExpect(content().json(atomaticjson));
+		.andExpect(status().isOk())
+		.andExpect(status().is(200))
+		.andExpect(content().string("Atomatic"));
+	}
+	
+	@Test
+	void testUpdateTeam() throws Exception {
+		atomatic.setName("AtomaticUpdated");
+		atomatic.setIdentifier("ATOMUPDATED");
+		String atomaticupdated = objectMapper.writeValueAsString(atomatic);
+		mockMvc.perform(post("/api/team").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
+		.andExpect(status().isOk())
+		.andExpect(status().is(200));	
 		
+		mockMvc.perform(get("/api/team").session(mockSession))
+		.andExpect(status().is(200))
+		.andExpect(content().string("AtomaticUpdated"));
+	}
+	
+	@Test
+	void testUpdateTeamNull() throws Exception {
+		atomatic.setName(null);
+		//atomatic.setIdentifier("ATOMUPDATED");
+		String atomaticupdated = objectMapper.writeValueAsString(atomatic);
+		mockMvc.perform(post("/api/team").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
+		.andExpect(status().isOk())
+		.andExpect(status().is(200));	
+		
+		mockMvc.perform(get("/api/team").session(mockSession))
+		.andExpect(status().is(200))
+		.andExpect(content().string("AtomaticUpdated"));
+	}
+	
+	@Test
+	void testGetTeamNameUpdated() throws Exception {
+		mockMvc.perform(get("/api/team").session(mockSession))
+		.andExpect(content().string("Atomatic"));
 	}
 }

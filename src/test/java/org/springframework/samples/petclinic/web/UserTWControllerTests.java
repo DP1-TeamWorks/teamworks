@@ -124,7 +124,7 @@ class UserTWControllerTests {
     @Test
 	void testInitCreationForm() throws Exception {
 		String georgejson = objectMapper.writeValueAsString(george);
-		mockMvc.perform(post("/api/userTW").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(georgejson)).andExpect(status().is(200));
+		mockMvc.perform(post("/api/user").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(georgejson)).andExpect(status().is(200));
 	}
 
 
