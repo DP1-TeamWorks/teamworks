@@ -2,6 +2,9 @@ package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,10 +12,7 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.samples.petclinic.model.Belongs;
-import org.springframework.samples.petclinic.model.Department;
-import org.springframework.samples.petclinic.model.Role;
-import org.springframework.samples.petclinic.model.UserTW;
+import org.springframework.samples.petclinic.model.*;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.UserTWService;
@@ -47,11 +47,11 @@ public class BelongsController {
 	// Belongs Requests
 
     @GetMapping(value="/api/departments/belongs")
-    public ResponseEntity<Collection<Belongs>> getBelongsFromDepartment(@RequestParam(required = true) Integer departmentId, HttpServletRequest r)
+    public ResponseEntity<List<Belongs>> getBelongsFromDepartment(@RequestParam(required = true) Integer departmentId, HttpServletRequest r)
     {
         try
         {
-            Collection<Belongs> belongs = belongsService.findCurrentBelongsInDepartment(departmentId);
+            List<Belongs> belongs = belongsService.findCurrentBelongsInDepartment(departmentId).stream().sorted(Comparator.comparing(Belongs::getLastname).thenComparing(Belongs::getName)).collect(Collectors.toList());
             return ResponseEntity.ok(belongs);
         } catch (DataAccessException e)
         {
@@ -99,11 +99,19 @@ public class BelongsController {
 				    Department dp = departmentService.findDepartmentById(departmentId);
 				    belongs.setIsDepartmentManager(true);
                     Belongs departmentManagerBelongs = belongsService.findCurrentDepartmentManager(departmentId);
-                    if (departmentManagerBelongs != null && departmentManagerBelongs.getUserTW().equals(user))
+                    if (departmentManagerBelongs != null)
                     {
                         // they're department manager. since there can only be one, they will lose privileges
                         departmentManagerBelongs.setFinalDate(LocalDate.now());
                         belongsService.saveBelongs(departmentManagerBelongs);
+                        // Create a new belong but without privileges
+                        Belongs replacingBelongs = new Belongs();
+                        replacingBelongs.setUserTW(departmentManagerBelongs.getUserTW());
+                        replacingBelongs.setInitialDate(LocalDate.now());
+                        replacingBelongs.setFinalDate(null);
+                        replacingBelongs.setIsDepartmentManager(false);
+                        replacingBelongs.setDepartment(department);
+                        belongsService.saveBelongs(replacingBelongs);
                     }
 				}
 				belongsService.saveBelongs(belongs);

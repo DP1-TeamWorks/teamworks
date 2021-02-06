@@ -1,6 +1,9 @@
 package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -49,6 +52,19 @@ public class ParticipationController {
 		dataBinder.setDisallowedFields("id");
 	}
 
+    @GetMapping(value="/api/projects/participation")
+    public ResponseEntity<Collection<Participation>> getParticipationsFromProject(@RequestParam(required = true) Integer projectId, HttpServletRequest r)
+    {
+        try
+        {
+            Collection<Participation> belongs = participationService.findCurrentParticipationsInDepartment(projectId).stream().sorted(Comparator.comparing(Participation::getLastname).thenComparing(Participation::getName)).collect(Collectors.toList());
+            return ResponseEntity.ok(belongs);
+        } catch (DataAccessException e)
+        {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 	@PostMapping(value = "/api/projects/participation")
 	public ResponseEntity<String> postParticipation(@RequestParam(required = true) Integer participationUserId,
 			@RequestParam(required = true) Integer projectId,
@@ -77,13 +93,34 @@ public class ParticipationController {
 				participation.setProject(project);
 				participation.setUserTW(participationUser);
 				participation.setIsProjectManager(false);
-				// Solo puedes asignar el rol de project manager si eres teamOwner o
-				// departmentManager
-				if (willBeProjectManager != null) {
-					participation.setIsProjectManager(willBeProjectManager);
-					if (managerParticipation != null) {
-						managerParticipation.setIsProjectManager(!willBeProjectManager);
-						participationService.saveParticipation(managerParticipation);
+				if (willBeProjectManager != null && managerBelongs == null && !user.getRole().equals(Role.team_owner))
+                {
+                    // Solo puedes asignar el rol de project manager si eres teamOwner o dptManager
+                    return ResponseEntity.badRequest().build();
+                }
+
+                if (userCurrentParticipation != null)
+                {
+                    // End the previous participation
+                    userCurrentParticipation.setFinalDate(LocalDate.now());
+                    participationService.saveParticipation(userCurrentParticipation);
+                }
+
+				if (willBeProjectManager != null && willBeProjectManager) {
+					participation.setIsProjectManager(true);
+					Participation projectManagerParticipation = participationService.findCurrentProjectManager(projectId);
+					if (projectManagerParticipation != null) {
+						projectManagerParticipation.setFinalDate(LocalDate.now());
+						participationService.saveParticipation(projectManagerParticipation);
+						// Create a new participation but without privileges
+                        Participation replacingParticipation = new Participation();
+                        replacingParticipation.setUserTW(projectManagerParticipation.getUserTW());
+                        replacingParticipation.setInitialDate(LocalDate.now());
+                        replacingParticipation.setFinalDate(null);
+                        replacingParticipation.setIsProjectManager(false);
+                        replacingParticipation.setProject(project);
+                        participationService.saveParticipation(replacingParticipation);
+
 					}
 				}
 				participationService.saveParticipation(participation);

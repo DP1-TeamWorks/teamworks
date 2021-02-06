@@ -39,7 +39,7 @@ public class ToDo extends BaseEntity {
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "user_id")
-
+    @JsonIgnore
     private UserTW assignee;
 
     @ManyToOne(optional = false)
@@ -55,5 +55,25 @@ public class ToDo extends BaseEntity {
     @JsonIgnore
     @ManyToMany
     private List<Message> messages;
+
+    public Integer getAssigneeId()
+    {
+        return assignee.getId();
+    }
+
+    public String getAssigneeName()
+    {
+        return assignee.getName();
+    }
+
+    public String getAssigneeLastname()
+    {
+        return assignee.getLastname();
+    }
+
+    public String getAssigneeEmail()
+    {
+        return assignee.getEmail();
+    }
 
 }
