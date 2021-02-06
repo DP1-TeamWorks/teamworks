@@ -60,7 +60,7 @@ public class Belongs extends BaseEntity {
         return userTW.getName();
     }
 
-    public String getLastName()
+    public String getLastname()
     {
         return userTW.getLastname();
     }

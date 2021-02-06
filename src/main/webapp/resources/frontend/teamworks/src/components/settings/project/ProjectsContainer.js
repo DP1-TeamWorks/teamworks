@@ -191,6 +191,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
             key={currentProject.name}
             onUserAdded={onUserAdded}
             projectId={currentProject.id}
+            departmentId={departments[departmentIndex].id}
             submitText={`Add to ${currentProject.name}`} />
         </SettingGroup>
         <SettingGroup
