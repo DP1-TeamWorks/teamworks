@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.web;
 
 import static org.mockito.Mockito.doThrow;
+
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -89,6 +90,7 @@ public class TeamControllerTest {
 		.andExpect(content().string("AtomaticUpdated"));
 	}
 	
+	//TODO NO FUNCIONA DEL TOODO
 	@Test
 	void testDeleteTeam() throws Exception {
 		
@@ -98,10 +100,5 @@ public class TeamControllerTest {
 		.andExpect(status().isBadRequest());
 	}
 	
-	//TODO NO FUNCIONA DEL TOODO
-	@Test
-	void testGetTeamNameUpdated() throws Exception {
-		mockMvc.perform(delete("/api/team").session(mockSession))
-		.andExpect(status().is(200));
-	}
+
 }

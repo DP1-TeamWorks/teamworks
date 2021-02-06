@@ -27,8 +27,8 @@ public class DepartmentController {
 	private final BelongsService belongsService;
 
 	@Autowired
-	public DepartmentController(DepartmentService departmentService, TeamService teamService,
-			UserTWService userTWService, BelongsService belongsService) {
+	public DepartmentController(DepartmentService departmentService, TeamService teamService, BelongsService belongsService) {
+		
 		this.departmentService = departmentService;
 		this.teamService = teamService;
 		this.belongsService = belongsService;

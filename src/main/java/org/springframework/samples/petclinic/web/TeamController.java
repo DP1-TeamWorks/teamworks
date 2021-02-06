@@ -66,7 +66,7 @@ public class TeamController {
 			teamService.deleteTeamById(teamId);
 			return ResponseEntity.ok("Team deleted");
 		} catch (DataAccessException d) {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.badRequest().build();
 		}
 	}
 
