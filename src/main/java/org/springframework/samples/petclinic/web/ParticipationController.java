@@ -103,24 +103,22 @@ public class ParticipationController {
 	public ResponseEntity<String> deleteParticipation(@RequestParam(required = true) Integer participationUserId,
 			@RequestParam(required = true) Integer projectId, HttpServletRequest r) {
 		try {
+		    // Authority is accounted for in projectmanagerinterceptor
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
-			Participation participation = participationService.findCurrentParticipation(participationUserId, projectId);
-			Project project = participation.getProject();
-			Boolean isDepartmentManager = belongsService
-					.findCurrentBelongs(user.getId(), project.getDepartment().getId()).getIsDepartmentManager();
-			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
-			Boolean isProjectManager = participation.getIsProjectManager();
-
-			if (isProjectManager == false || (isDepartmentManager || isTeamOwner)) {
-				participation.setFinalDate(LocalDate.now());
-				participationService.saveParticipation(participation);
-				return ResponseEntity.ok("Participation delete");
-			} else {
-				return ResponseEntity.status(403).build();
-			}
+			Participation currentParticipation = participationService.findCurrentParticipation(participationUserId, projectId);
+			if (currentParticipation != null)
+            {
+                // End the participation
+                currentParticipation.setFinalDate(LocalDate.now());
+                participationService.saveParticipation(currentParticipation);
+                return ResponseEntity.ok().build();
+            }
+			else {
+                return ResponseEntity.badRequest().build();
+            }
 
 		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.badRequest().build();
 		}
 
 	}
