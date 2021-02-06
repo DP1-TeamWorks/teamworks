@@ -128,7 +128,8 @@ const InputAutocompleteUser = ({ name, placeholder, departmentId, projectId, onU
         container: 'SuggestionsContainer',
         suggestionsList: 'SuggestionsList',
         suggestion: 'Suggestion',
-        suggestionHighlighted: 'Suggestion--Highlighted'
+        suggestionHighlighted: 'Suggestion--Highlighted',
+        suggestionsContainer: 'SuggestionsListBox'
     }
 
     return (
