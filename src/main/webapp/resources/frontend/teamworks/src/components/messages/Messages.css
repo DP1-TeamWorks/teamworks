@@ -150,6 +150,7 @@
 .SecondLineFlex {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .CloseNewMsg {
@@ -177,6 +178,11 @@
   width: 100%;
 }
 
+.InputContainer2 {
+  margin-right: 10px;
+  width: 49.3%;
+}
+
 .InputContainer:last-child {
   margin-right: 0px;
 }
@@ -196,7 +202,7 @@
 .NewMsgHeadText {
   position: absolute;
   left: 10px;
-  top: 29px;
+  top: 19px;
   color: #a6ce56;
   font-family: Inter;
   font-style: normal;
@@ -209,7 +215,7 @@
 .NewMsgHead {
   width: 100%;
   padding-left: 80px;
-  margin-top: 19px;
+  margin-top: 9px;
 }
 
 .NewMsgForm{
@@ -278,8 +284,4 @@
 
 .css-1uccc91-singleValue{
   color: white !important;
-}
-
-.css-2613qy-menu{
-  background-color: #292d22;
 }

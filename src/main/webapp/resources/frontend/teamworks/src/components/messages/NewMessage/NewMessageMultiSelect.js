@@ -6,9 +6,10 @@ const NewMessageMultiSelect = ({
   placeholder,
   options,
   changeHandler,
+  className
 }) => {
   return (
-    <div className="InputContainer">
+    <div className={`InputContainer ${className}`}>
       <p className="TitleNewMsg">{name}</p>
       <Select
         options={options}
@@ -50,10 +51,17 @@ const customStyles = {
   multiValue: (base) => ({
     ...base,
     backgroundColor: "#a6ce56",
+    
+  }),
+  valueContainer: (base) =>({
+    ...base,
+    flexDirection: "row",
+    flexWrap: "nowrap"
+    
   }),
   multiValueLabel: (base) => ({
     ...base,
-    color: "white",
+    color: "#262626",
   }),
 };
 
