@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import java.time.LocalDate;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +18,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 @Getter
 @Setter
@@ -37,21 +37,27 @@ public class UserTW extends BaseEntity {
 
     // Attributes
 
-    @NotNull
-    @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
-    @NotEmpty
-    @Size(min = 1, max = 25)
-    @Column(name = "name")
-    String name;
+	@NotNull
+	@Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
+	@NotEmpty
+	@Size(min=1,max=25)
+	@Column(name = "name")
+	String name;
+	
+	@Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
+	@NotEmpty
+	@Size(min=1,max=120)
+	@Column(name = "lastname")
+	String lastname;
 
-    @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
-    @NotEmpty
-    @Size(min = 1, max = 120)
-    @Column(name = "lastname")
-    String lastname;
+	
+	
+	@Column(name = "email", unique = true)
+	String email;
 
-    @Column(name = "email", unique = true)
-    String email;
+	
+	@Column(name = "password")
+	String password;
 
     @Column(name = "password")
     String password;
@@ -85,4 +91,14 @@ public class UserTW extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "assignee")
     private List<ToDo> toDos;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<Message> messagesSent;
+
+	@JsonIgnore
+    @ManyToMany(mappedBy="recipients")
+    private List<Message> messagesReceived;
+
+
 }

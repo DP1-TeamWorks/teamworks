@@ -304,51 +304,52 @@ values
     );
 
 INSERT INTO
-    MESSAGES_RECIPIENTS(message_id, recipients_id)
+    MESSAGES_RECIPIENTS(messages_received_id, recipients_id)
 values
     (1, 2);
 
 INSERT INTO
-    MESSAGES_RECIPIENTS(message_id, recipients_id)
+    MESSAGES_RECIPIENTS(messages_received_id, recipients_id)
 values
     (2, 2);
 
 INSERT INTO
-    MESSAGES_RECIPIENTS(message_id, recipients_id)
+    MESSAGES_RECIPIENTS(messages_received_id, recipients_id)
 values
     (3, 2);
 
 INSERT INTO
-    MESSAGES_RECIPIENTS(message_id, recipients_id)
+    MESSAGES_RECIPIENTS(messages_received_id, recipients_id)
 values
     (4, 2);
 
 INSERT INTO
-    MESSAGES_RECIPIENTS(message_id, recipients_id)
+    MESSAGES_RECIPIENTS(messages_received_id, recipients_id)
 values
     (5, 3);
 
 INSERT INTO
-    MESSAGES_RECIPIENTS(message_id, recipients_id)
+    MESSAGES_RECIPIENTS(messages_received_id, recipients_id)
 values
     (6, 1);
 
 INSERT INTO
-    MESSAGES_TAGS(message_id, tags_id)
+    TAGS_MESSAGES(tags_id, messages_id)
 values
     (2, 1);
 
 INSERT INTO
-    MESSAGES_TAGS(message_id, tags_id)
+    TAGS_MESSAGES(tags_id, messages_id)
 values
     (2, 3);
 
 INSERT INTO
-    MESSAGES_TAGS(message_id, tags_id)
+    TAGS_MESSAGES(tags_id, messages_id)
 values
     (3, 2);
 
 INSERT INTO
-    MESSAGES_TAGS(message_id, tags_id)
+    TAGS_MESSAGES(tags_id, messages_id)
 values
     (1, 1);
+

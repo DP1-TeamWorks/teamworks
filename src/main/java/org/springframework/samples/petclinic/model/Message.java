@@ -16,6 +16,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,25 +31,39 @@ import org.hibernate.annotations.CreationTimestamp;
 @Entity
 @Table(name = "messages")
 public class Message extends BaseEntity {
+	// Attributes
+	
+	@Column(name = "timestamp")
+	@CreationTimestamp
+	LocalDate timestamp;
 
-    // Attributes
+	
+	@Column(name = "subject")
+	private String subject;
 
-    @Column(name = "timestamp")
-    @CreationTimestamp
-    LocalDate timestamp;
+	
+	@Column(name = "text")
+	private String text;
 
     @Column(name = "subject")
     private String subject;
 
-    @Column(name = "text")
-    private String text;
+	@Transient
+	private List<String> recipientsEmails;
+	
+	@Transient
+	private List<Integer> recipientsIds;
 
     @NotNull
     @Column(name = "read")
     private Boolean read;
 
-    @Transient
-    private List<String> recipientsEmails;
+	
+	
+	// Relations
+	@OneToOne(optional = true)
+	@JoinColumn(name = "reply_to")
+	private Message replyTo;
 
     @Transient
     private List<Integer> toDoList;
