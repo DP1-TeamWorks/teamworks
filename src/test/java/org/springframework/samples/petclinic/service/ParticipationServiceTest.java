@@ -74,7 +74,7 @@ public class ParticipationServiceTest {
         participation.setProject(project);
         participation.setUserTW(user);
         user.getParticipation().add(participation);
-        project.getParticipation().add(participation);
+        project.getParticipations().add(participation);
         participation.setIsProjectManager(false);
         try {
             this.participationService.saveParticipation(participation);
@@ -87,7 +87,7 @@ public class ParticipationServiceTest {
         assertThat(participation.getId()).isNotNull();
         assertThat(participation.getUserTW().getId()).isEqualTo(user.getId());
         assertThat(participation.getProject().getId()).isEqualTo(project.getId());
-        assertThat(project.getParticipation().contains(participation)).isTrue();
+        assertThat(project.getParticipations().contains(participation)).isTrue();
         assertThat(user.getParticipation().contains(participation)).isTrue();
 
     }
