@@ -42,7 +42,6 @@ const Inbox = ({ search, setSearch }) => {
         case "Inbox":
           MessageApiUtils.getMyInboxMessages()
             .then((res) => {
-              console.log("Getting Inbox Messages");
               setSelectedMessages(res);
             })
             .catch((error) => {

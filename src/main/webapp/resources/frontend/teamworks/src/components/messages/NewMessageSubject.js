@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Input from "../forms/Input";
-import NewMessageInput from "./NewMessageInput";
+import NewMessageMultiSelect from "./NewMessageMultiSelect";
 
 export default function NewMessageSubject({ name }) {
   return (
@@ -10,7 +10,7 @@ export default function NewMessageSubject({ name }) {
         styleClass="Input NewMsgHead InputNewMsg"
         placeholder="How are you?"
       ></Input>
-      <NewMessageInput name="ToDo" placeholder="ToDos"></NewMessageInput>
+      <NewMessageMultiSelect name="ToDos" placeholder="ToDos"></NewMessageMultiSelect>
     </div>
   );
 }

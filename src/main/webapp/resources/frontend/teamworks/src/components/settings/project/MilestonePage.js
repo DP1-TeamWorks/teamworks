@@ -1,4 +1,4 @@
-import GoBackButton from "../buttons/GoBackButton"
+import GoBackButton from "../../buttons/GoBackButton"
 
 const MilestonePage = ({ match: { params: { projectId, milestoneId } } }) =>
 {

@@ -8,7 +8,6 @@ const InboxSidebarTab = ({
   isTag,
   children,
 }) => {
-  console.log(selectedTab);
   let className = isTag ? "SidebarTab SidebarTab--Tag" : "SidebarTab";
   if (selectedTab === text) {
     className += " SidebarTab--Selected";

@@ -1,11 +1,10 @@
-import Button from "../buttons/Button";
-import GoBackButton from "../buttons/GoBackButton";
-import ProfileHeader from "../profile/ProfileHeader";
-import EditableField from "./EditableField";
-import SettingGroup from "./SettingGroup";
-import UserList from "./UserList";
+import Button from "../../buttons/Button";
+import GoBackButton from "../../buttons/GoBackButton";
+import ProfileHeader from "../../profile/ProfileHeader";
+import EditableField from "../EditableField";
+import SettingGroup from "../SettingGroup";
 
-const UserPage = ({ match: { params: { userId } }, backPath }) =>
+const UserPage = ({ match: { params: { userId } } }) =>
 {
     return (
         <>
@@ -14,7 +13,7 @@ const UserPage = ({ match: { params: { userId } }, backPath }) =>
                 src="/default_pfp.png"
                 role="Team Manager"
                 name={`User ${userId}`}>
-                <GoBackButton darker anchored path={backPath} />
+                <GoBackButton darker anchored />
             </ProfileHeader>
             <div className="SettingGroupsContainer">
                 <SettingGroup name="Name">
@@ -30,10 +29,10 @@ const UserPage = ({ match: { params: { userId } }, backPath }) =>
                     <EditableField id="join-date" value="01/10/2021" editable={false} />
                 </SettingGroup>
                 <SettingGroup name="Departments" description="A list of the departments the user belongs or has belonged to.">
-                    <UserList />
+                    {/* <UserList /> */}
                 </SettingGroup>
                 <SettingGroup name="Projects" description="A list of the projects the user partipates or has participated in.">
-                    <UserList />
+                    {/* <UserList /> */}
                 </SettingGroup>
                 <SettingGroup danger name="Delete user" description="Deletes the user from the team. <br>This action cannot be undone.">
                     <Button className="Button--red">Delete user</Button>

@@ -55,6 +55,7 @@
 
 .Input:focus .InputNewToDo:focus {
   outline: none;
+  border-color: rgba(208, 240, 144, 0.8);
 }
 
 .SubmitButton {

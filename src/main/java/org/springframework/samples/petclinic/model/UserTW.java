@@ -28,9 +28,17 @@ import lombok.Setter;
 @Table(name = "users")
 
 public class UserTW extends BaseEntity {
-	
-	  // Attributes
-	
+
+    public interface StrippedUser
+    {
+        Integer getId();
+        String getName();
+        String getLastname();
+    }
+
+    // Attributes
+
+	@NotNull
 	@Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
 	@NotEmpty
 	@Size(min=1,max=25)
@@ -60,7 +68,7 @@ public class UserTW extends BaseEntity {
 
 	@NotNull
 	Role role;
-	
+
 	// Relations
 
 	@ManyToOne(optional = false)

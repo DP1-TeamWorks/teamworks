@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.Tag;
+import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.MessageService;
 import org.springframework.samples.petclinic.service.TagService;
+import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,17 +29,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 public class MessageController {
 	private final MessageService messageService;
 	private final UserTWService userService;
 	private final TagService tagService;
+	private final ToDoService toDoService;
 
 	@Autowired
-	public MessageController(MessageService messageService, UserTWService userService, TagService tagService) {
+	public MessageController(MessageService messageService, UserTWService userService, TagService tagService,
+			ToDoService toDoService) {
 		this.messageService = messageService;
 		this.userService = userService;
 		this.tagService = tagService;
+		this.toDoService = toDoService;
 	}
 
 	@InitBinder
@@ -124,22 +133,18 @@ public class MessageController {
 		}
 	}
 
-	@PostMapping(value = "api/message/new")
+	// @Valid delante de requestbody
+	@PostMapping(value = "api/message")
 	public ResponseEntity<String> newMessage(HttpServletRequest r, @Valid @RequestBody Message message) {
 		try {
 			Integer userId = (Integer) r.getSession().getAttribute("userId");
 			UserTW sender = userService.findUserById(userId);
 			message.setSender(sender);
 			message.setRead(false);
-
-			List<UserTW> recipientList = new ArrayList<>();
-			for (int i = 0; i < message.getRecipientsIds().size(); i++) {
-				UserTW recipient = userService.findUserById(message.getRecipientsIds().get(i));
-				recipientList.add(recipient);
-			}
+			log.info("Setting the recipient list of: " + message.toString());
+			List<UserTW> recipientList = message.getRecipientsEmails().stream()
+					.map(mail -> userService.findByEmail(mail)).collect(Collectors.toList());
 			message.setRecipients(recipientList);
-			// TODO set tags in message
-
 			messageService.saveMessage(message);
 			return ResponseEntity.ok().build();
 
