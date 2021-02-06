@@ -122,16 +122,27 @@ public class ProjectController {
 	}
 
 	@PatchMapping(value = "/api/projects")
-    public ResponseEntity<String> updateProject(@RequestParam(required = true) Integer departmentId, @RequestParam(required=true) Integer projectId,
-                                               @RequestBody Project project,BindingResult errors) {
-        try {
-        	projectValidator.validate(project, errors);
-            Project dbProject = projectService.findProjectById(projectId);
-            if (errors.hasErrors()||dbProject == null)
-                return ResponseEntity.badRequest().body(errors.getAllErrors().toString());
+	public ResponseEntity<String> updateProject(@RequestParam(required = true) Integer departmentId,
+			@RequestParam(required = true) Integer projectId, @RequestBody Project project, BindingResult errors) {
+		try {
+			projectValidator.validate(project, errors);
+			Project dbProject = projectService.findProjectById(projectId);
+			if (errors.hasErrors() || dbProject == null)
+				return ResponseEntity.badRequest().body(errors.getAllErrors().toString());
 
-            dbProject.setId(projectId);
+			dbProject.setId(projectId);
 
+			if (project.getName() != null)
+				dbProject.setName(project.getName());
+			if (project.getDescription() != null)
+				dbProject.setDescription(project.getDescription());
+
+			projectService.saveProject(dbProject);
+
+			return ResponseEntity.ok("Department updated");
+		} catch (DataAccessException d) {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 
 	// TODO: discutir departmentID (INTERCEPTOR)
