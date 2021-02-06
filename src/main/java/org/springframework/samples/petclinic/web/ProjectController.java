@@ -22,10 +22,13 @@ import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.ProjectService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.ProjectValidator;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,15 +41,18 @@ public class ProjectController {
 	private final ParticipationService participationService;
 	private final UserTWService userTWService;
 	private final BelongsService belongsService;
+	private final ProjectValidator projectValidator;
 
 	@Autowired
 	public ProjectController(DepartmentService departmentService, ProjectService projectService,
-			ParticipationService participationService, UserTWService userTWService, BelongsService belongsService) {
+			ParticipationService participationService, UserTWService userTWService, BelongsService belongsService,
+			ProjectValidator projectValidator) {
 		this.departmentService = departmentService;
 		this.projectService = projectService;
 		this.participationService = participationService;
 		this.userTWService = userTWService;
 		this.belongsService = belongsService;
+		this.projectValidator = projectValidator;
 	}
 
 	@InitBinder
@@ -113,6 +119,18 @@ public class ProjectController {
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
 		}
+	}
+
+	@PatchMapping(value = "/api/projects")
+    public ResponseEntity<String> updateProject(@RequestParam(required = true) Integer departmentId, @RequestParam(required=true) Integer projectId,
+                                               @RequestBody Project project,BindingResult errors) {
+        try {
+        	projectValidator.validate(project, errors);
+            Project dbProject = projectService.findProjectById(projectId);
+            if (errors.hasErrors()||dbProject == null)
+                return ResponseEntity.badRequest().body(errors.getAllErrors().toString());
+
+            dbProject.setId(projectId);
 
 	}
 
