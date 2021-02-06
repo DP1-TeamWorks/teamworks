@@ -17,21 +17,27 @@ import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.DepartmentValidator;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+
+import jdk.internal.org.jline.utils.Log;
 
 @RestController
 public class DepartmentController {
 	private final DepartmentService departmentService;
 	private final TeamService teamService;
 	private final BelongsService belongsService;
+	private final DepartmentValidator departmentValidator;
 
 	@Autowired
 	public DepartmentController(DepartmentService departmentService, TeamService teamService,
-			UserTWService userTWService, BelongsService belongsService) {
+			UserTWService userTWService, BelongsService belongsService,DepartmentValidator departmentValidator) {
 		this.departmentService = departmentService;
 		this.teamService = teamService;
 		this.belongsService = belongsService;
+		this.departmentValidator=departmentValidator;
 	}
 
 	@InitBinder
@@ -79,11 +85,13 @@ public class DepartmentController {
 	}
 
     @PatchMapping(value = "/api/departments")
-    public ResponseEntity<String> updateDepartment(@RequestBody Department department, HttpServletRequest r) {
+    public ResponseEntity<String> updateDepartment(@RequestBody Department department, HttpServletRequest r,BindingResult errors) {
         try {
+        	//log.info("Validando department con id:"+department.getId());
+        	departmentValidator.validate(department, errors);
             Department dbDepartment = departmentService.findDepartmentById(department.getId());
-            if (dbDepartment == null)
-                return ResponseEntity.badRequest().build();
+            if (errors.hasErrors()||dbDepartment == null)
+                return ResponseEntity.badRequest().body(errors.getAllErrors().toString());
 
             // TODO Validate department
          /*   if (department.getName() == "" || department.getDescription() == "")
