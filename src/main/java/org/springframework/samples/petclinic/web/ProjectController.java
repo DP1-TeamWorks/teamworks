@@ -25,7 +25,14 @@ import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.validation.ProjectValidator;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ProjectController {
@@ -38,13 +45,14 @@ public class ProjectController {
 
 	@Autowired
 	public ProjectController(DepartmentService departmentService, ProjectService projectService,
-			ParticipationService participationService, UserTWService userTWService, BelongsService belongsService,ProjectValidator projectValidator) {
+			ParticipationService participationService, UserTWService userTWService, BelongsService belongsService,
+			ProjectValidator projectValidator) {
 		this.departmentService = departmentService;
 		this.projectService = projectService;
 		this.participationService = participationService;
 		this.userTWService = userTWService;
 		this.belongsService = belongsService;
-		this.projectValidator=projectValidator;
+		this.projectValidator = projectValidator;
 	}
 
 	@InitBinder
@@ -94,14 +102,15 @@ public class ProjectController {
 
 		List<Project> l = new ArrayList<>();
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
-		l = participationService.findMyDepartmentProjects(userId, departmentId).stream().collect(Collectors.toList());
+		l = participationService.findMyDepartemntProjects(userId, departmentId).stream().collect(Collectors.toList());
 		return l;
 
 	}
 
 	@PostMapping(value = "/api/projects")
-	public ResponseEntity<String> postProject(@RequestParam(required = true) Integer departmentId,
+	public ResponseEntity<String> postProjects(@RequestParam(required = true) Integer departmentId,
 			@Valid @RequestBody Project project) {
+
 		try {
 			Department depar = departmentService.findDepartmentById(departmentId);
 			project.setDepartment(depar);
@@ -112,30 +121,31 @@ public class ProjectController {
 		}
 	}
 
-    @PatchMapping(value = "/api/projects")
-    public ResponseEntity<String> updateProject(@RequestParam(required = true) Integer departmentId, @RequestParam(required=true) Integer projectId,
-                                               @RequestBody Project project,BindingResult errors) {
-        try {
-        	projectValidator.validate(project, errors);
-            Project dbProject = projectService.findProjectById(projectId);
-            if (errors.hasErrors()||dbProject == null)
-                return ResponseEntity.badRequest().body(errors.getAllErrors().toString());
+	@PatchMapping(value = "/api/projects")
+	public ResponseEntity<String> updateProject(@RequestParam(required = true) Integer departmentId,
+			@RequestParam(required = true) Integer projectId, @RequestBody Project project, BindingResult errors) {
+		try {
+			projectValidator.validate(project, errors);
+			Project dbProject = projectService.findProjectById(projectId);
+			if (errors.hasErrors() || dbProject == null)
+				return ResponseEntity.badRequest().body(errors.getAllErrors().toString());
 
-            dbProject.setId(projectId);
+			dbProject.setId(projectId);
 
-            if (project.getName() != null)
-                dbProject.setName(project.getName());
-            if (project.getDescription() != null)
-                dbProject.setDescription(project.getDescription());
+			if (project.getName() != null)
+				dbProject.setName(project.getName());
+			if (project.getDescription() != null)
+				dbProject.setDescription(project.getDescription());
 
-            projectService.saveProject(dbProject);
+			projectService.saveProject(dbProject);
 
-            return ResponseEntity.ok("Department updated");
-        } catch (DataAccessException d) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
+			return ResponseEntity.ok("Department updated");
+		} catch (DataAccessException d) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
 
+	// TODO: discutir departmentID (INTERCEPTOR)
 	@DeleteMapping(value = "/api/projects")
 	public ResponseEntity<String> deleteProjects(@RequestParam(required = true) Integer departmentId,
 			@RequestParam(required = true) Integer projectId) {

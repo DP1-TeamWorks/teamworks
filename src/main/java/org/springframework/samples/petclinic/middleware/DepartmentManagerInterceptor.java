@@ -19,7 +19,8 @@ public class DepartmentManagerInterceptor extends HandlerInterceptorAdapter {
 	private final DepartmentService departmentService;
 
 	@Autowired
-	public DepartmentManagerInterceptor(UserTWService userTWService, BelongsService belongsService, DepartmentService departmentService) {
+	public DepartmentManagerInterceptor(UserTWService userTWService, BelongsService belongsService,
+			DepartmentService departmentService) {
 		this.belongsService = belongsService;
 		this.userTWService = userTWService;
 		this.departmentService = departmentService;
@@ -30,30 +31,24 @@ public class DepartmentManagerInterceptor extends HandlerInterceptorAdapter {
 		Integer userId = (Integer) req.getSession().getAttribute("userId");
 		UserTW user = userTWService.findUserById(userId);
 		Integer departmentId = Integer.valueOf(req.getParameter("departmentId"));
-		if (departmentId == null)
-        {
-            res.sendError(400);
-            return false;
-        }
-        Department department = departmentService.findDepartmentById(departmentId);
-        if (department == null)
-        {
-            res.sendError(400);
-            return false;
-        }
+		if (departmentId == null) {
+			res.sendError(400);
+			return false;
+		}
+		Department department = departmentService.findDepartmentById(departmentId);
+		if (department == null) {
+			res.sendError(400);
+			return false;
+		}
 		Belongs belongs = belongsService.findCurrentBelongs(userId, departmentId);
-		Boolean isDepartmentManager = false;
 
 		if (user.getTeam().equals(department.getTeam()) && user.getRole().equals(Role.team_owner))
-		    return true;
-		if (belongs == null || !belongs.getIsDepartmentManager())
-        {
-            res.sendError(403);
-            return false;
-        }
-		else
-        {
-            return true;
-        }
+			return true;
+		if (belongs == null || !belongs.getIsDepartmentManager()) {
+			res.sendError(403);
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

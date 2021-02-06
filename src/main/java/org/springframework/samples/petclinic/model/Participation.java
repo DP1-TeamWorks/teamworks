@@ -23,7 +23,7 @@ import lombok.Setter;
 @Table(name = "participations")
 
 public class Participation extends BaseEntity {
-
+	
 	  // Attributes
 
 	@CreationTimestamp
@@ -38,7 +38,7 @@ public class Participation extends BaseEntity {
 	@NotNull
 	@Column(name = "isProjectManager")
 	private Boolean isProjectManager;
-
+	
 	// Relations
 
 	@ManyToOne(optional = false)
@@ -52,25 +52,5 @@ public class Participation extends BaseEntity {
 	@JsonIgnore
 	// @JsonBackReference(value="project-participation")
 	Project project;
-
-    public Integer getUserId()
-    {
-        return userTW.getId();
-    }
-
-    public String getName()
-    {
-        return userTW.getName();
-    }
-
-    public String getLastName()
-    {
-        return userTW.getLastname();
-    }
-
-    public String getEmail()
-    {
-        return userTW.getEmail();
-    }
 
 }

@@ -4,12 +4,12 @@ import Circle from "../tags/Circle";
 import ToDoCircle from "./ToDoCircle";
 
 const ToDo = ({ id, tagList, title , done}) => {
-  console.log("AAAAAA" + done)
   const [isDone, setIsDone] = useState(done);
   const [isDoneAnimation, setIsDoneAnimation] = useState(false);
 
   const markAsDone = () => {
     setIsDoneAnimation(true);
+    console.log("Marking the toDo as done")
     setTimeout(
       () =>
         ToDoApiUtils.markToDoAsDone(id)

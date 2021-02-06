@@ -9,7 +9,6 @@ const MyProjectToDos = ({ projectId }) => {
   const [milestone, setMilestone] = useState({});
   const [toDoList, setToDoList] = useState([]);
   const [reloadToDos, setReloadToDos] = useState(false);
-  console.log(milestone);
 
   useEffect(() => {
     console.log("GETTING NEXT MILESTONE");
@@ -64,6 +63,7 @@ const MyProjectToDos = ({ projectId }) => {
         console.log(toDo);
         return (
           <ToDo
+            key={toDo.id}
             id={toDo.id}
             title={toDo.title}
             tagList={toDo.tags}

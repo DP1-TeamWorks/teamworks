@@ -37,6 +37,13 @@
   padding: 15px;
 }
 
+.ReplyInput {
+  width: 100%;
+  height: 36px;
+  padding: 15px;
+  background: #262626;
+}
+
 .Input {
   background: none;
   border: 1px solid rgba(166, 206, 86, 0.8);
@@ -86,7 +93,7 @@
   stroke-width: 2px;
 }
 
-.InputNewMsg{
+.InputNewMsg {
   border-radius: 4px;
   background: #262626;
   height: 40px;

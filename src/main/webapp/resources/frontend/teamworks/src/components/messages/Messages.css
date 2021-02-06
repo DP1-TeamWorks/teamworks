@@ -100,17 +100,31 @@
 .MsgContentText {
   display: inline-block;
   max-width: 85%;
-  padding: 10px 10px 40px 50px;
+  padding: 10px 10px 20px 50px;
+}
+
+.MsgContentInput {
+  display: inline-block;
+  width: 80%;
+  padding: 10px 0px 0px 50px;
 }
 
 .MsgContentSentTo {
+  color: white;
   max-width: 85%;
   padding: 10px 5px 0px 50px;
 }
 
+.MsgContentToDos {
+  display: inline-block;
+
+  padding: 10px 10px 20px 50px;
+  width: 85%;
+}
+
 .MsgContentButtons {
   display: inline-flex;
-  flex-direction: column;
+  flex-direction: row;
   align-content: space-between;
   align-items: flex-start;
   max-width: 15%;
@@ -121,6 +135,13 @@
 .NewMsgBackground {
   opacity: 40%;
   background-color: #161812;
+}
+
+.fa-reply > path {
+  color: #34382e;
+}
+.fa-forward > path {
+  color: #34382e;
 }
 
 .NewMsgModal {
@@ -144,12 +165,10 @@
   border-radius: 5px;
 }
 
-.NewMsgForm {
-}
-
 .SecondLineFlex {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .CloseNewMsg {
@@ -177,6 +196,11 @@
   width: 100%;
 }
 
+.InputContainer2 {
+  margin-right: 10px;
+  width: 49.3%;
+}
+
 .InputContainer:last-child {
   margin-right: 0px;
 }
@@ -190,14 +214,13 @@
 
 .NewMsgHeadLabel {
   position: relative;
-  display: flex;
   width: 100%;
 }
 
 .NewMsgHeadText {
   position: absolute;
   left: 10px;
-  top: 29px;
+  top: 19px;
   color: #a6ce56;
   font-family: Inter;
   font-style: normal;
@@ -210,10 +233,10 @@
 .NewMsgHead {
   width: 100%;
   padding-left: 80px;
-  margin-top: 19px;
+  margin-top: 9px;
 }
 
-.NewMsgForm{
+.NewMsgForm {
   height: 100%;
 }
 
@@ -277,10 +300,10 @@
     center / contain no-repeat;
 }
 
-.css-1uccc91-singleValue{
+.css-1uccc91-singleValue {
   color: white !important;
 }
 
-.css-2613qy-menu{
+.css-2613qy-menu {
   background-color: #292d22;
 }

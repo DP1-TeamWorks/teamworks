@@ -1,14 +1,14 @@
 import React from 'react';
-import { Redirect, Route, Switch, useLocation } from "react-router-dom";
+import Section from "./Section"
+import SettingsSidebar from "../components/sidebar/SettingsSidebar"
 import ProfileHeader from '../components/profile/ProfileHeader';
-import DepartmentSettings from "../components/settings/department/DepartmentSettings";
-import MilestonePage from '../components/settings/project/MilestonePage';
-import ProjectSettings from '../components/settings/project/ProjectSettings';
+import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import TeamSettings from '../components/settings/team/TeamSettings';
-import UserPage from '../components/settings/users/UserPage';
 import UserSettings from '../components/settings/users/UserSettings';
-import SettingsSidebar from "../components/sidebar/SettingsSidebar";
-import Section from "./Section";
+import DepartmentSettings from "../components/settings/department/DepartmentSettings";
+import ProjectSettings from '../components/settings/ProjectSettings';
+import UserPage from '../components/settings/users/UserPage';
+import MilestonePage from '../components/settings/project/MilestonePage';
 
 
 const PATHS = ["/settings/team", "/settings/departments", "/settings/projects", "/settings/users"];

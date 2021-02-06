@@ -1,17 +1,22 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.Collection;
 import java.util.List;
-
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Tag;
+import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.ProjectService;
 import org.springframework.samples.petclinic.service.TagService;
+import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.validation.TagLimitProjectException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,15 +27,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 public class TagController {
+
     private final TagService tagService;
     private final ProjectService projectService;
+    private final UserTWService userTWService;
 
     @Autowired
-    public TagController(TagService tagService, ProjectService projectService) {
+    public TagController(TagService tagService, ProjectService projectService, UserTWService userTWService) {
         this.tagService = tagService;
         this.projectService = projectService;
+        this.userTWService = userTWService;
     }
 
     @InitBinder
@@ -44,15 +53,27 @@ public class TagController {
         return project.getTags();
     }
 
+    @GetMapping(value = "/api/tags/mine/all")
+    public Map<String, List<Tag>> getAllMyTagsByProject(HttpServletRequest r) {
+        UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
+
+        Map<String, List<Tag>> tags = user.getParticipation().stream().filter(p -> p.getFinalDate() == null)
+                .map(Participation::getProject).map(Project::getTags).flatMap(Collection::stream)
+                .collect(Collectors.groupingBy(tag -> tag.getProject().getName()));
+
+        log.info(tags.toString());
+
+        return tags;
+    }
+
     @PostMapping(value = "/api/tags")
-    public ResponseEntity<String> createTag(HttpServletRequest r,@Valid @RequestBody Tag tag,
+    public ResponseEntity<String> createTag(HttpServletRequest r, @Valid @RequestBody Tag tag,
             @RequestParam(required = true) Integer projectId) {
         try {
             Project project = projectService.findProjectById(projectId);
             tag.setProject(project);
             tagService.saveTag(tag);
             return ResponseEntity.ok().build();
-
         } catch (DataAccessException | TagLimitProjectException d) {
             return ResponseEntity.badRequest().body(d.getMessage());
         }
@@ -63,10 +84,8 @@ public class TagController {
         try {
             tagService.deleteTagById(tagId);
             return ResponseEntity.ok().build();
-
         } catch (DataAccessException d) {
             return ResponseEntity.badRequest().build();
         }
     }
-
 }

@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "/api";
+import { API_URL } from "../../config/config";
 
 const ApiUtils = {
   get: (url, reloadOnUnauthorized = true) =>

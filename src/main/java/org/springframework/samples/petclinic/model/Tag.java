@@ -46,7 +46,6 @@ public class Tag extends BaseEntity {
     private Project project;
 
     @JsonIgnore
-    // @JsonBackReference(value="milestone-tag")
     @ManyToMany
     private List<Milestone> milestones;
 
