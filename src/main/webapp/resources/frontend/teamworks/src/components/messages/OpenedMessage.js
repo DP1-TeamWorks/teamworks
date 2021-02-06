@@ -8,6 +8,7 @@ import ReplyForm from "./ReplyForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faReply } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
+import ToDo from "../projects/toDos/ToDo";
 
 const OpenedMessage = ({ msg }) => {
   const [forwardOptions, setForwardOptions] = useState({});
@@ -25,6 +26,8 @@ const OpenedMessage = ({ msg }) => {
         console.log("ERROR: cannot get the users mails");
       });
   }, [msg]);
+
+  console.log(msg);
 
   return (
     <>
@@ -58,6 +61,18 @@ const OpenedMessage = ({ msg }) => {
         >
           <FontAwesomeIcon icon={faForward} />
         </GradientButton>
+      </div>
+      <div className="MsgContentToDos">
+        {msg.toDos.map((toDo) => {
+          return (
+            <ToDo
+              id={toDo.id}
+              tagList={toDo.tags}
+              title={toDo.title}
+              done={toDo.done}
+            />
+          );
+        })}
       </div>
       {messageOptions === "Reply" && <ReplyForm repliedMessage={msg} />}
       {messageOptions === "Forward" && (

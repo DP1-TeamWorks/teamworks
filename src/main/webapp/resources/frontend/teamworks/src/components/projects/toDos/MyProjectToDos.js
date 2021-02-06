@@ -71,12 +71,7 @@ const MyProjectToDos = ({ projectId }) => {
           />
         );
       })}
-      {true && (
-        <AddToDoForm
-          milestoneId={milestone.id}
-          setReloadToDos={setReloadToDos}
-        />
-      )}
+      <AddToDoForm milestoneId={milestone.id} setReloadToDos={setReloadToDos} />
     </div>
   );
 };

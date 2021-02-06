@@ -100,7 +100,7 @@
 .MsgContentText {
   display: inline-block;
   max-width: 85%;
-  padding: 10px 10px 40px 50px;
+  padding: 10px 10px 20px 50px;
 }
 
 .MsgContentInput {
@@ -113,6 +113,13 @@
   color: white;
   max-width: 85%;
   padding: 10px 5px 0px 50px;
+}
+
+.MsgContentToDos {
+  display: inline-block;
+
+  padding: 10px 10px 20px 50px;
+  width: 85%;
 }
 
 .MsgContentButtons {
