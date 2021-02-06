@@ -1,3 +1,5 @@
+import axios from "axios";
+import { API_URL } from "../../config/config";
 import ApiUtils from "./ApiUtils";
 const MESSAGE_URL = "/message";
 

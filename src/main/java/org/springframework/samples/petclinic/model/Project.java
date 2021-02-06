@@ -24,7 +24,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "projects")
 public class Project extends BaseEntity {
-
+	
 	  // Attributes
 
 	@Column(name = "name")
@@ -40,7 +40,7 @@ public class Project extends BaseEntity {
 	@Column(name = "creationTimestamp")
 	@CreationTimestamp
 	private LocalDate creationTimestamp;
-
+	
 	// Relations
 
 	@ManyToOne(optional = false)
@@ -57,7 +57,7 @@ public class Project extends BaseEntity {
 	@JsonIgnore
 	// @JsonManagedReference(value="project-participation")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
-	private List<Participation> participations;
+	private List<Participation> participation;
 
 	@JsonManagedReference(value = "project-tag")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)

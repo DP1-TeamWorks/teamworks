@@ -1,3 +1,5 @@
+import axios from "axios";
+import { API_URL } from "../../config/config";
 import ApiUtils from "./ApiUtils";
 const DEPARTMENT_URL = "/departments";
 const BELONGS_URL = "/belongs";

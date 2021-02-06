@@ -1,8 +1,12 @@
-import React, { useRef } from "react";
-import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
-import AddForm from "./AddForm";
+import React from "react";
+import Input from "./Input";
 import "./AddUserForm.css";
+import AddForm from "./AddForm";
+import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
+import { useEffect, useState } from "react/cjs/react.development";
+import UserApiUtils from "../../utils/api/UserApiUtils";
 import InputAutocompleteUser from "./InputAutocompleteUser";
+import { useRef } from "react";
 
 const AddUserToDepartment = ({ onUserAdded, submitText, departmentId }) =>
 {

@@ -1,8 +1,9 @@
-import Button from "../../buttons/Button";
-import GoBackButton from "../../buttons/GoBackButton";
-import ProfileHeader from "../../profile/ProfileHeader";
-import EditableField from "../EditableField";
-import SettingGroup from "../SettingGroup";
+import Button from "../buttons/Button";
+import GoBackButton from "../buttons/GoBackButton";
+import ProfileHeader from "../profile/ProfileHeader";
+import EditableField from "./EditableField";
+import SettingGroup from "./SettingGroup";
+import UserList from "./DepartmentMemberList";
 
 const UserPage = ({ match: { params: { userId } } }) =>
 {
@@ -29,10 +30,10 @@ const UserPage = ({ match: { params: { userId } } }) =>
                     <EditableField id="join-date" value="01/10/2021" editable={false} />
                 </SettingGroup>
                 <SettingGroup name="Departments" description="A list of the departments the user belongs or has belonged to.">
-                    {/* <UserList /> */}
+                    <UserList />
                 </SettingGroup>
                 <SettingGroup name="Projects" description="A list of the projects the user partipates or has participated in.">
-                    {/* <UserList /> */}
+                    <UserList />
                 </SettingGroup>
                 <SettingGroup danger name="Delete user" description="Deletes the user from the team. <br>This action cannot be undone.">
                     <Button className="Button--red">Delete user</Button>

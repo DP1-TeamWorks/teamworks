@@ -1,8 +1,8 @@
+import SettingGroup from './SettingGroup';
+import EditableField from './EditableField';
+import Button from '../buttons/Button';
+import TeamSettingsApiUtils from '../../utils/api/TeamSettingsApiUtils';
 import { useEffect, useState } from 'react';
-import TeamSettingsApiUtils from '../../../utils/api/TeamSettingsApiUtils';
-import Button from '../../buttons/Button';
-import EditableField from '../EditableField';
-import SettingGroup from '../SettingGroup';
 
 const TeamSettings = () =>
 {

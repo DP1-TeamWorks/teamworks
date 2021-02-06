@@ -30,15 +30,10 @@ public class DepartmentManagerInterceptor extends HandlerInterceptorAdapter {
 		Integer userId = (Integer) req.getSession().getAttribute("userId");
 		UserTW user = userTWService.findUserById(userId);
 		Integer departmentId = Integer.valueOf(req.getParameter("departmentId"));
-		if (departmentId == null)
-        {
-            res.sendError(400);
-            return false;
-        }
         Department department = departmentService.findDepartmentById(departmentId);
-        if (department == null)
+        if (departmentId == null)
         {
-            res.sendError(400);
+            res.sendError(403);
             return false;
         }
 		Belongs belongs = belongsService.findCurrentBelongs(userId, departmentId);
