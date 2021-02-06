@@ -3,12 +3,12 @@ import Section from "./Section"
 import SettingsSidebar from "../components/sidebar/SettingsSidebar"
 import ProfileHeader from '../components/profile/ProfileHeader';
 import { Redirect, Route, Switch, useLocation } from "react-router-dom";
-import TeamSettings from '../components/settings/TeamSettings';
-import UserSettings from '../components/settings/UserSettings';
-import DepartmentSettings from "../components/settings/DepartmentSettings";
+import TeamSettings from '../components/settings/team/TeamSettings';
+import UserSettings from '../components/settings/users/UserSettings';
+import DepartmentSettings from "../components/settings/department/DepartmentSettings";
 import ProjectSettings from '../components/settings/ProjectSettings';
-import UserPage from '../components/settings/UserPage';
-import MilestonePage from '../components/settings/MilestonePage';
+import UserPage from '../components/settings/users/UserPage';
+import MilestonePage from '../components/settings/project/MilestonePage';
 
 
 const PATHS = ["/settings/team", "/settings/departments", "/settings/projects", "/settings/users"];

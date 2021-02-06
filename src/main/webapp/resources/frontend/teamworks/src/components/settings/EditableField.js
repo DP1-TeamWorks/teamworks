@@ -21,14 +21,14 @@ const EditableField = ({value, inputType, smaller, editable, postFunction, field
       setActualVal(actualVal); // set the old values back
       setCurrentVal(actualVal);
       if (onUpdated)
-        onUpdated(actualVal);
+        onUpdated(fieldName, actualVal);
       setTimeout(() => setErrored(false), 5000);
     });
     // Set values inmediately after update, dont wait for promise
     setActualVal(actualVal);
     setEditing(false);
     if (onUpdated)
-      onUpdated(currentVal);
+      onUpdated(fieldName, currentVal);
   }
 
   function enterEditingMode()
