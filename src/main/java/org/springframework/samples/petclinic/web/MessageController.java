@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
@@ -58,6 +59,7 @@ public class MessageController {
             List<Message> messageList = (messageService.findMessagesByUserId(user)).stream()
                     .collect(Collectors.toList());
             log.info("Succeed");
+            Collections.reverse(messageList);
             return messageList;
         } catch (DataAccessException d) {
             log.error("ERROR: " + d.getMessage());
@@ -73,6 +75,7 @@ public class MessageController {
             List<Message> messageList = (messageService.findMessagesSentByUserId(userId)).stream()
                     .collect(Collectors.toList());
             log.info("Succeed");
+            Collections.reverse(messageList);
             return messageList;
         } catch (DataAccessException d) {
             log.error("ERROR: " + d.getMessage());
@@ -90,6 +93,7 @@ public class MessageController {
             List<Message> messageList = (messageService.findMessagesByTag(user, tag)).stream()
                     .collect(Collectors.toList());
             log.info("Succeed");
+            Collections.reverse(messageList);
             return messageList;
         } catch (DataAccessException d) {
             log.error("ERROR: " + d.getMessage());
@@ -106,6 +110,7 @@ public class MessageController {
             List<Message> messageList = (messageService.findMessagesBySearch(user, search.toLowerCase())).stream()
                     .collect(Collectors.toList());
             log.info("Succeed");
+            Collections.reverse(messageList);
             return messageList;
         } catch (DataAccessException d) {
             log.error("ERROR: " + d.getMessage());
@@ -163,21 +168,28 @@ public class MessageController {
             message.setRecipients(recipientList);
 
             log.info("Setting the todo list");
-            log.info("ToDoList: " + message.getToDoList().toString());
-            List<ToDo> toDoList = message.getToDoList().stream().map(toDoId -> toDoService.findToDoById(toDoId))
-                    .collect(Collectors.toList());
-            log.info("ToDoList: " + toDoList.toString());
-            message.setToDos(toDoList);
+            if (message.getToDoList() != null) {
+                List<ToDo> toDoList = message.getToDoList().stream().map(toDoId -> toDoService.findToDoById(toDoId))
+                        .collect(Collectors.toList());
+                log.info("ToDoList: " + toDoList.toString());
+                message.setToDos(toDoList);
+            } else
+                log.info("Any todo to attach");
 
             log.info("Setting the tag list");
-            List<Tag> tagList = message.getTagList().stream().map(tagId -> tagService.findTagById(tagId))
-                    .collect(Collectors.toList());
-            message.setTags(tagList);
+            if (message.getTagList() != null) {
+                List<Tag> tagList = message.getTagList().stream().map(tagId -> tagService.findTagById(tagId))
+                        .collect(Collectors.toList());
+                message.setTags(tagList);
+            } else
+                log.info("Any tag to attach");
 
             log.info("Saving the message");
             messageService.saveMessage(message);
             return ResponseEntity.ok().build();
-        } catch (DataAccessException d) {
+        } catch (
+
+        DataAccessException d) {
             log.error("ERROR: " + d.getMessage());
             return ResponseEntity.badRequest().build();
         }
@@ -190,17 +202,29 @@ public class MessageController {
         log.info("Replying to the message with id: " + replyId);
         Message repliedMessage = messageService.findMessageById(replyId);
         message.setReplyTo(repliedMessage);
+        log.info("Creating the reply");
         return newMessage(r, message);
 
     }
 
     @PostMapping(value = "api/message/forward")
-    public ResponseEntity<String> forwardMessage(HttpServletRequest r,
-            @RequestParam(required = true) List<String> forwardList, Integer messageId) {
+    public ResponseEntity<String> forwardMessage(HttpServletRequest r, @RequestBody List<String> forwardList,
+            Integer messageId) {
         log.info("Forwarding the message with id: " + messageId + " to: " + forwardList);
         Message message = messageService.findMessageById(messageId);
-        message.setRecipientsEmails(forwardList);
-        return newMessage(r, message);
+        log.info("Copying the message");
+        Message forwardCopy = new Message();
+        forwardCopy.setRead(false);
+        forwardCopy.setRecipientsEmails(forwardList);
+        forwardCopy.setSubject(message.getSubject().contains("Forwarded (") ? message.getSubject()
+                : "Forwarded(" + message.getSender().getName() + "): " + message.getSubject());
+        forwardCopy.setText(message.getSender().getName() + " said: " + message.getText());
+        forwardCopy.setTags(List.copyOf(message.getTags()));
+        forwardCopy.setToDos(List.copyOf(message.getToDos()));
+        forwardCopy.setTagList(null);
+        forwardCopy.setToDoList(null);
+        log.info("Creating the forward copy");
+        return newMessage(r, forwardCopy);
     }
 
     @PostMapping(value = "/api/message/markAsRead")

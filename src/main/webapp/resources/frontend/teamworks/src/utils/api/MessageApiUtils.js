@@ -22,9 +22,9 @@ const MessageApiUtils = {
       MESSAGE_URL + "?repliedMessageId=" + repliedMessageId,
       message
     ),
-  forwardMessage: (forwardList, repliedMessageId) =>
+  forwardMessage: (forwardList, messageId) =>
     ApiUtils.post(
-      MESSAGE_URL + "?repliedMessageId=" + repliedMessageId + "&forward=true",
+      MESSAGE_URL + "/forward?messageId=" + messageId,
       forwardList
     ),
   markMessageAsRead: (messageId) =>

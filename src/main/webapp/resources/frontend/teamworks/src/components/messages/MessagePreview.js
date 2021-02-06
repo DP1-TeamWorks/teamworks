@@ -58,14 +58,14 @@ const MessagePreview = ({ msg, openMessage, setOpenMessage, setReloadCounters })
         </h5>
         <div className="MsgTags" style={{ float: "right" }}>
           {msg.tags.map((tag) => {
-            return <Circle color={tag.color} />;
+            return <Circle key={tag.id} color={tag.color} />;
           })}
         </div>
       </div>
       <div
         className={isOpen() ? "MsgContent" : "MsgContent MsgContent--Collapsed"}
       >
-        <OpenedMessage msg={msg} reply={reply} forward={forward} />
+        <OpenedMessage key={msg.id} msg={msg} reply={reply} forward={forward} />
       </div>
     </>
   );

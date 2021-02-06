@@ -52,14 +52,11 @@ class NewMessageForm extends React.Component {
     let errorMsg = "";
     switch (field) {
       case "Subject":
-        if (!/^[A-Za-z0-9_-]*$/.test(value)) {
+        if (!/^[A-Za-z0-9_-]*$/.test(value))
           errorMsg = "Invalid, use letters and numbers";
-        }
         break;
       case "Message":
-        if (value === "") {
-          errorMsg = "Message required";
-        }
+        if (value === "") errorMsg = "Message required";
         break;
       default:
     }
@@ -76,22 +73,16 @@ class NewMessageForm extends React.Component {
 
   apiRequestHandler = (to, subject, text, toDos, tags) => {
     console.log("Sending: ");
-    console.log({
+    let message = {
       recipientsEmails: to,
       subject: subject,
       text: text,
       read: false,
       toDoList: toDos !== "" ? toDos : [],
       tagList: tags !== "" ? tags : [],
-    });
-    MessageApiUtils.newMessage({
-      recipientsEmails: to,
-      subject: subject,
-      text: text,
-      read: false,
-      toDoList: toDos !== "" ? toDos : [],
-      tagList: tags !== "" ? tags : [],
-    })
+    };
+    console.log(message);
+    MessageApiUtils.newMessage(message)
       .then(() => {
         console.log("Mensaje enviado");
       })
