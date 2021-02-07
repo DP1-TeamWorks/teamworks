@@ -35,7 +35,7 @@ class AddToDoForm extends React.Component {
 
     let errorMsg = "";
     if (value === "") errorMsg = "ToDo required";
-    else if (value.length > 14) errorMsg = "Too Long toDo";
+    else if (value.length > 30) errorMsg = "Too Long toDo";
 
     this.setState({
       errors: { ...this.state.errors, toDo: errorMsg },

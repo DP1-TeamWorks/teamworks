@@ -339,22 +339,22 @@ values
     (6, 1);
 
 INSERT INTO
-    TAGS_MESSAGES(tags_id, messages_id)
+    MESSAGES_TAGS(tags_id, messages_id)
 values
     (2, 1);
 
 INSERT INTO
-    TAGS_MESSAGES(tags_id, messages_id)
+    MESSAGES_TAGS(tags_id, messages_id)
 values
     (2, 3);
 
 INSERT INTO
-    TAGS_MESSAGES(tags_id, messages_id)
+    MESSAGES_TAGS(tags_id, messages_id)
 values
     (3, 2);
 
 INSERT INTO
-    TAGS_MESSAGES(tags_id, messages_id)
+    MESSAGES_TAGS(tags_id, messages_id)
 values
     (1, 1);
 

@@ -57,15 +57,15 @@ class ReplyForm extends React.Component {
   };
 
   apiRequestHandler = (text) => {
-    console.log(this.repliedMessage);
     let message = {
-      recipientsEmails: [this.repliedMessage.sender.email],
-      subject: "Reply To: " + this.repliedMessage.subject,
+      recipientsEmails: [this.repliedMessage.strippedSender.email],
+      subject: "Re: " + this.repliedMessage.subject,
       text: text,
       read: false,
       toDoList: [],
       tagList: [],
     };
+    console.log("Replying:")
     console.log(message);
     MessageApiUtils.replyMessage(message, this.repliedMessage.id)
       .then(() => {

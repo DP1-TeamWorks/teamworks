@@ -58,8 +58,9 @@ class ForwardForm extends React.Component {
   };
 
   apiRequestHandler = (recipientsEmails) => {
-    console.log(this.forwardedMessage.id);
+    console.log("Forwarding to:");
     console.log(recipientsEmails);
+
     MessageApiUtils.forwardMessage(recipientsEmails, this.forwardedMessage.id)
       .then(() => {
         console.log("Mensaje enviado");

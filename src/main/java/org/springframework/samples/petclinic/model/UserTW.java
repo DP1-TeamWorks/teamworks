@@ -32,27 +32,24 @@ public class UserTW extends BaseEntity {
 
     // Attributes
 
-	@NotNull
-	@Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
-	@NotEmpty
-	@Size(min=1,max=25)
-	@Column(name = "name")
-	String name;
+    @NotNull
+    @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
+    @NotEmpty
+    @Size(min = 1, max = 25)
+    @Column(name = "name")
+    String name;
 
-	@Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
-	@NotEmpty
-	@Size(min=1,max=120)
-	@Column(name = "lastname")
-	String lastname;
+    @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\u00f1\\u00d1 ]+$")
+    @NotEmpty
+    @Size(min = 1, max = 120)
+    @Column(name = "lastname")
+    String lastname;
 
+    @Column(name = "email", unique = true)
+    String email;
 
-
-	@Column(name = "email", unique = true)
-	String email;
-
-
-	@Column(name = "password")
-	String password;
+    @Column(name = "password")
+    String password;
 
     String profileThumbUrl;
 
@@ -88,9 +85,8 @@ public class UserTW extends BaseEntity {
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
     private List<Message> messagesSent;
 
-	@JsonIgnore
-    @ManyToMany(mappedBy="recipients")
+    @JsonIgnore
+    @ManyToMany(mappedBy = "recipients")
     private List<Message> messagesReceived;
-
 
 }

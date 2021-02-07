@@ -53,27 +53,29 @@ public class ToDo extends BaseEntity {
     private List<Tag> tags;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(mappedBy = "toDos")
     private List<Message> messages;
 
-    public Integer getAssigneeId()
-    {
+    public Integer getAssigneeId() {
         return assignee.getId();
     }
 
-    public String getAssigneeName()
-    {
+    public String getAssigneeName() {
         return assignee.getName();
     }
 
-    public String getAssigneeLastname()
-    {
+    public String getAssigneeLastname() {
         return assignee.getLastname();
     }
 
-    public String getAssigneeEmail()
-    {
+    public String getAssigneeEmail() {
         return assignee.getEmail();
+    }
+
+    @Override
+    public String toString() {
+        return "ToDo [assignee=" + assignee + ", done=" + done + ", messages=" + messages + ", milestone=" + milestone
+                + ", tags=" + tags + ", title=" + title + "]";
     }
 
 }
