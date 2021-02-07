@@ -151,10 +151,9 @@ public class DepartmentControllerTest {
 		//.andExpect(content().json(updatejson));
 	}
 	
-	//TODO ERRORD
 	@Test
 	void testDeleteDepartments() throws Exception {
-		
+		 
 		mockMvc.perform(delete("/api/departments/"+TEST_DEPARTMENT_ID))
 		.andExpect(status().isOk());
 		
