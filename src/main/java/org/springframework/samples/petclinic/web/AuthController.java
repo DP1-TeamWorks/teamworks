@@ -59,7 +59,7 @@ public class AuthController {
 				return ResponseEntity.badRequest().build();
 			}
 		} catch (DataAccessException d) {
-			return null;
+			return  ResponseEntity.badRequest().build();
 		}
 	}
 

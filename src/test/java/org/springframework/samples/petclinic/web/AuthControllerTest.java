@@ -1,10 +1,14 @@
 package org.springframework.samples.petclinic.web;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.mockito.BDDMockito.given;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.TestWebConfig;
@@ -24,12 +29,14 @@ import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.ManyTeamOwnerException;
 import org.springframework.samples.petclinic.validation.TeamValidator;
 import org.springframework.samples.petclinic.validation.UserValidator;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.validation.BindingResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -56,6 +63,9 @@ public class AuthControllerTest {
 	private UserValidator userValidator;
 	
 	@MockBean
+	private BindingResult bindingResult;
+	
+	@MockBean
 	private TeamValidator teamValidator;
 	
 	@Autowired
@@ -77,32 +87,68 @@ public class AuthControllerTest {
 		user.setId(TEST_USER_ID);
 		user.setName("Paco");
 		user.setLastname("Martin");
-		user.setEmail("andrespuertas@cyber");
+		user.setEmail("pacomartin@cyber");
 		user.setPassword("123123123");
 		user.setRole(Role.team_owner);
+		
 		
 		team=new Team();
 		team.setId(TEST_TEAM_ID);
 		user.setTeam(team);
-		team.setIdentifier("OOF");
+		team.setIdentifier("cyber");
+		team.setName("cyber");
 		
 		mockSession.setAttribute("userId",TEST_USER_ID);
 		mockSession.setAttribute("teamId",TEST_TEAM_ID);
 		
+		
+		
 		given(this.userTWService.getLoginUser(user.getEmail(), user.getPassword())).willReturn(user);
-		given(this.userValidator.validate(user, errors);
+		
 	}
 	
 	
-	//arreglar
 	@Test
 	void testLogin() throws Exception{
-		String json = objectMapper.writeValueAsString(user);
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("teamname", "cyber");
+		map.put("identifier", "cyber");
+		map.put("mail", "pacomartin@cyber");
+		map.put("username", "paco");
+		map.put("lastname", "martin");
+		map.put("password", "123123123");
+		String json = objectMapper.writeValueAsString(map);
 		
 		mockMvc.perform(post("/api/auth/login").session(mockSession)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(json))
 		.andExpect(status().isAccepted());
+	}
+	
+	@Test
+	void testLoginNull() throws Exception{
+		doThrow(new DataAccessResourceFailureException("User Null"))
+		.when(userTWService).getLoginUser("pacomartin@cyber", "123123123");
+
+		String json = objectMapper.writeValueAsString(null);
+		
+		mockMvc.perform(post("/api/auth/login").session(mockSession)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json))
+		.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	void testLoginWithErrors() throws Exception{
+		
+		Map<String, String> map = new HashMap<String, String>();
+		String json = objectMapper.writeValueAsString(map);
+		
+		mockMvc.perform(post("/api/auth/login").session(mockSession)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json))
+		.andExpect(status().isBadRequest());
 	}
 	
 	
@@ -116,7 +162,14 @@ public class AuthControllerTest {
 	//validators??
 	@Test
 	void testSignUp() throws Exception{
-		String json = objectMapper.writeValueAsString(user);
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("teamname", "cyber");
+		map.put("identifier", "cyber");
+		map.put("username", "paco");
+		map.put("lastname", "martin");
+		map.put("password", "123123123");
+		String json = objectMapper.writeValueAsString(map);
 		
 		mockMvc.perform(post("/api/auth/signup").session(mockSession)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -125,7 +178,61 @@ public class AuthControllerTest {
 	}
 	
 	
+	//el validador no funciona
+	@Test
+	void testSignUpWithErrorsValidator() throws Exception{
+		
+		
+		bindingResult.rejectValue("name", "The name size must be between 1 and 25");
+		doAnswer(invocation -> {
+			  Object[] args = invocation.getArguments();
+			  ((BindingResult)args[1]).rejectValue("name", "The name size must be between 1 and 25");
+			  return null; // void method in a block-style lambda, so return null
+			}).when(userValidator).validate(user, bindingResult);
+		
+
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("teamname", "cyber");
+		map.put("identifier", "cyber");
+		map.put("username", "paco");
+		map.put("lastname", "martin");
+		map.put("password", "123123123");
+		String json = objectMapper.writeValueAsString(map);
+		
+		mockMvc.perform(post("/api/auth/signup").session(mockSession)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json))
+		.andExpect(status().isBadRequest());
+	}
 	
+	
+	//este no funcionaaaaaaa
+	@Test
+	void testSignUpException() throws Exception{
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("teamname", "cyber");
+		map.put("identifier", "cyber");
+		map.put("username", "paco");
+		map.put("lastname", "martin");
+		map.put("password", "123123123");
+		String json = objectMapper.writeValueAsString(map);
+		user.setName("paco");
+		user.setLastname("martin");
+		user.setEmail(user.getName().toLowerCase() + user.getLastname().toLowerCase() + "@" + team.getIdentifier());
+		user.setRole(Role.team_owner);
+		user.setTeam(team);
+		user.setPassword("123123123");
+		
+		
+		doThrow(new DataAccessResourceFailureException("Error guardando el usuario"))
+		.when(userTWService).saveUser(user);
+
+		
+		mockMvc.perform(post("/api/auth/signup").session(mockSession)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json))
+		.andExpect(status().isBadRequest());
+	}
 	
 
 }
