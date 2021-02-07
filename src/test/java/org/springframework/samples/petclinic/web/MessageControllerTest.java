@@ -110,8 +110,8 @@ public class MessageControllerTest {
 		mockSession.setAttribute("userId",TEST_USER_ID);
 
 		
-		given(this.userService.findUserById(TEST_USER_ID)).willReturn(sender);		
-		given(this.userService.findUserById(TEST_USER2_ID)).willReturn(recipient);				
+		given(this.userService.findUserById(TEST_USER_ID)).willReturn(recipient);		
+		given(this.userService.findUserById(TEST_USER2_ID)).willReturn(sender);				
 		given(this.messageService.findMessagesByUserId(recipient)).willReturn(MReceivedList);
 	}
 	
