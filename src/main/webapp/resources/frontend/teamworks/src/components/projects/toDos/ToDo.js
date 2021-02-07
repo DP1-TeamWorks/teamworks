@@ -8,9 +8,10 @@ const ToDo = ({ id, tagList, title, done, blocked }) => {
   const [isDoneAnimation, setIsDoneAnimation] = useState(done);
 
   const markAsDone = () => {
-    setIsDoneAnimation(true);
-    console.log("Marking the toDo as done");
-    if (!blocked)
+    if (!blocked) {
+      setIsDoneAnimation(true);
+      console.log("Marking the toDo as done");
+
       setTimeout(
         () =>
           ToDoApiUtils.markToDoAsDone(id)
@@ -23,6 +24,7 @@ const ToDo = ({ id, tagList, title, done, blocked }) => {
             }),
         700
       );
+    }
   };
 
   return (
