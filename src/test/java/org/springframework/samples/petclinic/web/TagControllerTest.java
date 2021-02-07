@@ -1,18 +1,16 @@
 package org.springframework.samples.petclinic.web;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.when;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.TestWebConfig;
@@ -37,6 +36,7 @@ import org.springframework.samples.petclinic.service.ProjectService;
 import org.springframework.samples.petclinic.service.TagService;
 import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.TagLimitProjectException;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -145,7 +145,7 @@ public class TagControllerTest {
 		.andExpect(status().isOk());
 	}
 	
-	
+	//comprobar lo que esta devolviendo
 	@Test
 	void testGetAllMyTagsByProject() throws Exception{
 		mockMvc.perform(get("/api/tags/mine/all")
@@ -164,13 +164,58 @@ public class TagControllerTest {
 		.andExpect(status().isOk());
 	}
 	
+	@Test
+	void testCreateTagWithErrors() throws Exception {
+		Map<String, String> map = new HashMap<String, String>();
+		String json = objectMapper.writeValueAsString(map);
+		
+		mockMvc.perform(post("/api/tags?projectId={projectId}", TEST_PROJECT_ID)
+				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
+		.andExpect(status().isBadRequest());
+	}
+	
 	
 	@Test
-	void testDeleteTag() throws Exception{
+	void testCreateTagTooMany() throws Exception{
+		
+		doThrow(new TagLimitProjectException())
+		.when(tagService).saveTag(testing);
+		
+		String json = objectMapper.writeValueAsString(testing);
+		mockMvc.perform(post("/api/tags?projectId={projectId}", TEST_PROJECT_ID)
+				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
+		.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	void testCreateTagAlredyExist() throws Exception{
+		doThrow(new DataAccessResourceFailureException("Id ya existente"))
+		.when(tagService).saveTag(testing);
+		String json = objectMapper.writeValueAsString(testing);
+
+		
+		mockMvc.perform(post("/api/tags?projectId={projectId}", TEST_PROJECT_ID)
+				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
+		.andExpect(status().isBadRequest());
+		
+	}
+	
+	@Test
+	void testDeleteTagById() throws Exception{
 		
 		mockMvc.perform(delete("/api/tags?projectId={projectId}&tagId={tagId}", TEST_PROJECT_ID, TEST_TAG_ID)
 				.session(mockSession))
 		.andExpect(status().isOk());
+	}
+	
+	@Test
+	void testDeleteTagByIdNonExistent() throws Exception{
+		doThrow(new DataAccessResourceFailureException("Id no existente")).when(tagService).deleteTagById(TEST_TAG_ID);
+		
+		
+		mockMvc.perform(delete("/api/tags?projectId={projectId}&tagId={tagId}", TEST_PROJECT_ID, TEST_TAG_ID)
+				.session(mockSession))
+		.andExpect(status().isBadRequest());
 	}
 	
 }

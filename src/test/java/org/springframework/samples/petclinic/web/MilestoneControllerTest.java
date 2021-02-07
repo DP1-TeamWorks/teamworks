@@ -1,12 +1,18 @@
 package org.springframework.samples.petclinic.web;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.TestWebConfig;
@@ -62,6 +69,7 @@ public class MilestoneControllerTest {
 
 	private Milestone septiembre;
 	private Project iissi;
+	private List<Milestone> l;
 
 	@BeforeEach
 	void setup() {
@@ -72,32 +80,40 @@ public class MilestoneControllerTest {
 
 		iissi = new Project();
 		septiembre.setProject(iissi);
-		
+		l = new ArrayList<>();
+		l.add(septiembre);
 		
 		mockSession.setAttribute("milestoneId",TEST_MILESTONE_ID);
 		mockSession.setAttribute("milestoneId",TEST_PROJECT_ID);
 		given(this.milestoneService.findMilestoneById(TEST_MILESTONE_ID)).willReturn(septiembre);
 		given(this.projectService.findProjectById(TEST_PROJECT_ID)).willReturn(iissi);	
+		given(this.milestoneService.findNextMilestone(TEST_MILESTONE_ID)).willReturn(septiembre);
+		given(this.milestoneService.findMilestonesForProject(TEST_PROJECT_ID)).willReturn(l);
 	}
 	
-	//devuelve bien pero no se si tengo que comprobar algo mas?
 	
 	@Test
 	void testGetNextMilestone() throws Exception{
+		String json = objectMapper.writeValueAsString(septiembre);
+		
 		mockMvc.perform(get("/api/milestones/next?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession))
-		.andExpect(status().isOk());
+		.andExpect(status().isOk())
+		.andExpect(content().json(json));
 	}
 	
 	@Test
 	void testGetMilestones() throws Exception{
+		
+		String json = objectMapper.writeValueAsString(l);
+		
 		mockMvc.perform(get("/api/milestones?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession))
-		.andExpect(status().isOk());
+		.andExpect(status().isOk())
+		.andExpect(content().json(json));
 	}
 	
 	
-	//tipo de las milestones??????
 	@Test
 	void testPostMilestones() throws Exception{
 		String json = objectMapper.writeValueAsString(septiembre);
@@ -109,10 +125,30 @@ public class MilestoneControllerTest {
 	
 	
 	@Test
+	void testPostMilestonesWithErrors() throws Exception{
+		Map<String, String> map = new HashMap<String, String>();
+		
+		String json = objectMapper.writeValueAsString(map);
+		
+		mockMvc.perform(post("/api/milestones?projectId={projectId}", TEST_PROJECT_ID)
+				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
+		.andExpect(status().isBadRequest());
+	}
+	
+	@Test
 	void testDeleteMilestones() throws Exception{
 		mockMvc.perform(delete("/api/milestones?milestoneId={milestoneId}", TEST_MILESTONE_ID)
 				.session(mockSession))
 		.andExpect(status().isOk());
+	}
+	
+	@Test
+	void testDeleteMilestonesNonExistent() throws Exception{
+		doThrow(new DataAccessResourceFailureException("Id no existente")).when(milestoneService).deleteMilestonetById(11);
+		
+		mockMvc.perform(delete("/api/milestones?milestoneId={milestoneId}", TEST_MILESTONE_ID)
+				.session(mockSession))
+		.andExpect(status().isNotFound());
 	}
 	
 }

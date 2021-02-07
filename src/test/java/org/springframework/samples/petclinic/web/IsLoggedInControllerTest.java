@@ -41,11 +41,6 @@ public class IsLoggedInControllerTest {
 	@Autowired
 	protected MockHttpSession mockSession;
 
-
-	@BeforeEach
-	void setup() {
-			
-	}
 	
 	@Test
 	void testGet() throws Exception{
