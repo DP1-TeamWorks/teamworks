@@ -75,7 +75,7 @@ public class ParticipationService {
 	}
 
 	@Transactional(readOnly = true)
-    public Collection<Participation> findCurrentParticipationsInDepartment(Integer departmentId) throws DataAccessException {
+    public Collection<Participation> findCurrentParticipationsInProject(Integer departmentId) throws DataAccessException {
 	    return participationRepository.findCurrentParticipationsInProject(departmentId);
     }
 

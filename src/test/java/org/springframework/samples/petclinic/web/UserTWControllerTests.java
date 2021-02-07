@@ -28,6 +28,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.PetclinicInitializer;
@@ -241,6 +243,14 @@ public class UserTWControllerTests {
 		String userIdString=userId.toString();
   		mockMvc.perform(delete("/api/user").session(mockSession).param("userId",userIdString)).andExpect(status().is(200));
   	}
+    @Test
+  	void testDeleteUserInvalidId() throws Exception {
+    	Integer userId=99999;
+		String userIdString=userId.toString();
+		doThrow(new DataAccessResourceFailureException("Id no existente"))
+        .when(UserTWService).deleteUserById(userId);
+  		mockMvc.perform(delete("/api/user").session(mockSession).param("userId",userIdString)).andExpect(status().is(400));
+  	}
     
     @Test
     void testGetCredentials() throws Exception{
@@ -278,6 +288,8 @@ public class UserTWControllerTests {
 		Integer userId=TEST_USER_ID+1;
 		String userIdString=userId.toString();
 		mockMvc.perform(get("/api/user/credentials").session(mockSession).param("userId",userIdString )).andExpect(status().is(400));
+	
 	}
+	
 	
 }

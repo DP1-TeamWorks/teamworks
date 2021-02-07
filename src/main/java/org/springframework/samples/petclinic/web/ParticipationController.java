@@ -54,8 +54,8 @@ public class ParticipationController {
     {
         try
         {
-            Collection<Participation> belongs = participationService.findCurrentParticipationsInDepartment(projectId).stream().sorted(Comparator.comparing(Participation::getLastname).thenComparing(Participation::getName)).collect(Collectors.toList());
-            return ResponseEntity.ok(belongs);
+            Collection<Participation> participation = participationService.findCurrentParticipationsInProject(projectId).stream().sorted(Comparator.comparing(Participation::getLastname).thenComparing(Participation::getName)).collect(Collectors.toList());
+            return ResponseEntity.ok(participation);
         } catch (DataAccessException e)
         {
             return ResponseEntity.badRequest().build();

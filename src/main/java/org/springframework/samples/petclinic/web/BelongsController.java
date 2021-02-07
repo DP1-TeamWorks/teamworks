@@ -1,14 +1,12 @@
 package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +17,6 @@ import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.samples.petclinic.validation.IdParentIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyDepartmentManagerException;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
