@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 public class BelongsController {
 
@@ -77,10 +79,11 @@ public class BelongsController {
 				throw new IdParentIncoherenceException("Team", "User");
 			}
 
-			if(!user.getTeam().equals(department.getTeam())) {
-				throw new IdParentIncoherenceException("Team", "Department");
-			}
+//			if(!belonguser.getTeam().equals(department.getTeam())) {
+//				throw new IdParentIncoherenceException("Team", "Department");
+//			}
 
+            // Check if user DOESNT exist in department OR is being promoted/demoted
 			if (currentBelongs == null || (isDepartmentManager != null && currentBelongs.getIsDepartmentManager() != isDepartmentManager)) {
 				UserTW belongUser = userTWService.findUserById(belongUserId);
 				Belongs belongs = new Belongs();
@@ -96,6 +99,7 @@ public class BelongsController {
 
 				if (isDepartmentManager != null && isDepartmentManager)
 				{
+				    log.info("User is being promoted / demoted");
 				    Department dp = departmentService.findDepartmentById(departmentId);
 				    belongs.setIsDepartmentManager(true);
                     Belongs departmentManagerBelongs = belongsService.findCurrentDepartmentManager(departmentId);
@@ -117,6 +121,7 @@ public class BelongsController {
 				belongsService.saveBelongs(belongs);
 				return ResponseEntity.ok().build();
 			} else {
+			    log.error("Tried to create a belongs for an already existing member");
 			    // there's already a belongs for that user
 				return ResponseEntity.badRequest().body("alreadyexists");
 			}

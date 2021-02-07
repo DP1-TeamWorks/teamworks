@@ -40,6 +40,7 @@ public class DepartmentManagerInterceptor extends HandlerInterceptorAdapter {
 			res.sendError(400);
 			return false;
 		}
+		// Check that user is a manager of this department (departmentId)
 		Belongs belongs = belongsService.findCurrentBelongs(userId, departmentId);
 
 		if (user.getTeam().equals(department.getTeam()) && user.getRole().equals(Role.team_owner))

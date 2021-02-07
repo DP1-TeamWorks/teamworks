@@ -229,6 +229,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
           <MilestoneList
             key={`list${currentProject.id}`}
             updateCounter={milestoneUpdateCounter}
+            projectName={currentProject.name}
             projectId={currentProject.id} />
         </SettingGroup>
         <SettingGroup

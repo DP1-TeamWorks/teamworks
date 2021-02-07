@@ -51,7 +51,7 @@
     right: 95px;
     width: 40px;
     min-width: 0px !important;
-    border-radius: 100px;
+    /* border-radius: 100px; */
     /*quitarlo*/
 }
 

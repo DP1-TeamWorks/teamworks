@@ -41,6 +41,11 @@ public class MilestoneController {
 		dataBinder.setDisallowedFields("id");
 	}
 
+    @GetMapping(value = "/api/milestone")
+    public Milestone getMilestone(@RequestParam(required = true) Integer projectId, @RequestParam(required = true) Integer milestoneId) {
+        return milestoneService.findMilestoneById(milestoneId);
+    }
+
 	@GetMapping(value = "/api/milestones/next")
 	public Milestone getNextMilestone(@RequestParam(required = true) Integer projectId) {
 		return milestoneService.findNextMilestone(projectId);
@@ -79,14 +84,28 @@ public class MilestoneController {
 
 	@PostMapping(value = "/api/milestones")
 	public ResponseEntity<String> postMilestones(@RequestParam(required = true) Integer projectId,
-			@Valid @RequestBody Milestone milestone) {
+			@RequestBody Milestone milestone) {
 
 		try {
 			Project project = projectService.findProjectById(projectId);
-
-			milestone.setProject(project);
-			milestoneService.saveMilestone(milestone);
-			return ResponseEntity.ok("Milestone create");
+            milestone.setProject(project);
+			if (milestone.getId() == null)
+            {
+                milestoneService.saveMilestone(milestone);
+                return ResponseEntity.ok("Milestone create");
+            }
+			else
+            {
+                Milestone dbMile = milestoneService.findMilestoneById(milestone.getId());
+                if (dbMile == null || dbMile.getProject().getId() != projectId)
+                    return ResponseEntity.badRequest().build();
+                if (milestone.getName() != null)
+                    dbMile.setName(milestone.getName());
+                if (milestone.getDueFor() != null)
+                    dbMile.setDueFor(milestone.getDueFor());
+                milestoneService.saveMilestone(dbMile);
+                return ResponseEntity.ok("Milestone updated");
+            }
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
 		}
