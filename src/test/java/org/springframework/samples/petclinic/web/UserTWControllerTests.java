@@ -193,13 +193,23 @@ public class UserTWControllerTests {
 	}
 	@Test
 	void testGetInvalidUser() throws Exception {
+		//Introducimos un usuario con id invalida
 		mockMvc.perform(get("/api/user").session(mockSession).param("userId","2000" )).andExpect(status().is(400));
 	}
 	@Test
 	void testGetUserDiferentTeam() throws Exception {
-		UserTW george2=juan;
-		george2.getTeam().setId(20);
-		given(this.UserTWService.findUserById(TEST_USER_ID+1)).willReturn(juan);
+		//Introducimos un usuario con team diferente al logeado
+		UserTW jose=new UserTW();
+		jose.setName("Jose");
+		jose.setId(TEST_USER_ID+1);
+		jose.setLastname("Franklin");
+		jose.setPassword("123456789");
+		jose.setRole(Role.employee);
+		Team team2= new Team();
+		team2.setId(70);
+		team2.setName("Atomic");
+		jose.setTeam(team2);
+		given(this.UserTWService.findUserById(TEST_USER_ID+1)).willReturn(jose);
 		Integer userId=TEST_USER_ID+1;
 		String userIdString=userId.toString();
 		mockMvc.perform(get("/api/user").session(mockSession).param("userId",userIdString )).andExpect(status().is(400));
@@ -213,10 +223,15 @@ public class UserTWControllerTests {
 	}
     @Test
 	void testPostMorethan1TeamOwner() throws Exception {
+    	UserTW jose=new UserTW();
+		jose.setName("Jose");
+		jose.setId(TEST_USER_ID+1);
+		jose.setLastname("Franklin");
+		jose.setPassword("123456789");
+		jose.setRole(Role.team_owner);
+		jose.setTeam(team);
     	
-    	UserTW george2=juan;
-    	
-    	doThrow(ManyTeamOwnerException.class).when(this.UserTWService).saveUser(george2);
+    	doThrow(ManyTeamOwnerException.class).when(this.UserTWService).saveUser(jose);
 		mockMvc.perform(post("/api/user").session(mockSession)).andExpect(status().is(400));
 	}
     
@@ -243,13 +258,23 @@ public class UserTWControllerTests {
     }
     @Test
 	void testGetInvalidUserCredentials() throws Exception {
+    	//Introducimos un usuario con id invalida
 		mockMvc.perform(get("/api/user/credentials").session(mockSession).param("userId","2000" )).andExpect(status().is(400));
 	}
 	@Test
 	void testGetUserCredentialsDiferentTeam() throws Exception {
-		UserTW george2=juan;
-		george2.getTeam().setId(20);
-		given(this.UserTWService.findUserById(TEST_USER_ID+1)).willReturn(juan);
+		//Introducimos un usuario de un equipo diferente al del usuario logeado
+		UserTW jose=new UserTW();
+		jose.setName("Jose");
+		jose.setId(TEST_USER_ID+1);
+		jose.setLastname("Franklin");
+		jose.setPassword("123456789");
+		jose.setRole(Role.employee);
+		Team team2= new Team();
+		team2.setId(70);
+		team2.setName("Atomic");
+		jose.setTeam(team2);
+		given(this.UserTWService.findUserById(TEST_USER_ID+1)).willReturn(jose);
 		Integer userId=TEST_USER_ID+1;
 		String userIdString=userId.toString();
 		mockMvc.perform(get("/api/user/credentials").session(mockSession).param("userId",userIdString )).andExpect(status().is(400));

@@ -105,10 +105,14 @@ public class TagControllerTest {
 		saveTheWorld = new Project();
 		saveTheWorld.setName("saveTheWorld");
 		testing.setProject(saveTheWorld);
+		List<Tag> tags = new ArrayList<>();
+		tags.add(testing);
+		saveTheWorld.setTags(tags);
 		
 		maria = new UserTW();
 		maria.setId(TEST_USER_ID);
 		work = new Participation();
+		
 		List<Participation> parts = new ArrayList<>();
 		work.setProject(saveTheWorld);
 		parts.add(work);
@@ -117,8 +121,7 @@ public class TagControllerTest {
 		
 		
 		//cosas de getallmytagsbyproject
-		List<Tag> tags = new ArrayList<>();
-		tags.add(testing);
+		
 		map = new HashMap<String, List<Tag>>();
 		map.put(saveTheWorld.getName(), tags);
 		
@@ -142,8 +145,7 @@ public class TagControllerTest {
 		.andExpect(status().isOk());
 	}
 	
-	//TODO
-	//este está mal no soy capaz de sacarlo
+	
 	@Test
 	void testGetAllMyTagsByProject() throws Exception{
 		mockMvc.perform(get("/api/tags/mine/all")
