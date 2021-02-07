@@ -84,7 +84,7 @@ public class Message extends BaseEntity {
 
     @Column(name = "attatchments")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
-    private List<Attatchment> attatchments;
+    private List<Attachment> attatchments;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Tag> tags;
