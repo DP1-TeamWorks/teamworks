@@ -39,7 +39,7 @@ public class TeamController {
 	}
 
 	@PostMapping(value = "/api/team")
-	public ResponseEntity<String> updateTeam(HttpServletRequest req, @Valid @RequestBody Team teamAttrs) {
+	public ResponseEntity<String> updateTeam(HttpServletRequest req, @RequestBody Team teamAttrs) {
 		try {
 		    String name = teamAttrs.getName();
 			Integer teamId = (Integer) req.getSession().getAttribute("teamId");

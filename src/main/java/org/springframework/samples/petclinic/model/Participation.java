@@ -53,4 +53,24 @@ public class Participation extends BaseEntity {
 	// @JsonBackReference(value="project-participation")
 	Project project;
 
+    public Integer getUserId()
+    {
+        return userTW.getId();
+    }
+
+    public String getName()
+    {
+        return userTW.getName();
+    }
+
+    public String getLastname()
+    {
+        return userTW.getLastname();
+    }
+
+    public String getEmail()
+    {
+        return userTW.getEmail();
+    }
+
 }

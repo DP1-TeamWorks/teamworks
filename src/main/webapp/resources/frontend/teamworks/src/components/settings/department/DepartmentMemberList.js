@@ -11,7 +11,7 @@ const DepartmentMemberList = ({departmentId, members, loading, onListUpdated}) =
     if (member.isDepartmentManager)
     {
       // TODO: Change confirm message if it's department manager and not team manager who is asking
-      if (window.confirm(`Are you sure to demote ${member.name} ${member.lastName} and make them a member?`))
+      if (window.confirm(`Are you sure to demote ${member.name} ${member.lastname} and make them a member?`))
       {
         DepartmentApiUtils.addUserToDepartment(departmentId, member.userId, false)
           .then(() => onListUpdated())
@@ -20,7 +20,7 @@ const DepartmentMemberList = ({departmentId, members, loading, onListUpdated}) =
     } else
     {
       // TODO: Change confirm message if it's department manager and not team manager who is asking
-      if (window.confirm(`Are you sure to promote ${member.name} ${member.lastName} to department manager?`))
+      if (window.confirm(`Are you sure to promote ${member.name} ${member.lastname} to department manager?`))
       {
         DepartmentApiUtils.addUserToDepartment(departmentId, member.userId, true)
           .then(() => onListUpdated())
@@ -32,7 +32,7 @@ const DepartmentMemberList = ({departmentId, members, loading, onListUpdated}) =
 
   function onRemoveClicked(member)
   {
-    if (window.confirm(`Are you sure to remove ${member.name} ${member.lastName} from the department?`))
+    if (window.confirm(`Are you sure to remove ${member.name} ${member.lastname} from the department?`))
     {
       DepartmentApiUtils.removeUserFromDepartment(departmentId, member.userId)
       .then(() => onListUpdated())
@@ -52,7 +52,7 @@ const DepartmentMemberList = ({departmentId, members, loading, onListUpdated}) =
     {
       return (
         <tr key={member.id}>
-          <td><Link to={`/settings/users/${member.userId}`}>{member.lastName}, {member.name}</Link></td>
+          <td><Link to={`/settings/users/${member.userId}`}>{member.lastname}, {member.name}</Link></td>
           <td>{member.email}</td>
           <td>{member.isDepartmentManager ? "Dpt. Manager" : "Member"}</td>
           <td>{member.initialDate}</td>

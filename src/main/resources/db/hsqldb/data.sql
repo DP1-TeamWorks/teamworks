@@ -71,14 +71,14 @@ values
     ('Calidad', 'Aseguro la ...', 1);
 
 INSERT INTO
-    belongs(is_department_manager, user_id, department_id)
+    belongs(is_department_manager, user_id, department_id, initial_date)
 values
-    (TRUE, 2, 1);
+    (TRUE, 2, 1, '2021-02-03');
 
 INSERT INTO
-    belongs(is_department_manager, user_id, department_id)
+    belongs(is_department_manager, user_id, department_id, initial_date)
 values
-    (FALSE, 5, 1);
+    (FALSE, 5, 1, '2021-02-03');
 
 INSERT INTO
     departments(name, description, team_id)
@@ -86,9 +86,9 @@ values
     ('Gestion', 'La mejor gestion ...', 1);
 
 INSERT INTO
-    belongs(is_department_manager, user_id, department_id)
+    belongs(is_department_manager, user_id, department_id, initial_date)
 values
-    (TRUE, 3, 2);
+    (TRUE, 3, 2, '2021-02-03');
 
 INSERT INTO
     departments(name, description, team_id)
@@ -96,19 +96,19 @@ values
     ('Ventas', 'Debemos vender ...', 1);
 
 INSERT INTO
-    belongs(is_department_manager, user_id, department_id)
+    belongs(is_department_manager, user_id, department_id, initial_date)
 values
-    (TRUE, 4, 3);
+    (TRUE, 4, 3, '2021-02-03');
 
 INSERT INTO
-    belongs(is_department_manager, user_id, department_id)
+    belongs(is_department_manager, user_id, department_id, initial_date)
 values
-    (FALSE, 2, 2);
+    (FALSE, 2, 2, '2021-02-03');
 
 INSERT INTO
-    belongs(is_department_manager, user_id, department_id)
+    belongs(is_department_manager, user_id, department_id, initial_date)
 values
-    (FALSE, 2, 3);
+    (FALSE, 2, 3, '2021-02-03');
 
 /*PROJECTS*/
 INSERT INTO
@@ -175,24 +175,24 @@ values
     );
 
 INSERT INTO
-    participations(is_project_manager, user_id, project_id)
+    participations(is_project_manager, user_id, project_id, initial_date)
 values
-    (TRUE, 2, 1);
+    (TRUE, 2, 1, '2021-02-03');
 
 INSERT INTO
-    participations(is_project_manager, user_id, project_id)
+    participations(is_project_manager, user_id, project_id, initial_date)
 values
-    (TRUE, 2, 2);
+    (TRUE, 2, 2, '2021-02-03');
 
 INSERT INTO
-    participations(is_project_manager, user_id, project_id)
+    participations(is_project_manager, user_id, project_id, initial_date)
 values
-    (TRUE, 2, 3);
+    (TRUE, 2, 3, '2021-02-03');
 
 INSERT INTO
-    participations(is_project_manager, user_id, project_id)
+    participations(is_project_manager, user_id, project_id, initial_date)
 values
-    (TRUE, 2, 4);
+    (TRUE, 2, 4, '2021-02-03');
 
 /*TAGS*/
 INSERT INTO
@@ -304,51 +304,61 @@ values
     );
 
 INSERT INTO
-    MESSAGES_RECIPIENTS(message_id, recipients_id)
+    MESSAGES_RECIPIENTS(messages_received_id, recipients_id)
 values
     (1, 2);
 
 INSERT INTO
-    MESSAGES_RECIPIENTS(message_id, recipients_id)
+    MESSAGES_RECIPIENTS(messages_received_id, recipients_id)
 values
     (2, 2);
 
 INSERT INTO
-    MESSAGES_RECIPIENTS(message_id, recipients_id)
+    MESSAGES_RECIPIENTS(messages_received_id, recipients_id)
 values
     (3, 2);
 
 INSERT INTO
-    MESSAGES_RECIPIENTS(message_id, recipients_id)
+    MESSAGES_RECIPIENTS(messages_received_id, recipients_id)
 values
     (4, 2);
 
 INSERT INTO
-    MESSAGES_RECIPIENTS(message_id, recipients_id)
+    MESSAGES_RECIPIENTS(messages_received_id, recipients_id)
 values
     (5, 3);
 
 INSERT INTO
-    MESSAGES_RECIPIENTS(message_id, recipients_id)
+    MESSAGES_RECIPIENTS(messages_received_id, recipients_id)
 values
     (6, 1);
 
 INSERT INTO
-    MESSAGES_TAGS(message_id, tags_id)
+    TAGS_MESSAGES(tags_id, messages_id)
 values
     (2, 1);
 
 INSERT INTO
-    MESSAGES_TAGS(message_id, tags_id)
+    TAGS_MESSAGES(tags_id, messages_id)
 values
     (2, 3);
 
 INSERT INTO
-    MESSAGES_TAGS(message_id, tags_id)
+    TAGS_MESSAGES(tags_id, messages_id)
 values
     (3, 2);
 
 INSERT INTO
-    MESSAGES_TAGS(message_id, tags_id)
+    TAGS_MESSAGES(tags_id, messages_id)
 values
     (1, 1);
+
+INSERT INTO
+    TAGS_TODOS(tags_id, todos_id)
+values
+    (1, 2);
+
+INSERT INTO
+    TAGS_TODOS(tags_id, todos_id)
+values
+    (2, 3);

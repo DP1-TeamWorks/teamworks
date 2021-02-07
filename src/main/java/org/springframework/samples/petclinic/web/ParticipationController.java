@@ -1,6 +1,9 @@
 package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,10 +26,7 @@ import org.springframework.samples.petclinic.validation.IdParentIncoherenceExcep
 import org.springframework.samples.petclinic.validation.ManyProjectManagerException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class ParticipationController {
@@ -49,78 +49,117 @@ public class ParticipationController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@PostMapping(value = "/api/projects/participation")
-	public ResponseEntity<String> postParticipation(@RequestParam(required = true) Integer participationUserId,
-			@RequestParam(required = true) Integer projectId,
-			@RequestParam(required = false) Boolean willBeProjectManager, HttpServletRequest r) {
+    @GetMapping(value="/api/projects/participation")
+    public ResponseEntity<Collection<Participation>> getParticipationsFromProject(@RequestParam(required = true) Integer projectId, HttpServletRequest r)
+    {
+        try
+        {
+            Collection<Participation> belongs = participationService.findCurrentParticipationsInDepartment(projectId).stream().sorted(Comparator.comparing(Participation::getLastname).thenComparing(Participation::getName)).collect(Collectors.toList());
+            return ResponseEntity.ok(belongs);
+        } catch (DataAccessException e)
+        {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
-		try {
-			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
+    @PostMapping(value = "/api/projects/participation")
+    public ResponseEntity<String> postParticipation(@RequestParam(required = true) Integer participationUserId,
+                                                    @RequestParam(required = true) Integer projectId,
+                                                    @RequestParam(required = false) Boolean willBeProjectManager, HttpServletRequest r) {
 
-			Project project = projectService.findProjectById(projectId);
-			Participation userCurrentParticipation = participationService.findCurrentParticipation(participationUserId,
-					projectId);
-			Belongs userCurrentBelongs = belongsService.findCurrentBelongs(participationUserId,
-					project.getDepartment().getId());
+        try {
+            UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 
-			Participation managerParticipation = participationService.findCurrentParticipation(user.getId(), projectId);
+            Project project = projectService.findProjectById(projectId);
+            Participation userCurrentParticipation = participationService.findCurrentParticipation(participationUserId,
+                projectId);
+            Belongs userCurrentBelongs = belongsService.findCurrentBelongs(participationUserId,
+                project.getDepartment().getId());
 
-			if (project.getDepartment().getTeam().equals(user.getTeam()))
-				throw new IdParentIncoherenceException("Team", "Project");
+            Participation managerParticipation = participationService.findCurrentParticipation(user.getId(), projectId);
 
-			if (userCurrentBelongs == null)
-				throw new IdParentIncoherenceException("Department", "User");
+            if (!project.getDepartment().getTeam().equals(user.getTeam()))
+                throw new IdParentIncoherenceException("Team", "Project");
 
-			if (userCurrentParticipation == null) {
-				UserTW participationUser = userTWService.findUserById(participationUserId);
-				Participation participation = new Participation();
-				participation.setProject(project);
-				participation.setUserTW(participationUser);
-				participation.setIsProjectManager(false);
-				// Solo puedes asignar el rol de project manager si eres teamOwner o
-				// departmentManager
-				if (willBeProjectManager != null) {
-					participation.setIsProjectManager(willBeProjectManager);
-					if (managerParticipation != null) {
-						managerParticipation.setIsProjectManager(!willBeProjectManager);
-						participationService.saveParticipation(managerParticipation);
-					}
-				}
-				participationService.saveParticipation(participation);
-				return ResponseEntity.ok().build();
-			} else {
-				return ResponseEntity.badRequest()
-						.body("Ya existe una participacion o el usuario no pertenece al departamento");
-			}
-		} catch (DataAccessException | ManyProjectManagerException | DateIncoherenceException
-				| IdParentIncoherenceException d) {
-			return ResponseEntity.badRequest().body(d.getMessage());
-		}
+            if (userCurrentBelongs == null)
+                throw new IdParentIncoherenceException("Department", "User");
 
-	}
+            Integer departmentId;
+            Belongs managerBelongs = null;
+            if (managerParticipation != null)
+            {
+                departmentId = managerParticipation.getProject().getDepartment().getId();
+                managerBelongs = belongsService.findCurrentBelongs(user.getId(), departmentId);
+            }
+
+            if (userCurrentParticipation == null || (willBeProjectManager != null && userCurrentParticipation.getIsProjectManager() != willBeProjectManager)) {
+                UserTW participationUser = userTWService.findUserById(participationUserId);
+                Participation participation = new Participation();
+                participation.setProject(project);
+                participation.setUserTW(participationUser);
+                participation.setIsProjectManager(false);
+                if (willBeProjectManager != null && managerBelongs == null && !user.getRole().equals(Role.team_owner))
+                {
+                    // Solo puedes asignar el rol de project manager si eres teamOwner o dptManager
+                    return ResponseEntity.badRequest().build();
+                }
+
+                if (userCurrentParticipation != null)
+                {
+                    // End the previous participation
+                    userCurrentParticipation.setFinalDate(LocalDate.now());
+                    participationService.saveParticipation(userCurrentParticipation);
+                }
+
+                if (willBeProjectManager != null && willBeProjectManager) {
+                    participation.setIsProjectManager(true);
+                    Participation projectManagerParticipation = participationService.findCurrentProjectManager(projectId);
+                    if (projectManagerParticipation != null) {
+                        projectManagerParticipation.setFinalDate(LocalDate.now());
+                        participationService.saveParticipation(projectManagerParticipation);
+                        // Create a new participation but without privileges
+                        Participation replacingParticipation = new Participation();
+                        replacingParticipation.setUserTW(projectManagerParticipation.getUserTW());
+                        replacingParticipation.setInitialDate(LocalDate.now());
+                        replacingParticipation.setFinalDate(null);
+                        replacingParticipation.setIsProjectManager(false);
+                        replacingParticipation.setProject(project);
+                        participationService.saveParticipation(replacingParticipation);
+
+                    }
+                }
+                participationService.saveParticipation(participation);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.badRequest().body("alreadyexists");
+            }
+        } catch (DataAccessException | ManyProjectManagerException | DateIncoherenceException
+            | IdParentIncoherenceException d) {
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
 
 	@DeleteMapping(value = "/api/projects/participation")
 	public ResponseEntity<String> deleteParticipation(@RequestParam(required = true) Integer participationUserId,
 			@RequestParam(required = true) Integer projectId, HttpServletRequest r) {
 		try {
+		    // Authority is accounted for in projectmanagerinterceptor
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
-			Participation participation = participationService.findCurrentParticipation(participationUserId, projectId);
-			Project project = participation.getProject();
-			Boolean isDepartmentManager = belongsService
-					.findCurrentBelongs(user.getId(), project.getDepartment().getId()).getIsDepartmentManager();
-			Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
-			Boolean isProjectManager = participation.getIsProjectManager();
-
-			if (isProjectManager == false || (isDepartmentManager || isTeamOwner)) {
-				participation.setFinalDate(LocalDate.now());
-				participationService.saveParticipation(participation);
-				return ResponseEntity.ok("Participation delete");
-			} else {
-				return ResponseEntity.status(403).build();
-			}
+			Participation currentParticipation = participationService.findCurrentParticipation(participationUserId, projectId);
+			if (currentParticipation != null)
+            {
+                // End the participation
+                currentParticipation.setFinalDate(LocalDate.now());
+                participationService.saveParticipation(currentParticipation);
+                return ResponseEntity.ok().build();
+            }
+			else {
+                return ResponseEntity.badRequest().build();
+            }
 
 		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.badRequest().build();
 		}
 
 	}

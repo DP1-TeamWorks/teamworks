@@ -28,20 +28,20 @@ import lombok.Setter;
 @Table(name = "milestones")
 
 public class Milestone extends BaseEntity {
-	
+
 	  // Attributes
 
 	@NotEmpty
 	@Size(min=1,max=25)
-	@Column(name = "name", unique = true)
+	@Column(name = "name")
 	private String name;
 
-	
-	@NotEmpty
+
+	@NotNull
 	@Column(name = "due_for")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate dueFor;
-	
+
 	// Relations
 
 	@ManyToOne(optional = false)
@@ -50,10 +50,16 @@ public class Milestone extends BaseEntity {
 	// @JsonBackReference(value="project-milestone")
 	private Project project;
 
-	@JsonManagedReference(value = "milestone-toDo")
+	//@JsonManagedReference(value = "milestone-toDo")
 	@Column(name = "toDos")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "milestone", orphanRemoval = true)
 	private List<ToDo> toDos;
+
+	/*@JsonIgnore
+	public void setToDos(List<ToDo> todos)
+    {
+        toDos = todos;
+    }*/
 
 	@JsonIgnore
 	// @JsonManagedReference(value="milestone-tag")

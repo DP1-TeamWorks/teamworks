@@ -7,8 +7,14 @@ import { useEffect } from "react";
 
 const EditableField = ({value, inputType, smaller, editable, postFunction, fieldName, onUpdated}) => {
   function onOkClicked() {
-    if (!postFunction || !fieldName || actualVal == currentVal)
+    if (!postFunction || !fieldName || actualVal === currentVal)
     {
+      setEditing(false);
+      return;
+    }
+    if (!currentVal)
+    {
+      setCurrentVal(actualVal);
       setEditing(false);
       return;
     }

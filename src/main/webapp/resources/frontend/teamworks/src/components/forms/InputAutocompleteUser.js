@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import Autosuggest from "react-autosuggest";
+import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
+import ProjectApiUtils from "../../utils/api/ProjectApiUtils";
 import UserApiUtils from "../../utils/api/UserApiUtils";
 import "./InputAutocomplete.css";
 
-const InputAutocompleteUser = ({ name, placeholder, onUserSelected, val, onChangeHandler }) =>
+const InputAutocompleteUser = ({ name, placeholder, departmentId, projectId, onUserSelected, val, onChangeHandler }) =>
 {
     function getUserAutocompleteSuggestions(value)
     {
@@ -58,23 +60,66 @@ const InputAutocompleteUser = ({ name, placeholder, onUserSelected, val, onChang
             onChangeHandler(name, "");
     }
 
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState(null);
     const [selectedUserId, setSelectedUserId] = useState(-1);
     const [suggestions, setSuggestions] = useState([]);
 
     useEffect(() =>
     {
-        UserApiUtils.getAllUsers()
+        if (projectId)
+        {
+            ProjectApiUtils.getMembersFromProject(projectId)
+            .then(res => 
+                {
+                    setUsers()
+                })
+            .catch(err => console.error(err));
+        } else if (departmentId)
+        {
+            DepartmentApiUtils.getMembersFromDepartment(departmentId)
+            .then(res => setUsers(res.map(x => {
+                x.id = x.userId;
+                return x;
+            })))
+            .catch(err => console.error(err));
+        } else
+        {
+            UserApiUtils.getAllUsers()
             .then(res => setUsers(res))
             .catch(err => console.error(err));
+        }
     }, []);
+
+    let resultError = false;
+    if (users && users.length === 0)
+    {
+        if (projectId)
+        {
+            resultError = "No users in this project.";
+        } else if (departmentId)
+        {
+            resultError = "No users in this department.";
+        } else
+        {
+            resultError = "No users found.";
+        }
+    }
+
+    let placehold;
+    if (resultError)
+        placehold = resultError;
+    else if (users)
+        placehold = placeholder;
+    else
+        placehold = "Loading users...";
 
     const inputProps = {
         name,
-        placeholder,
+        placeholder: placehold,
         value: val,
         onChange,
         onBlur,
+        disabled: Boolean(resultError) || !users,
         className: "Input EditingInput",
     };
 
@@ -83,7 +128,8 @@ const InputAutocompleteUser = ({ name, placeholder, onUserSelected, val, onChang
         container: 'SuggestionsContainer',
         suggestionsList: 'SuggestionsList',
         suggestion: 'Suggestion',
-        suggestionHighlighted: 'Suggestion--Highlighted'
+        suggestionHighlighted: 'Suggestion--Highlighted',
+        suggestionsContainer: 'SuggestionsListBox'
     }
 
     return (

@@ -75,12 +75,19 @@ public class TagController {
             tagService.saveTag(tag);
             return ResponseEntity.ok().build();
         } catch (DataAccessException | TagLimitProjectException d) {
-            return ResponseEntity.badRequest().body(d.getMessage());
+            if (d.getClass() == TagLimitProjectException.class)
+            {
+                return ResponseEntity.badRequest().body("toomany");
+            } else
+            {
+                return ResponseEntity.badRequest().body("alreadyexists");
+            }
+
         }
     }
 
     @DeleteMapping(value = "/api/tags")
-    public ResponseEntity<String> deleteTagById(HttpServletRequest r, @RequestParam(required = true) Integer tagId) {
+    public ResponseEntity<String> deleteTagById(HttpServletRequest r, @RequestParam(required = true) Integer projectId, @RequestParam(required = true) Integer tagId) {
         try {
             tagService.deleteTagById(tagId);
             return ResponseEntity.ok().build();

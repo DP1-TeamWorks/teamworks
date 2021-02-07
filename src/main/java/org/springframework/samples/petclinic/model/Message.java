@@ -16,6 +16,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,36 +31,42 @@ import org.hibernate.annotations.CreationTimestamp;
 @Entity
 @Table(name = "messages")
 public class Message extends BaseEntity {
+	// Attributes
 
-    // Attributes
+	@Column(name = "timestamp")
+	@CreationTimestamp
+	LocalDate timestamp;
 
-    @Column(name = "timestamp")
-    @CreationTimestamp
-    LocalDate timestamp;
 
-    @Column(name = "subject")
-    private String subject;
+	@Column(name = "subject")
+	private String subject;
 
-    @Column(name = "text")
-    private String text;
+
+	@Column(name = "text")
+	private String text;
+
+	@Transient
+	private List<String> recipientsEmails;
+
+	@Transient
+	private List<Integer> recipientsIds;
 
     @NotNull
     @Column(name = "read")
     private Boolean read;
 
-    @Transient
-    private List<String> recipientsEmails;
+
+
+	// Relations
+	@OneToOne(optional = true)
+	@JoinColumn(name = "reply_to")
+	private Message replyTo;
 
     @Transient
     private List<Integer> toDoList;
 
     @Transient
     private List<Integer> tagList;
-
-    // Relations
-    @OneToOne(optional = true)
-    @JoinColumn(name = "reply_to")
-    private Message replyTo;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "sender_id")
@@ -68,9 +80,9 @@ public class Message extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
     private List<Attatchment> attatchments;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "messages")
     private List<Tag> tags;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "messages")
     private List<ToDo> toDos;
 }
