@@ -47,7 +47,7 @@ public class Tag extends BaseEntity {
     private List<ToDo> todos;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = Message.class, cascade = CascadeType.DETACH)
+    @ManyToMany(mappedBy = "tags")
     private List<Message> messages;
 
     public Integer getTodosUsingTag() {

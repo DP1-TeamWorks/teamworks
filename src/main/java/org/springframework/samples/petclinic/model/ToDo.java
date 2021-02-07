@@ -53,7 +53,7 @@ public class ToDo extends BaseEntity {
     private List<Tag> tags;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = Message.class)
+    @ManyToMany(mappedBy = "toDos")
     private List<Message> messages;
 
     public Integer getAssigneeId() {
