@@ -18,6 +18,8 @@ import org.springframework.samples.petclinic.service.MessageService;
 import org.springframework.samples.petclinic.service.TagService;
 import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.TagLimitProjectException;
+import org.springframework.samples.petclinic.validation.ToDoLimitMilestoneException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -171,8 +173,13 @@ public class MessageController {
             if (message.getToDoList() != null) {
                 List<ToDo> toDoList = message.getToDoList().stream().map(toDoId -> toDoService.findToDoById(toDoId))
                         .collect(Collectors.toList());
-                log.info("ToDoList: " + toDoList.toString());
-                message.setToDos(toDoList);
+                message.setToDoList(null);
+
+                for (ToDo toDo : toDoList) {
+                    log.info("TODO: " + toDo);
+                    toDo.getMessages().add(message);
+                    toDoService.saveToDo(toDo);
+                }
             } else
                 log.info("Any todo to attach");
 
@@ -180,17 +187,24 @@ public class MessageController {
             if (message.getTagList() != null) {
                 List<Tag> tagList = message.getTagList().stream().map(tagId -> tagService.findTagById(tagId))
                         .collect(Collectors.toList());
-                message.setTags(tagList);
+                message.setTagList(null);
+                for (Tag tag : tagList) {
+                    tag.getMessages().add(message);
+                    tagService.saveTag(tag);
+                }
+
             } else
                 log.info("Any tag to attach");
 
+            log.info("" + message.getToDos());
+            log.info("" + message.getTags());
             log.info("Saving the message");
             messageService.saveMessage(message);
             return ResponseEntity.ok().build();
         } catch (
 
-        DataAccessException d) {
-            log.error("ERROR: " + d.getMessage());
+                DataAccessException | TagLimitProjectException | ToDoLimitMilestoneException d) {
+            log.error("hello", d);
             return ResponseEntity.badRequest().build();
         }
     }

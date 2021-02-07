@@ -14,18 +14,19 @@ const OpenedMessage = ({ msg }) => {
   const [forwardOptions, setForwardOptions] = useState({});
   const [messageOptions, setMessageOptions] = useState("");
   useEffect(() => {
-    UserApiUtils.getMyTeamUsers()
-      .then((res) => {
-        console.log("Getting user mails");
-        let mailList = res.map((user) => {
-          return { label: user.name + " - " + user.email, value: user.email };
+    if (messageOptions === "Forward")
+      UserApiUtils.getMyTeamUsers()
+        .then((res) => {
+          console.log("Getting user mails");
+          let mailList = res.map((user) => {
+            return { label: user.name + " - " + user.email, value: user.email };
+          });
+          setForwardOptions(mailList);
+        })
+        .catch((error) => {
+          console.log("ERROR: cannot get the users mails");
         });
-        setForwardOptions(mailList);
-      })
-      .catch((error) => {
-        console.log("ERROR: cannot get the users mails");
-      });
-  }, [msg]);
+  }, [msg, messageOptions]);
 
   console.log(msg);
 
@@ -39,7 +40,10 @@ const OpenedMessage = ({ msg }) => {
           })}
         </span>
       </div>
-      <div className="MsgContentText">{msg.text.replace("\n", "<br>")}</div>
+      <div
+        className="MsgContentText"
+        dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, "<br>") }}
+      ></div>
       <div className="MsgContentButtons">
         <GradientButton
           onClick={() => {

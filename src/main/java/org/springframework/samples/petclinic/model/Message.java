@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import java.time.LocalDate;
 import java.util.List;
@@ -8,7 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -19,48 +17,43 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.NotNull;
-
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "messages")
 public class Message extends BaseEntity {
-	// Attributes
+    // Attributes
 
-	@Column(name = "timestamp")
-	@CreationTimestamp
-	LocalDate timestamp;
+    @Column(name = "timestamp")
+    @CreationTimestamp
+    LocalDate timestamp;
 
+    @Column(name = "subject")
+    @Size(min = 0, max = 150)
+    private String subject;
 
-	@Column(name = "subject")
-	private String subject;
+    @Column(name = "text")
+    @NotNull
+    @Size(min = 0, max = 750)
+    private String text;
 
+    @Transient
+    private List<String> recipientsEmails;
 
-	@Column(name = "text")
-	private String text;
-
-	@Transient
-	private List<String> recipientsEmails;
-
-	@Transient
-	private List<Integer> recipientsIds;
+    @Transient
+    private List<Integer> recipientsIds;
 
     @NotNull
     @Column(name = "read")
     private Boolean read;
 
-
-
-	// Relations
-	@OneToOne(optional = true)
-	@JoinColumn(name = "reply_to")
-	private Message replyTo;
+    // Relations
+    @OneToOne(optional = true)
+    @JoinColumn(name = "reply_to")
+    private Message replyTo;
 
     @Transient
     private List<Integer> toDoList;
@@ -80,9 +73,9 @@ public class Message extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
     private List<Attatchment> attatchments;
 
-    @ManyToMany(mappedBy = "messages")
+    @ManyToMany(mappedBy = "messages") 
     private List<Tag> tags;
 
-    @ManyToMany(mappedBy = "messages")
+    @ManyToMany(mappedBy = "messages") 
     private List<ToDo> toDos;
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import Select from "react-select";
+import InputError from "../../forms/InputError";
 
 const NewMessageMultiSelect = ({
   name,
@@ -7,9 +8,15 @@ const NewMessageMultiSelect = ({
   options,
   changeHandler,
   className,
+  error,
 }) => {
   return (
-    <div className={`InputContainer ${className}`}>
+    <div
+      className={`InputContainer ${className}`}
+      style={{
+        marginBottom: "0px",
+      }}
+    >
       <p className="TitleNewMsg">{name}</p>
       <Select
         options={options}
@@ -26,6 +33,7 @@ const NewMessageMultiSelect = ({
         placeholder={placeholder}
         isMulti
       ></Select>
+      <InputError error={error} />
     </div>
   );
 };
