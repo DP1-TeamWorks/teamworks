@@ -1,6 +1,5 @@
 package org.springframework.samples.petclinic.web;
 
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,13 +24,13 @@ import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
-import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.ProjectService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.ProjectValidator;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -69,6 +68,9 @@ public class ProjectControllerTest {
 	@MockBean
 	private BelongsService belongsService;
 	
+	@MockBean
+	private ProjectValidator projectValidator;
+	
 	@Autowired
 	private MockMvc mockMvc;
 	
@@ -78,42 +80,48 @@ public class ProjectControllerTest {
 	@Autowired
 	protected MockHttpSession mockSession;
 
-	private Project passdp;
-	private Department LSI;
-	private Participation work;
-	private UserTW pablo;
-	private Belongs working;
+	private Project project;
+	private Department department;
+	private Participation part;
+	private UserTW user;
+	private Belongs belongs;
+	private List<Project> projects;
+	private List<Department> departments;
 
 	@BeforeEach
 	void setup() {
-		passdp = new Project();
-		passdp.setId(TEST_PROJECT_ID);
-		passdp.setName("APROBAR");
-		passdp.setDescription("A tope chavales");
-		passdp.setCreationTimestamp(LocalDate.now());
-		mockSession.setAttribute("projectId",TEST_PROJECT_ID);
+		//proyecto
+		project = new Project();
+		project.setId(TEST_PROJECT_ID);
+		project.setCreationTimestamp(LocalDate.now());
+		project.setDescription("YeahPerdonen");
+		project.setName("DragonBallRap");
+		projects = new ArrayList<>();
+		projects.add(project);
+
 		
-		LSI = new Department();
-		passdp.setDepartment(LSI);
-		mockSession.setAttribute("departmentId",TEST_DEPARTMENT_ID);
-		given(this.projectService.findProjectById(TEST_PROJECT_ID)).willReturn(passdp);
-		given(this.departmentService.findDepartmentById(TEST_DEPARTMENT_ID)).willReturn(LSI);
+		//departamento
+		department = new Department();
+		department.setId(TEST_DEPARTMENT_ID);
+		department.setName("Youtube");
+		department.setDescription("Una descrip muy buena");
+		department.setProjects(projects);
+		//relacion con project
+		project.setDepartment(department);
 		
-		work = new Participation();
-		List<Participation> works = new ArrayList<>();
-		works.add(work);
-		passdp.setParticipations(works);
-		mockSession.setAttribute("participationId",TEST_PARTICIPATION_ID);
-		given(this.participationService.findParticipationById(TEST_PARTICIPATION_ID)).willReturn(work);
+		//participacion
+		part = new Participation();
+		part.setId(TEST_PARTICIPATION_ID);
+		part.setInitialDate(LocalDate.now());
+		part.setIsProjectManager(true);
+		//relacion con project
+		part.setProject(project);
 		
-		pablo = new UserTW();
-		pablo.setRole(Role.team_owner);
-		mockSession.setAttribute("userId",TEST_USER_ID);
-		given(this.userTWService.findUserById(TEST_USER_ID)).willReturn(pablo);
+		//
 		
-		working = new Belongs();
-		mockSession.setAttribute("belongsId",TEST_BELONGS_ID);
-		given(this.belongsService.findCurrentBelongs(TEST_USER_ID, TEST_DEPARTMENT_ID)).willReturn(working);
+		
+		//part.setUserTW(userTW);
+
 		
 	}
 	
@@ -134,47 +142,3 @@ public class ProjectControllerTest {
 		.andExpect(content().string("APROBAR"));
 	}
 }
-	
-/*	@Test
-	void testGetTeamName() throws Exception {
-		mockMvc.perform(get("/api/team").session(mockSession))
-		.andExpect(status().isOk())
-		.andExpect(status().is(200))
-		.andExpect(content().string("Atomatic"));
-	}
-	
-	@Test
-	void testUpdateTeam() throws Exception {
-		atomatic.setName("AtomaticUpdated");
-		atomatic.setIdentifier("ATOMUPDATED");
-		String atomaticupdated = objectMapper.writeValueAsString(atomatic);
-		mockMvc.perform(post("/api/team").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
-		.andExpect(status().isOk())
-		.andExpect(status().is(200));	
-		
-		mockMvc.perform(get("/api/team").session(mockSession))
-		.andExpect(status().is(200))
-		.andExpect(content().string("AtomaticUpdated"));
-	}
-	
-	@Test
-	void testUpdateTeamNull() throws Exception {
-		atomatic.setName(null);
-		//atomatic.setIdentifier("ATOMUPDATED");
-		String atomaticupdated = objectMapper.writeValueAsString(atomatic);
-		mockMvc.perform(post("/api/team").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
-		.andExpect(status().isOk())
-		.andExpect(status().is(200));	
-		
-		mockMvc.perform(get("/api/team").session(mockSession))
-		.andExpect(status().is(200))
-		.andExpect(content().string("AtomaticUpdated"));
-	}
-	
-	@Test
-	void testGetTeamNameUpdated() throws Exception {
-		mockMvc.perform(get("/api/team").session(mockSession))
-		.andExpect(content().string("Atomatic"));
-	}
-}
-*/
