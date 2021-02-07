@@ -35,7 +35,7 @@ public class Message extends BaseEntity {
     LocalDate timestamp;
 
     @Column(name = "subject")
-    @Size(min = 0, max = 150)
+    @Size(min = 0, max = 100)
     private String subject;
 
     @Column(name = "text")

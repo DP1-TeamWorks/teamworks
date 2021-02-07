@@ -1,6 +1,5 @@
 import React from "react";
 import Input from "../../forms/Input";
-import GradientButton from "../../buttons/GradientButton";
 import NewMessageMultiSelect from "./NewMessageMultiSelect";
 import NewMessageText from "./NewMessageText";
 import MessageApiUtils from "../../../utils/api/MessageApiUtils";
@@ -55,15 +54,12 @@ class NewMessageForm extends React.Component {
     let errorMsg = "";
     switch (field) {
       case "To":
-        console.log("TOOOOOOOOOOOO");
-        console.log(value.length);
-        console.log(value.length < 1);
         if (value.length < 1 || value === "")
           errorMsg = "Select one recipient at least";
         break;
       case "Subject":
-        if (value.length > 150)
-          errorMsg = "Too Long Subject (" + 150 - value.length + ")";
+        if (value.length > 100)
+          errorMsg = "Too Long Subject (" + (100 - value.length) + ")";
         break;
       case "Message":
         console.log(value.length);
@@ -73,13 +69,9 @@ class NewMessageForm extends React.Component {
         break;
       default:
     }
-    console.log(errorMsg);
-    console.log(field + "-" + value);
-    console.log(errorMsg);
     this.setState({
       errors: { ...this.state.errors, [field]: errorMsg },
     });
-    console.log(this.state.errors);
   };
 
   changeHandler = (field, value) => {
@@ -153,7 +145,6 @@ class NewMessageForm extends React.Component {
             changeHandler={this.changeHandler}
             options={this.tagOptions}
             className="InputContainer2"
-            error={this.state.errors.Tags}
           ></NewMessageMultiSelect>
           <NewMessageMultiSelect
             name="ToDos"
@@ -161,7 +152,6 @@ class NewMessageForm extends React.Component {
             options={this.toDoOptions}
             changeHandler={this.changeHandler}
             className="InputContainer2"
-            error={this.state.errors.ToDos}
           ></NewMessageMultiSelect>
         </div>
         <div className="NewMsg">

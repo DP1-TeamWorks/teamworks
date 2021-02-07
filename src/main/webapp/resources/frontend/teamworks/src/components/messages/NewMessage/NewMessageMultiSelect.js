@@ -33,7 +33,7 @@ const NewMessageMultiSelect = ({
         placeholder={placeholder}
         isMulti
       ></Select>
-      <InputError error={error} />
+      {error && <InputError error={error} />}
     </div>
   );
 };
