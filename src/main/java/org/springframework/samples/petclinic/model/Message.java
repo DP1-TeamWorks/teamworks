@@ -1,8 +1,11 @@
 package org.springframework.samples.petclinic.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,8 +28,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "messages")
 public class Message extends BaseEntity {
-    // Attributes
 
+    // Attributes
     @Column(name = "timestamp")
     @CreationTimestamp
     LocalDate timestamp;
@@ -63,19 +66,29 @@ public class Message extends BaseEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "sender_id")
+    @JsonIgnore
     private UserTW sender;
+
+    public UserTW.StrippedUser getStrippedSender() {
+        return new StrippedUserImpl(sender);
+    }
 
     @ManyToMany
     @JoinColumn(name = "recipients")
+    @JsonIgnore
     private List<UserTW> recipients;
+
+    public List<UserTW.StrippedUser> getStrippedRecipients() {
+        return recipients.stream().map(user -> new StrippedUserImpl(user)).collect(Collectors.toList());
+    }
 
     @Column(name = "attatchments")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
     private List<Attatchment> attatchments;
 
-    @ManyToMany(mappedBy = "messages") 
+    @ManyToMany(mappedBy = "messages")
     private List<Tag> tags;
 
-    @ManyToMany(mappedBy = "messages") 
+    @ManyToMany(mappedBy = "messages")
     private List<ToDo> toDos;
 }
