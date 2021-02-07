@@ -74,6 +74,8 @@ public class BelongsControllerTest {
 	private Collection<Belongs> belongCol;
 	
 	private Department calidad;
+	
+	private Belongs belongs;
 	@Autowired
 	protected MockHttpSession mockSession;
 	@BeforeEach
@@ -93,7 +95,7 @@ public class BelongsControllerTest {
 		juan.setPassword("123456789");
 		juan.setRole(Role.team_owner);
 		//juan belong
-		Belongs belongs=new Belongs();
+		belongs=new Belongs();
 		belongs.setUserTW(juan);
 		belongs.setIsDepartmentManager(true);
 		belongs.setDepartment(calidad);
@@ -133,14 +135,17 @@ public class BelongsControllerTest {
 		String departmentIdString=departmentId.toString();
 		mockMvc.perform(get("/api/departments/belongs").session(mockSession).param("departmentId", departmentIdString)).andExpect(status().is(200)).andExpect(content().json(belongsJson));
 	}
+	
 	@Test
 	void testCreateBelongs() throws Exception {
 		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
 		String belonguserId=String.valueOf(TEST_BELONGUSER_ID);
 		mockMvc.perform(post("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(200));
 	}
+	
 	@Test
 	void testCreateBelongsWithExistingBelongs() throws Exception {
+		//Añadimos un belong al usuario
 		Belongs belongUser=new Belongs();
 		belongUser.setUserTW(rosa);
 		belongUser.setDepartment(calidad);
@@ -151,8 +156,10 @@ public class BelongsControllerTest {
 		String belonguserId=String.valueOf(TEST_BELONGUSER_ID);
 		mockMvc.perform(post("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(400));
 	}
+	
 	@Test
 	void testCreateBelongsWithOtherTeamUser() throws Exception {
+		//Creamos el belong con un usuario de otro equipo
 		Team team2=new Team();
 		team2.setId(25);
 		team2.setName("Nike");
@@ -166,8 +173,10 @@ public class BelongsControllerTest {
 		String belonguserId=String.valueOf(TEST_BELONGUSER_ID+1);
 		mockMvc.perform(post("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(400));
 	}
+	
 	@Test
 	void testCreateBelongsWithOtherTeamDepartment() throws Exception {
+		//Creamos el belong con un departamento de otro equipo
 		Team java=new Team();
 		java.setId(40);
 		java.setName("Java");
@@ -181,6 +190,35 @@ public class BelongsControllerTest {
 		String departmentId=String.valueOf(TEST_DEPARTMENT_ID+1);
 		String belonguserId=String.valueOf(TEST_BELONGUSER_ID);
 		mockMvc.perform(post("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(400));
+	}
+	
+	@Test
+	void testCreateBelongsGiveDepartmentManagerToOtherUser() throws Exception {
+		given(belongsService.findCurrentDepartmentManager(TEST_DEPARTMENT_ID)).willReturn(belongs);
+		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
+		String belonguserId=String.valueOf(TEST_BELONGUSER_ID);
+		mockMvc.perform(post("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId).param("isDepartmentManager", "true")).andExpect(status().is(200));
+	}
+	@Test
+	void testEditBelongs() throws Exception {
+		//Quitar juan de department manager
+		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
+		String belonguserId=String.valueOf(TEST_USER_ID);
+		mockMvc.perform(post("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId).param("isDepartmentManager", "false")).andExpect(status().is(200));
+	}
+	@Test
+	void testDeleteBelongs() throws Exception {
+		
+		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
+		String belonguserId=String.valueOf(TEST_USER_ID);
+		mockMvc.perform(delete("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(200));
+	}
+	@Test
+	void testDeleteNotExistingBelongs() throws Exception {
+		//Introducimos la id de alguien que no tiene belongs
+		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
+		String belonguserId=String.valueOf(TEST_BELONGUSER_ID);
+		mockMvc.perform(delete("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(400));
 	}
 	
 	
