@@ -61,9 +61,6 @@ public class Milestone extends BaseEntity {
         toDos = todos;
     }*/
 
-	@JsonIgnore
-	// @JsonManagedReference(value="milestone-tag")
-	@ManyToMany
-	private List<Tag> tags;
+	
 
 }

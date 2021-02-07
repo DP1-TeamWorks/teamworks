@@ -39,9 +39,6 @@ public class Tag extends BaseEntity {
     @JsonBackReference(value = "project-tag")
     private Project project;
 
-    @JsonIgnore
-    @ManyToMany
-    private List<Milestone> milestones;
 
     @JsonIgnore
     @ManyToMany(cascade = {
