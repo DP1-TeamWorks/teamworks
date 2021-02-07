@@ -81,7 +81,11 @@ const OpenedMessage = ({ msg }) => {
       </div>
       {messageOptions === "Reply" && <ReplyForm repliedMessage={msg} />}
       {messageOptions === "Forward" && (
-        <ForwardForm forwardOptions={forwardOptions} forwardedMessage={msg} />
+        <ForwardForm
+          key={JSON.stringify(forwardOptions)}
+          forwardOptions={forwardOptions}
+          forwardedMessage={msg}
+        />
       )}
     </>
   );
