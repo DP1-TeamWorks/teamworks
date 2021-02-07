@@ -4,7 +4,7 @@ import AddForm from "./AddForm";
 import "./AddUserForm.css";
 import InputAutocompleteUser from "./InputAutocompleteUser";
 
-const AddUserToProject = ({ onUserAdded, submitText, projectId }) =>
+const AddUserToProject = ({ onUserAdded, submitText, projectId, departmentId }) =>
 {
   function onUserSelected(field, userId)
   {
@@ -31,7 +31,7 @@ const AddUserToProject = ({ onUserAdded, submitText, projectId }) =>
   return (
     <AddForm hasAutocomplete submitText={submitText} postFunction={addUserToProject} alreadyExistsErrorText="That user is already a project member." onAutocompleteSelected={onUserSelected}>
       <p className="InputTitle">Full Name</p>
-      <InputAutocompleteUser key={selectedUser} name="name" placeholder="Harvey Specter"/>
+      <InputAutocompleteUser key={selectedUser} departmentId={departmentId} name="name" placeholder="Harvey Specter"/>
     </AddForm>
   );
 };

@@ -39,8 +39,24 @@
     margin-left: 80px;
     white-space: nowrap;
     position: fixed;
-    right: 120px;
+    right: 170px;
     /*quitarlo*/
+}
+
+.HeaderButtonLogout{
+    margin-top: 20px;
+    height: 50px;
+    white-space: nowrap;
+    position: fixed;
+    right: 95px;
+    width: 40px;
+    min-width: 0px !important;
+    border-radius: 100px;
+    /*quitarlo*/
+}
+
+.LogoutIcon{
+    width: 20px;
 }
 
 .HeaderSearchbar{

@@ -1,17 +1,20 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Sticky from "react-sticky-el";
+import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
 import Button from "../../buttons/Button";
-import AddElementForm from "../../forms/AddElementForm";
+import AddMilestoneForm from "../../forms/AddMilestoneForm";
+import AddTagForm from "../../forms/AddTagForm";
+import AddUserToProject from "../../forms/AddUserToProjectForm";
+import Spinner from "../../spinner/Spinner";
 import EditableField from "../EditableField";
 import SettingGroup from "../SettingGroup";
 import SidePaneElement from "../SidePaneElement";
 import "../SubsettingContainer.css";
-import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
-import Spinner from "../../spinner/Spinner";
-import AddUserToProject from "../../forms/AddUserToProjectForm";
+import MilestoneList from "./MilestoneList";
 import ProjectMemberList from "./ProjectMemberList";
+import TagList from "./TagList";
 
 const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
 {
@@ -22,7 +25,10 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
   const [isAddLoading, setIsAddLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [projectMembers, setProjectMembers] = useState(null);
+  const [milestoneUpdateCounter, setMilestoneUpdateCounter] = useState(0);
+  const [tagUpdateCounter, setTagUpdateCounter] = useState(0);
 
+  // TODO useCallback to fix this warning? how would we fix this
   useEffect(() => fetchProjectMembers(), [departmentIndex, projectIndex, myDepartments])
 
   function generateNewProjectName(projects)
@@ -45,7 +51,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
   {
     if (isAddLoading)
       return;
-    
+
     const dpt = myDepartments[departmentIndex]
     const project = {
       name: generateNewProjectName(dpt.projects),
@@ -53,12 +59,12 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
     }
     setIsAddLoading(true);
     ProjectApiUtils.postProject(dpt.id, project)
-    .then(() => 
-    {
-      if (onProjectAdded)
-        onProjectAdded();
-    })
-    .catch(err => console.error(err));
+      .then(() => 
+      {
+        if (onProjectAdded)
+          onProjectAdded();
+      })
+      .catch(err => console.error(err));
   }
 
   function onProjectAttributeUpdated(field, value)
@@ -71,6 +77,16 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
         ...myDepartments
       }));
     }
+  }
+
+  function onMilestoneAdded()
+  { 
+    setMilestoneUpdateCounter(Math.random()); // HACK force an update
+  }
+
+  function onTagAdded()
+  { 
+    setTagUpdateCounter(Math.random()); // HACK force an update
   }
 
   function onProjectDeleteClicked()
@@ -116,14 +132,13 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
     {
       const projectId = myDepartments[departmentIndex].projects[projectIndex].id;
       ProjectApiUtils.getMembersFromProject(projectId)
-      .then(data => setProjectMembers(data))
-      .catch(err => console.error(err));
+        .then(data => setProjectMembers(data))
+        .catch(err => console.error(err));
     } else 
     {
       setProjectMembers(null);
     }
   }
-
 
   if (JSON.stringify(myDepartments) !== JSON.stringify(departments)) // When the department property is changed 
   {
@@ -156,10 +171,10 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
   } else
   {
     if (projectIndex >= projects.length)
-      {
-        setProjectIndex(0);
-        return;
-      }
+    {
+      setProjectIndex(0);
+      return;
+    }
     const currentProject = projects[projectIndex];
     Content = (
       <>
@@ -168,7 +183,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
           description="Choose an easily identifiable name for team members.">
           <EditableField
             key={`${departmentIndex}-${projectIndex}`}
-            value={currentProject.name} 
+            value={currentProject.name}
             fieldName="name"
             postFunction={updateProject}
             onUpdated={onProjectAttributeUpdated} />
@@ -191,6 +206,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
             key={currentProject.name}
             onUserAdded={onUserAdded}
             projectId={currentProject.id}
+            departmentId={departments[departmentIndex].id}
             submitText={`Add to ${currentProject.name}`} />
         </SettingGroup>
         <SettingGroup
@@ -200,22 +216,32 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
             key={`${departmentIndex}-${projectIndex}`}
             projectId={currentProject.id}
             loading={projectMembers == null}
-            members={projectMembers} 
+            members={projectMembers}
             onListUpdated={fetchProjectMembers} />
         </SettingGroup>
         <SettingGroup
           name="Milestones"
-          description="Click on a milestone below to manage it.">
-          {/* <UserList /> */}
+          description="You can add a new milestone below.">
+          <AddMilestoneForm
+            key={`mileform${currentProject.id}`}
+            projectId={currentProject.id}
+            onMilestoneAdded={onMilestoneAdded} />
+          <MilestoneList
+            key={`list${currentProject.id}`}
+            updateCounter={milestoneUpdateCounter}
+            projectId={currentProject.id} />
         </SettingGroup>
         <SettingGroup
           name="Tags"
-          description="Click on a tag to manage it.">
-          <AddElementForm
-            submitText="Add tag"
-            attributeName="Tag name"
-            attributePlaceholder="Documentation" />
-          {/* <UserList /> */}
+          description="You can add a new tag below.">
+          <AddTagForm
+            key={`tagform${currentProject.id}`}
+            projectId={currentProject.id}
+            onTagAdded={onTagAdded} />
+          <TagList
+            key={`taglist${currentProject.id}`}
+            updateCounter={tagUpdateCounter}
+            projectId={currentProject.id} />
         </SettingGroup>
         <SettingGroup
           danger
@@ -225,7 +251,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
             className="Button--red"
             onClick={onProjectDeleteClicked}>
             {isDeleting ? <Spinner red /> : "Delete project"}
-        </Button>
+          </Button>
         </SettingGroup>
       </>
     );
@@ -249,14 +275,24 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
   return (
     <div className="SubsettingContainer">
       <div className="SubsettingSidePane">
-        {DepartmentElements}
+        <Sticky
+          boundaryElement=".SubsettingSidePane"
+          topOffset={-240}
+          stickyStyle={{ transform: 'translateY(240px)' }}>
+          {DepartmentElements}
+        </Sticky>
       </div>
       <div className="SubsettingSidePane SubsettingSidePane--Second">
-        <SidePaneElement reducedpadding={isAddLoading} onClick={createProject}
-          highlighted elementDiv={isAddLoading}>
-          {addBtn}
+        <Sticky
+          boundaryElement=".SubsettingSidePane"
+          topOffset={-240}
+          stickyStyle={{ transform: 'translateY(240px)' }}>
+          <SidePaneElement reducedpadding={isAddLoading} onClick={createProject}
+            highlighted elementDiv={isAddLoading}>
+            {addBtn}
           </SidePaneElement>
-        {ProjectElements}
+          {ProjectElements}
+        </Sticky>
       </div>
       <div className="SettingGroupsContainer">
         {Content}

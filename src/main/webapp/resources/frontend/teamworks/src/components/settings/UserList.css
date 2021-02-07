@@ -6,6 +6,10 @@
     border-collapse: collapse;
 }
 
+.UserList--Smaller {
+    max-width: 500px;
+}
+
 .UserList__thead {
     background: #434343;
 }

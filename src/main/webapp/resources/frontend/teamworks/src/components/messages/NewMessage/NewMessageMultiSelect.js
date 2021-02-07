@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from "react";
-import Input from "../forms/Input";
-import ProjectPicker from "../projects/ProjectPicker";
+import React from "react";
 import Select from "react-select";
-import AsyncSelect from "react-select/async";
-import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
-import ProjectApiUtils from "../../utils/api/ProjectApiUtils";
 
 const NewMessageMultiSelect = ({
   name,
   placeholder,
   options,
   changeHandler,
+  className,
 }) => {
   return (
-    <div className="InputContainer">
+    <div className={`InputContainer ${className}`}>
       <p className="TitleNewMsg">{name}</p>
       <Select
         options={options}
-        onChange={(e) => changeHandler(name, e[0].value)}
+        onChange={(e) => {
+          changeHandler(
+            name,
+            e.map((x) => {
+              return x.value;
+            })
+          );
+        }}
         styles={customStyles}
         name={name}
         placeholder={placeholder}
@@ -56,9 +59,14 @@ const customStyles = {
     ...base,
     backgroundColor: "#a6ce56",
   }),
+  valueContainer: (base) => ({
+    ...base,
+    flexDirection: "row",
+    flexWrap: "nowrap",
+  }),
   multiValueLabel: (base) => ({
     ...base,
-    color: "white",
+    color: "#262626",
   }),
 };
 

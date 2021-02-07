@@ -22,8 +22,8 @@ public class ToDoService {
 
     @Transactional(rollbackFor = ToDoLimitMilestoneException.class)
     public void saveToDo(ToDo toDo) throws DataAccessException, ToDoLimitMilestoneException {
-        if (toDo.getDone() || toDo.getAssignee().getToDos().stream()
-                .filter(x -> !toDo.getDone() && x.getMilestone() == toDo.getMilestone()).count() < 7) {
+        if (toDo.getDone() || findToDoByMilestoneAndUser(toDo.getMilestone().getId(), toDo.getAssignee().getId())
+                .stream().filter(t -> !t.getDone()).count() < 7L) {
             toDoRepository.save(toDo);
         } else {
             throw new ToDoLimitMilestoneException();
@@ -38,6 +38,11 @@ public class ToDoService {
     @Transactional(readOnly = true)
     public void deleteToDoById(Integer toDoId) throws DataAccessException {
         toDoRepository.deleteById(toDoId);
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<ToDo> findToDoByUser(Integer userId) {
+        return toDoRepository.findToDoByUser(userId);
     }
 
     @Transactional(readOnly = true)

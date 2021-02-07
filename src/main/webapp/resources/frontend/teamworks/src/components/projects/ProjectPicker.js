@@ -24,8 +24,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   }, []);
 
   useEffect(() => {
-    if (department === null)
-      return;
+    if (department === null) return;
     ProjectApiUtils.getMyProjects(department.id)
       .then((res) => {
         setProjectList(res);
@@ -58,7 +57,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   };
 
   return (
-    <div style={{ display: departmentList<=0 ? "none": "" }}>
+    <div style={{ display: departmentList <= 0 ? "none" : "" }}>
       <h3 className="SidebarSectionTitle">Project</h3>
 
       <button className="PickerBox" onClick={openOrClose}>
@@ -72,6 +71,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
           {departmentList.map((dpt) => {
             return (
               <button
+                key={dpt.id}
                 className="CollapsedSelector"
                 onClick={() => handlePickDepartment(dpt)}
               >
@@ -84,6 +84,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
           {projectList.map((project) => {
             return (
               <button
+                key={project.id}
                 className="CollapsedSelector"
                 onClick={() => handlePickProject(project)}
               >

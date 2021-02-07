@@ -1,8 +1,9 @@
 package org.springframework.samples.petclinic.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 import java.time.LocalDate;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,69 +24,65 @@ import com.sun.istack.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "messages")
-
 public class Message extends BaseEntity {
 	// Attributes
-	
+
 	@Column(name = "timestamp")
 	@CreationTimestamp
 	LocalDate timestamp;
 
-	
+
 	@Column(name = "subject")
 	private String subject;
 
-	
+
 	@Column(name = "text")
 	private String text;
 
-	@NotNull
-	@Column(name = "read")
-	private Boolean read;
-
 	@Transient
 	private List<String> recipientsEmails;
-	
-	@Transient
-	private List<String> ListOfTags;
-	
-	@Transient
-	private List<String> ListOfToDos;
-	
+
 	@Transient
 	private List<Integer> recipientsIds;
 
-	@Transient
-	private List<Integer> tagList;
+    @NotNull
+    @Column(name = "read")
+    private Boolean read;
 
-	
-	
+
+
 	// Relations
 	@OneToOne(optional = true)
 	@JoinColumn(name = "reply_to")
 	private Message replyTo;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "sender_id")
-	private UserTW sender;
+    @Transient
+    private List<Integer> toDoList;
 
-	@ManyToMany
-	@JoinColumn(name = "recipients")
-	private List<UserTW> recipients;
+    @Transient
+    private List<Integer> tagList;
 
-	@Column(name = "attatchments")
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
-	private List<Attatchment> attatchments;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "sender_id")
+    private UserTW sender;
 
-	@ManyToMany
-	private List<Tag> tags;
+    @ManyToMany
+    @JoinColumn(name = "recipients")
+    private List<UserTW> recipients;
 
-	@ManyToMany
-	private List<ToDo> toDos;
+    @Column(name = "attatchments")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
+    private List<Attatchment> attatchments;
 
+    @ManyToMany(mappedBy = "messages")
+    private List<Tag> tags;
+
+    @ManyToMany(mappedBy = "messages")
+    private List<ToDo> toDos;
 }

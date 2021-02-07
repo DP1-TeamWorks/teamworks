@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import "../tags/Tags.css";
 
 const Circle = ({ color }) => {
   return (

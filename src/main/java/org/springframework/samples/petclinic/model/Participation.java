@@ -23,7 +23,7 @@ import lombok.Setter;
 @Table(name = "participations")
 
 public class Participation extends BaseEntity {
-
+	
 	  // Attributes
 
 	@CreationTimestamp
@@ -38,7 +38,7 @@ public class Participation extends BaseEntity {
 	@NotNull
 	@Column(name = "isProjectManager")
 	private Boolean isProjectManager;
-
+	
 	// Relations
 
 	@ManyToOne(optional = false)
@@ -63,7 +63,7 @@ public class Participation extends BaseEntity {
         return userTW.getName();
     }
 
-    public String getLastName()
+    public String getLastname()
     {
         return userTW.getLastname();
     }

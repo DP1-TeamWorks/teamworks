@@ -35,6 +35,7 @@ public class BelongsService {
             }
 		}
 		belongsRepository.save(belongs);
+
 	}
 
 	@Transactional

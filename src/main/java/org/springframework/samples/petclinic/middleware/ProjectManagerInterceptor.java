@@ -37,10 +37,6 @@ public class ProjectManagerInterceptor extends HandlerInterceptorAdapter {
 		Integer projectId = Integer.valueOf(req.getParameter("projectId"));
 		Participation participation = participationService.findCurrentParticipation(userId, projectId);
 		Project project = projectService.findProjectById(projectId);
-        if (project == null) {
-            res.sendError(400);
-            return false;
-        }
 		Belongs belongs = belongsService.findCurrentBelongs(userId, project.getDepartment().getId());
 		Boolean isDepartmentManager = false;
 		Boolean isProjectManager = false;

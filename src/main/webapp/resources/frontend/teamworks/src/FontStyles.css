@@ -4,6 +4,10 @@ body {
   font-family: 'Inter';
 }
 
+i {
+  font-style: italic;
+}
+
 .TinyTitle {
   font-size: 10pt;
   color: #A6CE56;

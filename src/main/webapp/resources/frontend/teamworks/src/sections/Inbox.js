@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MessageList from "../components/messages/MessageList";
-import NewMessage from "../components/messages/NewMessage";
+import NewMessage from "../components/messages/NewMessage/NewMessage";
 import InboxSidebar from "../components/sidebar/InboxSidebar";
 import MessageApiUtils from "../utils/api/MessageApiUtils";
 import Section from "./Section";

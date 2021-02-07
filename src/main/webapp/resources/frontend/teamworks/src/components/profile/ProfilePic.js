@@ -5,7 +5,7 @@ const ProfilePic = ({src, className, small, slim}) =>
 {
     let picClass = small ? "ProfilePicHeader" : "ProfilePic";
     return (
-        <img onClick={AuthApiUtils.logout} className={`${picClass} ${className??""}`} src={src} alt="Profile" ></img>
+        <img className={`${picClass} ${className??""}`} src={src} alt="Profile" ></img>
     )
 }
 

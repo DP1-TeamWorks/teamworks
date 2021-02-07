@@ -1,10 +1,10 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
 import Input from "../../forms/Input";
-import SubmitError from "../../forms/SubmitError";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
+import SubmitError from "../../forms/SubmitError";
 
 class AddToDoForm extends React.Component {
   constructor(props) {
@@ -16,17 +16,15 @@ class AddToDoForm extends React.Component {
       errors: {},
       requestError: "",
     };
+    this.disable = props.shouldDisable;
   }
 
   hasErrors = () => {
     const errors = Object.values(this.state.errors);
     const nInputs = Object.keys(this.state.inputs).length;
-    let b =
-      errors.length < nInputs
-        ? true
-        : errors.some((e) => {
-            return e !== "";
-          });
+    let b = errors.some((e) => {
+      return e !== "";
+    });
     return b;
   };
 
@@ -36,11 +34,9 @@ class AddToDoForm extends React.Component {
     });
 
     let errorMsg = "";
-    if (value === "") {
-      errorMsg = "ToDo required";
-    } else if (value.length > 14) {
-      errorMsg = "Too Long toDo";
-    }
+    if (value === "") errorMsg = "ToDo required";
+    else if (value.length > 14) errorMsg = "Too Long toDo";
+
     this.setState({
       errors: { ...this.state.errors, toDo: errorMsg },
     });
@@ -54,7 +50,7 @@ class AddToDoForm extends React.Component {
   apiRequestHandler = (toDoTitle) => {
     ToDoApiUtils.addNewPersonalToDo(this.props.milestoneId, {
       title: toDoTitle,
-      done: "false",
+      done: false,
     })
       .then((res) => {
         this.props.setReloadToDos(true);
@@ -62,10 +58,9 @@ class AddToDoForm extends React.Component {
       .catch((error) => {
         console.log("ERROR: cannot add the new todo");
         console.log(error.response);
-        if (error.response.data === "Many toDos assigned to milestone")
-          this.setState({
-            requestError: "Cannot add more toDos",
-          });
+        this.setState({
+          requestError: error.response.data,
+        });
       });
   };
 
@@ -77,6 +72,9 @@ class AddToDoForm extends React.Component {
       this.setState({ inputs: { ...this.state.inputs, toDo: "" } });
       this.apiRequestHandler(toDoTitle);
       event.target.reset();
+    } else {
+      console.log("There are errors in this form");
+      console.log(this.state.errors);
     }
   };
 
@@ -92,7 +90,9 @@ class AddToDoForm extends React.Component {
           changeHandler={this.changeHandler}
           error={this.state.errors.toDo}
         />
-        <SubmitError error={this.requestError !== "" && this.requestError} />
+        <SubmitError
+          error={this.state.requestError !== "" && this.state.requestError}
+        />
       </form>
     );
   }

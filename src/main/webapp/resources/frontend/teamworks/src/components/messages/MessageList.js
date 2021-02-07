@@ -9,6 +9,7 @@ const MessageList = ({ setReloadCounters, messages }) => {
       {messages.map((msg) => {
         return (
           <MessagePreview
+            key={msg.id}
             msg={msg}
             openMessage={openMessage}
             setOpenMessage={setOpenMessage}

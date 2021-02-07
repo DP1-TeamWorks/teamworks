@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Input from "../forms/Input";
 
 export default function NewMessageText({name, changeHandler}) {
   return (
@@ -9,7 +8,7 @@ export default function NewMessageText({name, changeHandler}) {
                 name={name}
                 className="Input NewMsgBody InputNewMsg"
                 form="NewMsgForm"
-                onChange={changeHandler}
+                onChange={(e) => changeHandler(name, e.target.value)}
               ></textarea>
             </div>
   );

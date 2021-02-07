@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.repository.ParticipationRepository;
@@ -22,12 +21,12 @@ public class ParticipationService {
 		this.participationRepository = participationRepository;
 	}
 
-	@Transactional
-	public void saveParticipation(Participation participation) throws DataAccessException, ManyProjectManagerException, DateIncoherenceException {
+    @Transactional
+    public void saveParticipation(Participation participation) throws DataAccessException, ManyProjectManagerException, DateIncoherenceException {
         if (participation.getFinalDate() == null && participation.getIsProjectManager() && participation.getProject().getParticipations().stream()
             .anyMatch(x -> x.getIsProjectManager() == true && x.getFinalDate() == null)) {
-			throw new ManyProjectManagerException();
-		}else if (participation.getFinalDate() != null)
+            throw new ManyProjectManagerException();
+        }else if (participation.getFinalDate() != null)
         {
             if (participation.getInitialDate() == null || (!participation.getInitialDate().equals(participation.getFinalDate()) && !participation.getInitialDate().isBefore(participation.getFinalDate())))
             {
@@ -35,7 +34,7 @@ public class ParticipationService {
             }
         }
         participationRepository.save(participation);
-	}
+    }
 
 	@Transactional
 	public void deleteParticipationById(Integer participationId) throws DataAccessException {
@@ -71,19 +70,17 @@ public class ParticipationService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Project> findMyDepartmentProjects(Integer userId, Integer departmentId) throws DataAccessException {
-		return participationRepository.findMyDepartmentProjects(userId, departmentId);
+	public Collection<Project> findMyDepartemntProjects(Integer userId, Integer departmentId) throws DataAccessException {
+		return participationRepository.findMyDepartemntProjects(userId, departmentId);
 	}
 
-    @Transactional(readOnly = true)
-    public Participation findCurrentProjectManager(Integer projectId)
-    {
-        return participationRepository.findCurrentProjectManager(projectId);
+	@Transactional(readOnly = true)
+    public Collection<Participation> findCurrentParticipationsInDepartment(Integer departmentId) throws DataAccessException {
+	    return participationRepository.findCurrentParticipationsInProject(departmentId);
     }
 
     @Transactional(readOnly = true)
-    public Collection<Participation> findCurrentParticipationsInDepartment(Integer projectId)
-    {
-        return participationRepository.findCurrentParticipationsInDepartment(projectId);
+    public Participation findCurrentProjectManager(Integer projectId) throws DataAccessException {
+        return participationRepository.findCurrentProjectManager(projectId);
     }
 }

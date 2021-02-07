@@ -15,12 +15,12 @@ public interface MilestoneRepository extends Repository<Milestone, Integer> {
 	void deleteById(Integer id) throws DataAccessException;
 
 	Milestone findById(Integer milestoneId);
-	
+
 	@Query(value = "SELECT u FROM Milestone u WHERE u.name = :name")
 	public Collection<Milestone> findMilestonesByName(@Param("name") Integer name);
 
 	@Query(value = "SELECT u FROM Milestone u WHERE u.project.id = :projectId")
-	public Collection<Milestone> findMilestonesByProject(@Param("projectId") Integer projectId);
+	public Collection<Milestone> findMilestonesForProject(@Param("projectId") Integer projectId);
 
 	Collection<Milestone> findAll() throws DataAccessException;;
 
