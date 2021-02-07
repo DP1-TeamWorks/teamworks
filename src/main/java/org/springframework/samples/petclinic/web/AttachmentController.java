@@ -1,8 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -12,25 +10,17 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.samples.petclinic.model.AttachmentBody;
 import org.springframework.samples.petclinic.model.Attachment;
 import org.springframework.samples.petclinic.model.Message;
-import org.springframework.samples.petclinic.model.Role;
-import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.model.UserTW;
-import org.springframework.samples.petclinic.service.AttachmentService;
 import org.springframework.samples.petclinic.service.AttachmentService;
 import org.springframework.samples.petclinic.service.MessageService;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 public class AttachmentController {
 
