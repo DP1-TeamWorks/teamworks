@@ -144,6 +144,12 @@
   color: #34382e;
 }
 
+.fa-times > path {
+  color: #a7e32d;
+  cursor: pointer;
+  float: right;
+}
+
 .NewMsgModal {
   z-index: 3;
   position: fixed;

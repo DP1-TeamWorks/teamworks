@@ -62,7 +62,6 @@ class NewMessageForm extends React.Component {
           errorMsg = "Too Long Subject (" + (100 - value.length) + ")";
         break;
       case "Message":
-        console.log(value.length);
         if (value === "") errorMsg = "Message required";
         if (value.length > 750)
           errorMsg = "The Message is too Long (" + (750 - value.length) + ")";
@@ -75,7 +74,6 @@ class NewMessageForm extends React.Component {
   };
 
   changeHandler = (field, value) => {
-    console.log(field + " - " + value);
     this.validate(field, value);
     /*if (field === "To")
       if (!this.mailOptions.includes(value)) {
@@ -113,7 +111,6 @@ class NewMessageForm extends React.Component {
   submitHandler = (event) => {
     event.preventDefault();
     this.validateAll();
-    console.log(this.state.inputs);
     if (!this.hasErrors()) {
       let to = this.state.inputs.To;
       let subject = this.state.inputs.Subject;
