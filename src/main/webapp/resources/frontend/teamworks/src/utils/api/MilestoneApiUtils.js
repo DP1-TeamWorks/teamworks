@@ -1,5 +1,3 @@
-import axios from "axios";
-import { API_URL } from "../../config/config";
 import ApiUtils from "./ApiUtils";
 const MILESTONE_URL = "/milestones";
 const SINGLE_MILESTONE_URL = "/milestone";

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Autosuggest from "react-autosuggest";
 import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
 import ProjectApiUtils from "../../utils/api/ProjectApiUtils";

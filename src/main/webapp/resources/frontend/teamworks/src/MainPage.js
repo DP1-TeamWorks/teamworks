@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Header from "./components/header/Header";
-import Settings from "./sections/Settings";
-import Inbox from "./sections/Inbox";
 import ScrollToTop from "./components/routing/ScrollToTop";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Inbox from "./sections/Inbox";
 import "./sections/Section.css";
+import Settings from "./sections/Settings";
 
 const MainPage = () => {
   const [search, setSearch] = useState("");
