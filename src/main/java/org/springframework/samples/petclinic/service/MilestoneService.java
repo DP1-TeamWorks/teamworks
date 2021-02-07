@@ -66,11 +66,16 @@ public class MilestoneService {
 		return milestoneRepository.findAll();
 	}
 
+    @Transactional(readOnly = true)
+    public Collection<Milestone> findMilestonesForProject(Integer projectId) throws DataAccessException {
+        return milestoneRepository.findMilestonesForProject(projectId);
+    }
+
 	@Transactional(readOnly = true)
 	public Milestone findNextMilestone(Integer projectId) throws DataAccessException {
-		return milestoneRepository.findMilestonesByProject(projectId).stream()
+		return milestoneRepository.findMilestonesForProject(projectId).stream()
 				.filter(m -> m.getDueFor().isAfter(LocalDate.now())).sorted(Comparator.comparing(x -> x.getDueFor()))
-				.sorted(Collections.reverseOrder()).findFirst().get();
+				.sorted(Comparator.comparing(Milestone::getDueFor)).findFirst().get();
 	}
 
 }

@@ -1,6 +1,9 @@
 package org.springframework.samples.petclinic.web;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,12 +47,34 @@ public class MilestoneController {
 	}
 
 	@GetMapping(value = "/api/milestones")
-	public List<Milestone> getMilestones(@RequestParam(required = false) String name) {
-		List<Milestone> l = new ArrayList<>();
-
-		l = milestoneService.getAllMilestone().stream().collect(Collectors.toList());
-
-		return l;
+	public List<Milestone> getMilestones(@RequestParam(required = true) Integer projectId) {
+		return milestoneService.findMilestonesForProject(projectId)
+            .stream()
+            .sorted((a, b) ->
+            {
+                if (a.getDueFor().isBefore(LocalDate.now()))
+                {
+                    if (b.getDueFor().isBefore(LocalDate.now()))
+                    {
+                        return a.getDueFor().compareTo(b.getDueFor());
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                } else
+                {
+                    if (b.getDueFor().isBefore(LocalDate.now()))
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        return a.getDueFor().compareTo(b.getDueFor());
+                    }
+                }
+            })
+            .collect(Collectors.toList());
 	}
 
 	@PostMapping(value = "/api/milestones")

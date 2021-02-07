@@ -353,3 +353,12 @@ INSERT INTO
 values
     (1, 1);
 
+INSERT INTO
+    TAGS_TODOS(tags_id, todos_id)
+values
+    (1, 2);
+
+INSERT INTO
+    TAGS_TODOS(tags_id, todos_id)
+values
+    (2, 3);

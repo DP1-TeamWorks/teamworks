@@ -21,8 +21,10 @@ class AddForm extends React.Component
     this.postFunction = props.postFunction;
     this.children = props.children;
     this.alreadyExistsErrorText = props.alreadyExistsErrorText ?? "An element with the same name already exists.";
+    this.tooManyErrorText = props.tooManyErrorText ?? "The maximum number of elements has been reached."
     this.disabled = props.disabled;
     this.onAutocompleteSelected = props.onAutocompleteSelected;
+    this.validateExcludeFields = props.validateExcludeFields ?? [];
   }
 
   hasErrors = () =>
@@ -50,12 +52,14 @@ class AddForm extends React.Component
     this.setState({
       requestError: "",
     });
+    if (this.validateExcludeFields.indexOf(field) >= 0)
+      return;
     let errorMsg = "";
     // same validation for all fields
     if (value === "")
     {
       errorMsg = "You can't leave this field empty";
-    } else if (!/^[A-Za-z0-9_\s]*$/.test(value))
+    } else if (!/^[a-zA-ZÀ-ÿ\u00f1\u00d1 0-9]+$/.test(value))
     {
       errorMsg = "Invalid, use letters and numbers";
     }
@@ -95,7 +99,14 @@ class AddForm extends React.Component
       .catch((error) =>
       {
         console.error(error);
-        const requestError = error.response.data === "alreadyexists" ? this.alreadyExistsErrorText : "Something went wrong";
+        let requestError;
+        if (error.response.data === "alreadyexists" || error.response.data === "toomany")
+        {
+          requestError = error.response.data === "toomany" ? this.tooManyErrorText : this.alreadyExistsErrorText;
+        } else
+        {
+          requestError = "Something went wrong";
+        }
         this.setState({
           requestError: requestError,
           isSubmitting: false
@@ -137,11 +148,13 @@ class AddForm extends React.Component
           {
             let name = child.props.name;
             let placeholder = child.props.placeholder;
+            let type = child.props.type;
             inputs[name] = this.state.inputs[name] ?? '';
             return (
               <div className="EditableField EditableField--OnlyInput">
                 <Input
                   name={name}
+                  type={type}
                   styleClass="Input EditingInput"
                   placeholder={placeholder}
                   value={this.state.inputs[name]??''}

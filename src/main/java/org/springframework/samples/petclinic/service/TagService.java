@@ -19,13 +19,14 @@ public class TagService {
     }
 
     @Transactional
-    public void saveTag(Tag tag)
-        throws DataAccessException, TagLimitProjectException {
-        if (tag.getProject().getTags().size() > 5) {
-            throw new TagLimitProjectException();
-        } else {
-            tagRepository.save(tag);
-        }
+    public void saveTag(Tag tag) throws DataAccessException, TagLimitProjectException {
+    	if(tag.getProject().getTags().size() > 5) {
+    		throw new TagLimitProjectException();
+    	}
+    	else {
+    		tagRepository.save(tag);
+    	}
+        
     }
 
     @Transactional(readOnly = true)
@@ -38,7 +39,7 @@ public class TagService {
         return tagRepository.findByName(tagName);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void deleteTagById(Integer tagId) throws DataAccessException {
         tagRepository.deleteById(tagId);
     }

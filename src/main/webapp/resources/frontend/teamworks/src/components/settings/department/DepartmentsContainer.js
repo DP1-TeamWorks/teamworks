@@ -7,6 +7,7 @@ import EditableField from "../EditableField";
 import SettingGroup from "../SettingGroup";
 import SidePaneElement from "../SidePaneElement";
 import DepartmentMemberList from "./DepartmentMemberList";
+import Sticky from "react-sticky-el";
 import "../SubsettingContainer.css";
 
 const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
@@ -65,8 +66,8 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
     if (departmentMembers != null)
       setDepartmentMembers(null);
     DepartmentApiUtils.getMembersFromDepartment(myDepartments[selectedIndex].id)
-    .then(data => setDepartmentMembers(data))
-    .catch(err => console.error(err));
+      .then(data => setDepartmentMembers(data))
+      .catch(err => console.error(err));
   }
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -102,7 +103,12 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
   return (
     <div className="SubsettingContainer">
       <div className="SubsettingSidePane">
-        {SidepaneElements}
+        <Sticky
+          boundaryElement=".SubsettingSidePane"
+          topOffset={-240}
+          stickyStyle={{ transform: 'translateY(240px)' }}>
+          {SidepaneElements}
+        </Sticky>
       </div>
       <div className="SettingGroupsContainer">
         <SettingGroup
@@ -142,7 +148,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
             key={selectedIndex}
             departmentId={currentDepartment.id}
             loading={departmentMembers == null}
-            members={departmentMembers} 
+            members={departmentMembers}
             onListUpdated={fetchDepartmentMembers} />
         </SettingGroup>
         <SettingGroup

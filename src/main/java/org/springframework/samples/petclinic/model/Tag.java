@@ -17,8 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "tags")
-
+@Table(name = "tags", uniqueConstraints = @UniqueConstraint(columnNames = {"title","project_id"}))
 public class Tag extends BaseEntity {
 
     // Attributes
@@ -54,7 +53,13 @@ public class Tag extends BaseEntity {
     private List<ToDo> todos;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.DETACH)
     private List<Message> messages;
+
+    public Integer getTodosUsingTag()
+    {
+        return todos.size();
+    }
+
 
 }
