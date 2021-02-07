@@ -62,8 +62,6 @@ class NewMessageForm extends React.Component {
           errorMsg = "Select one recipient at least";
         break;
       case "Subject":
-        if (!/^[A-Za-zÀ-ÿ\u00f1\u00d1]*$/.test(value))
-          errorMsg = "Invalid, use letters, numbers and -";
         if (value.length > 150)
           errorMsg = "Too Long Subject (" + 150 - value.length + ")";
         break;

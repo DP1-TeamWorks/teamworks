@@ -34,7 +34,7 @@ const ToDo = ({ id, tagList, title , done}) => {
       </span>
       <div style={{ float: "right" }}>
         {tagList.map((tag) => {
-          return <Circle color={tag.color} />;
+          return <Circle key={tag.color} color={tag.color} />;
         })}
       </div>
     </div>

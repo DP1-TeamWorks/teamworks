@@ -28,14 +28,12 @@ const OpenedMessage = ({ msg }) => {
         });
   }, [msg, messageOptions]);
 
-  console.log(msg);
-
   return (
     <>
       <div className="MsgContentSentTo">
         <span style={{ fontWeight: "bold" }}>
           Sent to{" "}
-          {msg.recipients.map((r) => {
+          {msg.strippedRecipients.map((r) => {
             return <b key={r.name}> {r.name} </b>;
           })}
         </span>

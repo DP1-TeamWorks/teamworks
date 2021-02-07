@@ -16,27 +16,25 @@ const NewMessage = ({ ChangeModalNewMessage }) => {
   useEffect(() => {
     UserApiUtils.getMyTeamUsers()
       .then((res) => {
-        console.log("Getting user mails");
+        console.log("Getting user mail options");
         let mailList = res.map((user) => {
-          console.log(user);
           return { label: user.name + " - " + user.email, value: user.email };
         });
         setMailOptions(mailList);
+        console.log(mailList);
       })
       .catch((error) => {
         console.log("ERROR: cannot get the users mails");
+        console.log(error);
       });
   }, [ChangeModalNewMessage]);
 
   useEffect(() => {
     TagApiUtils.getAllMyTags()
       .then((res) => {
-        console.log("Getting user tags");
-        console.log(res);
+        console.log("Getting user tags options");
         let taglist = Object.entries(res).map((proyecto) => {
-          console.log(proyecto);
           return proyecto[1].map((tag) => {
-            console.log(tag);
             return {
               label: tag.title + ": (" + proyecto[0] + ")",
               value: tag.id,
@@ -57,7 +55,6 @@ const NewMessage = ({ ChangeModalNewMessage }) => {
       .then((res) => {
         console.log("Getting user toDos");
         let toDoList = Object.entries(res).map((proyecto) => {
-          console.log(proyecto);
           return proyecto[1].map((toDo) => {
             return {
               label: toDo.title + ": (" + proyecto[0] + ")",
@@ -70,6 +67,7 @@ const NewMessage = ({ ChangeModalNewMessage }) => {
       })
       .catch((error) => {
         console.log("ERROR: cannot get the user's todos");
+        console.log(error);
       });
   }, [ChangeModalNewMessage]);
 
