@@ -73,9 +73,10 @@ public class Message extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
     private List<Attatchment> attatchments;
 
-    @ManyToMany(mappedBy = "messages") 
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Tag> tags;
 
-    @ManyToMany(mappedBy = "messages") 
+    // TODO once tags work then remove mappedby from here?
+    @ManyToMany
     private List<ToDo> toDos;
 }

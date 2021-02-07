@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -169,42 +170,42 @@ public class MessageController {
                     .map(mail -> userService.findByEmail(mail)).collect(Collectors.toList());
             message.setRecipients(recipientList);
 
-            log.info("Setting the todo list");
+
+
             if (message.getToDoList() != null) {
-                List<ToDo> toDoList = message.getToDoList().stream().map(toDoId -> toDoService.findToDoById(toDoId))
-                        .collect(Collectors.toList());
+                log.info("Todo list received. saving the relationships");
+                List<ToDo> toDoList = message.getToDoList().stream().map(todoId -> toDoService.findToDoById(todoId))
+                    .collect(Collectors.toList());
                 message.setToDoList(null);
-
-                for (ToDo toDo : toDoList) {
-                    log.info("TODO: " + toDo);
-                    toDo.getMessages().add(message);
-                    toDoService.saveToDo(toDo);
+                message.setToDos(new ArrayList<>());
+                message.getToDos().addAll(toDoList);
+                messageService.saveMessage(message);
+                for (ToDo todo : toDoList) {
+                    todo.getMessages().add(message);
+                    toDoService.saveToDo(todo);
                 }
-            } else
-                log.info("Any todo to attach");
+            }
 
-            log.info("Setting the tag list");
             if (message.getTagList() != null) {
+                log.info("Tag list received. saving the relationships");
                 List<Tag> tagList = message.getTagList().stream().map(tagId -> tagService.findTagById(tagId))
                         .collect(Collectors.toList());
                 message.setTagList(null);
+                message.setTags(new ArrayList<>());
+                message.getTags().addAll(tagList);
+                messageService.saveMessage(message);
                 for (Tag tag : tagList) {
                     tag.getMessages().add(message);
                     tagService.saveTag(tag);
                 }
+            }
 
-            } else
-                log.info("Any tag to attach");
-
-            log.info("" + message.getToDos());
-            log.info("" + message.getTags());
             log.info("Saving the message");
-            messageService.saveMessage(message);
             return ResponseEntity.ok().build();
         } catch (
 
                 DataAccessException | TagLimitProjectException | ToDoLimitMilestoneException d) {
-            log.error("hello", d);
+            log.error("exception ocurred saving message", d);
             return ResponseEntity.badRequest().build();
         }
     }
