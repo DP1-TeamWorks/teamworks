@@ -30,7 +30,7 @@ public class DepartmentController {
 	private final DepartmentValidator departmentValidator;
 
 	@Autowired
-	public DepartmentController(DepartmentService departmentService, TeamService teamService, BelongsService belongsService) {
+	public DepartmentController(DepartmentService departmentService, TeamService teamService, BelongsService belongsService, DepartmentValidator departmentValidator) {
 		
 		this.departmentService = departmentService;
 		this.teamService = teamService;
