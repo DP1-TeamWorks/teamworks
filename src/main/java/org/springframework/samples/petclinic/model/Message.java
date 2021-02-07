@@ -32,25 +32,22 @@ import org.hibernate.annotations.CreationTimestamp;
 @Table(name = "messages")
 public class Message extends BaseEntity {
 	// Attributes
-	
+
 	@Column(name = "timestamp")
 	@CreationTimestamp
 	LocalDate timestamp;
 
-	
+
 	@Column(name = "subject")
 	private String subject;
 
-	
+
 	@Column(name = "text")
 	private String text;
 
-    @Column(name = "subject")
-    private String subject;
-
 	@Transient
 	private List<String> recipientsEmails;
-	
+
 	@Transient
 	private List<Integer> recipientsIds;
 
@@ -58,8 +55,8 @@ public class Message extends BaseEntity {
     @Column(name = "read")
     private Boolean read;
 
-	
-	
+
+
 	// Relations
 	@OneToOne(optional = true)
 	@JoinColumn(name = "reply_to")
@@ -70,11 +67,6 @@ public class Message extends BaseEntity {
 
     @Transient
     private List<Integer> tagList;
-
-    // Relations
-    @OneToOne(optional = true)
-    @JoinColumn(name = "reply_to")
-    private Message replyTo;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "sender_id")
@@ -88,9 +80,9 @@ public class Message extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
     private List<Attatchment> attatchments;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "messages")
     private List<Tag> tags;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "messages")
     private List<ToDo> toDos;
 }

@@ -66,7 +66,7 @@ public class ProjectController {
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
 		UserTW user = userTWService.findUserById(userId);
 		Belongs currentBelongs = belongsService.findCurrentBelongs(userId, departmentId);
-		// Revisa si perteneces
+		// Revisa si perteneces TODO this isnt even needed
 		if (user.getRole().equals(Role.team_owner) || currentBelongs != null) {
 			List<Project> l = new ArrayList<>();
 			l = departmentService.findDepartmentById(departmentId).getProjects();

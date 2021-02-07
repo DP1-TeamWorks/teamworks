@@ -6,7 +6,7 @@ import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import TeamSettings from '../components/settings/team/TeamSettings';
 import UserSettings from '../components/settings/users/UserSettings';
 import DepartmentSettings from "../components/settings/department/DepartmentSettings";
-import ProjectSettings from '../components/settings/ProjectSettings';
+import ProjectSettings from '../components/settings/project/ProjectSettings';
 import UserPage from '../components/settings/users/UserPage';
 import MilestonePage from '../components/settings/project/MilestonePage';
 

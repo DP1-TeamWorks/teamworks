@@ -21,11 +21,11 @@ public interface ParticipationRepository extends Repository<Participation, Integ
 			@Param("projectId") Integer projectId);
 	@Query(value = "SELECT u FROM Participation u WHERE u.userTW.id = :userId ")
 	public Collection<Participation> findUserParticipations(@Param("userId") Integer userId);
-	
+
 	@Query(value = "SELECT u FROM Participation u WHERE u.userTW.id = :userId and u.project.id= :projectId and u.finalDate=null")
 	public Participation findCurrentParticipation(@Param("userId") Integer userId,
 			@Param("projectId") Integer projectId);
-	
+
 	@Query(value = "SELECT u FROM Participation u WHERE u.userTW.id = :userId and u.finalDate=null")
 	public Collection<Participation> findCurrentParticipationsUser(@Param("userId") Integer userId);
 
@@ -35,6 +35,10 @@ public interface ParticipationRepository extends Repository<Participation, Integ
 	@Query(value = "SELECT u.project FROM Participation u WHERE u.userTW.id = :userId and u.project.department.id = :departmentId and u.finalDate=null")
 	public Collection<Project> findMyDepartemntProjects(@Param("userId") Integer userId,
 			@Param("departmentId") Integer departmentId);
-	
-	
+
+    @Query(value = "SELECT u FROM Participation u WHERE u.project.id= :projectId and u.finalDate=null")
+    public Collection<Participation> findCurrentParticipationsInProject(@Param("projectId") Integer projectId);
+
+    @Query(value = "SELECT u FROM Participation u WHERE u.project.id = :projectId and u.finalDate=null and u.isProjectManager = true")
+    public Participation findCurrentProjectManager(@Param("projectId") Integer projectId);
 }

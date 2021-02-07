@@ -129,7 +129,7 @@
 			<artifactId>spring-security-taglibs</artifactId>
 		</dependency>
 		<!-- Databases - Uses H2 by default -->
-		<!-- dependency> <groupId>org.hsqldb</groupId> <artifactId>hsqldb</artifactId> 
+		<!-- dependency> <groupId>org.hsqldb</groupId> <artifactId>hsqldb</artifactId>
 			<scope>runtime</scope> </dependency -->
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -140,7 +140,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- validation <dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-validator</artifactId> 
+		<!-- validation <dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-validator</artifactId>
 			</dependency> -->
 		<!-- caching -->
 		<dependency>
@@ -204,7 +204,7 @@
 				<artifactId>spring-security-taglibs</artifactId>
 			</dependency>
 			<!-- Databases - Uses H2 by default -->
-			<!-- dependency> <groupId>org.hsqldb</groupId> <artifactId>hsqldb</artifactId> 
+			<!-- dependency> <groupId>org.hsqldb</groupId> <artifactId>hsqldb</artifactId>
 				<scope>runtime</scope> </dependency -->
 			<dependency>
 				<groupId>com.h2database</groupId>
@@ -215,7 +215,7 @@
 				<artifactId>mysql-connector-java</artifactId>
 				<scope>runtime</scope>
 			</dependency>
-			<!-- validation <dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-validator</artifactId> 
+			<!-- validation <dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-validator</artifactId>
 				</dependency> -->
 			<!-- caching -->
 			<dependency>
@@ -280,7 +280,7 @@
 				<artifactId>spring-security-taglibs</artifactId>
 			</dependency>
 			<!-- Databases - Uses H2 by default -->
-			<!-- dependency> <groupId>org.hsqldb</groupId> <artifactId>hsqldb</artifactId> 
+			<!-- dependency> <groupId>org.hsqldb</groupId> <artifactId>hsqldb</artifactId>
 				<scope>runtime</scope> </dependency -->
 			<dependency>
 				<groupId>com.h2database</groupId>
@@ -291,7 +291,7 @@
 				<artifactId>mysql-connector-java</artifactId>
 				<scope>runtime</scope>
 			</dependency>
-			<!-- validation <dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-validator</artifactId> 
+			<!-- validation <dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-validator</artifactId>
 				</dependency> -->
 			<!-- caching -->
 			<dependency>
@@ -373,7 +373,7 @@
 					<artifactId>spring-boot-maven-plugin</artifactId>
 					<executions>
 						<execution>
-							<!-- Spring Boot Actuator displays build-related information if a 
+							<!-- Spring Boot Actuator displays build-related information if a
 								META-INF/build-info.properties file is present -->
 							<goals>
 								<goal>build-info</goal>
@@ -415,7 +415,7 @@
 					<artifactId>spring-boot-maven-plugin</artifactId>
 					<executions>
 						<execution>
-							<!-- Spring Boot Actuator displays build-related information if a 
+							<!-- Spring Boot Actuator displays build-related information if a
 								META-INF/build-info.properties file is present -->
 							<goals>
 								<goal>build-info</goal>
@@ -451,7 +451,7 @@
 					</executions>
 				</plugin>
 
-				<!-- Spring Boot Actuator displays build-related information if a git.properties 
+				<!-- Spring Boot Actuator displays build-related information if a git.properties
 					file is present at the classpath -->
 				<plugin>
 					<groupId>pl.project13.maven</groupId>
@@ -473,7 +473,7 @@
 					</configuration>
 				</plugin>
 
-				<!-- Spring Boot Actuator displays build-related information if a git.properties 
+				<!-- Spring Boot Actuator displays build-related information if a git.properties
 					file is present at the classpath -->
 				<plugin>
 					<groupId>pl.project13.maven</groupId>
@@ -526,8 +526,14 @@
 							<version>${mockito.version}</version>
 						</dependency>
 					</dependencies>
-				</plugin>
-			</plugins>
+				</plugin><plugin><groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>10</source>
+                    <target>10</target>
+                </configuration>
+            </plugin>
+            </plugins>
 		</build>
 
 		<!-- Apache 2 license -->
