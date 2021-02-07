@@ -84,7 +84,7 @@ public class MilestoneController {
 
 	@PostMapping(value = "/api/milestones")
 	public ResponseEntity<String> postMilestones(@RequestParam(required = true) Integer projectId,
-			@RequestBody Milestone milestone) {
+			@Valid @RequestBody Milestone milestone) {
 
 		try {
 			Project project = projectService.findProjectById(projectId);

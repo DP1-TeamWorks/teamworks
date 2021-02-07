@@ -23,6 +23,8 @@ const MilestonePage = ({ match: { params: { projectName, projectId, milestoneNam
     function onAttributeUpdated(m)
     {
         m.id = milestoneId;
+        m.name = m.name ?? milestone.name;
+        m.dueFor = m.dueFor ?? milestone.dueFor;
         return MilestoneApiUtils.createMilestone(projectId, m);
     }
 
