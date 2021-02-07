@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.web;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -18,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.TestWebConfig;
 import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
@@ -106,7 +108,9 @@ public class ToDoControllerTest {
 		given(this.ToDoService.findToDoByMilestoneAndUser(TEST_MILESTONE_ID, TEST_USER_ID)).willReturn(toDoList);
 		
 		given(this.ToDoService.findToDoByUser(TEST_USER_ID)).willReturn(toDoList);
-
+		
+		
+		//given this 
 		
 	}
 	
@@ -121,11 +125,30 @@ public class ToDoControllerTest {
 	}
 	
 	@Test
-	void testGeAllMyTodos() throws Exception {
+	void testGeAllMyTodosByProject() throws Exception {
 		String toDoJson = objectMapper.writeValueAsString(toDoByPr);
 		mockMvc.perform(get("/api/toDos/mine/all").session(mockSession))
 		.andExpect(status().is(200))
 		.andExpect(content().json(toDoJson));
+	}
+	
+	
+	@Test
+	void testCreateTodo() throws Exception {
+		todo.setDone(false);
+		String toDoJson = objectMapper.writeValueAsString(todo);
+		
+		mockMvc.perform(post("/api/toDos").param("mine", ((Boolean)true).toString()).param("userId", ((Integer) TEST_USER_ID).toString()).param("milestoneId", ((Integer) TEST_MILESTONE_ID).toString()).session(mockSession).contentType(MediaType.APPLICATION_JSON).content(toDoJson))
+		.andExpect(status().is(200));
+	}
+	
+	
+	@Test
+	void testCreatePersonalTodos() throws Exception {
+		String toDoJson = objectMapper.writeValueAsString(todo);
+		
+		mockMvc.perform(post("/api/toDos/mine").param("milestoneId", ((Integer) TEST_MILESTONE_ID).toString()).session(mockSession).contentType(MediaType.APPLICATION_JSON).content(toDoJson))
+		.andExpect(status().is(200));
 
 	}
 	
