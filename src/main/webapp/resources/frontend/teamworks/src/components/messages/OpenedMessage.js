@@ -11,7 +11,7 @@ import { faForward } from "@fortawesome/free-solid-svg-icons";
 import ToDo from "../projects/toDos/ToDo";
 
 const OpenedMessage = ({ msg }) => {
-  const [forwardOptions, setForwardOptions] = useState({});
+  const [forwardOptions, setForwardOptions] = useState([]);
   const [messageOptions, setMessageOptions] = useState("");
   useEffect(() => {
     if (messageOptions === "Forward")
@@ -22,11 +22,12 @@ const OpenedMessage = ({ msg }) => {
             return { label: user.name + " - " + user.email, value: user.email };
           });
           setForwardOptions(mailList);
+          console.log(mailList);
         })
         .catch((error) => {
           console.log("ERROR: cannot get the users mails");
         });
-  }, [msg, messageOptions]);
+  }, [messageOptions]);
 
   return (
     <>
@@ -68,10 +69,12 @@ const OpenedMessage = ({ msg }) => {
         {msg.toDos.map((toDo) => {
           return (
             <ToDo
+              key={toDo.id}
               id={toDo.id}
               tagList={toDo.tags}
               title={toDo.title}
               done={toDo.done}
+              blocked={true}
             />
           );
         })}

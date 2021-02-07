@@ -170,12 +170,10 @@ public class MessageController {
                     .map(mail -> userService.findByEmail(mail)).collect(Collectors.toList());
             message.setRecipients(recipientList);
 
-
-
             if (message.getToDoList() != null) {
                 log.info("Todo list received. saving the relationships");
                 List<ToDo> toDoList = message.getToDoList().stream().map(todoId -> toDoService.findToDoById(todoId))
-                    .collect(Collectors.toList());
+                        .collect(Collectors.toList());
                 message.setToDoList(null);
                 message.setToDos(new ArrayList<>());
                 message.getToDos().addAll(toDoList);
@@ -200,7 +198,6 @@ public class MessageController {
                 }
             }
 
-            log.info("Saving the message");
             return ResponseEntity.ok().build();
         } catch (
 
@@ -231,13 +228,11 @@ public class MessageController {
         Message forwardCopy = new Message();
         forwardCopy.setRead(false);
         forwardCopy.setRecipientsEmails(forwardList);
-        forwardCopy.setSubject(message.getSubject().contains("Forwarded (") ? message.getSubject()
-                : "Forwarded(" + message.getSender().getName() + "): " + message.getSubject());
-        forwardCopy.setText(message.getSender().getName() + " said: " + message.getText());
-        forwardCopy.setTags(List.copyOf(message.getTags()));
-        forwardCopy.setToDos(List.copyOf(message.getToDos()));
-        forwardCopy.setTagList(null);
-        forwardCopy.setToDoList(null);
+        forwardCopy.setSubject(message.getSubject().contains("Fw(") ? message.getSubject()
+                : "Fw(" + message.getSender().getName() + "): " + message.getSubject());
+        forwardCopy.setText(message.getSender().getName() + "'s Original Message: " + message.getText());
+        forwardCopy.setTagList(message.getTags().stream().map(tag -> tag.getId()).collect(Collectors.toList()));
+        forwardCopy.setToDoList(message.getToDos().stream().map(todo -> todo.getId()).collect(Collectors.toList()));
         log.info("Creating the forward copy");
         return newMessage(r, forwardCopy);
     }
