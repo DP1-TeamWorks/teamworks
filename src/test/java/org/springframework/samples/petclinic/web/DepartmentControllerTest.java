@@ -30,6 +30,7 @@ import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.TeamService;
+import org.springframework.samples.petclinic.validation.DepartmentValidator;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -46,7 +47,7 @@ public class DepartmentControllerTest {
 	
 	private static final int TEST_DEPARTMENT_ID = 5;
 	private static final int TEST_TEAM_ID = 3;
-	private static final int TEST_USER_ID = 6;
+	//private static final int TEST_USER_ID = 6;
 
 
 
@@ -58,6 +59,9 @@ public class DepartmentControllerTest {
 	
 	@MockBean
 	private TeamService teamService;
+	
+	@MockBean
+	private DepartmentValidator departmentValidator;
 	
 	@MockBean
 	private BelongsService belongsService;
@@ -73,9 +77,9 @@ public class DepartmentControllerTest {
 	
 	private Department department;
 	private Team team;
-	private Belongs belongs;
-	private Belongs belongs2;
-	private UserTW user;
+	//private Belongs belongs;
+	//private Belongs belongs2;
+	//private UserTW user;
 	private List<Department> depfromTeam;
 	
 	@BeforeEach
@@ -108,12 +112,14 @@ public class DepartmentControllerTest {
 		*/
 	}
 	
+	
 	@Test
 	void testCreateDepartments() throws Exception {
 		String departmentJson = objectMapper.writeValueAsString(department);
 		mockMvc.perform(post("/api/departments").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(departmentJson))
 		.andExpect(status().is(200));
 	}
+	
 	
 	@Test
 	void testGetTeamDepartments() throws Exception {
@@ -129,6 +135,7 @@ public class DepartmentControllerTest {
 		mockMvc.perform(get("/api/department/users").param("departmentId", ((Integer) TEST_DEPARTMENT_ID).toString()))
 		.andExpect(status().is(200));
 	}
+	
 	
 	@Test
 	void testGetMyDepartments() throws Exception {
@@ -146,18 +153,24 @@ public class DepartmentControllerTest {
 		String updatejson = objectMapper.writeValueAsString(department);
 		mockMvc.perform(post("/api/departments").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(updatejson))
 		.andExpect(status().isOk());
-		
-		//mockMvc.perform
-		//.andExpect(content().json(updatejson));
 	}
+	
+	
+	@Test
+	void testUpdateDepartmentsWithNullValues() throws Exception {
+		department.setName(null);
+		department.setDescription(null);
+		String updatejson = objectMapper.writeValueAsString(department);
+		
+		mockMvc.perform(post("/api/departments").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(updatejson))
+		.andExpect(status().isBadRequest());
+	}
+	
 	
 	@Test
 	void testDeleteDepartments() throws Exception {
 		 
 		mockMvc.perform(delete("/api/departments/"+TEST_DEPARTMENT_ID))
 		.andExpect(status().isOk());
-		
-		//mockMvc.perform
-		//.andExpect(content().json(updatejson));
 	}
 }

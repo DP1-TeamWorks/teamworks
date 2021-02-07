@@ -90,12 +90,19 @@ public class TeamControllerTest {
 		.andExpect(content().string("AtomaticUpdated"));
 	}
 	
-	//TODO NO FUNCIONA DEL TOODO
 	@Test
-	void testDeleteTeam() throws Exception {
-		
-		//atomatic.setIdentifier("ATOMUPDATED");
+	void testDeleteTeam() throws Exception {		
+		mockMvc.perform(delete("/api/team").session(mockSession))
+		.andExpect(status().isOk());
+	}
+	
+	
+	@Test
+	void testUpdateWithNullValuesTeam() throws Exception {
+		atomatic.setName(null);
+		atomatic.setIdentifier(null);
 		String atomaticupdated = objectMapper.writeValueAsString(atomatic);
+				
 		mockMvc.perform(post("/api/team").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
 		.andExpect(status().isBadRequest());
 	}
