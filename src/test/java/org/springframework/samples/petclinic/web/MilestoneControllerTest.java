@@ -91,7 +91,7 @@ public class MilestoneControllerTest {
 	
 	@Test
 	void testGetMilestones() throws Exception{
-		mockMvc.perform(get("/api/milestones")
+		mockMvc.perform(get("/api/milestones?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession))
 		.andExpect(status().isOk());
 	}
