@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "tags", uniqueConstraints = @UniqueConstraint(columnNames = {"title","project_id"}))
+@Table(name = "tags", uniqueConstraints = @UniqueConstraint(columnNames = { "title", "project_id" }))
 public class Tag extends BaseEntity {
 
     // Attributes
@@ -26,7 +26,6 @@ public class Tag extends BaseEntity {
     @Size(min = 1, max = 200)
     @Column(name = "title")
     String title;
-
 
     @Pattern(regexp = "^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$")
     @NotBlank
@@ -44,22 +43,15 @@ public class Tag extends BaseEntity {
     private List<Milestone> milestones;
 
     @JsonIgnore
-    @ManyToMany(cascade = {
-        CascadeType.DETACH,
-        CascadeType.MERGE,
-        CascadeType.REFRESH,
-        CascadeType.PERSIST
-    })
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
     private List<ToDo> todos;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.DETACH)
+    @ManyToMany(mappedBy = "tags")
     private List<Message> messages;
 
-    public Integer getTodosUsingTag()
-    {
+    public Integer getTodosUsingTag() {
         return todos.size();
     }
-
 
 }
