@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collection;
 import java.util.logging.Level;
@@ -47,13 +48,35 @@ class UserTWServiceTest {
 
 		assertThat(user.getId()).isNotNull();
 	}
+	
+	@Test
+	@Transactional
+	public void shouldNotInsertAUserNullIntoDatabase() {
 
+		UserTW user = new UserTW();
+		assertThrows(Exception.class, ()-> {
+			this.userTWService.saveUser(user);
+            });
+
+	}
 	@Test
 	void shouldFindUserById() {
 		UserTW user3 = this.userTWService.findUserById(3);
 		assertThat(user3.getName()).isEqualTo("Maria");
 		assertThat(user3.getLastname()).isEqualTo("Torres");
 
+	}
+	
+	@Test
+	void shouldFindUserByMail() {
+		UserTW user3 = this.userTWService.findUserById(3);
+		assertThat(user3.getEmail()).isEqualTo("mariatorres@cyber");
+	}
+	
+	@Test
+	void shouldFindUserByTeam() {
+		UserTW user3 = this.userTWService.findUserById(3);
+		assertThat(user3.getTeam().getName()).isEqualTo("Cybergroup");
 	}
 
 	@Test
@@ -89,6 +112,19 @@ class UserTWServiceTest {
 		UserTW user = this.userTWService.findUserById(1);
 		UserTW user2 = this.userTWService.getLoginUser("johnnysilverhand@cyber", "123123123");
 		assertThat(user.getId()).isEqualTo(user2.getId());
+	}
+	
+	
+	@Test
+	@Transactional
+	void shouldNotInsertUserIntoDataBase() {
+
+
+		UserTW user = new UserTW();
+
+		assertThrows(Exception.class, ()-> {
+			this.userTWService.saveUser(user);
+			});	
 	}
 
 }

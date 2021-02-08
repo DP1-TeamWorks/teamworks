@@ -178,7 +178,7 @@ public class ProjectControllerTest {
 		given(this.departmentService.findDepartmentById(TEST_DEPARTMENT_ID)).willReturn(department);
 		given(this.projectService.findProjectById(TEST_PROJECT_ID)).willReturn(project);
 		given(this.projectService.findUserProjects(TEST_PROJECT_ID)).willReturn(users);
-		given(this.participationService.findMyDepartemntProjects(TEST_USER_ID, TEST_DEPARTMENT_ID)).willReturn(projects);
+		given(this.participationService.findMyDepartmentProjects(TEST_USER_ID, TEST_DEPARTMENT_ID)).willReturn(projects);
 	}
 	
 	

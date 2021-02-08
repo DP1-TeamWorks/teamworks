@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,7 +38,19 @@ public class ParticipationServiceTest {
         assertThat(participationTest.getProject().getName()).isEqualTo("Networking Solutions");
         assertThat(participationTest.getIsProjectManager()).isTrue();
     }
-
+    @Test
+    void shouldFindParticipationByUserIdAndProjectId() {
+        List<Participation> participations = this.participationService.findParticipationByUserIdAndProjectId(2, 1).stream().collect(Collectors.toList());
+        assertThat(participations.size()).isEqualTo(1);
+       
+    }
+    @Test
+    void shouldFindUserParticipationsByUserId() {
+        List<Participation> userParticipation = this.participationService.findUserParticipations(2).stream()
+                .collect(Collectors.toList());
+        assertThat(userParticipation.size()).isEqualTo(4);
+    }
+    
     @Test
     void shouldFindCurrentParticipationByUserIdAndProjectId() {
         Participation participation = this.participationService.findCurrentParticipation(2, 1);
@@ -45,12 +58,7 @@ public class ParticipationServiceTest {
         assertThat(participation.getUserTW().getName()).isEqualTo("Julia");
     }
 
-    @Test
-    void shouldFindUserParticipationsByUserId() {
-        List<Participation> userParticipation = this.participationService.findUserParticipations(2).stream()
-                .collect(Collectors.toList());
-        assertThat(userParticipation.size()).isEqualTo(4);
-    }
+    
 
     @Test
     void shouldFindUserCurrentParticipationByUserId() {
@@ -64,7 +72,22 @@ public class ParticipationServiceTest {
         List<Project> userProjects = this.participationService.findMyProjects(2).stream().collect(Collectors.toList());
         assertThat(userProjects.size()).isEqualTo(4);
     }
-
+    @Test
+    void shouldFindMyDepartmentProjects() {
+    	List<Project> userDepartmentProjects = this.participationService.findMyDepartmentProjects(2, 1).stream().collect(Collectors.toList());
+    	assertThat(userDepartmentProjects.size()).isEqualTo(4);
+    }
+    @Test
+    void shouldFindCurrentParticipationsInProject() {
+    	List<Participation> participationstProject = this.participationService.findCurrentParticipationsInProject(1).stream().collect(Collectors.toList());
+    	assertThat(participationstProject.size()).isEqualTo(1);
+    }
+    @Test
+    void shouldfindCurrentProjectManager() {
+    	Participation projectManagerParticipation=this.participationService.findCurrentProjectManager(1);
+    	assertThat(projectManagerParticipation.getUserTW().getName()).isEqualTo("Julia");
+    	assertThat(projectManagerParticipation.getUserTW().getLastname()).isEqualTo("Fabra");
+    }
     @Test
     @Transactional
     public void shouldInsertParticipationIntoDatabaseAndGenerateId() {
@@ -91,6 +114,16 @@ public class ParticipationServiceTest {
         assertThat(user.getParticipation().contains(participation)).isTrue();
 
     }
+    @Test
+	@Transactional
+	public void shouldNotInsertAParticipationNullIntoDatabase() {
+
+		Participation participation = new Participation();
+		assertThrows(Exception.class, ()-> {
+			this.participationService.saveParticipation(participation);
+            });
+
+	}
 
     @Test
     @Transactional

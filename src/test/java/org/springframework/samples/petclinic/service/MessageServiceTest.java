@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,6 +61,30 @@ class MessageServiceTest {
 	
 	
 	@Test
+	void shouldFindMessageByUserId() {
+		UserTW user = userTWService.findUserById(1);
+		Collection<Message> messagesByUserId= messageService.findMessagesByUserId(user);
+		List<Message> list;
+		if (messagesByUserId instanceof List)
+		  list = (List)messagesByUserId;
+		else
+		  list = new ArrayList(messagesByUserId);
+		assertThat(messagesByUserId).isEqualTo(list);
+	}
+	
+	void shouldFindMessageSentByUserId() {
+		UserTW user = userTWService.findUserById(1);
+		Collection<Message> messagesSentByUserId= messageService.findMessagesSentByUserId(user.getId());
+		List<Message> list;
+		if (messagesSentByUserId instanceof List)
+		  list = (List)messagesSentByUserId;
+		else
+		  list = new ArrayList(messagesSentByUserId);
+		assertThat(messagesSentByUserId).isEqualTo(list);
+	}
+	
+	
+	@Test
 	void shouldFindMessageByTag() {
 		Tag tag = tagService.findTagById(1);
 		UserTW user = userTWService.findUserById(1);
@@ -67,6 +92,14 @@ class MessageServiceTest {
 		assertThat(messagesByTag).isNotNull();
 	}
 	
+	@Test
+	void shouldFindMessageBySearch() {
+		UserTW user = userTWService.findUserById(1);
+		String Search = "Hello";
+		Collection<Message> messagesBySearch= messageService.findMessagesBySearch(user, Search);
+		
+		assertThat(messagesBySearch).isNotNull();
+	}
 	
 	//TODO:
 	//NEGATIVE USE CASE H21-E1
@@ -75,11 +108,11 @@ class MessageServiceTest {
 	void shouldNotInsertMessageWithoutData() {
 		UserTW sender = userTWService.findUserById(1);
 		ArrayList<Integer> recipients = new ArrayList<>();
-		recipients.add(2);
+		//recipients.add(2);
 		
 		Message messageError = new Message();
-		messageError.setRecipientsIds(recipients);
-		messageError.setSender(sender);
+//		messageError.setRecipientsIds(recipients);
+//		messageError.setSender(sender);
 
 		assertThrows(Exception.class, ()-> {
 			messageService.saveMessage(messageError);
@@ -92,13 +125,13 @@ class MessageServiceTest {
 	void shouldNotReplyMessageWithoutData() {
 		UserTW sender = userTWService.findUserById(1);
 		ArrayList<Integer> recipients = new ArrayList<>();
-		recipients.add(2);
+//		recipients.add(2);
 		Message replyTo = messageService.findMessageById(1);
 		
 		Message messageError = new Message();
 		messageError.setReplyTo(replyTo);
-		messageError.setRecipientsIds(recipients);
-		messageError.setSender(sender);
+//		messageError.setRecipientsIds(recipients);
+//		messageError.setSender(sender);
 
 		assertThrows(Exception.class, ()-> {
 			messageService.saveMessage(messageError);

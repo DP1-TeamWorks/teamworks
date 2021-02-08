@@ -81,12 +81,12 @@ public class BelongsControllerTest {
 	@BeforeEach
 	void setup() {
 		
-		//Calidad
+		//Departaemnto Calidad
 		calidad=new Department();
 		calidad.setId(TEST_DEPARTMENT_ID);
 		calidad.setName("Calidad");
 		calidad.setDescription("Me aseguro de...");
-		//Juan
+		//Usuario Juan
 		juan=new UserTW();
 		juan.setId(TEST_USER_ID);
 		juan.setName("Juan");
@@ -99,7 +99,7 @@ public class BelongsControllerTest {
 		belongs.setUserTW(juan);
 		belongs.setIsDepartmentManager(true);
 		belongs.setDepartment(calidad);
-		//rosa
+		//Usuario rosa
 		rosa=new UserTW();
 		rosa.setId(TEST_BELONGUSER_ID);
 		rosa.setName("Rosa");
@@ -113,7 +113,7 @@ public class BelongsControllerTest {
 		juan.setTeam(team);
 		rosa.setTeam(team);
 		calidad.setTeam(team);
-		//Belongs
+		//Belongs col
 		belongCol=new ArrayList<>();
 		belongCol.add(belongs);
 		//Session
@@ -124,12 +124,12 @@ public class BelongsControllerTest {
 		given(userTWService.findUserById(TEST_USER_ID)).willReturn(juan);
 		given(userTWService.findUserById(TEST_BELONGUSER_ID)).willReturn(rosa);
 		given(departmentService.findDepartmentById(TEST_DEPARTMENT_ID)).willReturn(calidad);
-		
+		given(belongsService.findCurrentBelongsInDepartment(TEST_DEPARTMENT_ID)).willReturn(belongCol);
 	}
 	
 	@Test
 	void testGetUsers() throws Exception {
-		given(belongsService.findCurrentBelongsInDepartment(TEST_DEPARTMENT_ID)).willReturn(belongCol);
+		
 		String belongsJson=objectMapper.writeValueAsString(belongCol);
 		Integer departmentId=TEST_DEPARTMENT_ID;
 		String departmentIdString=departmentId.toString();

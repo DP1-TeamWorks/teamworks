@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,6 +65,45 @@ public class ToDoServiceTest {
 		assertThat(toDo.getMilestone().getId()).isEqualTo(1);
 
 	}
+	
+	
+
+	@Test
+	void shouldFindDToDoByUser() {
+		UserTW user = userService.findUserById(2);
+		Collection<ToDo> toDos = this.toDoService.findToDoByUser(user.getId());
+		
+		List<ToDo> list;
+		if (toDos instanceof List)
+		  list = (List)toDos;
+		else
+		  list = new ArrayList(toDos);
+		
+		
+		assertThat(list.get(0).getTitle()).isEqualTo("Mark this as done");
+		assertThat(list.get(0).getMilestone().getId()).isEqualTo(1);
+
+	}
+	
+	
+	@Test
+	void shouldFindDToDoByMilestoneAndUser() {
+		UserTW user = userService.findUserById(2);
+		Milestone milestone = milestonService.findMilestoneById(1);
+		Collection<ToDo> toDos = this.toDoService.findToDoByMilestoneAndUser(milestone.getId(),
+				user.getId());
+		
+		List<ToDo> list;
+		if (toDos instanceof List)
+		  list = (List)toDos;
+		else
+		  list = new ArrayList(toDos);
+		
+		
+		assertThat(list.get(0).getTitle()).isEqualTo("Mark this as done");
+		assertThat(list.get(0).getMilestone().getId()).isEqualTo(1);
+
+	}
 
 	@Test
 	@Transactional
@@ -102,8 +143,7 @@ public class ToDoServiceTest {
 			});
 	}
 	
-	//TODO:
-	//NEGATIVE USE CASE 20-E1
+
 
 
 }

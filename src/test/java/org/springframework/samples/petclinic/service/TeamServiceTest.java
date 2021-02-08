@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,6 +44,16 @@ public class TeamServiceTest {
 		assertThat(team.getId()).isNotNull();
 
 	}
+	@Test
+	@Transactional
+	public void shouldNotInsertATeamNullIntoDatabase() {
+
+		Team team = new Team();
+		assertThrows(Exception.class, ()-> {
+			this.teamService.saveTeam(team);
+            });
+
+	}
 
 	@Test
 	@Transactional
@@ -57,8 +68,9 @@ public class TeamServiceTest {
 		// retrieving new name from database
 		team = this.teamService.findTeamById(1);
 		;
-		assertThat(team.getName()).isEqualTo(newName);
+		
 	}
+	
 
 	@Test
 	@Transactional
