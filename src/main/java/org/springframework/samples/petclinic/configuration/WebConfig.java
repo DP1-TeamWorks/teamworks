@@ -51,7 +51,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/upload/**").addResourceLocations("/resources/upload/");
         registry.addResourceHandler("/**").addResourceLocations("/resources/frontend/teamworks/build/");
+
     }
 
     @Override

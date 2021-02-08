@@ -5,14 +5,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Attachment;
 import org.springframework.samples.petclinic.repository.AttachmentRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
 public class AttachmentService {
 	private AttachmentRepository attatchmentRepository;
 
@@ -24,20 +27,13 @@ public class AttachmentService {
 	@Transactional(rollbackFor = IOException.class)
 	public void uploadAndSaveAttachment(Attachment attatchment) throws DataAccessException, IOException {
 		String fileName = attatchment.getFile().getOriginalFilename();
-		Path path = Paths.get("src//main//resources//static//upload");
-		String route = path.toFile().getAbsolutePath();
+		Path path = Paths.get("src//main//webapp//resources//upload//" + fileName);
 
 		byte[] bytes = attatchment.getFile().getBytes();
-		Path finalRoute = Paths.get(route + "//" + fileName);
-		Files.write(finalRoute, bytes);
-
-		attatchment.setUrl(finalRoute.toString());
+		Files.write(path, bytes);
+		log.info("Uploading file");
+		attatchment.setUrl("/upload/" + fileName);
 		attatchmentRepository.save(attatchment);
-	}
-
-	@Transactional(readOnly = true)
-	public Attachment findAttatchmentById(Integer attatchmentId) throws DataAccessException {
-		return attatchmentRepository.findById(attatchmentId);
 	}
 
 	@Transactional

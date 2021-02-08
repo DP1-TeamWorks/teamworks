@@ -68,7 +68,7 @@ const MessagePreview = ({
       <div
         className={isOpen() ? "MsgContent" : "MsgContent MsgContent--Collapsed"}
       >
-        <OpenedMessage key={msg.id} msg={msg} />
+        <OpenedMessage key={msg.id} msg={msg} setOpenMessage={setOpenMessage} />
       </div>
     </>
   );

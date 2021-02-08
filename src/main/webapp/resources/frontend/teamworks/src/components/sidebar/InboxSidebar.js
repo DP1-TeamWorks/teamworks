@@ -15,13 +15,9 @@ const InboxSidebar = ({
   setSelectedTab,
   setModalNewMessage,
   modalNewMessage,
+  pickedProject,
+  setPickedProject,
 }) => {
-  const [pickedProject, setPickedProject] = useState({
-    name: "Any",
-    id: 9999999999999999999,
-    tags: [],
-  });
-
   const ChangeModalNewMessage = () => {
     setModalNewMessage(!modalNewMessage);
   };
