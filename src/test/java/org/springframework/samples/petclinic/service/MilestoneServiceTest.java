@@ -109,7 +109,6 @@ class MilestoneServiceTest {
 			this.milestoneService.saveMilestone(milestone);
 			});			
 
-		assertThat(milestone).isNotNull();
 	}
 	
 
