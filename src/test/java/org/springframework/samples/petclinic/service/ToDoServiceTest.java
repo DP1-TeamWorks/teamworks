@@ -21,7 +21,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.samples.petclinic.model.Milestone;
 import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
-import org.springframework.samples.petclinic.validation.ToDoLimitMilestoneException;
+import org.springframework.samples.petclinic.validation.ToDoMaxToDosPerAssigneeException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +48,7 @@ public class ToDoServiceTest {
 
 		try {
 			this.toDoService.saveToDo(toDo);
-		} catch (DataAccessException | ToDoLimitMilestoneException ex) {
+		} catch (DataAccessException | ToDoMaxToDosPerAssigneeException ex) {
 			Logger.getLogger(ToDoServiceTest.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
@@ -65,41 +65,41 @@ public class ToDoServiceTest {
 		assertThat(toDo.getMilestone().getId()).isEqualTo(1);
 
 	}
-	
-	
+
+
 
 	@Test
 	void shouldFindDToDoByUser() {
 		UserTW user = userService.findUserById(2);
 		Collection<ToDo> toDos = this.toDoService.findToDoByUser(user.getId());
-		
+
 		List<ToDo> list;
 		if (toDos instanceof List)
 		  list = (List)toDos;
 		else
 		  list = new ArrayList(toDos);
-		
-		
+
+
 		assertThat(list.get(0).getTitle()).isEqualTo("Mark this as done");
 		assertThat(list.get(0).getMilestone().getId()).isEqualTo(1);
 
 	}
-	
-	
+
+
 	@Test
 	void shouldFindDToDoByMilestoneAndUser() {
 		UserTW user = userService.findUserById(2);
 		Milestone milestone = milestonService.findMilestoneById(1);
 		Collection<ToDo> toDos = this.toDoService.findToDoByMilestoneAndUser(milestone.getId(),
 				user.getId());
-		
+
 		List<ToDo> list;
 		if (toDos instanceof List)
 		  list = (List)toDos;
 		else
 		  list = new ArrayList(toDos);
-		
-		
+
+
 		assertThat(list.get(0).getTitle()).isEqualTo("Mark this as done");
 		assertThat(list.get(0).getMilestone().getId()).isEqualTo(1);
 
@@ -113,19 +113,19 @@ public class ToDoServiceTest {
 		ToDo toDo = this.toDoService.findToDoById(3);
 		assertThat(toDo).isNull();
 	}
-	
-	
+
+
 	//NEGATIVE USE CASE H16-E1
 	@Test
 	@Transactional
 	void shouldInsertToDoWithoutData() {
-		ToDo toDo = new ToDo();	
+		ToDo toDo = new ToDo();
 		assertThrows(Exception.class, ()-> {
 			toDoService.saveToDo(toDo);
 			});
 	}
-	
-	
+
+
 	//NEGATIVE USE CASE 19-E1
 	@Test
 	@Transactional
@@ -142,7 +142,7 @@ public class ToDoServiceTest {
 			toDoService.saveToDo(toDo);
 			});
 	}
-	
+
 
 
 
