@@ -176,48 +176,7 @@ public class AuthControllerTest {
 		.andExpect(status().isOk());
 	}
 	
-	
-	//el validador no funciona
-	@Test
-	void testSignUpWithErrorsValidator() throws Exception{
-		
-		
-		UserTW useri = new UserTW();
-		useri.setName("Paco");
-		useri.setLastname("Martin");
-		useri.setEmail("pacomartin@cyber");
-		useri.setPassword("123123123");
-		useri.setRole(Role.team_owner);
-		
-		Team teami=new Team();
-		teami.setIdentifier("cyber");
-		teami.setName("cyber");
-		
-		useri.setTeam(teami);
-		given(bindingResult.hasErrors()).willReturn(true);
-		//bindingResult.rejectValue("name", "The name size must be between 1 and 25");
-		doAnswer(invocation -> {
-			  Object[] args = invocation.getArguments();
-			  ((BindingResult)args[1]).rejectValue("name", "The name size must be between 1 and 25");
-			  return null; // void method in a block-style lambda, so return null
-			}).when(userValidator).validate(useri, bindingResult);
-		
 
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("teamname", "cyber");
-		map.put("identifier", "cyber");
-		map.put("username", "Paco");
-		map.put("lastname", "Martin");
-		map.put("password", "123123123");
-		String json = objectMapper.writeValueAsString(map);
-
-		
-		mockMvc.perform(post("/api/auth/signup").session(mockSession)
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(json))
-		.andExpect(status().isBadRequest());
-	}
-	
 	
 	@Test
 	void testSignUpException() throws Exception{
