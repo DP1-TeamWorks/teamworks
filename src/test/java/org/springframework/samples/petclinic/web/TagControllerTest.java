@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
@@ -89,6 +90,7 @@ public class TagControllerTest {
 	private Participation work;
 	private ToDo todo;
 	private Map<String, List<Tag>> map;
+	private List<Tag> tags;
 
 	@BeforeEach
 	void setup() {
@@ -105,7 +107,7 @@ public class TagControllerTest {
 		saveTheWorld = new Project();
 		saveTheWorld.setName("saveTheWorld");
 		testing.setProject(saveTheWorld);
-		List<Tag> tags = new ArrayList<>();
+		tags = new ArrayList<>();
 		tags.add(testing);
 		saveTheWorld.setTags(tags);
 		
@@ -140,17 +142,23 @@ public class TagControllerTest {
 	
 	@Test
 	void testGetTagsByProjectsId() throws Exception {
+		String json = objectMapper.writeValueAsString(tags);
+		
 		mockMvc.perform(get("/api/tags?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession))
-		.andExpect(status().isOk());
+		.andExpect(status().isOk())
+		.andExpect(content().json(json));
 	}
 	
 	//comprobar lo que esta devolviendo
 	@Test
 	void testGetAllMyTagsByProject() throws Exception{
+		String json = objectMapper.writeValueAsString(map);
+		
 		mockMvc.perform(get("/api/tags/mine/all")
 				.session(mockSession))
-		.andExpect(status().isOk());
+		.andExpect(status().isOk())
+		.andExpect(content().json(json));
 	}
 	
 	
