@@ -10,7 +10,7 @@ import { faReply } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
 import ToDo from "../projects/toDos/ToDo";
 
-const OpenedMessage = ({ msg }) => {
+const OpenedMessage = ({ msg, setOpenMessage }) => {
   const [forwardOptions, setForwardOptions] = useState([]);
   const [messageOptions, setMessageOptions] = useState("");
   useEffect(() => {
@@ -79,12 +79,15 @@ const OpenedMessage = ({ msg }) => {
           );
         })}
       </div>
-      {messageOptions === "Reply" && <ReplyForm repliedMessage={msg} />}
+      {messageOptions === "Reply" && (
+        <ReplyForm repliedMessage={msg} setOpenMessage={setOpenMessage} />
+      )}
       {messageOptions === "Forward" && (
         <ForwardForm
           key={JSON.stringify(forwardOptions)}
           forwardOptions={forwardOptions}
           forwardedMessage={msg}
+          setOpenMessage={setOpenMessage}
         />
       )}
     </>
