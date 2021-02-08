@@ -96,7 +96,7 @@ public class MilestoneController {
 	@DeleteMapping(value = "/api/milestones")
 	public ResponseEntity<String> deleteMilestones(@RequestParam(required = true) Integer milestoneId) {
 		try {
-			milestoneService.deleteMilestonetById(milestoneId);
+			milestoneService.deleteMilestoneById(milestoneId);
 			return ResponseEntity.ok("Milestone delete");
 		} catch (DataAccessException d) {
 			return ResponseEntity.notFound().build();

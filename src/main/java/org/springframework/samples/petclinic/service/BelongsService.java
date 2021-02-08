@@ -59,7 +59,7 @@ public class BelongsService {
 	}
 
 	@Transactional(readOnly = true)
-	public Belongs findCurrentBelongs(Integer userId, Integer departmentId) {
+	public Belongs findCurrentBelong(Integer userId, Integer departmentId) {
 		return belongsRepository.findCurrentBelongs(userId, departmentId);
 	}
 
