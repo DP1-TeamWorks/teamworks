@@ -209,10 +209,10 @@ public class MessageController {
 
     @PostMapping(value = "api/message/reply")
     public ResponseEntity<String> replyMessage(HttpServletRequest r,
-            @Valid @RequestParam(required = true) Message message, @RequestParam(required = true) Integer replyId) {
-
-        log.info("Replying to the message with id: " + replyId);
-        Message repliedMessage = messageService.findMessageById(replyId);
+            @Valid @RequestBody(required = true) Message message,
+            @RequestParam(required = true) Integer repliedMessageId) {
+        log.info("Replying to the message with id: " + repliedMessageId);
+        Message repliedMessage = messageService.findMessageById(repliedMessageId);
         message.setReplyTo(repliedMessage);
         log.info("Creating the reply");
         return newMessage(r, message);
@@ -221,9 +221,9 @@ public class MessageController {
 
     @PostMapping(value = "api/message/forward")
     public ResponseEntity<String> forwardMessage(HttpServletRequest r, @RequestBody List<String> forwardList,
-            Integer messageId) {
-        log.info("Forwarding the message with id: " + messageId + " to: " + forwardList);
-        Message message = messageService.findMessageById(messageId);
+            @RequestParam(required = true) Integer forwardedMessageId) {
+        log.info("Forwarding the message with id: " + forwardedMessageId + " to: " + forwardList);
+        Message message = messageService.findMessageById(forwardedMessageId);
         log.info("Copying the message");
         Message forwardCopy = new Message();
         forwardCopy.setRead(false);
