@@ -242,15 +242,9 @@ public class MessageControllerTest {
 	
 	@Test
 	void testGetMessagesByTag() throws Exception {
-		//messageSent.setTags(tagList);
 		List<Integer> tagListInt = new ArrayList<>();
 		tagListInt.add(TEST_TAG_ID);
 		messageSent.setTagList(tagListInt);
-		//messageSent.setToDos(toDoList);
-//		List<Integer> todoListInt = new ArrayList<>();
-//		todoListInt.add(TEST_TODO_ID);
-//		messageSent.setTagList(todoListInt);
-		
 		mockSession.setAttribute("userId",TEST_USER2_ID);
 
 		String json = objectMapper.writeValueAsString(MReceivedList);
