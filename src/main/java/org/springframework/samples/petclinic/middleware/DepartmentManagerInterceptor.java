@@ -30,7 +30,11 @@ public class DepartmentManagerInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
 		Integer userId = (Integer) req.getSession().getAttribute("userId");
 		UserTW user = userTWService.findUserById(userId);
-		Integer departmentId = Integer.valueOf(req.getParameter("departmentId"));
+		String paramDepartmentId=req.getParameter("departmentId");
+		Integer departmentId = null;
+		if(paramDepartmentId!=null) {
+			departmentId = Integer.valueOf(paramDepartmentId);
+		}
 		if (departmentId == null) {
 			res.sendError(400);
 			return false;
