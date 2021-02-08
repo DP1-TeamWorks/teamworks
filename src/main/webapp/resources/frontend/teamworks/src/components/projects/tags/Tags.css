@@ -1,4 +1,4 @@
-.TagTab {
+/*.TagTab {
   margin: 0 -35px;
   width: calc(100% + 70px);
   padding: 5px 35px;
@@ -20,7 +20,7 @@
 .TagTab--Selected {
   background-color: #3e4237;
   font-weight: 600;
-}
+}*/
 
 .Circle {
   margin-right: 4px;
@@ -28,6 +28,7 @@
   vertical-align: middle;
   border: 0;
   width: 15px;
+  min-width: 15px;
   height: 15px;
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;

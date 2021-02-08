@@ -50,9 +50,11 @@ const ProjectMemberList = ({projectId, members, loading, onListUpdated}) => {
   {
     elements = members.map(member =>
     {
+      const completename = member.name + " " + member.lastname;
+      const username = completename.toLowerCase().replace(/ /g, "");
       return (
         <tr key={member.id}>
-          <td><Link to={`/settings/users/${member.userId}`}>{member.lastname}, {member.name}</Link></td>
+          <td><Link to={`/settings/users/${member.userId}/${username}`}>{member.lastname}, {member.name}</Link></td>
           <td>{member.email}</td>
           <td>{member.isProjectManager ? "Proj. Manager" : "Member"}</td>
           <td>{member.initialDate}</td>

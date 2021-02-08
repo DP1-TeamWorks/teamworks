@@ -1,8 +1,7 @@
-import "./Profile.css";
 import "../../FontStyles.css";
-import AuthApiUtils from "../../utils/api/AuthApiUtils";
-
+import "./Profile.css";
 import ProfilePic from "./ProfilePic";
+
 
 const ProfileHeader = ({src, role, name, slim, children}) =>
 {

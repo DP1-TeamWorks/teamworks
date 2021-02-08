@@ -6,7 +6,7 @@ import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
 import Button from "../../buttons/Button";
 import AddMilestoneForm from "../../forms/AddMilestoneForm";
 import AddTagForm from "../../forms/AddTagForm";
-import AddUserToProject from "../../forms/AddUserToProjectForm";
+import AddUserToProjectForm from "../../forms/AddUserToProjectForm";
 import Spinner from "../../spinner/Spinner";
 import EditableField from "../EditableField";
 import SettingGroup from "../SettingGroup";
@@ -200,9 +200,22 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
             onUpdated={onProjectAttributeUpdated} />
         </SettingGroup>
         <SettingGroup
+          name="Milestones"
+          description="You can add a new milestone below.">
+          <AddMilestoneForm
+            key={`mileform${currentProject.id}`}
+            projectId={currentProject.id}
+            onMilestoneAdded={onMilestoneAdded} />
+          <MilestoneList
+            key={`list${currentProject.id}`}
+            updateCounter={milestoneUpdateCounter}
+            projectName={currentProject.name}
+            projectId={currentProject.id} />
+        </SettingGroup>
+        <SettingGroup
           name="Add user to project"
           description="Type their name below. They must be a department member.">
-          <AddUserToProject
+          <AddUserToProjectForm
             key={currentProject.name}
             onUserAdded={onUserAdded}
             projectId={currentProject.id}
@@ -218,18 +231,6 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
             loading={projectMembers == null}
             members={projectMembers}
             onListUpdated={fetchProjectMembers} />
-        </SettingGroup>
-        <SettingGroup
-          name="Milestones"
-          description="You can add a new milestone below.">
-          <AddMilestoneForm
-            key={`mileform${currentProject.id}`}
-            projectId={currentProject.id}
-            onMilestoneAdded={onMilestoneAdded} />
-          <MilestoneList
-            key={`list${currentProject.id}`}
-            updateCounter={milestoneUpdateCounter}
-            projectId={currentProject.id} />
         </SettingGroup>
         <SettingGroup
           name="Tags"

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "../Auth/Login/Login";
-import "./Header.css";
-import ProfilePic from "../profile/ProfilePic";
-import LinkButton from "../buttons/LinkButton";
-import Button from "../buttons/Button";
-import MainTitle from "./MainTitle";
 import AuthApiUtils from "../../utils/api/AuthApiUtils";
+import "../Auth/Login/Login";
+import Button from "../buttons/Button";
+import LinkButton from "../buttons/LinkButton";
+import ProfilePic from "../profile/ProfilePic";
+import "./Header.css";
+import MainTitle from "./MainTitle";
 
 const handleLogout = async event => {
   AuthApiUtils.logout();

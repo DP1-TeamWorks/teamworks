@@ -8,7 +8,7 @@ import UserSettings from '../components/settings/users/UserSettings';
 import DepartmentSettings from "../components/settings/department/DepartmentSettings";
 import ProjectSettings from '../components/settings/project/ProjectSettings';
 import UserPage from '../components/settings/users/UserPage';
-import MilestonePage from '../components/settings/project/MilestonePage';
+import MilestonePage from '../components/settings/milestone/MilestonePage';
 
 
 const PATHS = ["/settings/team", "/settings/departments", "/settings/projects", "/settings/users"];
@@ -36,8 +36,8 @@ const Settings = () =>
                     <Route path="/settings/departments">
                         <DepartmentSettings />
                     </Route>
-                    <Route path="/settings/users/:userId" component={UserPage} />
-                    <Route path="/settings/projects/:projectId/:milestoneId" component={MilestonePage} />
+                    <Route path="/settings/users/:userId/:userName" component={UserPage} />
+                    <Route path="/settings/projects/:projectName/:projectId/:milestoneName/:milestoneId" component={MilestonePage} />
                     <Route path="/settings/projects">
                         <ProjectSettings />
                     </Route>

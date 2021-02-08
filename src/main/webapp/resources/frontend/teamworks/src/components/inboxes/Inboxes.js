@@ -1,5 +1,4 @@
 import React from "react";
-import MessageApiUtils from "../../utils/api/MessageApiUtils";
 import InboxSidebarTab from "../sidebar/InboxSidebarTab";
 
 const Inboxes = ({

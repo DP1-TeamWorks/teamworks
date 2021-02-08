@@ -11,6 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -37,9 +38,10 @@ public class Milestone extends BaseEntity {
 	private String name;
 
 
+    @Valid
 	@NotNull
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
 	@Column(name = "due_for")
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate dueFor;
 
 	// Relations
