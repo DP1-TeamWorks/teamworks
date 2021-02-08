@@ -2,7 +2,9 @@ package org.springframework.samples.petclinic.web;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.HashMap;
@@ -16,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.TestWebConfig;
@@ -103,7 +106,7 @@ public class AuthControllerTest {
 		
 	}
 	
-/*
+
 	@Test
 	void testLogin() throws Exception{
 		
@@ -172,7 +175,7 @@ public class AuthControllerTest {
 				.content(json))
 		.andExpect(status().isOk());
 	}
-	*/
+	
 	
 	//el validador no funciona
 	@Test
@@ -216,31 +219,31 @@ public class AuthControllerTest {
 	}
 	
 	
-//	@Test
-//	void testSignUpException() throws Exception{
-//		
-//		Map<String, String> map = new HashMap<String, String>();
-//		map.put("teamname", "cyber");
-//		map.put("identifier", "cyber");
-//		map.put("username", "Paco");
-//		map.put("lastname", "Martin");
-//		map.put("password", "123123123");
-//		String json = objectMapper.writeValueAsString(map);
-//
-//		Team teami=new Team();
-//		teami.setIdentifier("cyber");
-//		teami.setName("cyber");
-//		
-//		
-//		doThrow(new DataAccessResourceFailureException("Error guardando el equipo"))
-//		.when(teamService).saveTeam(teami);
-//
-//		
-//		mockMvc.perform(post("/api/auth/signup").session(mockSession)
-//				.contentType(MediaType.APPLICATION_JSON)
-//				.content(json))
-//		.andExpect(status().isBadRequest());
-//	}
-//	
+	@Test
+	void testSignUpException() throws Exception{
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("teamname", "cyber");
+		map.put("identifier", "cyber");
+		map.put("username", "Paco");
+		map.put("lastname", "Martin");
+		map.put("password", "123123123");
+		String json = objectMapper.writeValueAsString(map);
+
+		Team teami=new Team();
+		teami.setIdentifier("cyber");
+		teami.setName("cyber");
+		
+		
+		doThrow(new DataAccessResourceFailureException("Error guardando el equipo"))
+		.when(teamService).saveTeam(teami);
+
+		
+		mockMvc.perform(post("/api/auth/signup").session(mockSession)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json))
+		.andExpect(status().isBadRequest());
+	}
+	
 
 }
