@@ -10,6 +10,9 @@ import org.springframework.samples.petclinic.validation.ToDoLimitMilestoneExcept
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ToDoService {
 
@@ -22,6 +25,7 @@ public class ToDoService {
 
     @Transactional(rollbackFor = ToDoLimitMilestoneException.class)
     public void saveToDo(ToDo toDo) throws DataAccessException, ToDoLimitMilestoneException {
+        log.info("" + toDo.toString());
         if (toDo.getDone() || findToDoByMilestoneAndUser(toDo.getMilestone().getId(), toDo.getAssignee().getId())
                 .stream().filter(t -> !t.getDone()).count() < 7L) {
             toDoRepository.save(toDo);

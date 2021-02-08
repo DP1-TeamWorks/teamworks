@@ -60,7 +60,6 @@ const MyProjectToDos = ({ projectId }) => {
       </h3>
       <span className="MilestoneDate"> for {milestone.dueFor} </span>
       {toDoList.map((toDo) => {
-        console.log(toDo);
         return (
           <ToDo
             key={toDo.id}

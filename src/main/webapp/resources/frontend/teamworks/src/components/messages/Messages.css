@@ -144,6 +144,12 @@
   color: #34382e;
 }
 
+.fa-times > path {
+  color: #a7e32d;
+  cursor: pointer;
+  float: right;
+}
+
 .NewMsgModal {
   z-index: 3;
   position: fixed;
@@ -243,7 +249,8 @@
 .NewMsgTextLabel {
   position: relative;
   width: 100%;
-  height: calc(100% - 138px);
+  height: calc(100% - 240px);
+  margin-top: 12px;
   flex: 1 0 auto;
 }
 
@@ -267,7 +274,7 @@
 
 .NewMsgBody {
   padding-top: 40px;
-  height: 100%;
+  height: 95%;
   resize: none;
   box-sizing: border-box;
 }

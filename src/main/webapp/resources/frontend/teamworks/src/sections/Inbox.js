@@ -26,7 +26,7 @@ const Inbox = ({ search, setSearch }) => {
 
   useEffect(() => {
     if (search !== "") {
-      console.log(search);
+      console.log("Searching messages by keywords: " + search);
       setSelectedTab("Search");
       MessageApiUtils.getMyMessagesBySearch(search)
         .then((res) => {

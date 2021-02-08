@@ -16,25 +16,26 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 /**
- * This advice is necessary because MockMvc is not a real servlet environment, therefore it does not redirect error
- * responses to [ErrorController], which produces validation response. So we need to fake it in tests.
- * It's not ideal, but at least we can use classic MockMvc tests for testing error response + document it.
+ * This advice is necessary because MockMvc is not a real servlet environment,
+ * therefore it does not redirect error responses to [ErrorController], which
+ * produces validation response. So we need to fake it in tests. It's not ideal,
+ * but at least we can use classic MockMvc tests for testing error response +
+ * document it.
  */
 @ControllerAdvice
-public class ExceptionHandlerConfiguration
-{
-	@Autowired
-	private BasicErrorController errorController;
+public class ExceptionHandlerConfiguration {
+    @Autowired
+    private BasicErrorController errorController;
     // add any exceptions/validations/binding problems
 
-   @ExceptionHandler(Exception.class)
-   public ResponseEntity defaultErrorHandler(HttpServletRequest request, Exception ex)  {
-       ResponseEntity resp = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error: " + ex.getMessage());
-       return resp;
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity defaultErrorHandler(HttpServletRequest request, Exception ex) {
+        ResponseEntity resp = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error: " + ex.getMessage());
+        return resp;
     }
 
-    @ExceptionHandler({BadRequestException.class, MissingServletRequestParameterException.class})
-    public ResponseEntity badRequestErrorHandler(HttpServletRequest request, Exception ex)  {
+    @ExceptionHandler({ BadRequestException.class, MissingServletRequestParameterException.class })
+    public ResponseEntity badRequestErrorHandler(HttpServletRequest request, Exception ex) {
         ResponseEntity resp = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("bad request: " + ex.getMessage());
         return resp;
     }

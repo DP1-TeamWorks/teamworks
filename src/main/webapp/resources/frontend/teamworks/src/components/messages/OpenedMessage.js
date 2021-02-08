@@ -11,35 +11,38 @@ import { faForward } from "@fortawesome/free-solid-svg-icons";
 import ToDo from "../projects/toDos/ToDo";
 
 const OpenedMessage = ({ msg }) => {
-  const [forwardOptions, setForwardOptions] = useState({});
+  const [forwardOptions, setForwardOptions] = useState([]);
   const [messageOptions, setMessageOptions] = useState("");
   useEffect(() => {
-    UserApiUtils.getMyTeamUsers()
-      .then((res) => {
-        console.log("Getting user mails");
-        let mailList = res.map((user) => {
-          return { label: user.name + " - " + user.email, value: user.email };
+    if (messageOptions === "Forward")
+      UserApiUtils.getMyTeamUsers()
+        .then((res) => {
+          console.log("Getting user mails");
+          let mailList = res.map((user) => {
+            return { label: user.name + " - " + user.email, value: user.email };
+          });
+          setForwardOptions(mailList);
+          console.log(mailList);
+        })
+        .catch((error) => {
+          console.log("ERROR: cannot get the users mails");
         });
-        setForwardOptions(mailList);
-      })
-      .catch((error) => {
-        console.log("ERROR: cannot get the users mails");
-      });
-  }, [msg]);
-
-  console.log(msg);
+  }, [messageOptions]);
 
   return (
     <>
       <div className="MsgContentSentTo">
         <span style={{ fontWeight: "bold" }}>
           Sent to{" "}
-          {msg.recipients.map((r) => {
+          {msg.strippedRecipients.map((r) => {
             return <b key={r.name}> {r.name} </b>;
           })}
         </span>
       </div>
-      <div className="MsgContentText">{msg.text.replace("\n", "<br>")}</div>
+      <div
+        className="MsgContentText"
+        dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, "<br>") }}
+      ></div>
       <div className="MsgContentButtons">
         <GradientButton
           onClick={() => {
@@ -66,17 +69,23 @@ const OpenedMessage = ({ msg }) => {
         {msg.toDos.map((toDo) => {
           return (
             <ToDo
+              key={toDo.id}
               id={toDo.id}
               tagList={toDo.tags}
               title={toDo.title}
               done={toDo.done}
+              blocked={true}
             />
           );
         })}
       </div>
       {messageOptions === "Reply" && <ReplyForm repliedMessage={msg} />}
       {messageOptions === "Forward" && (
-        <ForwardForm forwardOptions={forwardOptions} forwardedMessage={msg} />
+        <ForwardForm
+          key={JSON.stringify(forwardOptions)}
+          forwardOptions={forwardOptions}
+          forwardedMessage={msg}
+        />
       )}
     </>
   );

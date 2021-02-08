@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,8 @@ import org.springframework.samples.petclinic.service.MessageService;
 import org.springframework.samples.petclinic.service.TagService;
 import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.validation.TagLimitProjectException;
+import org.springframework.samples.petclinic.validation.ToDoLimitMilestoneException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -167,30 +170,39 @@ public class MessageController {
                     .map(mail -> userService.findByEmail(mail)).collect(Collectors.toList());
             message.setRecipients(recipientList);
 
-            log.info("Setting the todo list");
             if (message.getToDoList() != null) {
-                List<ToDo> toDoList = message.getToDoList().stream().map(toDoId -> toDoService.findToDoById(toDoId))
+                log.info("Todo list received. saving the relationships");
+                List<ToDo> toDoList = message.getToDoList().stream().map(todoId -> toDoService.findToDoById(todoId))
                         .collect(Collectors.toList());
-                log.info("ToDoList: " + toDoList.toString());
-                message.setToDos(toDoList);
-            } else
-                log.info("Any todo to attach");
+                message.setToDoList(null);
+                message.setToDos(new ArrayList<>());
+                message.getToDos().addAll(toDoList);
+                messageService.saveMessage(message);
+                for (ToDo todo : toDoList) {
+                    todo.getMessages().add(message);
+                    toDoService.saveToDo(todo);
+                }
+            }
 
-            log.info("Setting the tag list");
             if (message.getTagList() != null) {
+                log.info("Tag list received. saving the relationships");
                 List<Tag> tagList = message.getTagList().stream().map(tagId -> tagService.findTagById(tagId))
                         .collect(Collectors.toList());
-                message.setTags(tagList);
-            } else
-                log.info("Any tag to attach");
+                message.setTagList(null);
+                message.setTags(new ArrayList<>());
+                message.getTags().addAll(tagList);
+                messageService.saveMessage(message);
+                for (Tag tag : tagList) {
+                    tag.getMessages().add(message);
+                    tagService.saveTag(tag);
+                }
+            }
 
-            log.info("Saving the message");
-            messageService.saveMessage(message);
             return ResponseEntity.ok().build();
         } catch (
 
-        DataAccessException d) {
-            log.error("ERROR: " + d.getMessage());
+                DataAccessException | TagLimitProjectException | ToDoLimitMilestoneException d) {
+            log.error("exception ocurred saving message", d);
             return ResponseEntity.badRequest().build();
         }
     }
@@ -216,13 +228,11 @@ public class MessageController {
         Message forwardCopy = new Message();
         forwardCopy.setRead(false);
         forwardCopy.setRecipientsEmails(forwardList);
-        forwardCopy.setSubject(message.getSubject().contains("Forwarded (") ? message.getSubject()
-                : "Forwarded(" + message.getSender().getName() + "): " + message.getSubject());
-        forwardCopy.setText(message.getSender().getName() + " said: " + message.getText());
-        forwardCopy.setTags(List.copyOf(message.getTags()));
-        forwardCopy.setToDos(List.copyOf(message.getToDos()));
-        forwardCopy.setTagList(null);
-        forwardCopy.setToDoList(null);
+        forwardCopy.setSubject(message.getSubject().contains("Fw(") ? message.getSubject()
+                : "Fw(" + message.getSender().getName() + "): " + message.getSubject());
+        forwardCopy.setText(message.getSender().getName() + "'s Original Message: " + message.getText());
+        forwardCopy.setTagList(message.getTags().stream().map(tag -> tag.getId()).collect(Collectors.toList()));
+        forwardCopy.setToDoList(message.getToDos().stream().map(todo -> todo.getId()).collect(Collectors.toList()));
         log.info("Creating the forward copy");
         return newMessage(r, forwardCopy);
     }
