@@ -11,6 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -37,9 +38,10 @@ public class Milestone extends BaseEntity {
 	private String name;
 
 
+    @Valid
 	@NotNull
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
 	@Column(name = "due_for")
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate dueFor;
 
 	// Relations
@@ -54,12 +56,6 @@ public class Milestone extends BaseEntity {
 	@Column(name = "toDos")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "milestone", orphanRemoval = true)
 	private List<ToDo> toDos;
-
-	/*@JsonIgnore
-	public void setToDos(List<ToDo> todos)
-    {
-        toDos = todos;
-    }*/
 
 	@JsonIgnore
 	// @JsonManagedReference(value="milestone-tag")

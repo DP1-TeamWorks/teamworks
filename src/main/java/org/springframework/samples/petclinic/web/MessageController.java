@@ -20,7 +20,7 @@ import org.springframework.samples.petclinic.service.TagService;
 import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.validation.TagLimitProjectException;
-import org.springframework.samples.petclinic.validation.ToDoLimitMilestoneException;
+import org.springframework.samples.petclinic.validation.ToDoMaxToDosPerAssigneeException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -162,6 +162,8 @@ public class MessageController {
             log.info("Creating new message");
             Integer userId = (Integer) r.getSession().getAttribute("userId");
             UserTW sender = userService.findUserById(userId);
+            if (sender == null)
+                return ResponseEntity.badRequest().build();
             message.setSender(sender);
             message.setRead(false);
 
@@ -201,7 +203,7 @@ public class MessageController {
             return ResponseEntity.ok().build();
         } catch (
 
-                DataAccessException | TagLimitProjectException | ToDoLimitMilestoneException d) {
+                DataAccessException | TagLimitProjectException | ToDoMaxToDosPerAssigneeException d) {
             log.error("exception ocurred saving message", d);
             return ResponseEntity.badRequest().build();
         }

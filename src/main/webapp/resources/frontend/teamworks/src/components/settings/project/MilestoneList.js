@@ -5,7 +5,7 @@ import MilestoneApiUtils from "../../../utils/api/MilestoneApiUtils";
 import Spinner from "../../spinner/Spinner";
 import "../UserList.css";
 
-const MilestoneList = ({ projectId, updateCounter }) =>
+const MilestoneList = ({ projectName, projectId, updateCounter }) =>
 {
 
   const [milestones, setMilestones] = useState(null);
@@ -33,10 +33,12 @@ const MilestoneList = ({ projectId, updateCounter }) =>
     const today = new Date();
     elements = milestones.map(milestone =>
     {
+      const milename = milestone.name.replace(/ /g,"-");
+      const projname = projectName.replace(/ /g, "-");
       const pastText = new Date(milestone.dueFor) < today ? "Expired:" : "";
       return (
         <tr key={milestone.id}>
-          <td><i>{pastText}</i> <Link to={`/settings/projects/${projectId}/${milestone.id}`}>{milestone.name}</Link></td>
+          <td><i>{pastText}</i> <Link to={`/settings/projects/${projname}/${projectId}/${milename}/${milestone.id}`}>{milestone.name}</Link></td>
           <td>{milestone.toDos.length}</td>
           <td>{milestone.dueFor}</td>
         </tr>

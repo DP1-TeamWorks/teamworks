@@ -1,11 +1,13 @@
 import React from "react";
 import Select from "react-select";
 import InputError from "../../forms/InputError";
+import CustomOptionComponent from "./CustomOptionComponent";
 
 const NewMessageMultiSelect = ({
   name,
   placeholder,
   options,
+  defaultOptions,
   changeHandler,
   className,
   error,
@@ -19,7 +21,10 @@ const NewMessageMultiSelect = ({
     >
       <p className="TitleNewMsg">{name}</p>
       <Select
+        // components={{Option: CustomOptionComponent}}
+        formatOptionLabel={CustomOptionComponent}
         options={options}
+        defaultValue={defaultOptions}
         onChange={(e) => {
           changeHandler(
             name,
@@ -42,6 +47,7 @@ const customStyles = {
   option: (provided, state) => ({
     ...provided,
     color: "#a6ce56",
+    background: state.isFocused ? "#ccc2" : null
   }),
   control: (base, state) => ({
     ...base,

@@ -4,15 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.model.Belongs;
-import org.springframework.samples.petclinic.model.Participation;
-import org.springframework.samples.petclinic.model.Project;
-import org.springframework.samples.petclinic.model.Role;
-import org.springframework.samples.petclinic.model.UserTW;
-import org.springframework.samples.petclinic.service.BelongsService;
-import org.springframework.samples.petclinic.service.ParticipationService;
-import org.springframework.samples.petclinic.service.ProjectService;
-import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.model.*;
+import org.springframework.samples.petclinic.service.*;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class ProjectManagerInterceptor extends HandlerInterceptorAdapter {
@@ -20,14 +13,16 @@ public class ProjectManagerInterceptor extends HandlerInterceptorAdapter {
 	private final BelongsService belongsService;
 	private final ParticipationService participationService;
 	private final ProjectService projectService;
+	private final MilestoneService milestoneService;
 
 	@Autowired
 	public ProjectManagerInterceptor(UserTWService userTWService, BelongsService belongsService,
-			ParticipationService participationService, ProjectService projectService) {
+			ParticipationService participationService, ProjectService projectService, MilestoneService milestoneService) {
 		this.belongsService = belongsService;
 		this.userTWService = userTWService;
 		this.participationService = participationService;
 		this.projectService = projectService;
+		this.milestoneService = milestoneService;
 	}
 
 	@Override
@@ -35,6 +30,24 @@ public class ProjectManagerInterceptor extends HandlerInterceptorAdapter {
 		Integer userId = (Integer) req.getSession().getAttribute("userId");
 		UserTW user = userTWService.findUserById(userId);
 		Integer projectId = Integer.valueOf(req.getParameter("projectId"));
+		if (projectId == null)
+        {
+            // find by milestone
+            Integer milestoneId = Integer.valueOf(req.getParameter("milestoneId"));
+            if (milestoneId == null)
+            {
+                res.sendError(400);
+                return false;
+            }
+            Milestone m = milestoneService.findMilestoneById(milestoneId);
+            if (m == null)
+            {
+                res.sendError(403);
+                return false;
+            }
+            // set project id accordingly to run subsequent checks
+            projectId = m.getProject().getId();
+        }
 		Participation participation = participationService.findCurrentParticipation(userId, projectId);
 		Project project = projectService.findProjectById(projectId);
 		Belongs belongs = belongsService.findCurrentBelongs(userId, project.getDepartment().getId());

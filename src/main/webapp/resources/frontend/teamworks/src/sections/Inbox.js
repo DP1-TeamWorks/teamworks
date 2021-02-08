@@ -7,7 +7,7 @@ import Section from "./Section";
 
 const Inbox = ({ search, setSearch }) => {
   const [selectedTab, setSelectedTab] = useState("Inbox");
-  const [selectedMessages, setSelectedMessages] = useState([]);
+  const [selectedMessages, setSelectedMessages] = useState(null);
   const [nInboxMessages, setNInboxMessages] = useState([]);
   const [reloadCounters, setReloadCounters] = useState(true);
 

@@ -42,6 +42,7 @@
     flex-direction: row;
     align-items: center;
     padding-left: 60px;
+    background-color: #2D2D2D;
 }
 
 .ProfileHeader--Slim {
