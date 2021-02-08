@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collection;
 import java.util.logging.Level;
@@ -47,7 +48,17 @@ class UserTWServiceTest {
 
 		assertThat(user.getId()).isNotNull();
 	}
+	
+	@Test
+	@Transactional
+	public void shouldNotInsertAUserNullIntoDatabase() {
 
+		UserTW user = new UserTW();
+		assertThrows(Exception.class, ()-> {
+			this.userTWService.saveUser(user);
+            });
+
+	}
 	@Test
 	void shouldFindUserById() {
 		UserTW user3 = this.userTWService.findUserById(3);

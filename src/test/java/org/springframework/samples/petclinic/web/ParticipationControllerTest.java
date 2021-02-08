@@ -171,6 +171,7 @@ public class ParticipationControllerTest {
 	}
 	@Test
 	void testCreateParticipationsDontBelongProjectDepartment() throws Exception {
+		//Eliminamos al usuario del departamento
 		given(belongsService.findCurrentBelongs(TEST_PARTICIPATION_ID, TEST_DEPARTMENT_ID)).willReturn(null);
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_PARTICIPATION_ID);
@@ -178,6 +179,7 @@ public class ParticipationControllerTest {
 	}
 	@Test
 	void testCreateParticipationsOtherTeamUser() throws Exception {
+		//Metemos la id de un usuario de otro equipo
 		UserTW lola=new UserTW();
 		Team teamLola=new Team();
 		team.setId(3);
@@ -189,6 +191,7 @@ public class ParticipationControllerTest {
 	}
 	@Test
 	void testCreateParticipationsWithExistingParticipation() throws Exception {
+		//Creamos una participacion
 		Participation par=new Participation();
 		par.setProject(game);
 		par.setUserTW(rosa);
@@ -218,6 +221,7 @@ public class ParticipationControllerTest {
 	}
 	@Test
 	void testCreateParticipationsProjectManagerWithoutPermison() throws Exception {
+		//Eliminamos los permisos de juan
 		juan.setRole(Role.employee);
 		participation.setIsProjectManager(false);
 		given(userTWService.findUserById(TEST_USER_ID)).willReturn(juan);
@@ -237,7 +241,7 @@ public class ParticipationControllerTest {
 	}
 	@Test
 	void testDeleteNotExistingParticipations() throws Exception {
-		
+		//Le pasamos una id invalida
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_PARTICIPATION_ID);
 		mockMvc.perform(delete("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(400));
