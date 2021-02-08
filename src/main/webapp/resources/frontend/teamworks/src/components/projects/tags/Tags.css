@@ -28,6 +28,7 @@
   vertical-align: middle;
   border: 0;
   width: 15px;
+  min-width: 15px;
   height: 15px;
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;

@@ -4,7 +4,7 @@ import AssignUserForm from "../../forms/AssignUserForm"
 import EditableField from "../EditableField"
 import SettingGroup from "../SettingGroup"
 
-const TodoDetail = ({onCollapseClicked, todo, tags}) =>
+const TodoDetail = ({onCollapseClicked, onMarkAsDoneClicked, onNameUpdated, onUserAssigned, onTagsUpdated, todo, tags, projectId, milestoneId}) =>
 {
     let assigneeDescription;
     if (todo.assigneeId)
@@ -21,20 +21,21 @@ const TodoDetail = ({onCollapseClicked, todo, tags}) =>
             <span onClick={onCollapseClicked} className="BoldTitle BoldTitle--Smallest ActionButton CloseButton">Collapse</span>
             <GradientButton
                 className="MarkAsDoneButton"
+                onClick={() => onMarkAsDoneClicked(todo)}
                 reducedsize>
                 {todo.done ? "Unmark as done" : "Mark as done"}
             </GradientButton>
             <SettingGroup name="Title">
                 <EditableField
                     value={todo.title}
-                    fieldName="title"
-                    onUpdated={() => console.log('b')} />
+                    postFunction={p => onNameUpdated(todo, p)}
+                    fieldName="title" />
             </SettingGroup>
             <SettingGroup name="Assignee" description={assigneeDescription}>
-                <AssignUserForm submitText={`Assign to task`} />
+                <AssignUserForm onUserAssigned={onUserAssigned} submitText={`Assign to task`} projectId={projectId} milestoneId={milestoneId} todo={todo} />
             </SettingGroup>
             <SettingGroup name="Tags" description=" ">
-                <AddTagToTaskForm tags={tags} selectedTagIds={[1]} />
+                <AddTagToTaskForm tags={tags} selectedTagIds={todo.tags.map(x => x.id)} todo={todo} onTagsUpdated={onTagsUpdated} />
             </SettingGroup>
         </div>
     )

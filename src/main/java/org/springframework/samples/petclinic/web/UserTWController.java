@@ -81,8 +81,6 @@ public class UserTWController {
 		else {
 			return m;
 		}
-		
-		
 	}
 
 	@PostMapping(value = "/api/user")
@@ -126,7 +124,7 @@ public class UserTWController {
 		Map<String, Object> m = new HashMap<>();
 		UserTW user = userService.findUserById(userId);
 		if(user.getTeam().getId().equals(teamId)) {
-			
+
 		m.put("isTeamManager", user.getRole().equals(Role.team_owner));
 		List<Belongs> lb = belongsService.findCurrentUserBelongs(userId).stream().collect(Collectors.toList());
 		m.put("currentDepartments", lb);

@@ -1,11 +1,16 @@
 import React, { useRef } from "react";
-import ProjectApiUtils from "../../utils/api/ProjectApiUtils";
+import { useState } from "react/cjs/react.development";
+import ToDoApiUtils from "../../utils/api/ToDoApiUtils";
+import GradientButton from "../buttons/GradientButton";
 import AddForm from "./AddForm";
 import "./AddUserForm.css";
 import InputAutocompleteUser from "./InputAutocompleteUser";
 
-const AssignUserForm = ({ onUserAdded, submitText, projectId }) =>
+const AssignUserForm = ({ onUserAssigned, submitText, milestoneId, projectId, todo }) =>
 {
+  const selectedUser = useRef(-1);
+  const [unassignButtonVisible, setUnassignButtonVisible] = useState(Boolean(todo.assigneeId));
+
   function onUserSelected(field, userId)
   {
     selectedUser.current = userId;
@@ -15,24 +20,45 @@ const AssignUserForm = ({ onUserAdded, submitText, projectId }) =>
   {
     return new Promise((resolve, reject) =>
     {
-     /* ProjectApiUtils.addUserToProject(projectId, selectedUser.current)
-        .then(() => 
+      ToDoApiUtils.assignTodo(milestoneId, todo.id, selectedUser.current)
+        .then(name => 
         {
           resolve();
-          if (onUserAdded)
-            onUserAdded();
+          console.log(selectedUser.current);
+          setUnassignButtonVisible(selectedUser.current !== -1);
+          if (onUserAssigned)
+            onUserAssigned({todo, id: selectedUser.current, name});
         })
-        .catch((err) => reject(err));*/
+        .catch((err) => reject(err));
     });
   }
 
-  const selectedUser = useRef(-1);
+  function onUnassigned() {
+    selectedUser.current = -1;
+    addUserToProject();
+  }
+
+
+  let unassignButton;
+  if (unassignButtonVisible)
+  {
+    unassignButton = (
+      <GradientButton onClick={onUnassigned}>Unassign</GradientButton>
+    );
+  }
 
   return (
-    <AddForm hasAutocomplete submitText={submitText} postFunction={addUserToProject} alreadyExistsErrorText="That user is already a project member." onAutocompleteSelected={onUserSelected}>
+    <>
+    <AddForm
+      disabled={selectedUser.current === todo.assigneeId??-1}
+      hasAutocomplete submitText={submitText}
+      postFunction={addUserToProject}
+      onAutocompleteSelected={onUserSelected}>
       <p className="InputTitle">Full Name</p>
-      <InputAutocompleteUser key={selectedUser} projectId={projectId} name="name" placeholder="Harvey Specter"/>
+      <InputAutocompleteUser key={selectedUser} projectId={projectId} name="name" placeholder="Harvey Specter" />
     </AddForm>
+    {unassignButton}
+    </>
   );
 };
 

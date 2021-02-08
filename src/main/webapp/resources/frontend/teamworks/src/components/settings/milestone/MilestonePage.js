@@ -52,9 +52,9 @@ const MilestonePage = ({ match: { params: { projectName, projectId, milestoneNam
                     <EditableField id="dueFor" inputType="date" value={milestone?.dueFor} postFunction={onAttributeUpdated} fieldName="dueFor" />
                 </SettingGroup>
                 <SettingGroup name="Tasks" description=" ">
-                    <TodoTableContainer />
+                    <TodoTableContainer projectId={projectId} milestoneId={milestoneId} />
                 </SettingGroup>
-                <SettingGroup name="Delete milestone" description="Deletes the milestone and associated tags from the team.">
+                <SettingGroup name="Delete milestone" description="Deletes the milestone and associated tasks from the team.">
                     <Button className="Button--red">Delete milestone</Button>
                 </SettingGroup>
             </div>

@@ -22,6 +22,9 @@ public interface ToDoRepository extends Repository<ToDo, Integer> {
     @Query(value = "SELECT u FROM ToDo u WHERE u.assignee.id = :userId and u.milestone.id = :milestoneId")
     public Collection<ToDo> findToDoByMilestoneAndUser(@Param("milestoneId") Integer milestoneId,
             @Param("userId") Integer userId);
-    
+
+    @Query(value = "SELECT u FROM ToDo u WHERE u.milestone.id = :milestoneId")
+    public Collection<ToDo> findToDosByMilestone(@Param("milestoneId") Integer milestoneId);
+
     public Collection<ToDo> findAll() throws DataAccessException;
 }

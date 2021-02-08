@@ -202,7 +202,7 @@ class AddForm extends React.Component
           reducedsize
           text={this.submitText}
           requestError={this.state.requestError}
-          hasErrors={this.hasErrors() || (this.state.autocompleteVal && this.state.autocompleteVal === -1)}
+          hasErrors={this.disabled || this.hasErrors() || (this.state.autocompleteVal && this.state.autocompleteVal === -1)}
           loading={this.state.isSubmitting}
         />
       </form>

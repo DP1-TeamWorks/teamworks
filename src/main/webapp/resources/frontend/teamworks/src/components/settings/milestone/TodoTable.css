@@ -1,5 +1,5 @@
 .TodoTableContainer {
-    max-width: 800px;
+    max-width: fit-content;
 }
 
 .TagTabContainer {
@@ -8,7 +8,7 @@
     flex-direction: row;
     align-items: center;
     width: 100%;
-    max-width: 800px;
+    /* max-width: 800px; */
     height: 40px;
     box-shadow: 0 1px 2px #2222;
     border-radius: 3px 3px 0 0;
@@ -57,6 +57,22 @@
     width: 1px;
     height: 100%;
     background-color: #555;
+}
+
+.TodoTable {
+    max-width: 100%;
+    position: relative;
+}
+
+.TodoTable__Spinner {
+    position: absolute;
+    right: 25px;
+    top: 47px;
+    transform: scale(0.8);
+}
+
+.DoneTableCell, .DoneTableCell i {
+    color: #666;
 }
 
 .TodoDetailContainer {

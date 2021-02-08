@@ -1,12 +1,14 @@
 import "./TodoTable.css";
 import TagSelectorStrip from "./TagSelectorStrip";
+import TagApiUtils from "../../../utils/api/TagApiUtils";
 import TodoTable from "./TodoTable";
-import { useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react/cjs/react.development";
+import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
 
-const TodoTableContainer = () =>
+const TodoTableContainer = ({milestoneId, projectId}) =>
 {
 
-    let tags = [
+    /*let tags = [
         {
             id: 1,
             name: "Hola",
@@ -49,16 +51,23 @@ const TodoTableContainer = () =>
             assigneeName: "Nico6",
             assigneeLastname: "de Ory5",
         }
-    ]
+    ]*/
+
+    useEffect(() =>
+    {
+        TagApiUtils.getTags(projectId)
+        .then(t => setTagList(t))
+        .catch(err => console.error(err));
+    }, [projectId]);
 
     // const [selectedTodoId, setSelectedTodoId] = useState(null);
-    const [tagList, setTagList] = useState(tags);
-    const [todoList, setTodoList] = useState(todos);
+    const [tagList, setTagList] = useState([]);
+    const [selectedTagId, setSelectedTagId] = useState(-1);
 
     return (
         <div className="TodoTableContainer">
-            <TagSelectorStrip tags={tagList} />
-            <TodoTable todos={todoList} tags={tagList} />
+            <TagSelectorStrip tags={tagList} onSelectedIndexChanged={v => setSelectedTagId(v)} />
+            <TodoTable tags={tagList} projectId={projectId} milestoneId={milestoneId} selectedTagId={selectedTagId} />
         </div>
     );
 }

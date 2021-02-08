@@ -1,12 +1,23 @@
 import "./TodoTable.css";
 import TagTab from "./TagTab";
-import { useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react/cjs/react.development";
 import { Fragment } from "react";
 
-const TagSelectorStrip = ({ tags }) =>
+const TagSelectorStrip = ({ tags, onSelectedIndexChanged }) =>
 {
 
     const [selectedIndex, setSelectedIndex] = useState(0);
+
+    useEffect(() =>
+    {
+        if (onSelectedIndexChanged)
+        {
+            if (selectedIndex === 0)
+                onSelectedIndexChanged(-1);
+            else
+                onSelectedIndexChanged(tags[selectedIndex-1].id);
+        }
+    }, [selectedIndex, onSelectedIndexChanged, tags]);
 
     if (tags)
     {
@@ -18,7 +29,7 @@ const TagSelectorStrip = ({ tags }) =>
                         selected={selectedIndex - 1 === i}
                         color={x.color}
                         onClick={() => setSelectedIndex(i+1)}>
-                        {x.name}
+                        {x.title}
                     </TagTab>
                     <div className="TagSeparator" />
                 </Fragment>

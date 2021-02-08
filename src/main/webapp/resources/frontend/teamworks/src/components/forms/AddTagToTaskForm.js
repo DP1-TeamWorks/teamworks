@@ -2,7 +2,7 @@ import { useState } from "react/cjs/react.development";
 import NewMessageMultiSelect from "../messages/NewMessage/NewMessageMultiSelect";
 import SubmitButton from "./SubmitButton";
 
-const AddTagToTaskForm = ({ tags, selectedTagIds }) =>
+const AddTagToTaskForm = ({ tags, selectedTagIds, onTagsUpdated, todo }) =>
 {
 
     let options;
@@ -11,7 +11,7 @@ const AddTagToTaskForm = ({ tags, selectedTagIds }) =>
         options = tags.map(t =>
         {
             return {
-                label: t.name,
+                label: t.title,
                 value: t.id,
                 tagColor: t.color
             };
@@ -33,6 +33,7 @@ const AddTagToTaskForm = ({ tags, selectedTagIds }) =>
     {
         e.preventDefault();
         console.log(selectedTagIdList);
+        onTagsUpdated(todo, selectedTagIdList);
         setSubmitEnabled(false);
     }
 
