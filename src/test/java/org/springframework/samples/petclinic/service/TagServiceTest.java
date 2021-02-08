@@ -67,7 +67,7 @@ public class TagServiceTest {
 	//NEGATIVE USE CASE H14-E1
 	@Test
 	@Transactional
-	public void shouldInsertTagWithoutData() {
+	void shouldNotInsertTagWithoutData() {
 
 		Project project = projectService.findProjectById(1);
 		Tag tag = new Tag();

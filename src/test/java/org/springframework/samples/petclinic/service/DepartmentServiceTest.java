@@ -1,9 +1,11 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,8 +17,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Department;
-import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,5 +101,20 @@ public class DepartmentServiceTest {
 
 			//this.departmentService.saveDepartment(department);
 			//});			
+	}
+	
+	@Test
+	@Transactional
+	void shouldFindDepartmentUsers() {
+		Collection<UserTW> users = this.departmentService.findDepartmentUsers(1);
+		List<UserTW> list;
+		if (users instanceof List)
+		  list = (List)users;
+		else
+		  list = new ArrayList(users);
+		
+		
+		assertThat(list.get(0).getName().equals("Julia"));
+
 	}
 }

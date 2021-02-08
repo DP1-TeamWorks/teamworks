@@ -72,7 +72,7 @@ class MessageServiceTest {
 	//NEGATIVE USE CASE H21-E1
 	@Test
 	@Transactional
-	void shouldInsertMessageWithoutData() {
+	void shouldNotInsertMessageWithoutData() {
 		UserTW sender = userTWService.findUserById(1);
 		ArrayList<Integer> recipients = new ArrayList<>();
 		recipients.add(2);
@@ -89,7 +89,7 @@ class MessageServiceTest {
 	//TODO: ADD ATTACHMENT BIGGER THAN THE LIMIT
 	@Test
 	@Transactional
-	void shouldReplyMessageWithoutData() {
+	void shouldNotReplyMessageWithoutData() {
 		UserTW sender = userTWService.findUserById(1);
 		ArrayList<Integer> recipients = new ArrayList<>();
 		recipients.add(2);
