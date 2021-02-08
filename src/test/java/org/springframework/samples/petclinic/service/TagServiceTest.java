@@ -53,6 +53,13 @@ public class TagServiceTest {
 		assertThat(tag.getTitle()).isEqualTo("Testing");
 		assertThat(tag.getColor()).isEqualTo("#B0D9CD");
 	}
+	
+	@Test
+	void shouldFindTagByName() {
+		Tag tag = this.tagService.findTagById(3);
+		assertThat(tag.getTitle()).isEqualTo("Testing");
+	}
+	
 
 	@Test
 	@Transactional
