@@ -1,10 +1,12 @@
 import { useEffect } from "react";
+import Sticky from "react-sticky-el";
 import { useState } from "react/cjs/react.development";
 import MilestoneApiUtils from "../../../utils/api/MilestoneApiUtils";
 import Button from "../../buttons/Button";
 import GoBackButton from "../../buttons/GoBackButton";
 import EditableField from "../EditableField";
 import SettingGroup from "../SettingGroup";
+import TodoTableContainer from "./TodoTableContainer";
 
 const MilestonePage = ({ match: { params: { projectName, projectId, milestoneName, milestoneId } } }) =>
 {
@@ -30,13 +32,18 @@ const MilestonePage = ({ match: { params: { projectName, projectId, milestoneNam
 
     return (
         <>
-            <div className="ProfileHeader ProfileHeader--Slim">
-                <GoBackButton darker anchored />
-                <div className="ProfileTitleContainer">
-                    <h3 className="TinyTitle">{projname}</h3>
-                    <h1 className="BigTitle BigTitle--Slim">{milename}</h1>
+            <Sticky
+            boundaryElement=".Section"
+            topOffset={-90}
+            stickyStyle={{ transform: 'translateY(90px)', zIndex: 3 }}>
+                <div className="ProfileHeader ProfileHeader--Slim">
+                    <GoBackButton darker anchored />
+                    <div className="ProfileTitleContainer">
+                        <h3 className="TinyTitle">{projname}</h3>
+                        <h1 className="BigTitle BigTitle--Slim">{milename}</h1>
+                    </div>
                 </div>
-            </div>
+            </Sticky>
             <div className="SettingGroupsContainer">
                 <SettingGroup name="Name">
                     <EditableField id="name" value={milename} postFunction={onAttributeUpdated} fieldName="name" />
@@ -44,20 +51,11 @@ const MilestonePage = ({ match: { params: { projectName, projectId, milestoneNam
                 <SettingGroup name="Due by">
                     <EditableField id="dueFor" inputType="date" value={milestone?.dueFor} postFunction={onAttributeUpdated} fieldName="dueFor" />
                 </SettingGroup>
-                <SettingGroup name="Email">
-                    <EditableField id="last-name" value="nicolasdeorycarmona@peasonspecter" editable={false} />
+                <SettingGroup name="Tasks" description=" ">
+                    <TodoTableContainer />
                 </SettingGroup>
-                <SettingGroup name="User joined">
-                    <EditableField id="join-date" value="01/10/2021" editable={false} />
-                </SettingGroup>
-                <SettingGroup name="Departments" description="A list of the departments the user belongs or has belonged to.">
-                    {/* <UserList /> */}
-                </SettingGroup>
-                <SettingGroup name="Projects" description="A list of the projects the user partipates or has participated in.">
-                    {/* <UserList /> */}
-                </SettingGroup>
-                <SettingGroup danger name="Delete user" description="Deletes the user from the team. <br>This action cannot be undone.">
-                    <Button className="Button--red">Delete user</Button>
+                <SettingGroup name="Delete milestone" description="Deletes the milestone and associated tags from the team.">
+                    <Button className="Button--red">Delete milestone</Button>
                 </SettingGroup>
             </div>
         </>

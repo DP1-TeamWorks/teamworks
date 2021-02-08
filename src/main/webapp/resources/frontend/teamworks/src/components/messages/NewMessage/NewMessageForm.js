@@ -4,6 +4,7 @@ import GradientButton from "../../buttons/GradientButton";
 import NewMessageMultiSelect from "./NewMessageMultiSelect";
 import NewMessageText from "./NewMessageText";
 import MessageApiUtils from "../../../utils/api/MessageApiUtils";
+import SubmitButton from "../../forms/SubmitButton";
 
 class NewMessageForm extends React.Component {
   constructor(props) {

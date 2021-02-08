@@ -200,6 +200,19 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
             onUpdated={onProjectAttributeUpdated} />
         </SettingGroup>
         <SettingGroup
+          name="Milestones"
+          description="You can add a new milestone below.">
+          <AddMilestoneForm
+            key={`mileform${currentProject.id}`}
+            projectId={currentProject.id}
+            onMilestoneAdded={onMilestoneAdded} />
+          <MilestoneList
+            key={`list${currentProject.id}`}
+            updateCounter={milestoneUpdateCounter}
+            projectName={currentProject.name}
+            projectId={currentProject.id} />
+        </SettingGroup>
+        <SettingGroup
           name="Add user to project"
           description="Type their name below. They must be a department member.">
           <AddUserToProjectForm
@@ -218,19 +231,6 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
             loading={projectMembers == null}
             members={projectMembers}
             onListUpdated={fetchProjectMembers} />
-        </SettingGroup>
-        <SettingGroup
-          name="Milestones"
-          description="You can add a new milestone below.">
-          <AddMilestoneForm
-            key={`mileform${currentProject.id}`}
-            projectId={currentProject.id}
-            onMilestoneAdded={onMilestoneAdded} />
-          <MilestoneList
-            key={`list${currentProject.id}`}
-            updateCounter={milestoneUpdateCounter}
-            projectName={currentProject.name}
-            projectId={currentProject.id} />
         </SettingGroup>
         <SettingGroup
           name="Tags"

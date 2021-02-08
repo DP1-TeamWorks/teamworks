@@ -36,7 +36,7 @@ const Settings = () =>
                     <Route path="/settings/departments">
                         <DepartmentSettings />
                     </Route>
-                    <Route path="/settings/users/:userId" component={UserPage} />
+                    <Route path="/settings/users/:userId/:userName" component={UserPage} />
                     <Route path="/settings/projects/:projectName/:projectId/:milestoneName/:milestoneId" component={MilestonePage} />
                     <Route path="/settings/projects">
                         <ProjectSettings />

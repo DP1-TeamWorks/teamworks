@@ -1,10 +1,10 @@
 import React from "react";
 import "../tags/Tags.css";
 
-const Circle = ({ color }) => {
+const Circle = ({ color, className }) => {
   return (
     <>
-      <div className="Circle" style={{ background: color }} />
+      <div className={`Circle ${className}`} style={{ background: color }} />
     </>
   );
 };
