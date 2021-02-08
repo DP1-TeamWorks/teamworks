@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.web;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.TestWebConfig;
@@ -49,6 +51,10 @@ public class MessageControllerTest {
 	
 	private static final int TEST_USER_ID = 12;
 	private static final int TEST_USER2_ID = 19;
+	
+	//External user that doesnt send neither receive messages
+	private static final int TEST_USER3_ID = 25;
+
 	private static final int TEST_MESSAGE_ID = 21;
 
 	private static final int TEST_TAG_ID = 25;
@@ -176,9 +182,6 @@ public class MessageControllerTest {
 		given(this.messageService.findMessagesBySearch(recipient, search)).willReturn(MReceivedList);
 		
 		given(this.userService.findByEmail(recipient.getEmail())).willReturn(recipient);
-		//given(this.messageService.findMessagesBySearch(recipient, search)).willReturn(MReceivedList);
-
-	
 	
 	}
 	
@@ -195,6 +198,16 @@ public class MessageControllerTest {
 	}
 	
 	@Test
+	void testGetMyInboxMessagesEmpty() throws Exception {
+		mockSession.setAttribute("userId",TEST_USER3_ID);
+		
+		//RECEIVE A EMPTY JSON
+		mockMvc.perform(get("/api/message/inbox").session(mockSession))
+		.andExpect(status().is(200))
+		.andExpect(content().json("[]"));
+	}
+	
+	@Test
 	void testGetMySentMessages() throws Exception {
 		mockSession.setAttribute("userId",TEST_USER_ID);
 
@@ -204,6 +217,28 @@ public class MessageControllerTest {
 		.andExpect(status().is(200))
 		.andExpect(content().json(json));
 	}
+	
+	//TODO NO LANZA LA EXCEPCIÓN
+//	@Test
+//	void testGetMySentMessagesError() throws Exception {
+//		doThrow(new DataAccessResourceFailureException("Error")).when(messageService).findMessagesByUserId(sender);
+//		mockSession.setAttribute("userId",TEST_USER_ID);
+//		
+//		mockMvc.perform(get("/api/message/sent").session(mockSession))
+//		.andExpect(status().isBadRequest());
+//	}
+	
+	@Test
+	void testGetEmptySentMessages() throws Exception {
+		mockSession.setAttribute("userId",TEST_USER3_ID);
+		
+		//RECEIVE A EMPTY JSON
+		mockMvc.perform(get("/api/message/sent").session(mockSession))
+		.andExpect(status().is(200))
+		.andExpect(content().json("[]"));
+	}
+	
+	
 	
 	@Test
 	void testGetMessagesByTag() throws Exception {
@@ -225,16 +260,26 @@ public class MessageControllerTest {
 		.andExpect(content().json(json));
 	}
 	
-	//TODO DEBE DEVOLVER LA LISTA CON EL MENSAJE
+	@Test
+	void testGetMessagesByTagError() throws Exception {
+		List<Integer> tagListInt = new ArrayList<>();
+		//tagListInt.add(TEST_TAG_ID);
+		messageSent.setTagList(tagListInt);
+		
+		mockSession.setAttribute("userId",TEST_USER2_ID);
+		
+		doThrow(new DataAccessResourceFailureException("ERROR")).when(tagService).findTagById(TEST_TAG_ID);
+
+		mockMvc.perform(get("/api/message/byTag").param("tagId", ((Integer)TEST_TAG_ID).toString()).session(mockSession))
+		.andExpect(status().is(404));
+	}
+	
 	@Test
 	void testGetMessagesBySearch() throws Exception {
 		mockSession.setAttribute("userId",TEST_USER2_ID);
 
-		String json = objectMapper.writeValueAsString(MReceivedList);
-		
 		mockMvc.perform(get("/api/message/bySearch").param("search", search).session(mockSession))
 		.andExpect(status().is(200));
-		//.andExpect(content().json(json));
 	}
 	
 	@Test
@@ -249,7 +294,6 @@ public class MessageControllerTest {
 	
 	@Test
 	void testGetNumberMessagesNotReadByTag() throws Exception {
-		//messageSent.setTags(tagList);
 		List<Integer> tagListInt = new ArrayList<>();
 		tagListInt.add(TEST_TAG_ID);
 		messageSent.setTagList(tagListInt);
@@ -259,6 +303,34 @@ public class MessageControllerTest {
 		mockMvc.perform(get("/api/message/noReadByTag").param("tagId", ((Integer)TEST_TAG_ID).toString()).session(mockSession))
 		.andExpect(status().is(200))
 		.andExpect(content().string(((Integer)MReceivedList.size()).toString()));
+	}
+	
+	@Test
+	void testGetNumberEmptyMessagesNotReadByTag() throws Exception {
+		List<Integer> tagListInt = new ArrayList<>();
+		tagListInt.add(TEST_TAG_ID);
+		messageSent.setTagList(tagListInt);
+		
+		mockSession.setAttribute("userId",TEST_USER3_ID);
+		//Recibe 0 ya que es un usuario que no tiene mensajes
+		
+		mockMvc.perform(get("/api/message/noReadByTag").param("tagId", ((Integer)TEST_TAG_ID).toString()).session(mockSession))
+		.andExpect(status().is(200))
+		.andExpect(content().string("0"));
+	}
+	
+	@Test
+	void testGetNumberMessagesNotReadByTagError() throws Exception {
+		List<Integer> tagListInt = new ArrayList<>();
+		tagListInt.add(TEST_TAG_ID);
+		messageSent.setTagList(tagListInt);
+		
+		mockSession.setAttribute("userId",TEST_USER2_ID);
+		doThrow(new DataAccessResourceFailureException("ERROR")).when(tagService).findTagById(TEST_TAG_ID);
+		
+		//DataAccessException
+		mockMvc.perform(get("/api/message/noReadByTag").param("tagId", ((Integer)TEST_TAG_ID).toString()).session(mockSession))
+		.andExpect(status().is(404));
 	}
 	
 	@Test
@@ -295,11 +367,36 @@ public class MessageControllerTest {
 //		message2.setToDoList(null);
 		
 		mockSession.setAttribute("userId",TEST_USER_ID);
-		//String json = objectMapper.writeValueAsString(message2);
 		
 		mockMvc.perform(post("/api/message").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(jsonMap))
 		.andExpect(status().is(200));
 	}
+	
+	//TODO NO SALTA ERROR
+//	@Test
+//	void testNewMessageError() throws Exception {
+//		//Send any value null in order to throw an exception
+//		Map<String, Object> map = new HashMap<>();
+//		List<String> listacorreos = new ArrayList<>();
+//		listacorreos.add("correo@cyber");
+//		map.put("recipientsEmails", listacorreos);
+//		List<String> listatags = new ArrayList<>();
+//		List<String> listatoDo = new ArrayList<>();
+//
+//
+//		map.put("read", false);
+////		map.put("subject", "Testing");
+//		map.put("tagList", listatags);
+////		map.put("text", "Una prueba de correo");
+//		map.put("toDoList", listatoDo);
+//		
+//		String jsonMap = objectMapper.writeValueAsString(map);
+//		
+//		//mockSession.setAttribute("userId",TEST_USER_ID);
+//		
+//		mockMvc.perform(post("/api/message").contentType(MediaType.APPLICATION_JSON).content(jsonMap))
+//		.andExpect(status().isBadRequest());
+//	}
 	
 	
 	//TODO PROBLEMA CON EL CONTROLLER DE MESSAGE
@@ -347,6 +444,28 @@ public class MessageControllerTest {
 
 		mockMvc.perform(post("/api/message/markAsRead").param("messageId", ((Integer)TEST_MESSAGE_ID).toString()).session(mockSession))
 		.andExpect(status().is(200));
+	}
+	
+	@Test
+	//Try to read a message that the user hasn't received
+	void testMarkAsReadError() throws Exception {
+		messageSent.setRead(true);
+		mockSession.setAttribute("userId",TEST_USER3_ID);
+
+		mockMvc.perform(post("/api/message/markAsRead").param("messageId", ((Integer)TEST_MESSAGE_ID).toString()).session(mockSession))
+		.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	//Throw an exception in order to catch it
+	void testMarkAsReadError2() throws Exception {
+		doThrow(new DataAccessResourceFailureException("Error")).when(messageService).saveMessage(messageSent);
+
+		messageSent.setRead(true);
+		mockSession.setAttribute("userId",TEST_USER_ID);
+
+		mockMvc.perform(post("/api/message/markAsRead").param("messageId", ((Integer)TEST_MESSAGE_ID).toString()).session(mockSession))
+		.andExpect(status().isBadRequest());
 	}
 	
 
