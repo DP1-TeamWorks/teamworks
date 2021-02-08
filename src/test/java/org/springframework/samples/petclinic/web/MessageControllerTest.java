@@ -165,7 +165,9 @@ public class MessageControllerTest {
 		search = "Test";
 	
 		given(this.userService.findUserById(TEST_USER_ID)).willReturn(sender);		
-		given(this.userService.findUserById(TEST_USER2_ID)).willReturn(recipient);				
+		given(this.userService.findUserById(TEST_USER2_ID)).willReturn(recipient);	
+		given(this.messageService.findMessageById(TEST_MESSAGE_ID)).willReturn(messageSent);
+
 		given(this.messageService.findMessagesByUserId(recipient)).willReturn(MReceivedList);
 		given(this.messageService.findMessagesSentByUserId(TEST_USER_ID)).willReturn(MReceivedList);
 		given(this.tagService.findTagById(TEST_TAG_ID)).willReturn(tag);
@@ -327,7 +329,25 @@ public class MessageControllerTest {
 //		
 //	}
 	
+	//TODO ERROR DE CONTROLLER?¿
 	
+//	@Test
+//	void testForwardMessage() throws Exception {	
+//		String json = objectMapper.writeValueAsString(messageSent);
+//		
+//		mockMvc.perform(post("api/message/forward").param("messageId", ((Integer)TEST_MESSAGE_ID).toString()).session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
+//		.andExpect(status().is(200));
+//	}
+	
+	
+	@Test
+	void testMarkAsRead() throws Exception {
+		messageSent.setRead(true);
+		mockSession.setAttribute("userId",TEST_USER2_ID);
+
+		mockMvc.perform(post("/api/message/markAsRead").param("messageId", ((Integer)TEST_MESSAGE_ID).toString()).session(mockSession))
+		.andExpect(status().is(200));
+	}
 	
 
 }
