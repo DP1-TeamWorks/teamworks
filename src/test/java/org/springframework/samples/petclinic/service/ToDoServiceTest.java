@@ -84,6 +84,19 @@ public class ToDoServiceTest {
 		assertThat(list.get(0).getMilestone().getId()).isEqualTo(1);
 
 	}
+	
+	@Test
+	void shouldFindToDosByMilestone() {
+		Milestone milestone = milestonService.findMilestoneById(1);
+		Collection<ToDo> todos = this.toDoService.findToDosByMilestone(milestone.getId());
+		List<ToDo> list;
+		if (todos instanceof List)
+		  list = (List)todos;
+		else
+		  list = new ArrayList(todos);
+		
+		assertThat(list.get(0).getTitle()).isEqualTo("Mark this as done");
+	}
 
 
 	@Test
