@@ -1,0 +1,114 @@
+.TodoTableContainer {
+    max-width: fit-content;
+}
+
+.TagTabContainer {
+    background-color: #222;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    /* max-width: 800px; */
+    height: 40px;
+    box-shadow: 0 1px 2px #2222;
+    border-radius: 3px 3px 0 0;
+}
+
+.TagTab {
+    /* border-right: solid 1px #555; */
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    user-select: none;
+    cursor: pointer;
+    transition: background-color 0.05s;
+}
+
+.TagTab--Light {
+    color: #222;
+    font-weight: 600;
+}
+
+.TagTab--Unselectable {
+    cursor: auto;
+}
+.TagTab:not(.TagTab--Selected, .TagTab--Unselectable):hover {
+    background-color: #333;
+}
+
+.TagTab--Selected {
+    background-color: #a6ce56;
+    color: #222;
+    font-weight: 600;
+}
+
+.TagTab--Inline {
+    width: fit-content;
+    padding: 5px;
+}
+
+.TagTab__Circle {
+    margin-right: 10px; 
+}
+
+.TagSeparator {
+    width: 1px;
+    height: 100%;
+    background-color: #555;
+}
+
+.TodoTable {
+    max-width: 100%;
+    position: relative;
+}
+
+.TodoTable__Spinner {
+    position: absolute;
+    right: 25px;
+    top: 47px;
+    transform: scale(0.8);
+}
+
+.DoneTableCell, .DoneTableCell i {
+    color: #666;
+}
+
+.TodoDetailContainer {
+    background-color: #1A1A1A;
+    padding: 30px 50px;
+    position: relative;
+}
+
+.MarkAsDoneButton {
+    position: absolute;
+    top: 60px;
+    right: 50px;
+}
+
+.CloseButton {
+    position: absolute;
+    top: 30px;
+    right: 32px;
+}
+
+.AddTodoButton {
+    background-color: #1f271091;
+    color: #a6ce56;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.05s;
+}
+
+.AddTodoButton:hover {
+    background-color: #38471dc0;
+}
+
+.AddTodoButton:active {
+    background-color: #1f2710d3;
+}
+
+.AddTodoButton path {
+    fill: #a6ce56;
+}

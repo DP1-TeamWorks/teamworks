@@ -4,7 +4,7 @@ import ProfileHeader from "../../profile/ProfileHeader";
 import EditableField from "../EditableField";
 import SettingGroup from "../SettingGroup";
 
-const UserPage = ({ match: { params: { userId } } }) =>
+const UserPage = ({ match: { params: { userId, userName } } }) =>
 {
     return (
         <>

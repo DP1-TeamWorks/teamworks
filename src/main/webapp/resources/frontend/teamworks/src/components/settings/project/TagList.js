@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import "../../../FontStyles.css";
 import TagApiUtils from "../../../utils/api/TagApiUtils";
 import Circle from "../../projects/tags/Circle";

@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.TestWebConfig;
@@ -76,6 +77,7 @@ public class TeamControllerTest {
 		.andExpect(content().string("Atomatic"));
 	}
 	
+	
 	@Test
 	void testUpdateTeam() throws Exception {
 		atomatic.setName("AtomaticUpdated");
@@ -91,13 +93,6 @@ public class TeamControllerTest {
 	}
 	
 	@Test
-	void testDeleteTeam() throws Exception {		
-		mockMvc.perform(delete("/api/team").session(mockSession))
-		.andExpect(status().isOk());
-	}
-	
-	
-	@Test
 	void testUpdateWithNullValuesTeam() throws Exception {
 		atomatic.setName(null);
 		atomatic.setIdentifier(null);
@@ -106,6 +101,36 @@ public class TeamControllerTest {
 		mockMvc.perform(post("/api/team").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
 		.andExpect(status().isBadRequest());
 	}
+	
+	@Test
+	void testUpdateTeamError() throws Exception {
+		doThrow(new DataAccessResourceFailureException("ERROR")).when(teamService).saveTeam(atomatic);
+
+		atomatic.setName("AtomaticUpdated");
+		atomatic.setIdentifier("ATOMUPDATED");
+		String atomaticupdated = objectMapper.writeValueAsString(atomatic);
+		mockMvc.perform(post("/api/team").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
+		.andExpect(status().isBadRequest());	
+	
+	}
+	
+	@Test
+	void testDeleteTeam() throws Exception {		
+		mockMvc.perform(delete("/api/team").session(mockSession))
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	void testDeleteTeamEror() throws Exception {	
+		doThrow(new DataAccessResourceFailureException("ERROR")).when(teamService).deleteTeamById(TEST_TEAM_ID);
+
+		
+		mockMvc.perform(delete("/api/team").session(mockSession))
+		.andExpect(status().isBadRequest());
+	}
+	
+	
+	
 	
 
 }

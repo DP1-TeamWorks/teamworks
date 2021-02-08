@@ -78,8 +78,6 @@ public class UserTWController {
 		else {
 			return ResponseEntity.badRequest().build();
 		}
-
-
 	}
 
 	@PostMapping(value = "/api/user")

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Autosuggest from "react-autosuggest";
 import DepartmentApiUtils from "../../utils/api/DepartmentApiUtils";
 import ProjectApiUtils from "../../utils/api/ProjectApiUtils";
@@ -60,6 +60,23 @@ const InputAutocompleteUser = ({ name, placeholder, departmentId, projectId, onU
             onChangeHandler(name, "");
     }
 
+    function sortUsers(a,b) {
+        if (a.name > b.name) {
+            return 1;
+        } else if (a.name < b.name) { 
+            return -1;
+        }
+    
+        // Else go to the 2nd item
+        if (a.lastname < b.lastname) { 
+            return -1;
+        } else if (a.lastname > b.lastname) {
+            return 1
+        } else { // nothing to split them
+            return 0;
+        }
+    }
+
     const [users, setUsers] = useState(null);
     const [selectedUserId, setSelectedUserId] = useState(-1);
     const [suggestions, setSuggestions] = useState([]);
@@ -69,18 +86,24 @@ const InputAutocompleteUser = ({ name, placeholder, departmentId, projectId, onU
         if (projectId)
         {
             ProjectApiUtils.getMembersFromProject(projectId)
-            .then(res => 
-                {
-                    setUsers()
-                })
+            .then(res => {
+                const arr = res.map(x => {
+                    x.id = x.userId;
+                    return x;
+                }).sort(sortUsers);
+                setUsers(arr);
+            })
             .catch(err => console.error(err));
         } else if (departmentId)
         {
             DepartmentApiUtils.getMembersFromDepartment(departmentId)
-            .then(res => setUsers(res.map(x => {
-                x.id = x.userId;
-                return x;
-            })))
+            .then(res => {
+                const arr = res.map(x => {
+                    x.id = x.userId;
+                    return x;
+                }).sort(sortUsers);
+                setUsers(arr);
+            })
             .catch(err => console.error(err));
         } else
         {

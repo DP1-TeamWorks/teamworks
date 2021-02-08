@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import Tag from "./Tag";
+import React from "react";
 import InboxSidebarTab from "../../sidebar/InboxSidebarTab";
-
+import Tag from "./Tag";
 import "./Tags.css";
+
 
 const ProjectTags = ({
   tagList,

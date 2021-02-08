@@ -23,7 +23,7 @@ public class Tag extends BaseEntity {
     // Attributes
 
     @NotEmpty
-    @Size(min = 1, max = 200)
+    @Size(min = 1, max = 15)
     @Column(name = "title")
     String title;
 
@@ -40,7 +40,7 @@ public class Tag extends BaseEntity {
 
 
     @JsonIgnore
-    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
+    @ManyToMany(mappedBy = "tags")
     private List<ToDo> todos;
 
     @JsonIgnore
