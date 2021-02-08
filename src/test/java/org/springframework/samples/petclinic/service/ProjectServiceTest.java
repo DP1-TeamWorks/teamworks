@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -15,6 +16,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
+import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyProjectManagerException;
@@ -80,13 +82,22 @@ public class ProjectServiceTest {
 		;
 		assertThat(project.getName()).isEqualTo(newName);
 	}
+	@Test
+	@Transactional
+	public void shouldNotInsertAProjectNullIntoDatabase() {
+
+		Project project = new Project();
+		assertThrows(Exception.class, ()-> {
+			this.projectService.saveProject(project);
+            });
+
+	}
 
 	@Test
 	@Transactional
 	void shouldDeleteProject() {
 
 		projectService.deleteProjectById(2);
-		;
 		Project project = this.projectService.findProjectById(2);
 		assertThat(project).isNull();
 	}

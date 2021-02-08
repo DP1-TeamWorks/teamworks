@@ -102,7 +102,7 @@ public class ProjectController {
 
 		List<Project> l = new ArrayList<>();
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
-		l = participationService.findMyDepartemntProjects(userId, departmentId).stream().collect(Collectors.toList());
+		l = participationService.findMyDepartmentProjects(userId, departmentId).stream().collect(Collectors.toList());
 		return l;
 
 	}

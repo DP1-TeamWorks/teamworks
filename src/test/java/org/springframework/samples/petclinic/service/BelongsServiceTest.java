@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
+import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyDepartmentManagerException;
@@ -38,30 +40,47 @@ public class BelongsServiceTest {
         assertThat(belongsTest.getIsDepartmentManager()).isTrue();
     }
 
+   
+    @Test
+    void shouldfindBelongByUserIdAndDepartmentId() {
+        List<Belongs> userBelongs = this.belongService.findBelongByUserIdAndDepartmentId(2, 1).stream().collect(Collectors.toList());
+        assertThat(userBelongs.size()).isEqualTo(1);
+    }
+    @Test
+    void shouldFindUserBelongsByUserId() {
+        List<Belongs> userBelongs = this.belongService.findUserBelongs(2).stream().collect(Collectors.toList());
+        assertThat(userBelongs.size()).isEqualTo(3);
+    }
     @Test
     void shouldFindCurrentBelongsByUserIdAndDepartmentId() {
         Belongs belongs = this.belongService.findCurrentBelongs(2, 1);
         assertThat(belongs.getDepartment().getName()).isEqualTo("Calidad");
         assertThat(belongs.getUserTW().getName()).isEqualTo("Julia");
     }
-
+    
     @Test
-    void shouldFindUserBelongsByUserId() {
-        List<Belongs> userBelongs = this.belongService.findUserBelongs(2).stream().collect(Collectors.toList());
-        assertThat(userBelongs.size()).isEqualTo(3);
-    }
-
-    @Test
-    void shouldFindUserCurrentBelongsByUserId() {
+    void shouldFindCurrentUserBelongsByUserId() {
         List<Belongs> userBelongs = this.belongService.findCurrentUserBelongs(2).stream().collect(Collectors.toList());
         assertThat(userBelongs.size()).isEqualTo(3);
     }
-
     @Test
-    void shouldFindMyDepartments() {
-        List<Department> userBelongs = this.belongService.findMyDepartments(2).stream().collect(Collectors.toList());
-        assertThat(userBelongs.size()).isEqualTo(3);
+    void shouldFindMyDepartmentsByDepartmentId() {
+        List<Department> departments = this.belongService.findMyDepartments(2).stream().collect(Collectors.toList());
+        assertThat(departments.size()).isEqualTo(3);
     }
+   
+    @Test
+    void shouldFindCurrentDepartmentManagerByDepartmentId() {
+        Belongs belong=this.belongService.findCurrentDepartmentManager(1);
+        assertThat(belong.getUserTW().getName()).isEqualTo("Julia");
+        assertThat(belong.getUserTW().getLastname()).isEqualTo("Fabra");
+    } 
+    @Test
+    void shouldFindCurrentBelongsInDepartment() {
+    	 List<Belongs> userBelongs=this.belongService.findCurrentBelongsInDepartment(1).stream().collect(Collectors.toList());
+    	 assertThat(userBelongs.size()).isEqualTo(2);
+    }
+    
 
     @Test
     @Transactional
@@ -90,6 +109,16 @@ public class BelongsServiceTest {
         assertThat(dpt.getBelongs().contains(belongs)).isTrue();
         assertThat(user.getBelongs().contains(belongs)).isTrue();
     }
+    @Test
+	@Transactional
+	public void shouldNotInsertABelongsNullIntoDatabase() {
+
+    	Belongs belongs = new Belongs();
+		assertThrows(Exception.class, ()-> {
+			this.belongService.saveBelongs(belongs);
+            });
+
+	}
 
     @Test
     @Transactional

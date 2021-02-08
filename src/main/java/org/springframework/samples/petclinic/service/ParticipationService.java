@@ -48,7 +48,7 @@ public class ParticipationService {
 
 	@Transactional(readOnly = true)
 	public Collection<Participation> findParticipationByUserIdAndProjectId(Integer userId, Integer projectId) throws DataAccessException {
-		return participationRepository.findParticipationByUserAndDeparment(userId, projectId);
+		return participationRepository.findParticipationByUserAndProject(userId, projectId);
 	}
 	@Transactional(readOnly = true)
 	public Collection<Participation> findUserParticipations(Integer userId) throws DataAccessException {
@@ -70,13 +70,13 @@ public class ParticipationService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Project> findMyDepartemntProjects(Integer userId, Integer departmentId) throws DataAccessException {
+	public Collection<Project> findMyDepartmentProjects(Integer userId, Integer departmentId) throws DataAccessException {
 		return participationRepository.findMyDepartemntProjects(userId, departmentId);
 	}
 
 	@Transactional(readOnly = true)
-    public Collection<Participation> findCurrentParticipationsInProject(Integer departmentId) throws DataAccessException {
-	    return participationRepository.findCurrentParticipationsInProject(departmentId);
+    public Collection<Participation> findCurrentParticipationsInProject(Integer projectId) throws DataAccessException {
+	    return participationRepository.findCurrentParticipationsInProject(projectId);
     }
 
     @Transactional(readOnly = true)
