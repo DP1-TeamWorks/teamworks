@@ -68,6 +68,9 @@ public class BaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BaseEntity that = (BaseEntity) o;
+        if(id == null) {
+        	return that.id ==null;
+        }
         return id.equals(that.id);
     }
 

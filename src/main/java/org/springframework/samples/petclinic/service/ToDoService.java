@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.repository.ToDoRepository;
-import org.springframework.samples.petclinic.validation.ToDoLimitMilestoneException;
+import org.springframework.samples.petclinic.validation.ToDoMaxToDosPerAssigneeException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,14 +23,13 @@ public class ToDoService {
         this.toDoRepository = toDoRepository;
     }
 
-    @Transactional(rollbackFor = ToDoLimitMilestoneException.class)
-    public void saveToDo(ToDo toDo) throws DataAccessException, ToDoLimitMilestoneException {
-        log.info("" + toDo.toString());
-        if (toDo.getDone() || findToDoByMilestoneAndUser(toDo.getMilestone().getId(), toDo.getAssignee().getId())
+    @Transactional(rollbackFor = ToDoMaxToDosPerAssigneeException.class)
+    public void saveToDo(ToDo toDo) throws DataAccessException, ToDoMaxToDosPerAssigneeException {
+        if (toDo.getDone() || toDo.getAssignee() == null || findToDoByMilestoneAndUser(toDo.getMilestone().getId(), toDo.getAssignee().getId())
                 .stream().filter(t -> !t.getDone()).count() < 7L) {
             toDoRepository.save(toDo);
         } else {
-            throw new ToDoLimitMilestoneException();
+            throw new ToDoMaxToDosPerAssigneeException();
         }
     }
 
@@ -39,7 +38,7 @@ public class ToDoService {
         return toDoRepository.findById(toDoId);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void deleteToDoById(Integer toDoId) throws DataAccessException {
         toDoRepository.deleteById(toDoId);
     }
@@ -47,6 +46,11 @@ public class ToDoService {
     @Transactional(readOnly = true)
     public Collection<ToDo> findToDoByUser(Integer userId) {
         return toDoRepository.findToDoByUser(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<ToDo> findToDosByMilestone(Integer milestoneId) {
+        return toDoRepository.findToDosByMilestone(milestoneId);
     }
 
     @Transactional(readOnly = true)

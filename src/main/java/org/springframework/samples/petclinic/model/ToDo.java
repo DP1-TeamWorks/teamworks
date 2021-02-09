@@ -2,12 +2,7 @@ package org.springframework.samples.petclinic.model;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -48,7 +43,7 @@ public class ToDo extends BaseEntity {
     // @JsonBackReference(value="milestone-toDo")
     private Milestone milestone;
 
-    @ManyToMany(mappedBy = "todos", targetEntity = Tag.class)
+    @ManyToMany
     @JsonIgnoreProperties("todos")
     private List<Tag> tags;
 
@@ -57,19 +52,19 @@ public class ToDo extends BaseEntity {
     private List<Message> messages;
 
     public Integer getAssigneeId() {
-        return assignee.getId();
+        return assignee != null ? assignee.getId() : null;
     }
 
     public String getAssigneeName() {
-        return assignee.getName();
+        return assignee != null ? assignee.getName() : null;
     }
 
     public String getAssigneeLastname() {
-        return assignee.getLastname();
+        return assignee != null ? assignee.getLastname() : null;
     }
 
     public String getAssigneeEmail() {
-        return assignee.getEmail();
+        return assignee != null ? assignee.getEmail() : null;
     }
 
     @Override

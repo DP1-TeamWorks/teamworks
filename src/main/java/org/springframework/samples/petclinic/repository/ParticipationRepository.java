@@ -17,7 +17,7 @@ public interface ParticipationRepository extends Repository<Participation, Integ
 	Participation findById(Integer participationId) throws DataAccessException;
 
 	@Query(value = "SELECT u FROM Participation u WHERE u.userTW.id = :userId and u.project.id= :projectId")
-	public Collection<Participation> findParticipationByUserAndDeparment(@Param("userId") Integer userId,
+	public Collection<Participation> findParticipationByUserAndProject(@Param("userId") Integer userId,
 			@Param("projectId") Integer projectId);
 	@Query(value = "SELECT u FROM Participation u WHERE u.userTW.id = :userId ")
 	public Collection<Participation> findUserParticipations(@Param("userId") Integer userId);

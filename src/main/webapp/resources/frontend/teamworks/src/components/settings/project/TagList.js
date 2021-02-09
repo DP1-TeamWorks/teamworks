@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext } from "react/cjs/react.development";
+import UserCredentials from "../../../context/UserCredentials";
 import "../../../FontStyles.css";
 import TagApiUtils from "../../../utils/api/TagApiUtils";
 import Circle from "../../projects/tags/Circle";
@@ -8,6 +9,9 @@ import "../UserList.css";
 
 const TagList = ({ projectId, updateCounter }) =>
 {
+
+  const credentials = useContext(UserCredentials);
+  const isProjectManager = credentials.isProjectManager(projectId);
 
   const [tags, setTags] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -53,9 +57,11 @@ const TagList = ({ projectId, updateCounter }) =>
         <tr key={tag.id}>
           <td><Circle color={tag.color} />  {tag.title}</td>
           <td>{tag.todosUsingTag}</td>
-          <td className="ActionStrip">
-            <span onClick={() => onRemoveClicked(tag)} className="BoldTitle BoldTitle--Smallest ActionButton">Remove</span>
-          </td>
+          {isProjectManager ? (
+            <td className="ActionStrip">
+              <span onClick={() => onRemoveClicked(tag)} className="BoldTitle BoldTitle--Smallest ActionButton">Remove</span>
+            </td>
+          ) : undefined}
         </tr>
       );
     });
@@ -70,7 +76,7 @@ const TagList = ({ projectId, updateCounter }) =>
         <tr>
           <th>Name</th>
           <th>Tasks</th>
-          <th>Actions</th>
+          {isProjectManager ? <th>Actions</th> : undefined}
         </tr>
       </thead>
       <tbody>

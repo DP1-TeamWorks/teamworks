@@ -24,6 +24,12 @@
     border-left: solid 3px #222;
 }
 
+.Spinner--Green:after {
+    border: 3px solid #a6ce56;
+    border-color: #a6ce56 transparent;
+    border-left: solid 3px #a6ce56;
+}
+
 .Spinner--Red:after {
     border: 3px solid #FF2F2F;;
     border-color: #FF2F2F transparent;

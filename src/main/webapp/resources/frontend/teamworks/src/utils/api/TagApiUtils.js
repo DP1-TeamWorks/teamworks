@@ -7,9 +7,9 @@ const TagApiUtils = {
   getTags: (projectId) => ApiUtils.get(TAGS_URL + "?projectId=" + projectId),
   getAllMyTags: () => ApiUtils.get(TAGS_URL + "/mine/all"),
   addNewTag: (projectId, tag) =>
-    ApiUtils.post(TAGS_URL + "?projectId=" + projectId, tag),
+    ApiUtils.post(TAGS_URL + "/create?projectId=" + projectId, tag),
   deleteTag: (projectId, tagId) =>
-    ApiUtils.delete(TAGS_URL + `?projectId=${projectId}&tagId=${tagId}`),
+    ApiUtils.delete(TAGS_URL + `/delete?projectId=${projectId}&tagId=${tagId}`),
 };
 
 export default TagApiUtils;

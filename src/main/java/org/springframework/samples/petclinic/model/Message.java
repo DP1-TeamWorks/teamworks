@@ -65,7 +65,7 @@ public class Message extends BaseEntity {
     @Transient
     private List<Integer> tagList;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "sender_id")
     @JsonIgnore
     private UserTW sender;
@@ -89,7 +89,7 @@ public class Message extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
     private List<Attachment> attatchments;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private List<Tag> tags;
 
     @ManyToMany

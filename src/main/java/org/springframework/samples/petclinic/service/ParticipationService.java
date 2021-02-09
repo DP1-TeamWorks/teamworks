@@ -1,24 +1,31 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
+import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.repository.ParticipationRepository;
 import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyProjectManagerException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 public class ParticipationService {
 	private ParticipationRepository participationRepository;
+	private ToDoService toDoService;
 
 	@Autowired
-	public ParticipationService(ParticipationRepository participationRepository) {
+	public ParticipationService(ParticipationRepository participationRepository, ToDoService toDoService) {
 		this.participationRepository = participationRepository;
+		this.toDoService = toDoService;
 	}
 
     @Transactional
@@ -33,7 +40,26 @@ public class ParticipationService {
                 throw new DateIncoherenceException();
             }
         }
+
         participationRepository.save(participation);
+
+        // CASCADE ASSIGNEES
+        List<ToDo> affectedTodos = participation
+            .getProject()
+            .getMilestones()
+            .stream()
+            .map(x -> x.getToDos())
+            .flatMap(Collection::stream)
+            .filter(x -> x.getAssignee() != null && x.getAssignee().equals(participation.getUserTW()))
+            .collect(Collectors.toList());
+        for (ToDo t : affectedTodos) {
+            t.setAssignee(null);
+            try {
+                toDoService.saveToDo(t);
+            } catch (Exception e) {
+                log.error("ERROR", e);
+            }
+        }
     }
 
 	@Transactional
@@ -48,7 +74,7 @@ public class ParticipationService {
 
 	@Transactional(readOnly = true)
 	public Collection<Participation> findParticipationByUserIdAndProjectId(Integer userId, Integer projectId) throws DataAccessException {
-		return participationRepository.findParticipationByUserAndDeparment(userId, projectId);
+		return participationRepository.findParticipationByUserAndProject(userId, projectId);
 	}
 	@Transactional(readOnly = true)
 	public Collection<Participation> findUserParticipations(Integer userId) throws DataAccessException {
@@ -70,13 +96,13 @@ public class ParticipationService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Project> findMyDepartemntProjects(Integer userId, Integer departmentId) throws DataAccessException {
+	public Collection<Project> findMyDepartmentProjects(Integer userId, Integer departmentId) throws DataAccessException {
 		return participationRepository.findMyDepartemntProjects(userId, departmentId);
 	}
 
 	@Transactional(readOnly = true)
-    public Collection<Participation> findCurrentParticipationsInDepartment(Integer departmentId) throws DataAccessException {
-	    return participationRepository.findCurrentParticipationsInProject(departmentId);
+    public Collection<Participation> findCurrentParticipationsInProject(Integer projectId) throws DataAccessException {
+	    return participationRepository.findCurrentParticipationsInProject(projectId);
     }
 
     @Transactional(readOnly = true)

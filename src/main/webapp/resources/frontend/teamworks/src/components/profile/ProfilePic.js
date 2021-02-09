@@ -1,4 +1,3 @@
-import AuthApiUtils from "../../utils/api/AuthApiUtils";
 import "./Profile.css";
 
 const ProfilePic = ({src, className, small, slim}) =>

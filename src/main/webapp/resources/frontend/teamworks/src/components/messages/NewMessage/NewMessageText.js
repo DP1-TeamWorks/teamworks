@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import InputError from "../../forms/InputError";
 
 export default function NewMessageText({ name, changeHandler, error }) {

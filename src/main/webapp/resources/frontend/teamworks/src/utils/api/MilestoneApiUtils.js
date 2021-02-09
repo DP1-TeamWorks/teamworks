@@ -1,13 +1,14 @@
-import axios from "axios";
-import { API_URL } from "../../config/config";
 import ApiUtils from "./ApiUtils";
 const MILESTONE_URL = "/milestones";
+const SINGLE_MILESTONE_URL = "/milestone";
 
 const MilestoneApiUtils = {
   /*MILESTONES*/
   getMilestones: (projectId) => ApiUtils.get(MILESTONE_URL + `?projectId=${projectId}`),
+  getMilestoneById: (projectId, milestoneId) => ApiUtils.get(SINGLE_MILESTONE_URL + `?projectId=${projectId}&milestoneId=${milestoneId}`),
   getNextMilestone: (projectId) => ApiUtils.get(MILESTONE_URL + `/next?projectId=${projectId}`),
-  createMilestone: (projectId, milestone) => ApiUtils.post(MILESTONE_URL + `?projectId=${projectId}`, milestone)
+  createMilestone: (projectId, milestone) => ApiUtils.post(MILESTONE_URL + `/post?projectId=${projectId}`, milestone),
+  deleteMilestone: (milestoneId) => ApiUtils.delete(MILESTONE_URL + `/delete?milestoneId=${milestoneId}`)
 };
 
 export default MilestoneApiUtils;

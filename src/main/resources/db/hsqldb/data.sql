@@ -3,9 +3,14 @@ INSERT INTO
     teams(name, identifier)
 values
     ('Cybergroup', 'cyber');
+    
+INSERT INTO
+    teams(name, identifier)
+values
+    ('Nike', 'nk');
 
 INSERT INTO
-    users(name, lastname, email, password, role, team_id)
+    users(name, lastname, email, password, role, team_id, join_date)
 values
     (
         'Johnny',
@@ -13,11 +18,12 @@ values
         'johnnysilverhand@cyber',
         '$2a$10$0nvRQTbmAF3gLpwOs5Nc4ujS0FYMsQy1DI0eV9x03JDapfItsLw56',
         0,
-        1
+        1,
+        '2021-01-20'
     );
 
 INSERT INTO
-    users(name, lastname, email, password, role, team_id)
+    users(name, lastname, email, password, role, team_id, join_date)
 values
     (
         'Julia',
@@ -25,11 +31,12 @@ values
         'juliafabra@cyber',
         '$2a$10$0nvRQTbmAF3gLpwOs5Nc4ujS0FYMsQy1DI0eV9x03JDapfItsLw56',
         1,
-        1
+        1,
+        '2021-01-20'
     );
 
 INSERT INTO
-    users(name, lastname, email, password, role, team_id)
+    users(name, lastname, email, password, role, team_id, join_date)
 values
     (
         'Maria',
@@ -37,11 +44,12 @@ values
         'mariatorres@cyber',
         '$2a$10$0nvRQTbmAF3gLpwOs5Nc4ujS0FYMsQy1DI0eV9x03JDapfItsLw56',
         1,
-        1
+        1,
+        '2021-01-20'
     );
 
 INSERT INTO
-    users(name, lastname, email, password, role, team_id)
+    users(name, lastname, email, password, role, team_id, join_date)
 values
     (
         'Luis',
@@ -49,11 +57,12 @@ values
         'luiscumbrera@cyber',
         '$2a$10$0nvRQTbmAF3gLpwOs5Nc4ujS0FYMsQy1DI0eV9x03JDapfItsLw56',
         1,
-        1
+        1,
+        '2021-01-20'
     );
 
 INSERT INTO
-    users(name, lastname, email, password, role, team_id)
+    users(name, lastname, email, password, role, team_id, join_date)
 values
     (
         'Roman',
@@ -61,7 +70,8 @@ values
         'romancalle@cyber',
         '$2a$10$0nvRQTbmAF3gLpwOs5Nc4ujS0FYMsQy1DI0eV9x03JDapfItsLw56',
         1,
-        1
+        1,
+        '2021-01-20'
     );
 
 /*DEPARTMENTS*/
@@ -354,11 +364,11 @@ values
     (1, 1);
 
 INSERT INTO
-    TAGS_TODOS(tags_id, todos_id)
+    TODOS_TAGS(tags_id, todos_id)
 values
     (1, 2);
 
 INSERT INTO
-    TAGS_TODOS(tags_id, todos_id)
+    TODOS_TAGS(tags_id, todos_id)
 values
     (2, 3);

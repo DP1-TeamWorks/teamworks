@@ -2,11 +2,13 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import Sticky from "react-sticky-el";
+import { useContext } from "react/cjs/react.development";
+import UserCredentials from "../../../context/UserCredentials";
 import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
 import Button from "../../buttons/Button";
 import AddMilestoneForm from "../../forms/AddMilestoneForm";
 import AddTagForm from "../../forms/AddTagForm";
-import AddUserToProject from "../../forms/AddUserToProjectForm";
+import AddUserToProjectForm from "../../forms/AddUserToProjectForm";
 import Spinner from "../../spinner/Spinner";
 import EditableField from "../EditableField";
 import SettingGroup from "../SettingGroup";
@@ -18,6 +20,8 @@ import TagList from "./TagList";
 
 const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
 {
+
+  const credentials = useContext(UserCredentials);
 
   const [departmentIndex, setDepartmentIndex] = useState(0);
   const [projectIndex, setProjectIndex] = useState(0);
@@ -80,12 +84,12 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
   }
 
   function onMilestoneAdded()
-  { 
+  {
     setMilestoneUpdateCounter(Math.random()); // HACK force an update
   }
 
   function onTagAdded()
-  { 
+  {
     setTagUpdateCounter(Math.random()); // HACK force an update
   }
 
@@ -150,6 +154,8 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
   if (!myDepartments)
     return <p>No projects found.</p>
 
+  const currentDepartment = myDepartments[departmentIndex];
+  const isDepartmentManager = credentials.isDepartmentManager(currentDepartment.id);
   let DepartmentElements = [];
 
   for (let i = 0; i < myDepartments.length; i++)
@@ -158,7 +164,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
     DepartmentElements.push(<SidePaneElement key={i} selected={i === departmentIndex} onClick={() => setDepartmentIndex(i)}>{dpt.name}</SidePaneElement>);
   }
 
-  const projects = myDepartments[departmentIndex].projects
+  const projects = currentDepartment.projects;
   const ProjectElements = projects.map((x, i) =>
   {
     return <SidePaneElement key={i} selected={i === projectIndex} onClick={() => setProjectIndex(i)}>{x.name}</SidePaneElement>;
@@ -167,7 +173,13 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
   let Content;
   if (projects.length === 0)
   {
-    Content = <p>There are no projects in this department. Click on "Add new project" to create a new one.</p>
+    if (isDepartmentManager)
+    {
+      Content = <p>There are no projects in this department. Click on "Add new project" to create a new one.</p>
+    } else
+    {
+      Content = <p>You aren't a member of any projects from this department.</p>
+    }
   } else
   {
     if (projectIndex >= projects.length)
@@ -176,83 +188,94 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
       return;
     }
     const currentProject = projects[projectIndex];
+    const isProjectManager = credentials.isProjectManager(currentProject.id);
     Content = (
       <>
         <SettingGroup
-          name="Project name"
-          description="Choose an easily identifiable name for team members.">
+          name="Project name">
           <EditableField
             key={`${departmentIndex}-${projectIndex}`}
             value={currentProject.name}
+            editable={isProjectManager}
             fieldName="name"
             postFunction={updateProject}
             onUpdated={onProjectAttributeUpdated} />
         </SettingGroup>
         <SettingGroup
-          name="Description"
-          description="A brief description of the project.">
+          name="Description">
           <EditableField
             smaller
             key={`${departmentIndex}-${projectIndex}`}
             fieldName="description"
+            editable={isProjectManager}
             value={currentProject.description}
             postFunction={updateProject}
             onUpdated={onProjectAttributeUpdated} />
         </SettingGroup>
         <SettingGroup
-          name="Add user to project"
-          description="Type their name below. They must be a department member.">
-          <AddUserToProject
-            key={currentProject.name}
-            onUserAdded={onUserAdded}
-            projectId={currentProject.id}
-            departmentId={departments[departmentIndex].id}
-            submitText={`Add to ${currentProject.name}`} />
+          name="Milestones"
+          description={isProjectManager ? "You can add a new milestone below." : " "}>
+          {isProjectManager ? (
+            <AddMilestoneForm
+              key={`mileform${currentProject.id}`}
+              projectId={currentProject.id}
+              onMilestoneAdded={onMilestoneAdded} />
+          ) : ""}
+          <MilestoneList
+            key={`list${currentProject.id}`}
+            updateCounter={milestoneUpdateCounter}
+            projectName={currentProject.name}
+            projectId={currentProject.id} />
         </SettingGroup>
+        {isProjectManager ? (
+          <SettingGroup
+            name="Add user to project"
+            description="Type their name below. They must be a department member.">
+            <AddUserToProjectForm
+              key={currentProject.name}
+              onUserAdded={onUserAdded}
+              projectId={currentProject.id}
+              departmentId={departments[departmentIndex].id}
+              submitText={`Add to ${currentProject.name}`} />
+          </SettingGroup>
+        ) : ""}
         <SettingGroup
           name="Members"
           description="Click on a user to see their profile and hover to show available actions.">
           <ProjectMemberList
             key={`${departmentIndex}-${projectIndex}`}
+            departmentId={currentDepartment.id}
             projectId={currentProject.id}
             loading={projectMembers == null}
             members={projectMembers}
             onListUpdated={fetchProjectMembers} />
         </SettingGroup>
         <SettingGroup
-          name="Milestones"
-          description="You can add a new milestone below.">
-          <AddMilestoneForm
-            key={`mileform${currentProject.id}`}
-            projectId={currentProject.id}
-            onMilestoneAdded={onMilestoneAdded} />
-          <MilestoneList
-            key={`list${currentProject.id}`}
-            updateCounter={milestoneUpdateCounter}
-            projectId={currentProject.id} />
-        </SettingGroup>
-        <SettingGroup
           name="Tags"
-          description="You can add a new tag below.">
-          <AddTagForm
-            key={`tagform${currentProject.id}`}
-            projectId={currentProject.id}
-            onTagAdded={onTagAdded} />
+          description={isProjectManager ? "You can add a new tag below." : " "}>
+          {isProjectManager ? (
+            <AddTagForm
+              key={`tagform${currentProject.id}`}
+              projectId={currentProject.id}
+              onTagAdded={onTagAdded} />
+          ) : ""}
           <TagList
             key={`taglist${currentProject.id}`}
             updateCounter={tagUpdateCounter}
             projectId={currentProject.id} />
         </SettingGroup>
-        <SettingGroup
-          danger
-          name="Delete project"
-          description="Deletes the project, as well as its associated members, tags and tasks. <br>This action cannot be undone.">
-          <Button
-            className="Button--red"
-            onClick={onProjectDeleteClicked}>
-            {isDeleting ? <Spinner red /> : "Delete project"}
-          </Button>
-        </SettingGroup>
+        {isProjectManager ? (
+          <SettingGroup
+            danger
+            name="Delete project"
+            description="Deletes the project, as well as its associated members, tags and tasks. <br>This action cannot be undone.">
+            <Button
+              className="Button--red"
+              onClick={onProjectDeleteClicked}>
+              {isDeleting ? <Spinner red /> : "Delete project"}
+            </Button>
+          </SettingGroup>
+        ) : ""}
       </>
     );
   }
@@ -268,9 +291,10 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
         <FontAwesomeIcon
           icon={faPlus}
           className="AddIcon" />
-        Add new project
+          Add new project
       </>);
   }
+
 
   return (
     <div className="SubsettingContainer">
@@ -287,10 +311,12 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
           boundaryElement=".SubsettingSidePane"
           topOffset={-240}
           stickyStyle={{ transform: 'translateY(240px)' }}>
-          <SidePaneElement reducedpadding={isAddLoading} onClick={createProject}
-            highlighted elementDiv={isAddLoading}>
-            {addBtn}
-          </SidePaneElement>
+          {isDepartmentManager ? (
+            <SidePaneElement reducedpadding={isAddLoading} onClick={createProject}
+              highlighted elementDiv={isAddLoading}>
+              {addBtn}
+            </SidePaneElement>
+          ) : undefined}
           {ProjectElements}
         </Sticky>
       </div>

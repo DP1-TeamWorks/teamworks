@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
-import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.enums.Role;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
@@ -30,7 +30,11 @@ public class DepartmentManagerInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
 		Integer userId = (Integer) req.getSession().getAttribute("userId");
 		UserTW user = userTWService.findUserById(userId);
-		Integer departmentId = Integer.valueOf(req.getParameter("departmentId"));
+		String paramDepartmentId=req.getParameter("departmentId");
+		Integer departmentId = null;
+		if(paramDepartmentId!=null) {
+			departmentId = Integer.valueOf(paramDepartmentId);
+		}
 		if (departmentId == null) {
 			res.sendError(400);
 			return false;
@@ -40,6 +44,7 @@ public class DepartmentManagerInterceptor extends HandlerInterceptorAdapter {
 			res.sendError(400);
 			return false;
 		}
+		// Check that user is a manager of this department (departmentId)
 		Belongs belongs = belongsService.findCurrentBelongs(userId, departmentId);
 
 		if (user.getTeam().equals(department.getTeam()) && user.getRole().equals(Role.team_owner))

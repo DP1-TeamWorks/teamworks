@@ -4,17 +4,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.model.Belongs;
-import org.springframework.samples.petclinic.model.Participation;
-import org.springframework.samples.petclinic.model.Role;
-import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.model.UserTW;
+import org.springframework.samples.petclinic.enums.Role;
+import org.springframework.samples.petclinic.model.*;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.TeamService;
@@ -22,15 +17,8 @@ import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.validation.ManyTeamOwnerException;
 import org.springframework.samples.petclinic.validation.UserValidator;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserTWController {
@@ -60,32 +48,30 @@ public class UserTWController {
 	@GetMapping(value = "/api/users")
 	public Collection<UserTW.StrippedUser> getUsers(HttpServletRequest r) {
         Integer teamId = (Integer) r.getSession().getAttribute("teamId");
-		List<UserTW.StrippedUser> l = userService.findUsersByTeam(teamId).stream().collect(Collectors.toList());
+		List<UserTW.StrippedUser> l = userService.findUsersByTeam(teamId).stream().map(x -> new StrippedUserImpl(x)).collect(Collectors.toList());
 		return l;
 	}
 
 	@GetMapping(value = "/api/user")
-	public Map<String, Object> getUser(HttpServletRequest r, Integer userId) {
+	public ResponseEntity<Map<String, Object>> getUser(HttpServletRequest r, @RequestParam("userId") Integer userId) {
 		Integer teamId =(Integer) r.getSession().getAttribute("teamId");
 		UserTW user = userService.findUserById(userId);
 		Map<String, Object> m = new HashMap<>();
-		if(user.getTeam().getId().equals(teamId)) {
-			m.put("user", user);
+		if(user!=null&&user.getTeam().getId().equals(teamId)) {
+			m.put("user", new StrippedUserImpl(user));
 			List<Belongs> lb = belongsService.findUserBelongs(userId).stream().collect(Collectors.toList());
-			m.put("currentDepartments", lb);
+			m.put("departmentBelongs", lb);
 			List<Participation> lp = participationService.findUserParticipations(userId).stream()
 					.collect(Collectors.toList());
-			m.put("currentProjects", lp);
-			return m;
+			m.put("projectParticipations", lp);
+			return ResponseEntity.ok(m);
 		}
 		else {
-			return m;
+			return ResponseEntity.badRequest().build();
 		}
-		
-		
 	}
 
-	@PostMapping(value = "/api/user")
+	@PostMapping(value = "/api/user/create")
 	public ResponseEntity<String> postUser(HttpServletRequest r, @RequestBody UserTW user, BindingResult errors) {
 		try {
 
@@ -94,21 +80,75 @@ public class UserTWController {
 				Integer teamId = (Integer) r.getSession().getAttribute("teamId");
 				Team team = teamService.findTeamById(teamId);
 				user.setTeam(team);
+				user.setRole(Role.employee);
 				user.setEmail(
 						user.getName().toLowerCase() + user.getLastname().toLowerCase() + "@" + team.getIdentifier());
 				user.setPassword(SecurityConfiguration.passwordEncoder().encode(user.getPassword()));
 				userService.saveUser(user);
 				return ResponseEntity.ok("User Created");
 			} else {
-				return ResponseEntity.badRequest().body(errors.getAllErrors().toString());
+				return ResponseEntity.badRequest().body("errors");
 			}
 
 		} catch (DataAccessException | ManyTeamOwnerException d) {
-			return ResponseEntity.badRequest().body(d.getMessage());
+			return ResponseEntity.badRequest().body("alreadyexists");
 		}
 	}
 
-	@DeleteMapping(value = "/api/user")
+    @PostMapping(value = "/api/user/update")
+    public ResponseEntity<String> updateUser(HttpServletRequest r, @RequestBody UserTW user, BindingResult errors) {
+        try {
+            UserTW dbUser = userService.findUserById(user.getId());
+            if (dbUser == null)
+                return ResponseEntity.badRequest().build();
+
+            userValidator.validate(user, errors);
+
+            if (user.getName() != null)
+            {
+                if (errors.hasFieldErrors("name"))
+                    return ResponseEntity.badRequest().build();
+                dbUser.setName(user.getName());
+            }
+
+            if (user.getLastname() != null)
+            {
+                if (errors.hasFieldErrors("Lastname"))
+                    return ResponseEntity.badRequest().build();
+                dbUser.setLastname(user.getLastname());
+            }
+
+            if (user.getPassword() != null)
+            {
+                if (errors.hasFieldErrors("Password"))
+                    return ResponseEntity.badRequest().build();
+                dbUser.setPassword(user.getPassword());
+            }
+
+            if (user.getRole() != null && !user.getRole().equals(dbUser.getRole()))
+            {
+                if (user.getRole().equals(Role.team_owner))
+                {
+                    // if there's another team owner, remove their privileges
+                    UserTW teamOwner = userService.findTeamOwner(dbUser.getTeam().getId());
+                    if (!teamOwner.equals(dbUser))
+                    {
+                        teamOwner.setRole(Role.employee);
+                        userService.saveUser(teamOwner);
+                    }
+                }
+                dbUser.setRole(user.getRole());
+            }
+
+            userService.saveUser(dbUser);
+            return ResponseEntity.ok().build();
+
+        } catch (DataAccessException | ManyTeamOwnerException d) {
+            return ResponseEntity.badRequest().body("alreadyexists");
+        }
+    }
+
+	@DeleteMapping(value = "/api/user/delete")
 	public ResponseEntity<String> deleteUser(@RequestParam(required = true) Integer userId) {
 		try {
 			userService.deleteUserById(userId);
@@ -121,21 +161,22 @@ public class UserTWController {
 	}
 
 	@GetMapping(value = "/api/user/credentials")
-	public Map<String, Object> getCredentials(HttpServletRequest r, Integer userId) {
+	public ResponseEntity<Map<String, Object>> getCredentials(HttpServletRequest r) {
+	    Integer userId = (Integer)r.getSession().getAttribute("userId");
 		Integer teamId =(Integer) r.getSession().getAttribute("teamId");
 		Map<String, Object> m = new HashMap<>();
 		UserTW user = userService.findUserById(userId);
-		if(user.getTeam().getId().equals(teamId)) {
-			
-		m.put("isTeamManager", user.getRole().equals(Role.team_owner));
-		List<Belongs> lb = belongsService.findCurrentUserBelongs(userId).stream().collect(Collectors.toList());
-		m.put("currentDepartments", lb);
-		List<Participation> lp = participationService.findCurrentParticipationsUser(userId).stream()
+		if(user!=null&&user.getTeam().getId().equals(teamId)) {
+            m.put("user", new StrippedUserImpl(user));
+			m.put("isTeamManager", user.getRole().equals(Role.team_owner));
+			List<Belongs> lb = belongsService.findCurrentUserBelongs(userId).stream().collect(Collectors.toList());
+			m.put("currentDepartments", lb);
+			List<Participation> lp = participationService.findCurrentParticipationsUser(userId).stream()
 				.collect(Collectors.toList());
-		m.put("currentProjects", lp);
-		return m;
+			m.put("currentProjects", lp);
+			return ResponseEntity.ok(m);
 		}else {
-			return m;
+			return ResponseEntity.badRequest().build();
 		}
 	}
 

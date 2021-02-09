@@ -1,9 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +38,11 @@ public class MilestoneController {
 		dataBinder.setDisallowedFields("id");
 	}
 
+    @GetMapping(value = "/api/milestone")
+    public Milestone getMilestone(@RequestParam(required = true) Integer projectId, @RequestParam(required = true) Integer milestoneId) {
+        return milestoneService.findMilestoneById(milestoneId);
+    }
+
 	@GetMapping(value = "/api/milestones/next")
 	public Milestone getNextMilestone(@RequestParam(required = true) Integer projectId) {
 		return milestoneService.findNextMilestone(projectId);
@@ -77,26 +79,40 @@ public class MilestoneController {
             .collect(Collectors.toList());
 	}
 
-	@PostMapping(value = "/api/milestones")
+	@PostMapping(value = "/api/milestones/post")
 	public ResponseEntity<String> postMilestones(@RequestParam(required = true) Integer projectId,
 			@Valid @RequestBody Milestone milestone) {
 
 		try {
 			Project project = projectService.findProjectById(projectId);
-
-			milestone.setProject(project);
-			milestoneService.saveMilestone(milestone);
-			return ResponseEntity.ok("Milestone create");
+            milestone.setProject(project);
+			if (milestone.getId() == null)
+            {
+                milestoneService.saveMilestone(milestone);
+                return ResponseEntity.ok("Milestone create");
+            }
+			else
+            {
+                Milestone dbMile = milestoneService.findMilestoneById(milestone.getId());
+                if (dbMile == null || dbMile.getProject().getId() != projectId)
+                    return ResponseEntity.badRequest().build();
+                if (milestone.getName() != null)
+                    dbMile.setName(milestone.getName());
+                if (milestone.getDueFor() != null)
+                    dbMile.setDueFor(milestone.getDueFor());
+                milestoneService.saveMilestone(dbMile);
+                return ResponseEntity.ok("Milestone updated");
+            }
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();
 		}
 
 	}
 
-	@DeleteMapping(value = "/api/milestones")
+	@DeleteMapping(value = "/api/milestones/delete")
 	public ResponseEntity<String> deleteMilestones(@RequestParam(required = true) Integer milestoneId) {
 		try {
-			milestoneService.deleteMilestonetById(milestoneId);
+			milestoneService.deleteMilestoneById(milestoneId);
 			return ResponseEntity.ok("Milestone delete");
 		} catch (DataAccessException d) {
 			return ResponseEntity.notFound().build();

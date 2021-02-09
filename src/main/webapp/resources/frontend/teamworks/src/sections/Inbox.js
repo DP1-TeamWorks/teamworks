@@ -7,7 +7,7 @@ import Section from "./Section";
 
 const Inbox = ({ search, setSearch }) => {
   const [selectedTab, setSelectedTab] = useState("Inbox");
-  const [selectedMessages, setSelectedMessages] = useState([]);
+  const [selectedMessages, setSelectedMessages] = useState(null);
   const [nInboxMessages, setNInboxMessages] = useState([]);
   const [pickedProject, setPickedProject] = useState({
     name: "Any",
@@ -20,7 +20,6 @@ const Inbox = ({ search, setSearch }) => {
     if (reloadCounters)
       MessageApiUtils.getNumberOfNotReadMessages()
         .then((res) => {
-          console.log("Getting number of Inbox Messages");
           setNInboxMessages(res);
         })
         .catch((error) => {

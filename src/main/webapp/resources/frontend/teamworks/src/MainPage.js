@@ -1,13 +1,15 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Header from "./components/header/Header";
-import Settings from "./sections/Settings";
-import Inbox from "./sections/Inbox";
 import ScrollToTop from "./components/routing/ScrollToTop";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import UserCredentialsProvider from "./context/UserCredentialsProvider";
+import Inbox from "./sections/Inbox";
 import "./sections/Section.css";
+import Settings from "./sections/Settings";
 
-const MainPage = () => {
+const MainPage = () =>
+{
   const [search, setSearch] = useState("");
   return (
     <Router>
@@ -19,7 +21,9 @@ const MainPage = () => {
         </Route>
         <Route path="/settings">
           <Header nosearchbar />
-          <Settings />
+          <UserCredentialsProvider>
+            <Settings />
+          </UserCredentialsProvider>
         </Route>
       </Switch>
     </Router>
