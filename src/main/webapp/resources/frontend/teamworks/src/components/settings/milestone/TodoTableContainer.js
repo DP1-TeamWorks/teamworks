@@ -5,7 +5,7 @@ import TodoTable from "./TodoTable";
 import { useEffect, useState } from "react";
 import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
 
-const TodoTableContainer = ({milestoneId, projectId}) =>
+const TodoTableContainer = ({departmentId, milestoneId, projectId}) =>
 {
 
     useEffect(() =>
@@ -22,7 +22,7 @@ const TodoTableContainer = ({milestoneId, projectId}) =>
     return (
         <div className="TodoTableContainer">
             <TagSelectorStrip tags={tagList} onSelectedIndexChanged={v => setSelectedTagId(v)} />
-            <TodoTable tags={tagList} projectId={projectId} milestoneId={milestoneId} selectedTagId={selectedTagId} />
+            <TodoTable tags={tagList} projectId={projectId} departmentId={departmentId} milestoneId={milestoneId} selectedTagId={selectedTagId} />
         </div>
     );
 }

@@ -188,7 +188,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
       return;
     }
     const currentProject = projects[projectIndex];
-    const isProjectManager = credentials.isProjectManager(currentProject.id);
+    const isProjectManager = credentials.isProjectManager(currentProject.id, currentDepartment.id);
     Content = (
       <>
         <SettingGroup
@@ -223,6 +223,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
           ) : ""}
           <MilestoneList
             key={`list${currentProject.id}`}
+            departmentId={currentDepartment.id}
             updateCounter={milestoneUpdateCounter}
             projectName={currentProject.name}
             projectId={currentProject.id} />
@@ -261,6 +262,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
           ) : ""}
           <TagList
             key={`taglist${currentProject.id}`}
+            departmentId={currentDepartment.id}
             updateCounter={tagUpdateCounter}
             projectId={currentProject.id} />
         </SettingGroup>
