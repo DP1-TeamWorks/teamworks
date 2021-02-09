@@ -211,16 +211,9 @@ public class UserTWControllerTest {
 	}
     @Test
 	void testPostMorethan1TeamOwner() throws Exception {
-    	UserTW jose=new UserTW();
-		jose.setName("Jose");
-		jose.setId(TEST_USER_ID+1);
-		jose.setLastname("Franklin");
-		jose.setPassword("123456789");
-		jose.setRole(Role.team_owner);
-		jose.setTeam(team);
-
-    	doThrow(ManyTeamOwnerException.class).when(this.UserTWService).saveUser(jose);
-		mockMvc.perform(post("/api/user/create").session(mockSession)).andExpect(status().is(400));
+    	String georgejson = objectMapper.writeValueAsString(juan);
+    	doThrow(ManyTeamOwnerException.class).when(this.UserTWService).saveUser(juan);
+		mockMvc.perform(post("/api/user/create").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(georgejson)).andExpect(status().is(400));
 	}
 
     @Test

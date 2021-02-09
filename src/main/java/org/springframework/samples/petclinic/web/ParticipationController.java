@@ -62,6 +62,7 @@ public class ParticipationController {
                                                     @RequestParam(required = false) Boolean willBeProjectManager, HttpServletRequest r) {
 
         try {
+        	log.info("Creando participacion entre el user con id "+participationUserId+" y el proyecto con id "+projectId);
             UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 
             Project project = projectService.findProjectById(projectId);
@@ -71,10 +72,12 @@ public class ParticipationController {
                 project.getDepartment().getId());
 
             Participation managerParticipation = participationService.findCurrentParticipation(user.getId(), projectId);
-
+           
+            log.info("Comprobando que el proyecto y el usuario pertenecen al mismo team");
             if (!project.getDepartment().getTeam().equals(user.getTeam()))
                 throw new IdParentIncoherenceException("Team", "Project");
-
+            
+            log.info("Comprobando que el usuario pertenzca al departamento del proyecto");
             if (userCurrentBelongs == null)
                 throw new IdParentIncoherenceException("Department", "User");
 
@@ -86,6 +89,7 @@ public class ParticipationController {
                 managerBelongs = belongsService.findCurrentBelongs(user.getId(), departmentId);
             }
 
+            log.info("Comprobando que el usuario no tiene ninguna participacion actual");
             if (userCurrentParticipation == null || (willBeProjectManager != null && userCurrentParticipation.getIsProjectManager() != willBeProjectManager)) {
                 UserTW participationUser = userTWService.findUserById(participationUserId);
                 Participation participation = new Participation();
@@ -122,14 +126,18 @@ public class ParticipationController {
 
                     }
                 }
+                log.info("Guardando participacion");
                 participationService.saveParticipation(participation);
+                log.info("Participacion guardada con exito");
                 return ResponseEntity.ok().build();
             } else {
+            	log.error("Existe ya una participacion");
                 return ResponseEntity.badRequest().body("alreadyexists");
             }
         } catch (DataAccessException | ManyProjectManagerException | DateIncoherenceException
-            | IdParentIncoherenceException d) {
-            return ResponseEntity.badRequest().build();
+            | IdParentIncoherenceException d) { 
+        	log.error("Error",d);
+        	return ResponseEntity.badRequest().build();
         }
 
     }
@@ -138,22 +146,28 @@ public class ParticipationController {
 	public ResponseEntity<String> deleteParticipation(@RequestParam(required = true) Integer participationUserId,
 			@RequestParam(required = true) Integer projectId, HttpServletRequest r) {
 		try {
+			log.info("Borrando participacion entre el user con id "+participationUserId+" y el proyecto con id "+projectId);
 		    // Authority is accounted for in projectmanagerinterceptor
 			UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
 			Participation currentParticipation = participationService.findCurrentParticipation(participationUserId, projectId);
+			log.info("Comprobando que la participacion existe");
 			if (currentParticipation != null)
             {
                 // End the participation
+				log.info("Borrando participacion");
                 currentParticipation.setFinalDate(LocalDate.now());
                 participationService.saveParticipation(currentParticipation);
-
+                log.info("Participacion borrada correctamente");
+                
                 return ResponseEntity.ok().build();
             }
 			else {
+				log.error("No existe una participacion");
                 return ResponseEntity.badRequest().build();
             }
 
 		} catch (Exception e) {
+			log.error("Error:",e);
 			return ResponseEntity.badRequest().build();
 		}
 

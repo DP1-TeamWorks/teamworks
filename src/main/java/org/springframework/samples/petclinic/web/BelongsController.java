@@ -50,10 +50,12 @@ public class BelongsController {
     @GetMapping(value = "/api/departments/belongs")
     public ResponseEntity<List<Belongs>> getBelongsFromDepartment(@RequestParam(required = true) Integer departmentId, HttpServletRequest r) {
         try {
+        	log.info("Obteniendo belongs del departamento con id:"+departmentId);
             List<Belongs> belongs = belongsService.findCurrentBelongsInDepartment(departmentId).stream().sorted(Comparator.comparing(Belongs::getLastname).thenComparing(Belongs::getName)).collect(Collectors.toList());
             return ResponseEntity.ok(belongs);
         } catch (DataAccessException e) {
-            return ResponseEntity.badRequest().build();
+            log.error("Error",e);
+        	return ResponseEntity.badRequest().build();
         }
     }
 
@@ -64,21 +66,18 @@ public class BelongsController {
                                                 @RequestParam(required = false) Boolean isDepartmentManager, HttpServletRequest r) {
 
         try {
-
+        	log.info("Creando belongs entre el usuario con id "+belongUserId+" y el departeamento con id: "+departmentId);
             Belongs currentBelongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
             UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
             Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
             Department department = departmentService.findDepartmentById(departmentId);
             UserTW belonguser = userTWService.findUserById(belongUserId);
-
+            log.info("Comprobando si el usuario pertenece al team");
             if (!belonguser.getTeam().equals(user.getTeam())) {
                 throw new IdParentIncoherenceException("Team", "User");
             }
 
-//			if(!belonguser.getTeam().equals(department.getTeam())) {
-//				throw new IdParentIncoherenceException("Team", "Department");
-//			}
-
+            log.info("Comprobando que no tiene ningun belongs actual o esta siendo asccendido o degradado");
             // Check if user DOESNT exist in department OR is being promoted/demoted
             if (currentBelongs == null || (isDepartmentManager != null && currentBelongs.getIsDepartmentManager() != isDepartmentManager)) {
                 UserTW belongUser = userTWService.findUserById(belongUserId);
@@ -111,16 +110,19 @@ public class BelongsController {
                         belongsService.saveBelongs(replacingBelongs);
                     }
                 }
+                log.info("Guardando belongs");
                 belongsService.saveBelongs(belongs);
+                log.info("Belongs guardado correctamente");
                 return ResponseEntity.ok().build();
             } else {
-                log.error("Tried to create a belongs for an already existing member");
+            	log.error("Ya existe un belongs");
                 // there's already a belongs for that user
                 return ResponseEntity.badRequest().body("alreadyexists");
             }
 
         } catch (DataAccessException | ManyDepartmentManagerException | DateIncoherenceException | IdParentIncoherenceException d) {
-            return ResponseEntity.badRequest().build();
+        	log.error("Error: ",d);
+        	return ResponseEntity.badRequest().build();
         }
 
     }
@@ -130,16 +132,18 @@ public class BelongsController {
     public ResponseEntity<String> deleteBelongs(@RequestParam(required = true) Integer belongUserId,
                                                 Integer departmentId, HttpServletRequest r) {
         try {
+        	log.info("Borrando belongs entre el usuario con id "+belongUserId+" y el departeamento con id: "+departmentId);
             UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
             Boolean isTeamOwner = user.getRole().equals(Role.team_owner);
             Belongs belongs = belongsService.findCurrentBelongs(belongUserId, departmentId);
             // Authority is sorted out in the interceptor so we only do minimal checks here
+            log.info("Comprobando que existe un belong");
             if (belongs != null) {
                 belongs.setFinalDate(LocalDate.now());
                 belongsService.saveBelongs(belongs);
-
+                log.info("Belongs borrado correctamente");
                 // CASCADE PROJECTS
-
+                log.info("Borrando participaciones del usuario en ese departamento");
                 for (Participation p : belongs.getUserTW().getParticipation()) {
                     p.setFinalDate(LocalDate.now());
 
@@ -149,14 +153,16 @@ public class BelongsController {
                         log.error("ERROR", e);
                     }
                 }
-
+                log.info("Participaciones borradas correctamente");
                 return ResponseEntity.ok().build();
             } else {
+            	log.error("No existe un belong para ese usuario y departamento");
                 return ResponseEntity.badRequest().build();
             }
 
         } catch (DataAccessException | ManyDepartmentManagerException | DateIncoherenceException d) {
-            return ResponseEntity.badRequest().build();
+            log.error("Error",d);
+        	return ResponseEntity.badRequest().build();
         }
     }
 }

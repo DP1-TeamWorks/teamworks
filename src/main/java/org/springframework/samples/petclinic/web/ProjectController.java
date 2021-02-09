@@ -34,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @RestController
 public class ProjectController {
 	private final DepartmentService departmentService;
@@ -67,11 +69,14 @@ public class ProjectController {
 		UserTW user = userTWService.findUserById(userId);
 		Belongs currentBelongs = belongsService.findCurrentBelongs(userId, departmentId);
 		// Revisa si perteneces TODO this isnt even needed
+		log.info("Comprobando si el usuario con id "+userId+" perteneces al departamento o es team owner");
 		if (user.getRole().equals(Role.team_owner) || currentBelongs != null) {
 			List<Project> l = new ArrayList<>();
 			l = departmentService.findDepartmentById(departmentId).getProjects();
+			log.info("Obteniendo proyectos del departamento con id: "+departmentId);
 			return ResponseEntity.ok(l);
 		} else {
+			log.error("El usuario no tiene permisos");
 			return ResponseEntity.status(403).build();
 		}
 
@@ -102,6 +107,7 @@ public class ProjectController {
 
 		List<Project> l = new ArrayList<>();
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
+		log.info("Obteniendo los departamentos del usuario con id: "+userId);
 		l = participationService.findMyDepartmentProjects(userId, departmentId).stream().collect(Collectors.toList());
 		return l;
 
@@ -112,11 +118,15 @@ public class ProjectController {
 			@Valid @RequestBody Project project) {
 
 		try {
+			log.info("Proyecto validado correctamente");
 			Department depar = departmentService.findDepartmentById(departmentId);
 			project.setDepartment(depar);
+			log.info("Guardando departamento");
 			projectService.saveProject(project);
+			log.info("Departamento guardado correctamente");
 			return ResponseEntity.ok("Project create");
 		} catch (DataAccessException d) {
+			log.error("Error:",d);
 			return ResponseEntity.badRequest().build();
 		}
 	}
@@ -125,10 +135,14 @@ public class ProjectController {
 	public ResponseEntity<String> updateProject(@RequestParam(required = true) Integer departmentId,
 			@RequestParam(required = true) Integer projectId, @RequestBody Project project, BindingResult errors) {
 		try {
+			log.info("Validando proyecto con id:"+projectId);
 			projectValidator.validate(project, errors);
 			Project dbProject = projectService.findProjectById(projectId);
-			if (errors.hasErrors() || dbProject == null)
+			if (errors.hasErrors() || dbProject == null) {
+				log.error("Se han detectado errores de validacion " + errors.getAllErrors().toString());
 				return ResponseEntity.badRequest().body(errors.getAllErrors().toString());
+			}
+				
 
 			dbProject.setId(projectId);
 
@@ -136,11 +150,13 @@ public class ProjectController {
 				dbProject.setName(project.getName());
 			if (project.getDescription() != null)
 				dbProject.setDescription(project.getDescription());
-
+			log.info("Actualizando proyecto");
 			projectService.saveProject(dbProject);
+			log.info("Proyecto actualizado");
 
 			return ResponseEntity.ok("Department updated");
 		} catch (DataAccessException d) {
+			log.error("Error",d);
 			return ResponseEntity.badRequest().build();
 		}
 	}
@@ -150,9 +166,11 @@ public class ProjectController {
 	public ResponseEntity<String> deleteProjects(@RequestParam(required = true) Integer departmentId,
 			@RequestParam(required = true) Integer projectId) {
 		try {
+			log.info("Borrando proyecto con id: "+projectId);
 			projectService.deleteProjectById(projectId);
 			return ResponseEntity.ok("Project delete");
 		} catch (DataAccessException d) {
+			log.error("Error",d);
 			return ResponseEntity.notFound().build();
 		}
 	}
