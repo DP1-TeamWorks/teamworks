@@ -51,7 +51,6 @@ const MessagePreview = ({
             ? msg.strippedSender.lastname
             : "Eliminado"}{" "}
           -{" "}
-          {msg.strippedSender.email ? msg.strippedSender.email : "deleted@user"}
         </h4>
         <h5 className="MsgSubject"> {msg.subject} </h5>
 

@@ -138,6 +138,13 @@
   align-items: center;
   justify-content: center;
   margin-right: 15px;
+  transition: all 1s;
+}
+
+.FilePreview:hover {
+  border-radius: 16px;
+  background-color: #4a6620;
+  transition: all 1s;
 }
 
 .fa-long-arrow-alt-down {

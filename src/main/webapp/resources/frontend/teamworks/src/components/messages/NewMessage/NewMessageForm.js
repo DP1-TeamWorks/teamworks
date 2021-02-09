@@ -24,7 +24,6 @@ class NewMessageForm extends React.Component {
 
     this.ChangeModalNewMessage = props.ChangeModalNewMessage;
     this.mailOptions = props.mailOptions;
-    this.mailOptions.push({ label: "Other", value: "@team.com" });
     this.toDoOptions = props.toDoOptions;
     this.tagOptions = props.tagOptions;
     this.fileRef = createRef(null);
@@ -78,11 +77,7 @@ class NewMessageForm extends React.Component {
 
   changeHandler = (field, value) => {
     this.validate(field, value);
-    /*if (field === "To")
-      if (!this.mailOptions.includes(value)) {
-        this.mailOptions.pop();
-        this.mailOptions.push({ label: value, value: value });
-      }*/
+
     this.setState({
       inputs: { ...this.state.inputs, [field]: value },
     });
