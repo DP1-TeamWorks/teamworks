@@ -122,12 +122,17 @@ public class UserTWControllerTest {
 		team.setId(TEST_TEAM_ID);
 		juan.setTeam(team);
 		//Participation and belongs of George
+		Project p =new Project(); 
+		Department d=new Department();
+		p.setDepartment(d);
 		Participation participation=new Participation();
 		participation.setUserTW(juan);
 		participation.setIsProjectManager(true);
+		participation.setProject(p);
 		Belongs belongs=new Belongs();
 		belongs.setUserTW(juan);
 		belongs.setIsDepartmentManager(true);
+		belongs.setDepartment(d);
 		belongsCol.add(belongs);
 		participationCol.add(participation);
 		
@@ -163,10 +168,10 @@ public class UserTWControllerTest {
 		Map<String,Object> m=new HashMap<>();
 		m.put("user", new StrippedUserImpl(juan));
 		List<Belongs> lb = belongsCol.stream().collect(Collectors.toList());
-		m.put("currentDepartments", lb);
+		m.put("departmentBelongs", lb);
 		List<Participation> lp = participationCol.stream()
 				.collect(Collectors.toList());
-		m.put("currentProjects", lp);
+		m.put("projectParticipations", lp);
 		String userDeatailJson = objectMapper.writeValueAsString(m);
 		Integer userId=TEST_USER_ID;
 		String userIdString=userId.toString();
@@ -236,39 +241,28 @@ public class UserTWControllerTest {
     @Test
     void testGetCredentials() throws Exception{
     	Map<String,Object> m=new HashMap<>();
+    	m.put("user", new StrippedUserImpl(juan));
     	m.put("isTeamManager", juan.getRole().equals(Role.team_owner));
 		List<Belongs> lb = belongsCol.stream().collect(Collectors.toList());
 		m.put("currentDepartments", lb);
 		List<Participation> lp = participationCol.stream()
 			.collect(Collectors.toList());
 		m.put("currentProjects", lp);
-    	Integer userId=TEST_USER_ID;
-		String userIdString=userId.toString();
 		String georgeCredentialsJson = objectMapper.writeValueAsString(m);
-    	mockMvc.perform(get("/api/user/credentials").session(mockSession).param("userId",userIdString)).andExpect(status().is(200)).andExpect(content().json(georgeCredentialsJson));
+    	mockMvc.perform(get("/api/user/credentials").session(mockSession)).andExpect(status().is(200)).andExpect(content().json(georgeCredentialsJson));
     }
     @Test
 	void testGetInvalidUserCredentials() throws Exception {
     	//Introducimos un usuario con id invalida
-		mockMvc.perform(get("/api/user/credentials").session(mockSession).param("userId","2000" )).andExpect(status().is(400));
+    	mockSession.setAttribute("userId",2000);
+		mockMvc.perform(get("/api/user/credentials").session(mockSession)).andExpect(status().is(400));
 	}
 	@Test
 	void testGetUserCredentialsDiferentTeam() throws Exception {
 		//Introducimos un usuario de un equipo diferente al del usuario logeado
-		UserTW jose=new UserTW();
-		jose.setName("Jose");
-		jose.setId(TEST_USER_ID+1);
-		jose.setLastname("Franklin");
-		jose.setPassword("123456789");
-		jose.setRole(Role.employee);
-		Team team2= new Team();
-		team2.setId(70);
-		team2.setName("Atomic");
-		jose.setTeam(team2);
-		given(this.UserTWService.findUserById(TEST_USER_ID+1)).willReturn(jose);
-		Integer userId=TEST_USER_ID+1;
-		String userIdString=userId.toString();
-		mockMvc.perform(get("/api/user/credentials").session(mockSession).param("userId",userIdString )).andExpect(status().is(400));
+		juan.getTeam().setId(30);
+		given(this.UserTWService.findUserById(TEST_USER_ID)).willReturn(juan);
+		mockMvc.perform(get("/api/user/credentials").session(mockSession)).andExpect(status().is(400));
 
 	}
 	
