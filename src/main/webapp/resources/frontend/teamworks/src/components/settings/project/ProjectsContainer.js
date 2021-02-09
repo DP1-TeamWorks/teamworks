@@ -2,6 +2,8 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import Sticky from "react-sticky-el";
+import { useContext } from "react/cjs/react.development";
+import UserCredentials from "../../../context/UserCredentials";
 import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
 import Button from "../../buttons/Button";
 import AddMilestoneForm from "../../forms/AddMilestoneForm";
@@ -18,6 +20,8 @@ import TagList from "./TagList";
 
 const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
 {
+
+  const credentials = useContext(UserCredentials);
 
   const [departmentIndex, setDepartmentIndex] = useState(0);
   const [projectIndex, setProjectIndex] = useState(0);
@@ -80,12 +84,12 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
   }
 
   function onMilestoneAdded()
-  { 
+  {
     setMilestoneUpdateCounter(Math.random()); // HACK force an update
   }
 
   function onTagAdded()
-  { 
+  {
     setTagUpdateCounter(Math.random()); // HACK force an update
   }
 
@@ -150,6 +154,8 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
   if (!myDepartments)
     return <p>No projects found.</p>
 
+  const currentDepartment = myDepartments[departmentIndex];
+
   let DepartmentElements = [];
 
   for (let i = 0; i < myDepartments.length; i++)
@@ -158,7 +164,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
     DepartmentElements.push(<SidePaneElement key={i} selected={i === departmentIndex} onClick={() => setDepartmentIndex(i)}>{dpt.name}</SidePaneElement>);
   }
 
-  const projects = myDepartments[departmentIndex].projects
+  const projects = currentDepartment.projects
   const ProjectElements = projects.map((x, i) =>
   {
     return <SidePaneElement key={i} selected={i === projectIndex} onClick={() => setProjectIndex(i)}>{x.name}</SidePaneElement>;
@@ -176,36 +182,40 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
       return;
     }
     const currentProject = projects[projectIndex];
+    const isProjectManager = credentials.isProjectManager(currentProject.id);
+
     Content = (
       <>
         <SettingGroup
-          name="Project name"
-          description="Choose an easily identifiable name for team members.">
+          name="Project name">
           <EditableField
             key={`${departmentIndex}-${projectIndex}`}
             value={currentProject.name}
+            editable={isProjectManager}
             fieldName="name"
             postFunction={updateProject}
             onUpdated={onProjectAttributeUpdated} />
         </SettingGroup>
         <SettingGroup
-          name="Description"
-          description="A brief description of the project.">
+          name="Description">
           <EditableField
             smaller
             key={`${departmentIndex}-${projectIndex}`}
             fieldName="description"
+            editable={isProjectManager}
             value={currentProject.description}
             postFunction={updateProject}
             onUpdated={onProjectAttributeUpdated} />
         </SettingGroup>
         <SettingGroup
           name="Milestones"
-          description="You can add a new milestone below.">
-          <AddMilestoneForm
-            key={`mileform${currentProject.id}`}
-            projectId={currentProject.id}
-            onMilestoneAdded={onMilestoneAdded} />
+          description={isProjectManager ? "You can add a new milestone below." : undefined}>
+          {isProjectManager ? (
+            <AddMilestoneForm
+              key={`mileform${currentProject.id}`}
+              projectId={currentProject.id}
+              onMilestoneAdded={onMilestoneAdded} />
+          ) : ""}
           <MilestoneList
             key={`list${currentProject.id}`}
             updateCounter={milestoneUpdateCounter}
@@ -215,12 +225,14 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
         <SettingGroup
           name="Add user to project"
           description="Type their name below. They must be a department member.">
-          <AddUserToProjectForm
+          {isProjectManager ? (
+            <AddUserToProjectForm
             key={currentProject.name}
             onUserAdded={onUserAdded}
             projectId={currentProject.id}
             departmentId={departments[departmentIndex].id}
             submitText={`Add to ${currentProject.name}`} />
+          ) : ""}
         </SettingGroup>
         <SettingGroup
           name="Members"
@@ -234,44 +246,52 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
         </SettingGroup>
         <SettingGroup
           name="Tags"
-          description="You can add a new tag below.">
-          <AddTagForm
-            key={`tagform${currentProject.id}`}
-            projectId={currentProject.id}
-            onTagAdded={onTagAdded} />
+          description={isProjectManager ? "You can add a new tag below." : undefined}>
+          {isProjectManager ? (
+            <AddTagForm
+              key={`tagform${currentProject.id}`}
+              projectId={currentProject.id}
+              onTagAdded={onTagAdded} />
+          ) : ""}
           <TagList
             key={`taglist${currentProject.id}`}
             updateCounter={tagUpdateCounter}
             projectId={currentProject.id} />
         </SettingGroup>
-        <SettingGroup
-          danger
-          name="Delete project"
-          description="Deletes the project, as well as its associated members, tags and tasks. <br>This action cannot be undone.">
-          <Button
-            className="Button--red"
-            onClick={onProjectDeleteClicked}>
-            {isDeleting ? <Spinner red /> : "Delete project"}
-          </Button>
-        </SettingGroup>
+        {isProjectManager ? (
+          <SettingGroup
+            danger
+            name="Delete project"
+            description="Deletes the project, as well as its associated members, tags and tasks. <br>This action cannot be undone.">
+            <Button
+              className="Button--red"
+              onClick={onProjectDeleteClicked}>
+              {isDeleting ? <Spinner red /> : "Delete project"}
+            </Button>
+          </SettingGroup>
+        ) : ""}
       </>
     );
   }
 
   let addBtn;
-  if (isAddLoading)
+  if (credentials.isDepartmentManager(currentDepartment.id))
   {
-    addBtn = <Spinner />
-  } else
-  {
-    addBtn = (
-      <>
-        <FontAwesomeIcon
-          icon={faPlus}
-          className="AddIcon" />
-        Add new project
-      </>);
+    if (isAddLoading)
+    {
+      addBtn = <Spinner />
+    } else
+    {
+      addBtn = (
+        <>
+          <FontAwesomeIcon
+            icon={faPlus}
+            className="AddIcon" />
+          Add new project
+        </>);
+    }
   }
+
 
   return (
     <div className="SubsettingContainer">

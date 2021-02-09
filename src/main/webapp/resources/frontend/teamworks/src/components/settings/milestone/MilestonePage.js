@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Sticky from "react-sticky-el";
-import { useState } from "react/cjs/react.development";
+import { useContext, useState } from "react/cjs/react.development";
+import UserCredentials from "../../../context/UserCredentials";
 import MilestoneApiUtils from "../../../utils/api/MilestoneApiUtils";
 import Button from "../../buttons/Button";
 import GoBackButton from "../../buttons/GoBackButton";
@@ -10,10 +11,13 @@ import TodoTableContainer from "./TodoTableContainer";
 
 const MilestonePage = ({ match: { params: { projectName, projectId, milestoneName, milestoneId } } }) =>
 {
+
+    const credentials = useContext(UserCredentials);
+    const isProjectManager = credentials.isProjectManager(projectId);
+    const [milestone, setMilestone] = useState(null);
+
     const projname = projectName.replace(/-/g," ");
     const milename = milestoneName.replace(/-/g," ");
-
-    const [milestone, setMilestone] = useState(null);
 
     function fetchMilestone()
     {
@@ -69,17 +73,19 @@ const MilestonePage = ({ match: { params: { projectName, projectId, milestoneNam
             </Sticky>
             <div className="SettingGroupsContainer">
                 <SettingGroup name="Name">
-                    <EditableField id="name" value={milestone?.name??milename} postFunction={onAttributeUpdated} fieldName="name" />
+                    <EditableField editable={isProjectManager} value={milestone?.name??milename} postFunction={onAttributeUpdated} fieldName="name" />
                 </SettingGroup>
                 <SettingGroup name="Due by">
-                    <EditableField id="dueFor" inputType="date" value={milestone?.dueFor} postFunction={onAttributeUpdated} fieldName="dueFor" />
+                    <EditableField editable={isProjectManager} inputType="date" value={milestone?.dueFor} postFunction={onAttributeUpdated} fieldName="dueFor" />
                 </SettingGroup>
                 <SettingGroup name="Tasks" description=" ">
                     <TodoTableContainer projectId={projectId} milestoneId={milestoneId} />
                 </SettingGroup>
-                <SettingGroup name="Delete milestone" description="Deletes the milestone and associated tasks from the team.">
-                    <Button className="Button--red" onClick={deleteMilestone}>Delete milestone</Button>
-                </SettingGroup>
+                {isProjectManager ? (
+                    <SettingGroup name="Delete milestone" description="Deletes the milestone and associated tasks from the team.">
+                        <Button className="Button--red" onClick={deleteMilestone}>Delete milestone</Button>
+                    </SettingGroup>
+                ) : ""}
             </div>
         </>
     );

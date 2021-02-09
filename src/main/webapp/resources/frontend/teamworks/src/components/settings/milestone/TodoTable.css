@@ -24,6 +24,8 @@
     user-select: none;
     cursor: pointer;
     transition: background-color 0.05s;
+    width: 100%;
+    white-space: nowrap;
 }
 
 .TagTab--Light {

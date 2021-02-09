@@ -161,12 +161,13 @@ public class UserTWController {
 	}
 
 	@GetMapping(value = "/api/user/credentials")
-	public ResponseEntity<Map<String, Object>> getCredentials(HttpServletRequest r, Integer userId) {
+	public ResponseEntity<Map<String, Object>> getCredentials(HttpServletRequest r) {
+	    Integer userId = (Integer)r.getSession().getAttribute("userId");
 		Integer teamId =(Integer) r.getSession().getAttribute("teamId");
 		Map<String, Object> m = new HashMap<>();
 		UserTW user = userService.findUserById(userId);
 		if(user!=null&&user.getTeam().getId().equals(teamId)) {
-
+            m.put("user", new StrippedUserImpl(user));
 			m.put("isTeamManager", user.getRole().equals(Role.team_owner));
 			List<Belongs> lb = belongsService.findCurrentUserBelongs(userId).stream().collect(Collectors.toList());
 			m.put("currentDepartments", lb);

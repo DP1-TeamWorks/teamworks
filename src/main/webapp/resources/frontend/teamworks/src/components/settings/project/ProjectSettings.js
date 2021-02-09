@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { useState } from "react/cjs/react.development";
+import { useContext, useState } from "react/cjs/react.development";
+import UserCredentials from "../../../context/UserCredentials";
 import DepartmentApiUtils from "../../../utils/api/DepartmentApiUtils";
 import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
 import Spinner from "../../spinner/Spinner";
@@ -8,15 +9,18 @@ import ProjectsContainer from "./ProjectsContainer";
 
 const ProjectSettings = () =>
 {
-
+  const credentials = useContext(UserCredentials);
   function retrieveDepartments()
   {
-    DepartmentApiUtils.getDepartments()
-      .then(dpts => {
+    let func = credentials.isTeamManager ? DepartmentApiUtils.getDepartments : DepartmentApiUtils.getMyDepartments;
+    func()
+      .then(dpts =>
+      {
         Promise.all(dpts.map(d => ProjectApiUtils.getProjects(d.id)))
-        .then(projects =>
+          .then(projects =>
           {
-            for (let i = 0; i < projects.length; i++) {
+            for (let i = 0; i < projects.length; i++)
+            {
               const proj = projects[i];
               dpts[i].projects = proj;
             }
@@ -49,13 +53,13 @@ const ProjectSettings = () =>
       <div className="SettingGroupsContainer">
         <SettingGroup
           name="Manage projects"
-          description="Only showing projects you have management permissions on.">
+          description=" ">
+          <ProjectsContainer departments={departments} onProjectAdded={retrieveDepartments} onProjectDeleted={retrieveDepartments} />
         </SettingGroup>
-        <ProjectsContainer departments={departments} onProjectAdded={retrieveDepartments} onProjectDeleted={retrieveDepartments} />
       </div>
     );
   }
-  
+
 };
 
 export default ProjectSettings;

@@ -11,12 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Department;
+import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
-import org.springframework.samples.petclinic.service.BelongsService;
-import org.springframework.samples.petclinic.service.DepartmentService;
-import org.springframework.samples.petclinic.service.TeamService;
-import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.service.*;
 import org.springframework.samples.petclinic.validation.DepartmentValidator;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -28,14 +26,16 @@ public class DepartmentController {
 	private final TeamService teamService;
 	private final BelongsService belongsService;
 	private final DepartmentValidator departmentValidator;
+	private final ParticipationService participationService;
 
 	@Autowired
-	public DepartmentController(DepartmentService departmentService, TeamService teamService, BelongsService belongsService, DepartmentValidator departmentValidator) {
+	public DepartmentController(DepartmentService departmentService, ParticipationService participationService, TeamService teamService, BelongsService belongsService, DepartmentValidator departmentValidator) {
 
 		this.departmentService = departmentService;
 		this.teamService = teamService;
 		this.belongsService = belongsService;
 		this.departmentValidator = departmentValidator;
+		this.participationService = participationService;
 	}
 
 	@InitBinder
@@ -61,8 +61,22 @@ public class DepartmentController {
 	@GetMapping(value = "/api/departments/mine")
 	public List<Department> getMyDeparments(HttpServletRequest r) {
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
-		List<Department> l = belongsService.findMyDepartments(userId).stream().collect(Collectors.toList());
-		return l;
+		List<Department> myDpts = belongsService.findMyDepartments(userId).stream().collect(Collectors.toList());
+		// for every department remove projects the user isnt a member in
+        List<Project> participations = participationService.findCurrentParticipationsUser(userId)
+            .stream().map(x -> x.getProject()).collect(Collectors.toList());
+        for (Department d : myDpts)
+        {
+            List<Project> projectsWhereUserParticipates = new ArrayList<>();
+            for (Project p : d.getProjects())
+            {
+                if (participations.contains(p))
+                    projectsWhereUserParticipates.add(p);
+            }
+            d.setProjects(projectsWhereUserParticipates);
+        }
+
+		return myDpts;
 	}
 
 	@PostMapping(value = "/api/departments/create")
