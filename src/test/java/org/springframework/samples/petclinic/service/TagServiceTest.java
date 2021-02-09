@@ -56,11 +56,11 @@ public class TagServiceTest {
 	
 	@Test
 	void shouldFindTagByName() {
-		Tag tag = this.tagService.findTagById(3);
-		assertThat(tag.getTitle()).isEqualTo("Testing");
+		Tag tag = this.tagService.findTagByName("Testing");
+		assertThat(tag.getColor()).isEqualTo("#B0D9CD");
 	}
 	
-
+	
 	@Test
 	@Transactional
 	void shouldDeleteTag() {
