@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -72,6 +73,9 @@ public class UserTWControllerTest {
     @MockBean
     private UserValidator userValidator;
 
+    
+    @MockBean
+    private ProjectService projectService;
 //    @Autowired
 //    private WebApplicationContext context;
 //
@@ -90,6 +94,7 @@ public class UserTWControllerTest {
 	private Collection<UserTW> userCol;
 	private Collection<Participation> participationCol;
 	private Collection<Belongs> belongsCol;
+	private Collection<Project> userProCol;
 	@Autowired
 	protected MockHttpSession mockSession;
 
@@ -124,6 +129,10 @@ public class UserTWControllerTest {
 		belongs.setIsDepartmentManager(true);
 		belongsCol.add(belongs);
 		participationCol.add(participation);
+		
+		
+
+		
 		given(belongsService.findUserBelongs(TEST_USER_ID)).willReturn(belongsCol);
 		given(belongsService.findCurrentUserBelongs(TEST_USER_ID)).willReturn(belongsCol);
 		given(participationService.findCurrentParticipationsUser(TEST_USER_ID)).willReturn(participationCol);
@@ -160,7 +169,9 @@ public class UserTWControllerTest {
 		String userDeatailJson = objectMapper.writeValueAsString(m);
 		Integer userId=TEST_USER_ID;
 		String userIdString=userId.toString();
-		mockMvc.perform(get("/api/user").session(mockSession).param("userId",userIdString )).andExpect(status().is(200)).andExpect(content().json(userDeatailJson));
+		mockMvc.perform(get("/api/user").session(mockSession)
+				.param("userId",userIdString ))
+		.andExpect(status().is(200)).andExpect(content().json(userDeatailJson));
 	}
 	@Test
 	void testGetInvalidUser() throws Exception {
