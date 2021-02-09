@@ -25,7 +25,7 @@ public class Department extends BaseEntity {
 
 	@NotEmpty
 	@Size(min=1,max=25)
-	@Column(name = "name", unique = true)
+	@Column(name = "name")
 	private String name;
 	
 	@Size(min=1,max=3000)

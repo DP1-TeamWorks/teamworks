@@ -1,12 +1,15 @@
 package org.springframework.samples.petclinic.web;
 
-import static org.mockito.BDDMockito.doThrow;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,21 +23,20 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.TestWebConfig;
 import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+import org.springframework.samples.petclinic.enums.Role;
 import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
-import org.springframework.samples.petclinic.enums.Role;
+import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
+import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -48,6 +50,7 @@ public class BelongsControllerTest {
 	private static final int TEST_BELONGUSER_ID = 6;
 	private static final int TEST_TEAM_ID = 3;
 	private static final int TEST_DEPARTMENT_ID = 5;
+	private static final int TEST_PARTICIPATION_ID = 99;
 
 	@MockBean
     GenericIdToEntityConverter idToEntityConverter;
@@ -58,6 +61,8 @@ public class BelongsControllerTest {
 	private  DepartmentService departmentService;
 	@MockBean
 	private BelongsService belongsService;
+	@MockBean
+	private ParticipationService participationService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -74,6 +79,8 @@ public class BelongsControllerTest {
 	private Department calidad;
 
 	private Belongs belongs;
+	
+	private Participation participation;
 	@Autowired
 	protected MockHttpSession mockSession;
 	@BeforeEach
@@ -114,9 +121,19 @@ public class BelongsControllerTest {
 		//Belongs col
 		belongCol=new ArrayList<>();
 		belongCol.add(belongs);
+		//Part
+		participation = new Participation();
+		participation.setUserTW(juan);
+		participation.setId(TEST_PARTICIPATION_ID);
+		participation.setIsProjectManager(true);
+		List<Participation> parts= new ArrayList<>();
+		parts.add(participation);
+		juan.setParticipation(parts);
+		
 		//Session
 		mockSession.setAttribute("userId",TEST_USER_ID);
 		mockSession.setAttribute("teamId",TEST_TEAM_ID);
+		mockSession.setAttribute("departmentId", TEST_DEPARTMENT_ID);
 
 		given(belongsService.findCurrentBelongs(TEST_USER_ID, TEST_DEPARTMENT_ID)).willReturn(belongs);
 		given(userTWService.findUserById(TEST_USER_ID)).willReturn(juan);
@@ -184,14 +201,19 @@ public class BelongsControllerTest {
 		//Quitar juan de department manager
 		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
 		String belonguserId=String.valueOf(TEST_USER_ID);
-		mockMvc.perform(post("/api/departments/belongs/create").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId).param("isDepartmentManager", "false")).andExpect(status().is(200));
+		mockMvc.perform(post("/api/departments/belongs/create").session(mockSession)
+				.param("belongUserId", belonguserId).param("departmentId", departmentId)
+				.param("isDepartmentManager", "false")).andExpect(status().is(200));
 	}
 	@Test
 	void testDeleteBelongs() throws Exception {
-
+		//error derivado de participationservice
 		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
 		String belonguserId=String.valueOf(TEST_USER_ID);
-		mockMvc.perform(delete("/api/departments/belongs/delete").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(200));
+		mockMvc.perform(delete("/api/departments/belongs/delete").session(mockSession)
+				.param("belongUserId", belonguserId)
+				.param("departmentId", departmentId))
+		.andExpect(status().is(200));
 	}
 	@Test
 	void testDeleteNotExistingBelongs() throws Exception {
