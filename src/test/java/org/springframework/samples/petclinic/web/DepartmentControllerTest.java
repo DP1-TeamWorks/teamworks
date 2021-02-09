@@ -2,10 +2,10 @@ package org.springframework.samples.petclinic.web;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,12 +27,12 @@ import org.springframework.samples.petclinic.config.TestWebConfig;
 import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
 import org.springframework.samples.petclinic.enums.Role;
-import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
+import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.TeamService;
 import org.springframework.samples.petclinic.validation.DepartmentValidator;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -69,6 +69,9 @@ public class DepartmentControllerTest {
 	
 	@MockBean
 	private BelongsService belongsService;
+	
+	@MockBean
+	private ParticipationService participationService;
 	
 	@Autowired
 	private ObjectMapper objectMapper;
