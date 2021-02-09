@@ -51,12 +51,12 @@ public class DepartmentController {
 		return l;
 	}
 
-	@GetMapping(value = "/api/department/users")
+	/*@GetMapping(value = "/api/department/users")
 	public List<UserTW> getTeamUser(HttpServletRequest r, @RequestParam(required = true) Integer departmentId) {
 		List<UserTW> l = new ArrayList<>();
 		l = departmentService.findDepartmentUsers(departmentId).stream().collect(Collectors.toList());
 		return l;
-	}
+	}*/
 
 	@GetMapping(value = "/api/departments/mine")
 	public List<Department> getMyDeparments(HttpServletRequest r) {
