@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../../../FontStyles.css";
 import Spinner from "../../spinner/Spinner";
@@ -20,7 +19,7 @@ const UserList = ({members}) => {
       const username = completename.toLowerCase().replace(/ /g, "");
       return (
         <tr key={member.id}>
-          <td><Link to={`/settings/users/${member.userId}/${username}`}>{member.lastname}, {member.name}</Link></td>
+          <td><Link to={`/settings/users/${member.id}/${username}`}>{member.lastname}, {member.name}</Link></td>
           <td>{member.email}</td>
           <td>{member.role === "team_owner" ? "Team manager" : "Member"}</td>
           <td>{member.joinDate}</td>

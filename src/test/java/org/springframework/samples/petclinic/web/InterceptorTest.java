@@ -15,15 +15,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.InterceptorController;
 import org.springframework.samples.petclinic.config.TestInterceptorsWebConfig;
-import org.springframework.samples.petclinic.config.TestUserWebConfig;
 import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.configuration.WebConfig;
 import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
-import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.enums.Role;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
@@ -37,8 +35,6 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(controllers = InterceptorController.class,
 excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
@@ -74,10 +70,10 @@ public class InterceptorTest {
 
 	@MockBean
 	private ProjectService projectService;
-	
+
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@Autowired
 	protected MockHttpSession mockSession;
 	private UserTW juan;
@@ -87,7 +83,7 @@ public class InterceptorTest {
 	private Team team;
 	private Project game;
 	private Participation participationRosa;
-	
+
 	@BeforeEach
 	void setup() {
 		//Team
@@ -128,13 +124,13 @@ public class InterceptorTest {
 		game.setName("Game");
 		game.setDescription("Hola");
 		game.setDepartment(calidad);
-		
+
 		//Partticipacion Juan a game
 		participationRosa=new Participation();
 		participationRosa.setUserTW(rosa);
 		participationRosa.setProject(game);
 		participationRosa.setIsProjectManager(true);
-		
+
 		given(userTWService.findUserById(TEST_TEAMOWNER_ID)).willReturn(juan);
 		given(userTWService.findUserById(TEST_EMPLOYEE_ID)).willReturn(rosa);
 		given(departmentService.findDepartmentById(TEST_DEPARTMENT_ID)).willReturn(calidad);
@@ -144,7 +140,7 @@ public class InterceptorTest {
 		mockSession.setAttribute("userId", TEST_TEAMOWNER_ID);
 		mockSession.setAttribute("teamId", TEST_TEAM_ID);
 	}
-	
+
 	//LoginInterceptor
 	@Test
 	void testLoginInterceptorAccessAsLogerUser() throws Exception {
@@ -255,5 +251,5 @@ public class InterceptorTest {
 		mockMvc.perform(get("/api/InterceptorTest/ProjectEmployee").session(mockSession).param("projectId",projectId ))
 		.andExpect(status().isOk());
 	}
-	
+
 }

@@ -21,7 +21,6 @@ const MessagePreview = ({
   const collapseMessage = () => {
     isOpen() ? setOpenMessage("") : setOpenMessage(msg.id);
     setReloadCounters(true);
-    console.log("Marking the message as read");
     if (!read) {
       MessageApiUtils.markMessageAsRead(msg.id)
         .then((res) => {

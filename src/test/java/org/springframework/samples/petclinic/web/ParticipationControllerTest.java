@@ -26,11 +26,10 @@ import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
-import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.enums.Role;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
-import org.springframework.samples.petclinic.service.DepartmentService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.ProjectService;
 import org.springframework.samples.petclinic.service.UserTWService;
@@ -47,13 +46,13 @@ excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classe
 @ContextConfiguration(classes = {TestWebConfig.class, SecurityConfiguration.class})
 @Import(ParticipationController.class)
 public class ParticipationControllerTest {
-	
+
 	private static final int TEST_USER_ID = 1;
 	private static final int TEST_PARTICIPATION_ID = 6;
 	private static final int TEST_PROJECT_ID = 3;
 	private static final int TEST_DEPARTMENT_ID = 5;
 	private static final int TEST_TEAM_ID = 4;
-	
+
 	@MockBean
     GenericIdToEntityConverter idToEntityConverter;
 	@MockBean
@@ -75,13 +74,13 @@ public class ParticipationControllerTest {
 	private Collection<Participation> participationCol;
 	private UserTW rosa;
 	private Project game;
-	
+
 	private Participation participation;
 	private Department calidad;
 	private Belongs belongsJuan;
 	private Belongs belongsRosa;
 	private Team team;
-	
+
 	@BeforeEach
 	void setup() {
 		//Team
@@ -89,13 +88,13 @@ public class ParticipationControllerTest {
 		team.setName("NK");
 		team.setId(TEST_TEAM_ID);
 		//Calidad
-			
+
 		calidad=new Department();
 		calidad.setId(TEST_DEPARTMENT_ID);
 		calidad.setName("Calidad");
 		calidad.setDescription("Me aseguro de...");
 		calidad.setTeam(team);
-		
+
 		//Juan
 		juan=new UserTW();
 		juan.setId(TEST_USER_ID);
@@ -110,7 +109,7 @@ public class ParticipationControllerTest {
 		belongsJuan.setUserTW(juan);
 		belongsJuan.setIsDepartmentManager(true);
 		belongsJuan.setDepartment(calidad);
-		
+
 		rosa=new UserTW();
 		rosa.setId(TEST_PARTICIPATION_ID);
 		rosa.setName("Rosa");
@@ -119,20 +118,20 @@ public class ParticipationControllerTest {
 		rosa.setPassword("123456789");
 		rosa.setRole(Role.employee);
 		rosa.setTeam(team);
-		
+
 		//Rosa belongs
 		belongsRosa=new Belongs();
 		belongsRosa.setDepartment(calidad);
 		belongsRosa.setUserTW(rosa);
 		belongsRosa.setIsDepartmentManager(false);
-		
+
 		game=new Project();
 		game.setId(TEST_PROJECT_ID);
 		game.setName("Game");
 		game.setDescription("Hola");
 		game.setDepartment(calidad);
-		
-		
+
+
 		participation=new Participation();
 		participation.setUserTW(juan);
 		participation.setProject(game);
@@ -149,22 +148,22 @@ public class ParticipationControllerTest {
 		given(belongsService.findCurrentBelongs(TEST_USER_ID, TEST_DEPARTMENT_ID)).willReturn(belongsJuan);
 		given(belongsService.findCurrentBelongs(TEST_PARTICIPATION_ID, TEST_DEPARTMENT_ID)).willReturn(belongsRosa);
 		given(participationService.findCurrentProjectManager(TEST_PROJECT_ID)).willReturn(participation);
-		
-		
-		
+
+
+
 	}
-	
+
 	@Test
 	void testGetParticipationsFromProject() throws Exception {
 		given(participationService.findCurrentParticipationsInProject(TEST_PROJECT_ID)).willReturn(participationCol);
 		String participationJson=objectMapper.writeValueAsString(participationCol);
 		String projectId=String.valueOf(TEST_PROJECT_ID);
-		
+
 		mockMvc.perform(get("/api/projects/participation").session(mockSession).param("projectId", projectId)).andExpect(status().is(200)).andExpect(content().json(participationJson));
 	}
 	@Test
 	void testCreateParticipations() throws Exception {
-		
+
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_PARTICIPATION_ID);
 		mockMvc.perform(post("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(200));
@@ -231,10 +230,10 @@ public class ParticipationControllerTest {
 		String participationUserId=String.valueOf(TEST_PARTICIPATION_ID);
 		mockMvc.perform(post("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId).param("willBeProjectManager", "true")).andExpect(status().is(400));
 	}
-	
+
 	@Test
 	void testDeleteParticipations() throws Exception {
-		
+
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_USER_ID);
 		mockMvc.perform(delete("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(200));
@@ -246,5 +245,5 @@ public class ParticipationControllerTest {
 		String participationUserId=String.valueOf(TEST_PARTICIPATION_ID);
 		mockMvc.perform(delete("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(400));
 	}
-	
+
 }

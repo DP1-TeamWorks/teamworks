@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.samples.petclinic.enums.Role;
 
 @Getter
 @Setter
@@ -86,11 +87,15 @@ public class UserTW extends BaseEntity {
     private List<ToDo> toDos;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sender")
     private List<Message> messagesSent;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "recipients")
     private List<Message> messagesReceived;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "assignee")
+    private List<ToDo> assignedTodos;
 
 }

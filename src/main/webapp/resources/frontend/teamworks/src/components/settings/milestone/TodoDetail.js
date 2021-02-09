@@ -4,7 +4,7 @@ import AssignUserForm from "../../forms/AssignUserForm"
 import EditableField from "../EditableField"
 import SettingGroup from "../SettingGroup"
 
-const TodoDetail = ({onCollapseClicked, onMarkAsDoneClicked, onNameUpdated, onUserAssigned, onTagsUpdated, todo, tags, projectId, milestoneId}) =>
+const TodoDetail = ({ onCollapseClicked, onMarkAsDoneClicked, onNameUpdated, onUserAssigned, onTagsUpdated, todo, tags, projectId, milestoneId }) =>
 {
     let assigneeDescription;
     if (todo.assigneeId)
@@ -32,7 +32,12 @@ const TodoDetail = ({onCollapseClicked, onMarkAsDoneClicked, onNameUpdated, onUs
                     fieldName="title" />
             </SettingGroup>
             <SettingGroup name="Assignee" description={assigneeDescription}>
-                <AssignUserForm onUserAssigned={onUserAssigned} submitText={`Assign to task`} projectId={projectId} milestoneId={milestoneId} todo={todo} />
+                <AssignUserForm
+                    onUserAssigned={onUserAssigned}
+                    submitText={`Assign to task`}
+                    projectId={projectId}
+                    milestoneId={milestoneId}
+                    todo={todo} />
             </SettingGroup>
             <SettingGroup name="Tags" description=" ">
                 <AddTagToTaskForm tags={tags} selectedTagIds={todo.tags.map(x => x.id)} todo={todo} onTagsUpdated={onTagsUpdated} />

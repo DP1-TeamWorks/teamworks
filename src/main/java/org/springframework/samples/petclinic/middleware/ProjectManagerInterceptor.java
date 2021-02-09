@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.enums.Role;
 import org.springframework.samples.petclinic.model.*;
 import org.springframework.samples.petclinic.service.*;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;

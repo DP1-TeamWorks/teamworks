@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.model;
 
+import org.springframework.samples.petclinic.enums.Role;
 import org.springframework.samples.petclinic.model.UserTW.StrippedUser;
 
 import java.time.LocalDate;
@@ -14,6 +15,9 @@ public class StrippedUserImpl implements StrippedUser {
     private Role role;
 
     public StrippedUserImpl(UserTW user) {
+        if (user == null)
+            return;
+
         this.name = user.name;
         this.lastName = user.lastname;
         this.id = user.id;
