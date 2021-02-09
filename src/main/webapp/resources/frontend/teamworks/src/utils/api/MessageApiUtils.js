@@ -17,7 +17,7 @@ const MessageApiUtils = {
   newMessage: (message) => ApiUtils.post(MESSAGE_URL, message),
   replyMessage: (message, repliedMessageId) =>
     ApiUtils.post(
-      MESSAGE_URL + "?repliedMessageId=" + repliedMessageId,
+      MESSAGE_URL + "/reply?repliedMessageId=" + repliedMessageId,
       message
     ),
   forwardMessage: (forwardList, forwardedMessageId) =>

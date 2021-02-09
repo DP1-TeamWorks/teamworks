@@ -167,7 +167,7 @@ public class MessageController {
     }
 
     @PostMapping(value = "api/message", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> newMessage(HttpServletRequest r, @Valid @RequestPart Message message,
+    public ResponseEntity<String> newMessage(HttpServletRequest r, @Valid @RequestPart("message") Message message,
             @RequestPart("files") MultipartFile[] files) {
         try {
             log.info("Creating new message");
@@ -267,7 +267,7 @@ public class MessageController {
         forwardCopy.setText(message.getSender().getName() + "'s Original Message: " + message.getText());
         forwardCopy.setTagList(message.getTags().stream().map(tag -> tag.getId()).collect(Collectors.toList()));
         forwardCopy.setToDoList(message.getToDos().stream().map(todo -> todo.getId()).collect(Collectors.toList()));
-        forwardCopy.setAttatchments(message.getAttatchments());
+        forwardCopy.setAttatchments(List.copyOf(message.getAttatchments()));
         log.info("Creating the forward copy");
         return newMessage(r, forwardCopy, null);
     }
