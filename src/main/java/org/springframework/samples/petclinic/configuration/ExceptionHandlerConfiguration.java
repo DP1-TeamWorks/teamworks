@@ -35,8 +35,6 @@ import java.util.Optional;
 @Slf4j
 @ControllerAdvice
 public class ExceptionHandlerConfiguration {
-    @Autowired
-    private BasicErrorController errorController;
     // add any exceptions/validations/binding problems
 
     @ExceptionHandler(Exception.class)
