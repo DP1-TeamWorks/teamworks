@@ -15,11 +15,15 @@ const MilestonePage = ({ match: { params: { projectName, projectId, milestoneNam
 
     const [milestone, setMilestone] = useState(null);
 
-    useEffect(() =>
+    function fetchMilestone()
     {
         MilestoneApiUtils.getMilestoneById(projectId, milestoneId)
         .then(m => setMilestone(m))
         .catch(err => console.error(err));
+    }
+    useEffect(() =>
+    {
+        fetchMilestone();
     }, [projectId, milestoneId]);
 
     function onAttributeUpdated(m)
@@ -27,7 +31,16 @@ const MilestonePage = ({ match: { params: { projectName, projectId, milestoneNam
         m.id = milestoneId;
         m.name = m.name ?? milestone.name;
         m.dueFor = m.dueFor ?? milestone.dueFor;
-        return MilestoneApiUtils.createMilestone(projectId, m);
+        return new Promise((resolve, reject) =>
+        {
+            MilestoneApiUtils.createMilestone(projectId, m)
+            .then(() =>
+            {
+                fetchMilestone();
+                resolve();
+            })
+            .catch(err => reject());
+        });
     }
 
     function deleteMilestone()
@@ -50,13 +63,13 @@ const MilestonePage = ({ match: { params: { projectName, projectId, milestoneNam
                     <GoBackButton darker anchored />
                     <div className="ProfileTitleContainer">
                         <h3 className="TinyTitle">{projname}</h3>
-                        <h1 className="BigTitle BigTitle--Slim">{milename}</h1>
+                        <h1 className="BigTitle BigTitle--Slim">{milestone?.name??milename}</h1>
                     </div>
                 </div>
             </Sticky>
             <div className="SettingGroupsContainer">
                 <SettingGroup name="Name">
-                    <EditableField id="name" value={milename} postFunction={onAttributeUpdated} fieldName="name" />
+                    <EditableField id="name" value={milestone?.name??milename} postFunction={onAttributeUpdated} fieldName="name" />
                 </SettingGroup>
                 <SettingGroup name="Due by">
                     <EditableField id="dueFor" inputType="date" value={milestone?.dueFor} postFunction={onAttributeUpdated} fieldName="dueFor" />

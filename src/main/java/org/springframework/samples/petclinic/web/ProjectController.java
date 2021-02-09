@@ -107,7 +107,7 @@ public class ProjectController {
 
 	}
 
-	@PostMapping(value = "/api/projects")
+	@PostMapping(value = "/api/projects/create")
 	public ResponseEntity<String> postProjects(@RequestParam(required = true) Integer departmentId,
 			@Valid @RequestBody Project project) {
 
@@ -121,7 +121,7 @@ public class ProjectController {
 		}
 	}
 
-	@PatchMapping(value = "/api/projects")
+	@PatchMapping(value = "/api/projects/update")
 	public ResponseEntity<String> updateProject(@RequestParam(required = true) Integer departmentId,
 			@RequestParam(required = true) Integer projectId, @RequestBody Project project, BindingResult errors) {
 		try {
@@ -146,7 +146,7 @@ public class ProjectController {
 	}
 
 	// TODO: discutir departmentID (INTERCEPTOR)
-	@DeleteMapping(value = "/api/projects")
+	@DeleteMapping(value = "/api/projects/delete")
 	public ResponseEntity<String> deleteProjects(@RequestParam(required = true) Integer departmentId,
 			@RequestParam(required = true) Integer projectId) {
 		try {

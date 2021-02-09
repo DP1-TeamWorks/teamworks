@@ -60,7 +60,7 @@ public class BelongsController {
     }
 
 
-	@PostMapping(value = "/api/departments/belongs")
+	@PostMapping(value = "/api/departments/belongs/create")
 	public ResponseEntity<String> createBelongs(@RequestParam(required = true) Integer belongUserId,
 			@RequestParam(required = true) Integer departmentId,
 			@RequestParam(required = false) Boolean isDepartmentManager, HttpServletRequest r) {
@@ -131,7 +131,7 @@ public class BelongsController {
 	}
 
 	// Belongs Requests
-	@DeleteMapping(value = "/api/departments/belongs")
+	@DeleteMapping(value = "/api/departments/belongs/delete")
 	public ResponseEntity<String> deleteBelongs(@RequestParam(required = true) Integer belongUserId,
 			Integer departmentId, HttpServletRequest r) {
 		try {

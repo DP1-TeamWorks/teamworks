@@ -31,7 +31,7 @@ public class DepartmentController {
 
 	@Autowired
 	public DepartmentController(DepartmentService departmentService, TeamService teamService, BelongsService belongsService, DepartmentValidator departmentValidator) {
-		
+
 		this.departmentService = departmentService;
 		this.teamService = teamService;
 		this.belongsService = belongsService;
@@ -65,7 +65,7 @@ public class DepartmentController {
 		return l;
 	}
 
-	@PostMapping(value = "/api/departments")
+	@PostMapping(value = "/api/departments/create")
 	public ResponseEntity<String> createDeparment(@Valid @RequestBody Department department, HttpServletRequest r) {
 		try {
 			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
@@ -82,7 +82,7 @@ public class DepartmentController {
 		}
 	}
 
-	@PatchMapping(value = "/api/departments")
+	@PatchMapping(value = "/api/departments/update")
 	public ResponseEntity<String> updateDepartment(@RequestBody Department department, HttpServletRequest r,
 			BindingResult errors) {
 		try {
@@ -112,7 +112,7 @@ public class DepartmentController {
 		}
 	}
 
-	@DeleteMapping(value = "/api/departments/{id}")
+	@DeleteMapping(value = "/api/departments/{id}/delete")
 	public ResponseEntity<String> deleteDeparment(@PathVariable(required = true) Integer id, HttpServletRequest r) {
 		try {
 			departmentService.deleteDepartmentById(id);

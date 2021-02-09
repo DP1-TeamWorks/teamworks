@@ -79,7 +79,7 @@ public class MilestoneController {
             .collect(Collectors.toList());
 	}
 
-	@PostMapping(value = "/api/milestones")
+	@PostMapping(value = "/api/milestones/post")
 	public ResponseEntity<String> postMilestones(@RequestParam(required = true) Integer projectId,
 			@Valid @RequestBody Milestone milestone) {
 
@@ -109,7 +109,7 @@ public class MilestoneController {
 
 	}
 
-	@DeleteMapping(value = "/api/milestones")
+	@DeleteMapping(value = "/api/milestones/delete")
 	public ResponseEntity<String> deleteMilestones(@RequestParam(required = true) Integer milestoneId) {
 		try {
 			milestoneService.deleteMilestoneById(milestoneId);

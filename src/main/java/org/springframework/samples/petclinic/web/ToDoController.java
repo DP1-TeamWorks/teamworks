@@ -60,7 +60,7 @@ public class ToDoController {
 	    return toDoService.findToDosByMilestone(milestoneId);
     }
 
-	@PostMapping(value = "/api/toDos/mine")
+	@PostMapping(value = "/api/toDos/mine/create")
 	public ResponseEntity<ToDo> createPersonalToDo(HttpServletRequest r, @Valid @RequestBody ToDo toDo,
 			@RequestParam(required = true) Integer milestoneId) {
 
