@@ -1,5 +1,7 @@
 # TEAMWORKS
 
+A showcase video can be found [here](https://youtu.be/g9Iu-Cj1-e0).
+
 ## Local Deployment
 ### Backend
 
@@ -7,6 +9,11 @@
 - import the maven project
 - maven install
 - execute the commnad: `./mvnw spring-boot:run` or run "PetclinicApplication"
+
+Navigate to localhost:8080 and login with one of the following emails:
+- johnnysilverhand@cyber (password 123123123)
+- juliafabra@cyber (password 123123123)
+- romancalle@cyber (password 123123123)
 
 ### Frontend
 If you wish to modify frontend code and see changes on the fly:
