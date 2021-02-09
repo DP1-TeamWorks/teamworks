@@ -13,16 +13,17 @@ const ProjectSettings = () =>
   function retrieveDepartments()
   {
     let func = credentials.isTeamManager ? DepartmentApiUtils.getDepartments : DepartmentApiUtils.getMyDepartments;
+    let func2 = credentials.isTeamManager ? ProjectApiUtils.getProjects : ProjectApiUtils.getMyProjects;
     func()
       .then(dpts =>
       {
-        Promise.all(dpts.map(d => ProjectApiUtils.getProjects(d.id)))
+        Promise.all(dpts.map(d => func2(d.id)))
           .then(projects =>
           {
             for (let i = 0; i < projects.length; i++)
             {
               const proj = projects[i];
-              dpts[i].projects = proj;
+              dpts[i].projects = proj.sort((a,b) => a.name.localeCompare(b.name));
             }
             setDepartments(dpts);
           });

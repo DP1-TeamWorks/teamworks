@@ -21,7 +21,6 @@ const UserSettings = () =>
   }
   useEffect(() => fetchMembers(), []);
 
-
   return (
     <div className="SettingGroupsContainer">
       {credentials.isTeamManager ? (

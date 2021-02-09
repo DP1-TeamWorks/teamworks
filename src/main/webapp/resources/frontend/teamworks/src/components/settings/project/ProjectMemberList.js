@@ -6,7 +6,7 @@ import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
 import Spinner from "../../spinner/Spinner";
 import "../UserList.css";
 
-const ProjectMemberList = ({projectId, members, loading, onListUpdated}) => {
+const ProjectMemberList = ({departmentId, projectId, members, loading, onListUpdated}) => {
 
   const credentials = useContext(UserCredentials);
   const isProjectManager = credentials.isProjectManager(projectId);
@@ -15,8 +15,12 @@ const ProjectMemberList = ({projectId, members, loading, onListUpdated}) => {
   {
     if (member.isProjectManager)
     {
-      // TODO: Change confirm message if it's project manager and not team manager who is asking
-      if (window.confirm(`Are you sure to demote ${member.name} ${member.lastname} and make them a member?`))
+      let confirmMessage = `Are you sure to demote ${member.name} ${member.lastname} and make them a member?`;
+      if (!credentials.isTeamManager && !credentials.isDepartmentManager(departmentId) && isProjectManager)
+      {
+        confirmMessage = `NOTE: You are demoting yourself and you will NO LONGER HAVE MANAGEMENT PRIVILEGES. This action cannot be undone. Would you like to continue?`;
+      }
+      if (window.confirm(confirmMessage))
       {
         ProjectApiUtils.addUserToProject(projectId, member.userId, false)
           .then(() => onListUpdated())
@@ -24,8 +28,12 @@ const ProjectMemberList = ({projectId, members, loading, onListUpdated}) => {
       }
     } else
     {
-      // TODO: Change confirm message if it's project manager and not team manager who is asking
-      if (window.confirm(`Are you sure to promote ${member.name} ${member.lastname} to project manager?`))
+      let confirmMessage = `Are you sure to promote ${member.name} ${member.lastname} to project manager?`;
+      if (!credentials.isTeamManager && !credentials.isDepartmentManager(departmentId) && isProjectManager)
+      {
+        confirmMessage =  `NOTE: You are promoting ${member.name} ${member.lastname} to project manager. You will NO LONGER HAVE MANAGEMENT PRIVILEGES. This action cannot be undone. Would you like to continue?`;
+      }
+      if (window.confirm(confirmMessage))
       {
         ProjectApiUtils.addUserToProject(projectId, member.userId, true)
           .then(() => onListUpdated())

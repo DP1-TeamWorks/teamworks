@@ -47,7 +47,7 @@ const Header = ({ nosearchbar, handleSearch}) => {
         </label>
         <LinkButton
           className="Button--green HeaderButton"
-          path="/settings/team"
+          path="/settings"
         >
           Manage team
         </LinkButton>
