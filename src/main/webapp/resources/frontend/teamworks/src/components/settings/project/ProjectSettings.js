@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useContext, useState } from "react/cjs/react.development";
+import { useContext, useState } from "react";
 import UserCredentials from "../../../context/UserCredentials";
 import DepartmentApiUtils from "../../../utils/api/DepartmentApiUtils";
 import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";

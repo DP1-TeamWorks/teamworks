@@ -1,7 +1,7 @@
 import React from "react";
 import MessageApiUtils from "../../utils/api/MessageApiUtils";
 import GradientButton from "../buttons/GradientButton";
-import Select from "react-select";
+import Creatable from "react-select/creatable";
 
 class ForwardForm extends React.Component {
   constructor(props) {
@@ -91,7 +91,7 @@ class ForwardForm extends React.Component {
     return (
       <form onSubmit={this.submitHandler}>
         <div className="MsgContentInput">
-          <Select
+          <Creatable
             options={this.forwardOptions}
             onChange={(e) => {
               this.changeHandler(
@@ -104,7 +104,7 @@ class ForwardForm extends React.Component {
             styles={customStyles}
             placeholder={"Select the recipients"}
             isMulti
-          ></Select>
+          ></Creatable>
         </div>
         <div className="MsgContentButtons">
           <GradientButton

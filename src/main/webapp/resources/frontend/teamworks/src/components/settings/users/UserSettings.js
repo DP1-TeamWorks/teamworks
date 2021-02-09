@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import UserList from "./UserList";
 import UserApiUtils from "../../../utils/api/UserApiUtils";
 import UserCredentials from "../../../context/UserCredentials";
-import { useContext } from "react/cjs/react.development";
+import { useContext } from "react";
 //import UserList from "./UserList";
 
 const UserSettings = () =>

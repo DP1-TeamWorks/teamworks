@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useContext } from "react/cjs/react.development";
+import { useContext } from "react";
 import UserCredentials from "../../../context/UserCredentials";
 import DepartmentApiUtils from "../../../utils/api/DepartmentApiUtils";
 import AddDepartmentForm from "../../forms/AddDepartmentForm";

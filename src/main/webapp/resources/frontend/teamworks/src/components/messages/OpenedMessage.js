@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react";
 import UserApiUtils from "../../utils/api/UserApiUtils";
 import GradientButton from "../buttons/GradientButton";
 import ForwardForm from "./ForwardForm";

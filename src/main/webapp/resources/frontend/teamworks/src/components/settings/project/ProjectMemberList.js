@@ -1,6 +1,6 @@
 import { faWindows } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
-import { useContext } from "react/cjs/react.development";
+import { useContext } from "react";
 import UserCredentials from "../../../context/UserCredentials";
 import "../../../FontStyles.css";
 import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
