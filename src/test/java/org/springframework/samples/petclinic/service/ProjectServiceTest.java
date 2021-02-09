@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,7 +36,8 @@ public class ProjectServiceTest {
 	protected ParticipationService participationService;
 	@Autowired
 	protected UserTWService userService;
-
+	@Autowired
+	protected ToDoService todoService;
 
 
 	@Test
@@ -139,7 +141,9 @@ public class ProjectServiceTest {
 		participacion.setUserTW(user);
 		participacion.setProject(project);
 		participacion.setIsProjectManager(false);
+
 		try {
+			//peta aquí, tiene que ver con el save participation pero no soy capaz de dar con el error
 			participationService.saveParticipation(participacion);
 		} catch (DataAccessException | ManyProjectManagerException | DateIncoherenceException e) {
 			Logger.getLogger(ProjectServiceTest.class.getName()).log(Level.SEVERE, null, e);
