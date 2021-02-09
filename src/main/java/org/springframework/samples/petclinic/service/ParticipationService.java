@@ -42,7 +42,7 @@ public class ParticipationService {
         }
 
         participationRepository.save(participation);
-        if(participation.getFinalDate() != null) {
+        if(participation.getFinalDate() != null && participation.getProject().getMilestones() != null) {
         	// CASCADE ASSIGNEES
             List<ToDo> affectedTodos = participation
                 .getProject()
@@ -61,7 +61,7 @@ public class ParticipationService {
                 }
             }
         }
-        
+
     }
 
 	@Transactional

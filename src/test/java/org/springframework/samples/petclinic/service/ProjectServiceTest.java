@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -66,7 +67,7 @@ public class ProjectServiceTest {
 		assertThat(project.getId()).isNotNull();
 
 	}
-	
+
 
 	@Test
 	@Transactional
@@ -104,7 +105,7 @@ public class ProjectServiceTest {
 		assertThat(project).isNull();
 	}
 
-	
+
 	@Test
 	void shouldFindProjectWithCorrectId() {
 		Project project2 = this.projectService.findProjectById(2);
@@ -112,7 +113,7 @@ public class ProjectServiceTest {
 		assertThat(project2.getDescription()).isEqualTo("Teach netrunning skills!");
 	}
 
-	
+
 	@Test
 	void shouldGetProjectByName() {
 		Collection<Project> projects = this.projectService.getProjectsByName("Networking Solutions");
@@ -121,13 +122,13 @@ public class ProjectServiceTest {
 		  list = (List)projects;
 		else
 		  list = new ArrayList(projects);
-		
+
 		assertThat(list.get(0).getId()).isEqualTo(1);
-		
+
 	}
-	
-	
-	
+
+
+
 	@Test
 	@Transactional
 	void shouldfindUserProjects() {
@@ -136,25 +137,27 @@ public class ProjectServiceTest {
 		project.setName("Valorant");
 		project.setDescription("Juego de riot");
 		project.setDepartment(department);
+//		project.setParticipations(new ArrayList<>());
 		this.projectService.saveProject(project);
 
 		Participation participacion = new Participation();
 		UserTW user = userService.findUserById(1);
 		participacion.setProject(project);
 		participacion.setIsProjectManager(false);
-		List<Participation> parts = new ArrayList<>();
-		parts.add(participacion);
-		user.setParticipation(parts);
+//		List<Participation> parts = new ArrayList<>();
+//		parts.add(participacion);
+//		user.setParticipation(parts);
 		participacion.setUserTW(user);
-		
+		participacion.setInitialDate(LocalDate.of(2020,02,03));
+
 		Milestone mil = milestoneService.findMilestoneById(1);
 		ToDo todo = todoService.findToDoById(1);
-		List<ToDo> todos = new ArrayList<>();
-		todos.add(todo);
-		mil.setToDos(todos);
-		List<Milestone> miles = new ArrayList<>();
-		miles.add(mil);
-		project.setMilestones(miles);
+//		List<ToDo> todos = new ArrayList<>();
+//		todos.add(todo);
+//		mil.setToDos(todos);
+//		List<Milestone> miles = new ArrayList<>();
+//		miles.add(mil);
+//		project.setMilestones(miles);
 		try {
 			//peta aquí, tiene que ver con el save participation pero no soy capaz de dar con el error
 			participationService.saveParticipation(participacion);
