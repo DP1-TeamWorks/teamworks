@@ -1,6 +1,6 @@
 import "./TodoTable.css";
 import TagTab from "./TagTab";
-import { useEffect, useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react";
 import { Fragment } from "react";
 
 const TagSelectorStrip = ({ tags, onSelectedIndexChanged }) =>
