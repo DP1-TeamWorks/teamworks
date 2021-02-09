@@ -11,34 +11,30 @@ Les recuerdo que cada sprint debe contener "un documento en el repositorio del p
 
 ### Respecto del sprint
 
-El sprint ha sido completado con exito. al replanteamiento completo del proyecto y la creacion de la documentación desde cero. Sin embargo se han conseguido grandes avances tanto en frontend y backend por separado como en cuanto a integración.
+El sprint ha sido completado con exito. A pesar del replanteamiento completo del proyecto que realizamos al principio se ha conseguido desarrollar la segunda opción en su totalidad, con toda la funcionalidad prevista.
+
+En cuanto a la planificación, no ha podido ser seguida con exactitud a causa de bugs, problemas, errores y el periodo de examenes. Todo esto nos ha llevado a tener que ayudar y tomar parte en tareas que no teníamos asignadas y a replantear el orden de las mismas.
 
 ### Respecto del proyecto
 
-Se estima que este sprint conlleva un 75% del proyecto.
+Se estima que este sprint conlleva un 35% del proyecto.
 
 ## Justificación de requisitos completados
 
-- Se ha realizado una primera versión de la documentación de diseño (Entregable 3)
-- Se han implementado un gran número de historias de usuario tanto en front como en back.
-- Se han integrado algunas de las historias implementadas.
+- Se ha finalizado y revisado el documento de análisis y requisitos.
+- Se ha finalizado y revisado el documento de diseño.
+- Se han finalizado todas las historias de usuario pendiente tanto en frontend como en backend.
+- Se han integrado todas las historias.
+- Se han desarrollado las pruebas de controladores y servicios.
+- Se han desarrollado todas las reglas de negocio y se han validado todas las entidades.
 
-### Documentación
-
-- Elaboración de la primera versión del documento de diseño
-- Revisión y actualización cuando procedía del documento de requisitos/análisis
-- Correspondientes actualizaciones en los issues en github
-
-### Frontend
-
-- Desarrollo de una primera versión del frontend incluyendo casi todas las historias.
-
-### Backend
-
-- Desarrollo de una primera versión del backend incluyendo un gran número de historias.
-- Tests de los controladores implementados hasta el momento.
+Los requisitos han sido desarrollados y validados tanto de forma individual como colectiva por todo el equipo. El proceso de completado de los mismos ha estado condicionado por las continuas dependencias entre las diferentes historias y el desarrollo en paralelo de las mismas.
 
 ## Análisis Retrospectivo
+
+### Respecto al Equipo
+
+### Individualmente
 
 ![individual](https://github.com/gii-is-DP1/dp1-2020-g1-08/blob/master/sprints/IndividualS3.png)
 

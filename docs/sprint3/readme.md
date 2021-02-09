@@ -6,7 +6,7 @@ El sprint no ha sido completado, debido al replanteamiento completo del proyecto
 
 ### Respecto del proyecto
 
-Se estima que este sprint conlleva un 75% del proyecto.
+Se estima que este sprint conlleva un 55% del proyecto.
 
 ## Justificación de requisitos completados
 
