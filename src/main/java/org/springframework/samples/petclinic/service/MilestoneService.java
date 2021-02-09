@@ -55,7 +55,7 @@ public class MilestoneService {
 	}
 
 	@Transactional
-	public void deleteMilestonetById(Integer milestoneId) throws DataAccessException {
+	public void deleteMilestoneById(Integer milestoneId) throws DataAccessException {
 		milestoneRepository.deleteById(milestoneId);
 	}
 

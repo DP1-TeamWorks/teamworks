@@ -14,10 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Milestone;
 import org.springframework.samples.petclinic.model.Project;
-import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +35,7 @@ class MilestoneServiceTest {
 		milestone.setName("Sprint323");
 		milestone.setDueFor(LocalDate.now());
 		milestone.setProject(project);
-		
+
 
 		try {
 			this.milestoneService.saveMilestone(milestone);
@@ -63,7 +61,7 @@ class MilestoneServiceTest {
 	@Transactional
 	void shouldDeleteMilestoneById() {
 
-		milestoneService.deleteMilestonetById(1);
+		milestoneService.deleteMilestoneById(1);
 		Milestone mile = this.milestoneService.findMilestoneById(1);
 		assertThat(mile).isNull();
 
@@ -88,8 +86,8 @@ class MilestoneServiceTest {
 
 		assertThat(milestone.getDueFor()).isBefore(milestone2.getDueFor());
 	}
-	
-	
+
+
 	@Test
 	void shouldFindMilestoneForProject() {
 		Project project = projectService.findProjectById(1);
@@ -99,14 +97,14 @@ class MilestoneServiceTest {
 		  list = (List)milestones;
 		else
 		  list = new ArrayList(milestones);
-		
-		
+
+
 		assertThat(list.get(0).getName()).isEqualTo("New Year objectives");
 
 	}
-	
-	
-	
+
+
+
 	//NEGATIVE USE CASE H12-E1
 	@Test
 	@Transactional
@@ -118,9 +116,9 @@ class MilestoneServiceTest {
 
 		assertThrows(Exception.class, ()-> {
 			this.milestoneService.saveMilestone(milestone);
-			});			
+			});
 
 	}
-	
+
 
 }

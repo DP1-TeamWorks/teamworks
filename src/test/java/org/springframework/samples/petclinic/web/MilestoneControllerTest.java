@@ -45,25 +45,25 @@ excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classe
 @ContextConfiguration(classes = {TestWebConfig.class, SecurityConfiguration.class})
 @Import(MilestoneController.class)
 public class MilestoneControllerTest {
-		
+
 	private static final int TEST_MILESTONE_ID = 11;
 	private static final int TEST_PROJECT_ID = 11;
 
 	@MockBean
     GenericIdToEntityConverter idToEntityConverter;
-	
+
 	@MockBean
 	private MilestoneService milestoneService;
-	
+
 	@MockBean
 	private ProjectService projectService;
-	
+
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
-	
+
 	@Autowired
 	protected MockHttpSession mockSession;
 
@@ -82,73 +82,73 @@ public class MilestoneControllerTest {
 		septiembre.setProject(iissi);
 		l = new ArrayList<>();
 		l.add(septiembre);
-		
+
 		mockSession.setAttribute("milestoneId",TEST_MILESTONE_ID);
 		mockSession.setAttribute("milestoneId",TEST_PROJECT_ID);
 		given(this.milestoneService.findMilestoneById(TEST_MILESTONE_ID)).willReturn(septiembre);
-		given(this.projectService.findProjectById(TEST_PROJECT_ID)).willReturn(iissi);	
+		given(this.projectService.findProjectById(TEST_PROJECT_ID)).willReturn(iissi);
 		given(this.milestoneService.findNextMilestone(TEST_MILESTONE_ID)).willReturn(septiembre);
 		given(this.milestoneService.findMilestonesForProject(TEST_PROJECT_ID)).willReturn(l);
 	}
-	
-	
+
+
 	@Test
 	void testGetNextMilestone() throws Exception{
 		String json = objectMapper.writeValueAsString(septiembre);
-		
+
 		mockMvc.perform(get("/api/milestones/next?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(content().json(json));
 	}
-	
+
 	@Test
 	void testGetMilestones() throws Exception{
-		
+
 		String json = objectMapper.writeValueAsString(l);
-		
+
 		mockMvc.perform(get("/api/milestones?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(content().json(json));
 	}
-	
-	
+
+
 	@Test
 	void testPostMilestones() throws Exception{
 		String json = objectMapper.writeValueAsString(septiembre);
-		
+
 		mockMvc.perform(post("/api/milestones?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
 		.andExpect(status().isOk());
 	}
-	
-	
+
+
 	@Test
 	void testPostMilestonesWithErrors() throws Exception{
 		Map<String, String> map = new HashMap<String, String>();
-		
+
 		String json = objectMapper.writeValueAsString(map);
-		
+
 		mockMvc.perform(post("/api/milestones?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
 		.andExpect(status().isBadRequest());
 	}
-	
+
 	@Test
 	void testDeleteMilestones() throws Exception{
 		mockMvc.perform(delete("/api/milestones?milestoneId={milestoneId}", TEST_MILESTONE_ID)
 				.session(mockSession))
 		.andExpect(status().isOk());
 	}
-	
+
 	@Test
 	void testDeleteMilestonesNonExistent() throws Exception{
-		doThrow(new DataAccessResourceFailureException("Id no existente")).when(milestoneService).deleteMilestonetById(11);
-		
+		doThrow(new DataAccessResourceFailureException("Id no existente")).when(milestoneService).deleteMilestoneById(11);
+
 		mockMvc.perform(delete("/api/milestones?milestoneId={milestoneId}", TEST_MILESTONE_ID)
 				.session(mockSession))
 		.andExpect(status().isNotFound());
 	}
-	
+
 }

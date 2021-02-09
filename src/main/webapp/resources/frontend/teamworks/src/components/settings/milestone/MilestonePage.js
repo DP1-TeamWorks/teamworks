@@ -30,6 +30,16 @@ const MilestonePage = ({ match: { params: { projectName, projectId, milestoneNam
         return MilestoneApiUtils.createMilestone(projectId, m);
     }
 
+    function deleteMilestone()
+    {
+        if (window.confirm("Are you sure to delete this milestone and associated tasks?"))
+        {
+            MilestoneApiUtils.deleteMilestone(milestoneId)
+            .then(() => window.location.replace('/settings/projects'))
+            .catch(err => console.error(err));
+        }
+    }
+
     return (
         <>
             <Sticky
@@ -55,7 +65,7 @@ const MilestonePage = ({ match: { params: { projectName, projectId, milestoneNam
                     <TodoTableContainer projectId={projectId} milestoneId={milestoneId} />
                 </SettingGroup>
                 <SettingGroup name="Delete milestone" description="Deletes the milestone and associated tasks from the team.">
-                    <Button className="Button--red">Delete milestone</Button>
+                    <Button className="Button--red" onClick={deleteMilestone}>Delete milestone</Button>
                 </SettingGroup>
             </div>
         </>
