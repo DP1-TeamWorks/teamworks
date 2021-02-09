@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.web;
 
 import static org.mockito.BDDMockito.doThrow;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -269,6 +270,25 @@ public class UserTWControllerTest {
 		String userIdString=userId.toString();
 		mockMvc.perform(get("/api/user/credentials").session(mockSession).param("userId",userIdString )).andExpect(status().is(400));
 
+	}
+	
+
+    @Test
+	void testUpdateUser() throws Exception {
+    	juan.setName("paco");
+		String georgejson = objectMapper.writeValueAsString(juan);
+		mockMvc.perform(post("/api/user/update").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(georgejson)).andExpect(status().is(200));
+	}
+    
+    @Test
+	void testUpdateUserwithErrors() throws Exception {
+    	doThrow(new DataAccessResourceFailureException("Alredy Exist"))
+    	.when(UserTWService).saveUser(juan);
+    	
+		String georgejson = objectMapper.writeValueAsString(juan);
+		mockMvc.perform(post("/api/user/update").session(mockSession)
+				.contentType(MediaType.APPLICATION_JSON).content(georgejson))
+		.andExpect(status().isBadRequest());
 	}
 
 
