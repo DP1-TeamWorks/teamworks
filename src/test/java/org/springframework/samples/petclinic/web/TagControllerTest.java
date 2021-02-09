@@ -120,9 +120,7 @@ public class TagControllerTest {
 		parts.add(work);
 		maria.setParticipation(parts);
 		saveTheWorld.setParticipations(parts);
-		
-		
-		//cosas de getallmytagsbyproject
+		//getallmytagsbyproject
 		
 		map = new HashMap<String, List<Tag>>();
 		map.put(saveTheWorld.getName(), tags);
@@ -181,7 +179,6 @@ public class TagControllerTest {
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
 		.andExpect(status().isBadRequest());
 	}
-	
 	
 	@Test
 	void testCreateTagTooMany() throws Exception{
