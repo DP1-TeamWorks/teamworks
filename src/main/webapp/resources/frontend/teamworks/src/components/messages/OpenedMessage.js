@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faReply } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
 import ToDo from "../projects/toDos/ToDo";
+import FilePreview from "./FilePreview";
 
 const OpenedMessage = ({ msg, setOpenMessage }) => {
   const [forwardOptions, setForwardOptions] = useState([]);
@@ -77,6 +78,11 @@ const OpenedMessage = ({ msg, setOpenMessage }) => {
               blocked={true}
             />
           );
+        })}
+      </div>
+      <div className="MsgContentFiles">
+        {msg.files.map((file) => {
+          return <FilePreview key={file.id} id={file.id} url={file.url} />;
         })}
       </div>
       {messageOptions === "Reply" && (

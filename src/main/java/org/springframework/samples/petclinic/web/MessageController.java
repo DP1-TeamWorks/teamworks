@@ -25,6 +25,7 @@ import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.validation.TagLimitProjectException;
 import org.springframework.samples.petclinic.validation.ToDoMaxToDosPerAssigneeException;
+import org.springframework.samples.petclinic.validation.TooBigFileException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -225,13 +226,15 @@ public class MessageController {
 
             log.info("Message sent correctly");
             return ResponseEntity.ok().build();
-        } catch (DataAccessException | TagLimitProjectException | ToDoMaxToDosPerAssigneeException | IOException d) {
+        } catch (DataAccessException | TagLimitProjectException | ToDoMaxToDosPerAssigneeException | IOException
+                | TooBigFileException d) {
             log.error("exception ocurred saving message", d);
             return ResponseEntity.badRequest().build();
         }
     }
 
-    public void newAttachment(Attachment attach, Message msg) throws DataAccessException, IOException {
+    public void newAttachment(Attachment attach, Message msg)
+            throws DataAccessException, IOException, TooBigFileException {
 
         log.info("Saving the attachment");
         attach.setMessage(msg);
