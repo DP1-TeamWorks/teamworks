@@ -44,7 +44,7 @@ class MessageServiceTest {
 		message.setText("Primer mensaje enviado");
 		message.setRecipientsIds(recipients);
 		message.setSender(sender);
-		
+		message.setId(111);
 		ArrayList<Integer> tags = new ArrayList<>();
 		//tag: planning
 		tags.add(1);
@@ -57,6 +57,13 @@ class MessageServiceTest {
 		}
 		
 		assertThat(message.getId()).isNotNull();
+	}
+	
+	@Test
+	void shouldFindMessageById() {
+		Message message = messageService.findMessageById(1);
+		
+		assertThat(message.getSubject()).contains("Hello World in TeamWorks");
 	}
 	
 	
@@ -72,6 +79,8 @@ class MessageServiceTest {
 		assertThat(messagesByUserId).isEqualTo(list);
 	}
 	
+	
+	@Test
 	void shouldFindMessageSentByUserId() {
 		UserTW user = userTWService.findUserById(1);
 		Collection<Message> messagesSentByUserId= messageService.findMessagesSentByUserId(user.getId());
@@ -81,6 +90,16 @@ class MessageServiceTest {
 		else
 		  list = new ArrayList(messagesSentByUserId);
 		assertThat(messagesSentByUserId).isEqualTo(list);
+	}
+	
+	@Test
+	void shouldDeleteMessageById() {
+		
+		messageService.deleteMessageById(1);
+		Message message = messageService.findMessageById(1);
+		
+		assertThat(message).isNull();
+		
 	}
 	
 	

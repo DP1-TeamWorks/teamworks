@@ -3,6 +3,8 @@ package org.springframework.samples.petclinic.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,9 +16,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Department;
+import org.springframework.samples.petclinic.model.Milestone;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
-import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyProjectManagerException;
@@ -34,12 +36,7 @@ public class ProjectServiceTest {
 	@Autowired
 	protected UserTWService userService;
 
-	@Test
-	void shouldFindProjectWithCorrectId() {
-		Project project2 = this.projectService.findProjectById(2);
-		assertThat(project2.getName()).isEqualTo("Netrunning School");
-		assertThat(project2.getDescription()).isEqualTo("Teach netrunning skills!");
-	}
+
 
 	@Test
 	@Transactional
@@ -65,6 +62,7 @@ public class ProjectServiceTest {
 		assertThat(project.getId()).isNotNull();
 
 	}
+	
 
 	@Test
 	@Transactional
@@ -102,6 +100,30 @@ public class ProjectServiceTest {
 		assertThat(project).isNull();
 	}
 
+	
+	@Test
+	void shouldFindProjectWithCorrectId() {
+		Project project2 = this.projectService.findProjectById(2);
+		assertThat(project2.getName()).isEqualTo("Netrunning School");
+		assertThat(project2.getDescription()).isEqualTo("Teach netrunning skills!");
+	}
+
+	
+	@Test
+	void shouldGetProjectByName() {
+		Collection<Project> projects = this.projectService.getProjectsByName("Networking Solutions");
+		List<Project> list;
+		if (projects instanceof List)
+		  list = (List)projects;
+		else
+		  list = new ArrayList(projects);
+		
+		assertThat(list.get(0).getId()).isEqualTo(1);
+		
+	}
+	
+	
+	
 	@Test
 	@Transactional
 	void shouldfindUserProjects() {

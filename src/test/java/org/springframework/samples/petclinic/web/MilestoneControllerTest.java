@@ -93,6 +93,18 @@ public class MilestoneControllerTest {
 
 
 	@Test
+	void testGetMilestone() throws Exception{
+		String json = objectMapper.writeValueAsString(septiembre);
+		
+		mockMvc.perform(get("/api/milestone?projectId={projectId}&milestoneId={milestoneId}",
+				TEST_PROJECT_ID, TEST_MILESTONE_ID)
+				.session(mockSession))
+		.andExpect(status().isOk())
+		.andExpect(content().json(json));
+	}
+	
+	
+	@Test
 	void testGetNextMilestone() throws Exception{
 		String json = objectMapper.writeValueAsString(septiembre);
 
@@ -116,9 +128,10 @@ public class MilestoneControllerTest {
 
 	@Test
 	void testPostMilestones() throws Exception{
+		septiembre.setId(null);
 		String json = objectMapper.writeValueAsString(septiembre);
 
-		mockMvc.perform(post("/api/milestones?projectId={projectId}", TEST_PROJECT_ID)
+		mockMvc.perform(post("/api/milestones/post?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
 		.andExpect(status().isOk());
 	}
@@ -130,14 +143,14 @@ public class MilestoneControllerTest {
 
 		String json = objectMapper.writeValueAsString(map);
 
-		mockMvc.perform(post("/api/milestones?projectId={projectId}", TEST_PROJECT_ID)
+		mockMvc.perform(post("/api/milestones/post?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
 		.andExpect(status().isBadRequest());
 	}
 
 	@Test
 	void testDeleteMilestones() throws Exception{
-		mockMvc.perform(delete("/api/milestones?milestoneId={milestoneId}", TEST_MILESTONE_ID)
+		mockMvc.perform(delete("/api/milestones/delete?milestoneId={milestoneId}", TEST_MILESTONE_ID)
 				.session(mockSession))
 		.andExpect(status().isOk());
 	}
@@ -146,7 +159,7 @@ public class MilestoneControllerTest {
 	void testDeleteMilestonesNonExistent() throws Exception{
 		doThrow(new DataAccessResourceFailureException("Id no existente")).when(milestoneService).deleteMilestoneById(11);
 
-		mockMvc.perform(delete("/api/milestones?milestoneId={milestoneId}", TEST_MILESTONE_ID)
+		mockMvc.perform(delete("/api/milestones/delete?milestoneId={milestoneId}", TEST_MILESTONE_ID)
 				.session(mockSession))
 		.andExpect(status().isNotFound());
 	}

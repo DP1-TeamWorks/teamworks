@@ -269,7 +269,7 @@ public class ProjectControllerTest {
 	void testPostProject() throws Exception{
 		String json = objectMapper.writeValueAsString(project);
 
-		mockMvc.perform(post("/api/projects?departmentId={departmentId}", TEST_DEPARTMENT_ID)
+		mockMvc.perform(post("/api/projects/create?departmentId={departmentId}", TEST_DEPARTMENT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON)
 				.content(json))
 		.andExpect(status().isOk());
@@ -281,7 +281,7 @@ public class ProjectControllerTest {
 		.when(projectService).saveProject(project);
 		String json = objectMapper.writeValueAsString(project);
 
-		mockMvc.perform(post("/api/projects?departmentId={departmentId}", TEST_DEPARTMENT_ID)
+		mockMvc.perform(post("/api/projects/create?departmentId={departmentId}", TEST_DEPARTMENT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON)
 				.content(json))
 		.andExpect(status().isBadRequest());
@@ -291,7 +291,7 @@ public class ProjectControllerTest {
 	void testUpdateProject() throws Exception{
 		String json = objectMapper.writeValueAsString(project);
 
-		mockMvc.perform(patch("/api/projects?departmentId={departmentId}&projectId={projectId}",
+		mockMvc.perform(patch("/api/projects/update?departmentId={departmentId}&projectId={projectId}",
 				TEST_DEPARTMENT_ID, TEST_PROJECT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON)
 				.content(json))
@@ -306,7 +306,7 @@ public class ProjectControllerTest {
 
 		String json = objectMapper.writeValueAsString(project);
 
-		mockMvc.perform(patch("/api/projects?departmentId={departmentId}&projectId={projectId}",
+		mockMvc.perform(patch("/api/projects/update?departmentId={departmentId}&projectId={projectId}",
 				TEST_DEPARTMENT_ID, TEST_PROJECT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON)
 				.content(json))
@@ -317,7 +317,7 @@ public class ProjectControllerTest {
 	@Test
 	void testDeleteProjects() throws Exception{
 
-		mockMvc.perform(delete("/api/projects?departmentId={departmentId}&projectId={projectId}",
+		mockMvc.perform(delete("/api/projects/delete?departmentId={departmentId}&projectId={projectId}",
 				TEST_DEPARTMENT_ID, TEST_PROJECT_ID)
 				.session(mockSession))
 		.andExpect(status().isOk());
@@ -329,7 +329,7 @@ public class ProjectControllerTest {
 		.when(projectService).deleteProjectById(TEST_PROJECT_ID);
 
 
-		mockMvc.perform(delete("/api/projects?departmentId={departmentId}&projectId={projectId}",
+		mockMvc.perform(delete("/api/projects/delete?departmentId={departmentId}&projectId={projectId}",
 				TEST_DEPARTMENT_ID, TEST_PROJECT_ID)
 				.session(mockSession))
 		.andExpect(status().isNotFound());

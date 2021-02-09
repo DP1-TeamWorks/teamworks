@@ -167,7 +167,7 @@ public class TagControllerTest {
 	void testCreateTag() throws Exception {
 		String json = objectMapper.writeValueAsString(testing);
 		
-		mockMvc.perform(post("/api/tags?projectId={projectId}", TEST_PROJECT_ID)
+		mockMvc.perform(post("/api/tags/create?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
 		.andExpect(status().isOk());
 	}
@@ -177,7 +177,7 @@ public class TagControllerTest {
 		Map<String, String> map = new HashMap<String, String>();
 		String json = objectMapper.writeValueAsString(map);
 		
-		mockMvc.perform(post("/api/tags?projectId={projectId}", TEST_PROJECT_ID)
+		mockMvc.perform(post("/api/tags/create?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
 		.andExpect(status().isBadRequest());
 	}
@@ -190,7 +190,7 @@ public class TagControllerTest {
 		.when(tagService).saveTag(testing);
 		
 		String json = objectMapper.writeValueAsString(testing);
-		mockMvc.perform(post("/api/tags?projectId={projectId}", TEST_PROJECT_ID)
+		mockMvc.perform(post("/api/tags/create?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
 		.andExpect(status().isBadRequest());
 	}
@@ -202,7 +202,7 @@ public class TagControllerTest {
 		String json = objectMapper.writeValueAsString(testing);
 
 		
-		mockMvc.perform(post("/api/tags?projectId={projectId}", TEST_PROJECT_ID)
+		mockMvc.perform(post("/api/tags/create?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON).content(json))
 		.andExpect(status().isBadRequest());
 		
@@ -211,7 +211,7 @@ public class TagControllerTest {
 	@Test
 	void testDeleteTagById() throws Exception{
 		
-		mockMvc.perform(delete("/api/tags?projectId={projectId}&tagId={tagId}", TEST_PROJECT_ID, TEST_TAG_ID)
+		mockMvc.perform(delete("/api/tags/delete?projectId={projectId}&tagId={tagId}", TEST_PROJECT_ID, TEST_TAG_ID)
 				.session(mockSession))
 		.andExpect(status().isOk());
 	}
@@ -221,7 +221,7 @@ public class TagControllerTest {
 		doThrow(new DataAccessResourceFailureException("Id no existente")).when(tagService).deleteTagById(TEST_TAG_ID);
 		
 		
-		mockMvc.perform(delete("/api/tags?projectId={projectId}&tagId={tagId}", TEST_PROJECT_ID, TEST_TAG_ID)
+		mockMvc.perform(delete("/api/tags/delete?projectId={projectId}&tagId={tagId}", TEST_PROJECT_ID, TEST_TAG_ID)
 				.session(mockSession))
 		.andExpect(status().isBadRequest());
 	}
