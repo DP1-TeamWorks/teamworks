@@ -1,8 +1,10 @@
 package org.springframework.samples.petclinic.web;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.TestWebConfig;
@@ -121,6 +124,16 @@ public class DepartmentControllerTest {
 		.andExpect(status().is(200));
 	}
 	
+	@Test
+	void testCreateDepartmentsWithErrors() throws Exception {
+		doThrow(new DataAccessResourceFailureException("Ya Existe"))
+		.when(departmentService).saveDepartment(department);
+		
+		String departmentJson = objectMapper.writeValueAsString(department);
+		mockMvc.perform(post("/api/departments/create").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(departmentJson))
+		.andExpect(status().isBadRequest());
+	}
+	
 	
 	@Test
 	void testGetTeamDepartments() throws Exception {
@@ -151,8 +164,11 @@ public class DepartmentControllerTest {
 	void testUpdateDepartments() throws Exception {
 		department.setName("DTE");
 		department.setDescription("Departamento para pruebas");
+		department.setTeam(team);
+		department.setId(TEST_DEPARTMENT_ID);
 		String updatejson = objectMapper.writeValueAsString(department);
-		mockMvc.perform(post("/api/departments/update").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(updatejson))
+		
+		mockMvc.perform(patch("/api/departments/update").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(updatejson))
 		.andExpect(status().isOk());
 	}
 	
@@ -163,7 +179,7 @@ public class DepartmentControllerTest {
 		department.setDescription(null);
 		String updatejson = objectMapper.writeValueAsString(department);
 		
-		mockMvc.perform(post("/api/departments/update").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(updatejson))
+		mockMvc.perform(patch("/api/departments/update").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(updatejson))
 		.andExpect(status().isBadRequest());
 	}
 	
@@ -174,4 +190,14 @@ public class DepartmentControllerTest {
 		mockMvc.perform(delete("/api/departments/"+TEST_DEPARTMENT_ID+"/delete"))
 		.andExpect(status().isOk());
 	}
+	
+	@Test
+	void testDeleteDepartmentsError() throws Exception {
+		doThrow(new DataAccessResourceFailureException("Id no existente"))
+		.when(departmentService).deleteDepartmentById(TEST_DEPARTMENT_ID);
+		
+		mockMvc.perform(delete("/api/departments/"+TEST_DEPARTMENT_ID+"/delete"))
+		.andExpect(status().isNotFound());
+	}
+	
 }
