@@ -190,7 +190,7 @@ public class UserTWControllerTest {
     @Test
 	void testPostUser() throws Exception {
 		String georgejson = objectMapper.writeValueAsString(juan);
-		mockMvc.perform(post("/api/user").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(georgejson)).andExpect(status().is(200));
+		mockMvc.perform(post("/api/user/create").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(georgejson)).andExpect(status().is(200));
 	}
     @Test
 	void testPostMorethan1TeamOwner() throws Exception {
@@ -203,14 +203,14 @@ public class UserTWControllerTest {
 		jose.setTeam(team);
 
     	doThrow(ManyTeamOwnerException.class).when(this.UserTWService).saveUser(jose);
-		mockMvc.perform(post("/api/user").session(mockSession)).andExpect(status().is(400));
+		mockMvc.perform(post("/api/user/create").session(mockSession)).andExpect(status().is(400));
 	}
 
     @Test
   	void testDeleteUser() throws Exception {
     	Integer userId=TEST_USER_ID;
 		String userIdString=userId.toString();
-  		mockMvc.perform(delete("/api/user").session(mockSession).param("userId",userIdString)).andExpect(status().is(200));
+  		mockMvc.perform(delete("/api/user/delete").session(mockSession).param("userId",userIdString)).andExpect(status().is(200));
   	}
     @Test
   	void testDeleteUserInvalidId() throws Exception {
@@ -218,7 +218,7 @@ public class UserTWControllerTest {
 		String userIdString=userId.toString();
 		doThrow(new DataAccessResourceFailureException("Id no existente"))
         .when(UserTWService).deleteUserById(userId);
-  		mockMvc.perform(delete("/api/user").session(mockSession).param("userId",userIdString)).andExpect(status().is(400));
+  		mockMvc.perform(delete("/api/user/delete").session(mockSession).param("userId",userIdString)).andExpect(status().is(400));
   	}
 
     @Test

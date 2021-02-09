@@ -138,7 +138,7 @@ public class BelongsControllerTest {
 	void testCreateBelongs() throws Exception {
 		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
 		String belonguserId=String.valueOf(TEST_BELONGUSER_ID);
-		mockMvc.perform(post("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(200));
+		mockMvc.perform(post("/api/departments/belongs/create").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(200));
 	}
 
 	@Test
@@ -152,7 +152,7 @@ public class BelongsControllerTest {
 
 		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
 		String belonguserId=String.valueOf(TEST_BELONGUSER_ID);
-		mockMvc.perform(post("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(400));
+		mockMvc.perform(post("/api/departments/belongs/create").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(400));
 	}
 
 	@Test
@@ -169,7 +169,7 @@ public class BelongsControllerTest {
 
 		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
 		String belonguserId=String.valueOf(TEST_BELONGUSER_ID+1);
-		mockMvc.perform(post("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(400));
+		mockMvc.perform(post("/api/departments/belongs/create").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(400));
 	}
 
 	@Test
@@ -177,28 +177,28 @@ public class BelongsControllerTest {
 		given(belongsService.findCurrentDepartmentManager(TEST_DEPARTMENT_ID)).willReturn(belongs);
 		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
 		String belonguserId=String.valueOf(TEST_BELONGUSER_ID);
-		mockMvc.perform(post("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId).param("isDepartmentManager", "true")).andExpect(status().is(200));
+		mockMvc.perform(post("/api/departments/belongs/create").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId).param("isDepartmentManager", "true")).andExpect(status().is(200));
 	}
 	@Test
 	void testEditBelongs() throws Exception {
 		//Quitar juan de department manager
 		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
 		String belonguserId=String.valueOf(TEST_USER_ID);
-		mockMvc.perform(post("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId).param("isDepartmentManager", "false")).andExpect(status().is(200));
+		mockMvc.perform(post("/api/departments/belongs/create").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId).param("isDepartmentManager", "false")).andExpect(status().is(200));
 	}
 	@Test
 	void testDeleteBelongs() throws Exception {
 
 		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
 		String belonguserId=String.valueOf(TEST_USER_ID);
-		mockMvc.perform(delete("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(200));
+		mockMvc.perform(delete("/api/departments/belongs/delete").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(200));
 	}
 	@Test
 	void testDeleteNotExistingBelongs() throws Exception {
 		//Introducimos la id de alguien que no tiene belongs
 		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);
 		String belonguserId=String.valueOf(TEST_BELONGUSER_ID);
-		mockMvc.perform(delete("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(400));
+		mockMvc.perform(delete("/api/departments/belongs/delete").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(400));
 	}
 
 

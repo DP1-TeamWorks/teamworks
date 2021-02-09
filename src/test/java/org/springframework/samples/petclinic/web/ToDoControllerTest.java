@@ -394,7 +394,7 @@ public class ToDoControllerTest {
 	void testCreatePersonalTodos() throws Exception {
 		String toDoJson = objectMapper.writeValueAsString(todo);
 
-		mockMvc.perform(post("/api/toDos/mine").param("milestoneId", ((Integer) TEST_MILESTONE_ID).toString()).session(mockSession).contentType(MediaType.APPLICATION_JSON).content(toDoJson))
+		mockMvc.perform(post("/api/toDos/mine/create").param("milestoneId", ((Integer) TEST_MILESTONE_ID).toString()).session(mockSession).contentType(MediaType.APPLICATION_JSON).content(toDoJson))
 		.andExpect(status().is(200));
 	}
 	

@@ -166,7 +166,7 @@ public class ParticipationControllerTest {
 
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_PARTICIPATION_ID);
-		mockMvc.perform(post("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(200));
+		mockMvc.perform(post("/api/projects/participation/create").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(200));
 	}
 	@Test
 	void testCreateParticipationsDontBelongProjectDepartment() throws Exception {
@@ -174,7 +174,7 @@ public class ParticipationControllerTest {
 		given(belongsService.findCurrentBelongs(TEST_PARTICIPATION_ID, TEST_DEPARTMENT_ID)).willReturn(null);
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_PARTICIPATION_ID);
-		mockMvc.perform(post("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(400));
+		mockMvc.perform(post("/api/projects/participation/create").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(400));
 	}
 	@Test
 	void testCreateParticipationsOtherTeamUser() throws Exception {
@@ -186,7 +186,7 @@ public class ParticipationControllerTest {
 		given(userTWService.findUserById(TEST_USER_ID)).willReturn(lola);
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_PARTICIPATION_ID);
-		mockMvc.perform(post("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(400));
+		mockMvc.perform(post("/api/projects/participation/create").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(400));
 	}
 	@Test
 	void testCreateParticipationsWithExistingParticipation() throws Exception {
@@ -198,14 +198,14 @@ public class ParticipationControllerTest {
 		given(participationService.findCurrentParticipation(TEST_PARTICIPATION_ID, TEST_PROJECT_ID)).willReturn(par);
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_PARTICIPATION_ID);
-		mockMvc.perform(post("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(400));
+		mockMvc.perform(post("/api/projects/participation/create").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(400));
 	}
 	@Test
 	void testEditParticipations() throws Exception {
 		//Quitar juan de project manager
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_USER_ID);
-		mockMvc.perform(post("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId).param("willBeProjectManager", "false")).andExpect(status().is(200));
+		mockMvc.perform(post("/api/projects/participation/create").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId).param("willBeProjectManager", "false")).andExpect(status().is(200));
 	}
 	@Test
 	void testCreateParticipationsChangeProjectManager() throws Exception {
@@ -216,7 +216,7 @@ public class ParticipationControllerTest {
 		given(participationService.findCurrentParticipation(TEST_PARTICIPATION_ID, TEST_PROJECT_ID)).willReturn(par);
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_PARTICIPATION_ID);
-		mockMvc.perform(post("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId).param("willBeProjectManager", "true")).andExpect(status().is(200));
+		mockMvc.perform(post("/api/projects/participation/create").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId).param("willBeProjectManager", "true")).andExpect(status().is(200));
 	}
 	@Test
 	void testCreateParticipationsProjectManagerWithoutPermison() throws Exception {
@@ -228,7 +228,7 @@ public class ParticipationControllerTest {
 		given(belongsService.findCurrentBelongs(TEST_USER_ID, TEST_DEPARTMENT_ID)).willReturn(null);
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_PARTICIPATION_ID);
-		mockMvc.perform(post("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId).param("willBeProjectManager", "true")).andExpect(status().is(400));
+		mockMvc.perform(post("/api/projects/participation/create").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId).param("willBeProjectManager", "true")).andExpect(status().is(400));
 	}
 
 	@Test
@@ -236,14 +236,14 @@ public class ParticipationControllerTest {
 
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_USER_ID);
-		mockMvc.perform(delete("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(200));
+		mockMvc.perform(delete("/api/projects/participation/delete").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(200));
 	}
 	@Test
 	void testDeleteNotExistingParticipations() throws Exception {
 		//Le pasamos una id invalida
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		String participationUserId=String.valueOf(TEST_PARTICIPATION_ID);
-		mockMvc.perform(delete("/api/projects/participation").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(400));
+		mockMvc.perform(delete("/api/projects/participation/delete").session(mockSession).param("participationUserId", participationUserId).param("projectId", projectId)).andExpect(status().is(400));
 	}
 
 }

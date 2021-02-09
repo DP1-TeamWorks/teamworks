@@ -83,7 +83,7 @@ public class TeamControllerTest {
 		atomatic.setName("AtomaticUpdated");
 		atomatic.setIdentifier("ATOMUPDATED");
 		String atomaticupdated = objectMapper.writeValueAsString(atomatic);
-		mockMvc.perform(post("/api/team").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
+		mockMvc.perform(post("/api/team/update").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
 		.andExpect(status().isOk())
 		.andExpect(status().is(200));	
 		
@@ -98,7 +98,7 @@ public class TeamControllerTest {
 		atomatic.setIdentifier(null);
 		String atomaticupdated = objectMapper.writeValueAsString(atomatic);
 				
-		mockMvc.perform(post("/api/team").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
+		mockMvc.perform(post("/api/team/update").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
 		.andExpect(status().isBadRequest());
 	}
 	
@@ -109,14 +109,14 @@ public class TeamControllerTest {
 		atomatic.setName("AtomaticUpdated");
 		atomatic.setIdentifier("ATOMUPDATED");
 		String atomaticupdated = objectMapper.writeValueAsString(atomatic);
-		mockMvc.perform(post("/api/team").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
+		mockMvc.perform(post("/api/team/update").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(atomaticupdated))
 		.andExpect(status().isBadRequest());	
 	
 	}
 	
 	@Test
 	void testDeleteTeam() throws Exception {		
-		mockMvc.perform(delete("/api/team").session(mockSession))
+		mockMvc.perform(delete("/api/team/delete").session(mockSession))
 		.andExpect(status().isOk());
 	}
 	
@@ -125,7 +125,7 @@ public class TeamControllerTest {
 		doThrow(new DataAccessResourceFailureException("ERROR")).when(teamService).deleteTeamById(TEST_TEAM_ID);
 
 		
-		mockMvc.perform(delete("/api/team").session(mockSession))
+		mockMvc.perform(delete("/api/team/delete").session(mockSession))
 		.andExpect(status().isBadRequest());
 	}
 	

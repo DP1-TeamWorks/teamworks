@@ -23,6 +23,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.TestWebConfig;
 import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+import org.springframework.samples.petclinic.enums.Role;
 import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Team;
@@ -47,7 +48,7 @@ public class DepartmentControllerTest {
 	
 	private static final int TEST_DEPARTMENT_ID = 5;
 	private static final int TEST_TEAM_ID = 3;
-	//private static final int TEST_USER_ID = 6;
+	private static final int TEST_USER_ID = 6;
 
 
 
@@ -79,7 +80,7 @@ public class DepartmentControllerTest {
 	private Team team;
 	//private Belongs belongs;
 	//private Belongs belongs2;
-	//private UserTW user;
+	private UserTW user;
 	private List<Department> depfromTeam;
 	
 	@BeforeEach
@@ -88,9 +89,9 @@ public class DepartmentControllerTest {
 		department.setName("LSI");
 		team=new Team();
 		
-		//user = new UserTW();
-		//user.setId(TEST_USER_ID);
-		
+		user = new UserTW();
+		user.setId(TEST_USER_ID);
+		user.setRole(Role.team_owner);
 		depfromTeam = new ArrayList<>();
 		team.setDepartments(depfromTeam);
 		
@@ -98,7 +99,7 @@ public class DepartmentControllerTest {
 		department.setDescription("A tope jefe de equipo");
 		mockSession.setAttribute("departmentId",TEST_DEPARTMENT_ID);
 		mockSession.setAttribute("teamId",TEST_TEAM_ID);
-		//mockSession.setAttribute("userId",TEST_USER_ID);
+		mockSession.setAttribute("userId",TEST_USER_ID);
 		given(this.departmentService.findDepartmentById(TEST_DEPARTMENT_ID)).willReturn(department);		
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(team);
 		
@@ -116,7 +117,7 @@ public class DepartmentControllerTest {
 	@Test
 	void testCreateDepartments() throws Exception {
 		String departmentJson = objectMapper.writeValueAsString(department);
-		mockMvc.perform(post("/api/departments").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(departmentJson))
+		mockMvc.perform(post("/api/departments/create").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(departmentJson))
 		.andExpect(status().is(200));
 	}
 	
@@ -151,7 +152,7 @@ public class DepartmentControllerTest {
 		department.setName("DTE");
 		department.setDescription("Departamento para pruebas");
 		String updatejson = objectMapper.writeValueAsString(department);
-		mockMvc.perform(post("/api/departments").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(updatejson))
+		mockMvc.perform(post("/api/departments/update").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(updatejson))
 		.andExpect(status().isOk());
 	}
 	
@@ -162,7 +163,7 @@ public class DepartmentControllerTest {
 		department.setDescription(null);
 		String updatejson = objectMapper.writeValueAsString(department);
 		
-		mockMvc.perform(post("/api/departments").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(updatejson))
+		mockMvc.perform(post("/api/departments/update").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(updatejson))
 		.andExpect(status().isBadRequest());
 	}
 	
@@ -170,7 +171,7 @@ public class DepartmentControllerTest {
 	@Test
 	void testDeleteDepartments() throws Exception {
 		 
-		mockMvc.perform(delete("/api/departments/"+TEST_DEPARTMENT_ID))
+		mockMvc.perform(delete("/api/departments/"+TEST_DEPARTMENT_ID+"/delete"))
 		.andExpect(status().isOk());
 	}
 }
