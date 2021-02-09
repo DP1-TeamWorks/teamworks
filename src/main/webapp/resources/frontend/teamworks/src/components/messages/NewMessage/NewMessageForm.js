@@ -24,7 +24,7 @@ class NewMessageForm extends React.Component {
 
     this.ChangeModalNewMessage = props.ChangeModalNewMessage;
     this.mailOptions = props.mailOptions;
-    //this.mailOptions.push({ label: "Other", value: "@team.com" });
+    this.mailOptions.push({ label: "Other", value: "@team.com" });
     this.toDoOptions = props.toDoOptions;
     this.tagOptions = props.tagOptions;
     this.fileRef = createRef(null);

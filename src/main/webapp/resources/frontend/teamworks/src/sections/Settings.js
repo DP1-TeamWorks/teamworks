@@ -9,7 +9,7 @@ import DepartmentSettings from "../components/settings/department/DepartmentSett
 import ProjectSettings from '../components/settings/project/ProjectSettings';
 import UserPage from '../components/settings/users/UserPage';
 import MilestonePage from '../components/settings/milestone/MilestonePage';
-import { useContext } from 'react/cjs/react.development';
+import { useContext } from 'react';
 import UserCredentials from '../context/UserCredentials';
 import Spinner from '../components/spinner/Spinner';
 

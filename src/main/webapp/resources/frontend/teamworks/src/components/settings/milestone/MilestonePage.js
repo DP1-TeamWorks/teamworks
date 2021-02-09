@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Sticky from "react-sticky-el";
-import { useContext, useState } from "react/cjs/react.development";
+import { useContext, useState } from "react";
 import UserCredentials from "../../../context/UserCredentials";
 import MilestoneApiUtils from "../../../utils/api/MilestoneApiUtils";
 import Button from "../../buttons/Button";
