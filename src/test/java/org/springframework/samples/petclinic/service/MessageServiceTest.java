@@ -123,41 +123,6 @@ class MessageServiceTest {
 		assertThat(messagesBySearch).isNotNull();
 	}
 	
-	//TODO:
-	//NEGATIVE USE CASE H21-E1
-	@Test
-	@Transactional
-	void shouldNotInsertMessageWithoutData() {
-		UserTW sender = userTWService.findUserById(1);
-		ArrayList<Integer> recipients = new ArrayList<>();
-		//recipients.add(2);
-		
-		Message messageError = new Message();
-//		messageError.setRecipientsIds(recipients);
-//		messageError.setSender(sender);
 
-		assertThrows(Exception.class, ()-> {
-			messageService.saveMessage(messageError);
-			});
-	}
-	
-	//TODO: ADD ATTACHMENT BIGGER THAN THE LIMIT
-	@Test
-	@Transactional
-	void shouldNotReplyMessageWithoutData() {
-		UserTW sender = userTWService.findUserById(1);
-		ArrayList<Integer> recipients = new ArrayList<>();
-//		recipients.add(2);
-		Message replyTo = messageService.findMessageById(1);
-		
-		Message messageError = new Message();
-		messageError.setReplyTo(replyTo);
-//		messageError.setRecipientsIds(recipients);
-//		messageError.setSender(sender);
-
-		assertThrows(Exception.class, ()-> {
-			messageService.saveMessage(messageError);
-			});
-	}
 
 }
