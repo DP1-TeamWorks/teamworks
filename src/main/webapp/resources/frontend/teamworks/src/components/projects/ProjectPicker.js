@@ -49,6 +49,7 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
 
   const handlePickProject = (project) => {
     setDepartment(pickedDepartment);
+    localStorage.setItem("pickedProject", project);
     setPickedProject(project);
     openOrClose();
   };

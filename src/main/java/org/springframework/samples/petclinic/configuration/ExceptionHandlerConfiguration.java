@@ -12,7 +12,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -22,6 +32,7 @@ import java.util.Optional;
  * but at least we can use classic MockMvc tests for testing error response +
  * document it.
  */
+@Slf4j
 @ControllerAdvice
 public class ExceptionHandlerConfiguration {
     @Autowired
@@ -38,5 +49,12 @@ public class ExceptionHandlerConfiguration {
     public ResponseEntity badRequestErrorHandler(HttpServletRequest request, Exception ex) {
         ResponseEntity resp = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("bad request: " + ex.getMessage());
         return resp;
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public void requestHandlingNoHandlerFound(HttpServletResponse r) throws IOException {
+        log.info("ASDFAWERGAERG");
+        r.sendRedirect("/");
+
     }
 }

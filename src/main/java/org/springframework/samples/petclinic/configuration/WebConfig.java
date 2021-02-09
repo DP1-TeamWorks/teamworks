@@ -11,6 +11,7 @@ import org.springframework.samples.petclinic.middleware.TeamOwnerInterceptor;
 import org.springframework.samples.petclinic.service.*;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceView;
@@ -53,6 +54,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/upload/**").addResourceLocations("/resources/upload/");
         registry.addResourceHandler("/**").addResourceLocations("/resources/frontend/teamworks/build/");
 
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/notFound").setViewName("forward:/index.html");
     }
 
     @Override
