@@ -14,30 +14,42 @@ const DepartmentMemberList = ({ departmentId, members, loading, onListUpdated })
 
   function onPromoteClicked(member)
   {
+    let isCredentialInDanger = !credentials.isTeamManager && isDepartmentManager;
     if (member.isDepartmentManager)
     {
       let confirmMessage = `Are you sure to demote ${member.name} ${member.lastname} and make them a member?`;
-      if (!credentials.isTeamManager && isDepartmentManager)
+      if (isCredentialInDanger)
       {
         confirmMessage = `NOTE: You are demoting yourself and you will NO LONGER HAVE MANAGEMENT PRIVILEGES. This action cannot be undone. Would you like to continue?`;
       }
       if (window.confirm(confirmMessage))
       {
         DepartmentApiUtils.addUserToDepartment(departmentId, member.userId, false)
-          .then(() => onListUpdated())
+          .then(() => {
+            if (isCredentialInDanger) 
+              window.location.replace('/settings/departments');
+            else
+              onListUpdated();
+          })
           .catch(err => console.error(err));
       }
     } else
     {
       let confirmMessage = `Are you sure to demote ${member.name} ${member.lastname} and make them a member?`;
-      if (!credentials.isTeamManager && isDepartmentManager)
+      if (isCredentialInDanger)
       {
         confirmMessage = `NOTE: You are promoting ${member.name} ${member.lastname} to department manager. You will NO LONGER HAVE MANAGEMENT PRIVILEGES. This action cannot be undone. Would you like to continue?`;
       }
       if (window.confirm(confirmMessage))
       {
         DepartmentApiUtils.addUserToDepartment(departmentId, member.userId, true)
-          .then(() => onListUpdated())
+          .then(() => 
+          {
+            if (isCredentialInDanger) 
+              window.location.replace('/settings/departments');
+            else
+              onListUpdated();
+          })
           .catch(err => console.error(err));
       }
     }
@@ -46,10 +58,22 @@ const DepartmentMemberList = ({ departmentId, members, loading, onListUpdated })
 
   function onRemoveClicked(member)
   {
-    if (window.confirm(`Are you sure to remove ${member.name} ${member.lastname} from the department?`))
+    let isCredentialInDanger = member.userId === credentials.user.id && !credentials.isTeamManager && isDepartmentManager;
+    let confirmMessage = `Are you sure to remove ${member.name} ${member.lastname} from the department?`;
+    if (isCredentialInDanger)
+    {
+      confirmMessage = "Are you sure to REMOVE YOURSELF from this department and lose access? This action cannot be undone.";
+    }
+    if (window.confirm(confirmMessage))
     {
       DepartmentApiUtils.removeUserFromDepartment(departmentId, member.userId)
-        .then(() => onListUpdated())
+        .then(() => 
+        {
+          if (isCredentialInDanger)
+            window.location.reload();
+          else
+            onListUpdated();
+        })
         .catch(err => console.error(err));
     }
   }

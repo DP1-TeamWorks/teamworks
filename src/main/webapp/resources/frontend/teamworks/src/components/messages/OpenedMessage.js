@@ -15,7 +15,7 @@ const OpenedMessage = ({ msg, setOpenMessage }) => {
   const [messageOptions, setMessageOptions] = useState("");
   useEffect(() => {
     if (messageOptions === "Forward")
-      UserApiUtils.getMyTeamUsers()
+      UserApiUtils.getUsers()
         .then((res) => {
           console.log("Getting user mails");
           let mailList = res.map((user) => {

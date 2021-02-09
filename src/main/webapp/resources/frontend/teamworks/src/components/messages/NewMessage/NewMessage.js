@@ -13,7 +13,7 @@ const NewMessage = ({ ChangeModalNewMessage }) => {
   const [tagOptions, setTagOptions] = useState([]);
 
   useEffect(() => {
-    UserApiUtils.getMyTeamUsers()
+    UserApiUtils.getUsers()
       .then((res) => {
         console.log("Getting user mail options");
         let mailList = res.map((user) => {

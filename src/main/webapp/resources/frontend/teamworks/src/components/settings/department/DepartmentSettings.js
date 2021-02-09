@@ -16,7 +16,7 @@ const DepartmentSettings = () =>
   {
     let func = credentials.isTeamManager ? DepartmentApiUtils.getDepartments : DepartmentApiUtils.getMyDepartments;
     func()
-      .then(dpts => setDepartments(dpts))
+      .then(dpts => setDepartments(dpts.sort((a,b) => a.name.localeCompare(b.name))))
       .catch((err) => console.error(err));
   }
 
