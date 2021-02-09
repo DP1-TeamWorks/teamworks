@@ -113,13 +113,6 @@ public class UserTWControllerTest {
 	@Autowired
 	protected MockHttpSession mockSession;
 
-//    @Before
-//    public void setupTests() {
-//        mockMvc = MockMvcBuilders
-//            .webAppContextSetup(context)
-//            .addFilters(springSecurityFilterChain)
-//            .build();
-//    }
 
 	@BeforeEach
 	void setup() {

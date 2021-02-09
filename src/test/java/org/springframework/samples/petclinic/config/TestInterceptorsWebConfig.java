@@ -76,7 +76,7 @@ public class TestInterceptorsWebConfig implements WebMvcConfigurer {
         		.addPathPatterns("/api/InterceptorTest/DepartmentManager").order(2);
         registry.addInterceptor(new ProjectManagerInterceptor(userTWService, belongsService, participationService, projectService, milestoneService))
                 .addPathPatterns("/api/InterceptorTest/ProjectManager").order(3);
-        registry.addInterceptor(new ProjectEmployeeInterceptor(userTWService, milestoneService, toDoService, participationService, belongsService))
+        registry.addInterceptor(new ProjectEmployeeInterceptor(userTWService, milestoneService, toDoService, participationService, belongsService, projectService))
                 .addPathPatterns("/api/InterceptorTest/ProjectEmployee").order(4);
     }
 }

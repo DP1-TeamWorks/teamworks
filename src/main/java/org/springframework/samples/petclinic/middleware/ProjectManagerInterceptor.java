@@ -29,11 +29,21 @@ public class ProjectManagerInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
 		Integer userId = (Integer) req.getSession().getAttribute("userId");
 		UserTW user = userTWService.findUserById(userId);
-		Integer projectId = Integer.valueOf(req.getParameter("projectId"));
+		String paramProjectId=req.getParameter("projectId");
+		Integer projectId=null;
+		if(paramProjectId!=null) {
+			projectId = Integer.valueOf(paramProjectId);
+		}
+		
 		if (projectId == null)
         {
             // find by milestone
-            Integer milestoneId = Integer.valueOf(req.getParameter("milestoneId"));
+			String paramMilestoneId=req.getParameter("milestoneId");
+			Integer milestoneId=null;
+			if(paramMilestoneId!=null) {
+				milestoneId = Integer.valueOf(paramMilestoneId);
+			}
+             
             if (milestoneId == null)
             {
                 res.sendError(400);

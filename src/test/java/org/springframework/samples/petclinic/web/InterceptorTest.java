@@ -15,16 +15,16 @@ import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.samples.petclinic.config.InterceptorController;
 import org.springframework.samples.petclinic.config.TestInterceptorsWebConfig;
-import org.springframework.samples.petclinic.config.TestUserWebConfig;
 import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.configuration.WebConfig;
 import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
+import org.springframework.samples.petclinic.model.Milestone;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Role;
 import org.springframework.samples.petclinic.model.Team;
+import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
@@ -38,8 +38,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @WebMvcTest(controllers = InterceptorController.class,
 excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
 @WebAppConfiguration
@@ -51,6 +49,8 @@ public class InterceptorTest {
 	private static final int TEST_TEAM_ID = 3;
 	private static final int TEST_DEPARTMENT_ID = 8;
 	private static final int TEST_PROJECT_ID = 10;
+	private static final int TEST_MILESTONE_ID = 7;
+	private static final int TEST_TODO_ID = 4;
 	@MockBean
     GenericIdToEntityConverter idToEntityConverter;
 
@@ -87,6 +87,7 @@ public class InterceptorTest {
 	private Team team;
 	private Project game;
 	private Participation participationRosa;
+	private ToDo toDo;
 	
 	@BeforeEach
 	void setup() {
@@ -135,12 +136,25 @@ public class InterceptorTest {
 		participationRosa.setProject(game);
 		participationRosa.setIsProjectManager(true);
 		
+		//Milestone
+		Milestone milestone=new Milestone();
+		milestone.setId(TEST_MILESTONE_ID);
+		milestone.setName("Sprint1");
+		milestone.setProject(game);
+		//ToDo
+		toDo=new ToDo();
+		toDo.setAssignee(juan);
+		toDo.setTitle("Ejercicio 1");
+		toDo.setMilestone(milestone);
+		
 		given(userTWService.findUserById(TEST_TEAMOWNER_ID)).willReturn(juan);
 		given(userTWService.findUserById(TEST_EMPLOYEE_ID)).willReturn(rosa);
 		given(departmentService.findDepartmentById(TEST_DEPARTMENT_ID)).willReturn(calidad);
 		given(belongsService.findCurrentBelongs(TEST_EMPLOYEE_ID, TEST_DEPARTMENT_ID)).willReturn(belongsRosa);
 		given(projectService.findProjectById(TEST_PROJECT_ID)).willReturn(game);
 		given(participationService.findCurrentParticipation(TEST_EMPLOYEE_ID, TEST_PROJECT_ID)).willReturn(participationRosa);
+		given(milestoneService.findMilestoneById(TEST_MILESTONE_ID)).willReturn(milestone);
+		given(toDoService.findToDoById(TEST_TODO_ID)).willReturn(toDo);
 		mockSession.setAttribute("userId", TEST_TEAMOWNER_ID);
 		mockSession.setAttribute("teamId", TEST_TEAM_ID);
 	}
@@ -192,10 +206,10 @@ public class InterceptorTest {
 		mockMvc.perform(get("/api/InterceptorTest/DepartmentManager").session(mockSession).param("departmentId",departmentId ))
 		.andExpect(status().is(403));
 	}
-	//TODO Problema id
+	
 	@Test
 	void testDepartmentManagerInterceptorAccessWithoutDepartmentId() throws Exception {
-		mockMvc.perform(get("/api/InterceptorTest/DepartmentManager").session(mockSession).param("departmentId","null"))
+		mockMvc.perform(get("/api/InterceptorTest/DepartmentManager").session(mockSession))
 		.andExpect(status().is(400));
 	}
 	@Test
@@ -210,6 +224,13 @@ public class InterceptorTest {
 		mockMvc.perform(get("/api/InterceptorTest/ProjectManager").session(mockSession).param("projectId",projectId ))
 		.andExpect(status().isOk());
 	}
+	@Test
+	void testProjectManagerInterceptorWithMileStone() throws Exception {
+		String milestoneId=String.valueOf(TEST_MILESTONE_ID);
+		mockMvc.perform(get("/api/InterceptorTest/ProjectManager").session(mockSession).param("milestoneId",milestoneId ))
+		.andExpect(status().isOk());
+	}
+	
 	@Test
 	void testProjectManagerInterceptorAccessAsDepartmenManager() throws Exception {
 		mockSession.setAttribute("userId", TEST_EMPLOYEE_ID);
@@ -247,13 +268,80 @@ public class InterceptorTest {
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		mockMvc.perform(get("/api/InterceptorTest/ProjectManager").session(mockSession).param("projectId",projectId))
 		.andExpect(status().is(403));
+	}@Test
+	void testProjectManagerInterceptorAccessWithoutParams() throws Exception {
+		mockMvc.perform(get("/api/InterceptorTest/ProjectManager").session(mockSession))
+		.andExpect(status().is(400));
 	}
 	//ProjectEmployeeInterceptor
 	@Test
-	void testProjectEmployeeInterceptorAccessAsTeamOwner() throws Exception {
+	void testProjectEmployeeInterceptorAccessAsTeamOwnerWithProject() throws Exception {
 		String projectId=String.valueOf(TEST_PROJECT_ID);
 		mockMvc.perform(get("/api/InterceptorTest/ProjectEmployee").session(mockSession).param("projectId",projectId ))
 		.andExpect(status().isOk());
+	}
+	@Test
+	void testProjectEmployeeInterceptorAccessAsTeamOwnerWithMilestone() throws Exception {
+		String milestoneId=String.valueOf(TEST_MILESTONE_ID);
+		mockMvc.perform(get("/api/InterceptorTest/ProjectEmployee").session(mockSession).param("milestoneId",milestoneId ))
+		.andExpect(status().isOk());
+	}
+	@Test
+	void testProjectEmployeeInterceptorAccessTeamOwnerAsWithToDo() throws Exception {
+		String toDoId=String.valueOf(TEST_TODO_ID);
+		mockMvc.perform(get("/api/InterceptorTest/ProjectEmployee").session(mockSession).param("toDoId",toDoId ))
+		.andExpect(status().isOk());
+	}
+	@Test
+	void testProjectEmployeeInterceptorAccessAsDepartmenManager() throws Exception {
+		given(participationService.findCurrentParticipation(TEST_EMPLOYEE_ID, TEST_PROJECT_ID)).willReturn(null);
+		mockSession.setAttribute("userId", TEST_EMPLOYEE_ID);
+		String projectId=String.valueOf(TEST_PROJECT_ID);
+		mockMvc.perform(get("/api/InterceptorTest/ProjectEmployee").session(mockSession).param("projectId",projectId ))
+		.andExpect(status().isOk());
+	}
+	@Test
+	void testProjectEmployeeInterceptorAccessAsProjectManager() throws Exception {
+		belongsRosa.setIsDepartmentManager(false);
+		given(belongsService.findCurrentBelongs(TEST_EMPLOYEE_ID, TEST_DEPARTMENT_ID)).willReturn(belongsRosa);
+		mockSession.setAttribute("userId", TEST_EMPLOYEE_ID);
+		String projectId=String.valueOf(TEST_PROJECT_ID);
+		mockMvc.perform(get("/api/InterceptorTest/ProjectEmployee").session(mockSession).param("projectId",projectId ))
+		.andExpect(status().isOk());
+	}
+	@Test
+	void testProjectEmployeeInterceptorAccessAsEmployee() throws Exception {
+		belongsRosa.setIsDepartmentManager(false);
+		participationRosa.setIsProjectManager(false);
+		given(belongsService.findCurrentBelongs(TEST_EMPLOYEE_ID, TEST_DEPARTMENT_ID)).willReturn(belongsRosa);
+		given(participationService.findCurrentParticipation(TEST_EMPLOYEE_ID, TEST_PROJECT_ID)).willReturn(participationRosa);
+		mockSession.setAttribute("userId", TEST_EMPLOYEE_ID);
+		String projectId=String.valueOf(TEST_PROJECT_ID);
+		mockMvc.perform(get("/api/InterceptorTest/ProjectEmployee").session(mockSession).param("projectId",projectId ))
+		.andExpect(status().isOk());
+	}
+	@Test
+	void testProjectEmployeeInterceptorAccessAsTeamOwnerOtherTeam() throws Exception {
+		Team team2=new Team();
+		team2.setId(900);
+		juan.setTeam(team2);
+		given(userTWService.findUserById(TEST_TEAMOWNER_ID)).willReturn(juan);
+		String projectId=String.valueOf(TEST_PROJECT_ID);
+		mockMvc.perform(get("/api/InterceptorTest/ProjectEmployee").session(mockSession).param("projectId",projectId ))
+		.andExpect(status().is(403));
+	}
+	@Test
+	void testProjectEmployeeInterceptorAccessWithoutParams() throws Exception {
+		mockMvc.perform(get("/api/InterceptorTest/ProjectEmployee").session(mockSession))
+		.andExpect(status().is(403));
+	}
+	@Test
+	void testProjectEmployeeInterceptorAccessWithoutBelongsAndParticipations() throws Exception {
+		given(belongsService.findCurrentBelongs(TEST_EMPLOYEE_ID, TEST_DEPARTMENT_ID)).willReturn(null);
+		given(participationService.findCurrentParticipation(TEST_EMPLOYEE_ID, TEST_PROJECT_ID)).willReturn(null);
+		mockSession.setAttribute("userId", TEST_EMPLOYEE_ID);
+		mockMvc.perform(get("/api/InterceptorTest/ProjectEmployee").session(mockSession))
+		.andExpect(status().is(403));
 	}
 	
 }

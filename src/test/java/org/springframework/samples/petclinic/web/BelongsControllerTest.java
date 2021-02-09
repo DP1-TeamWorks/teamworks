@@ -175,24 +175,6 @@ public class BelongsControllerTest {
 	}
 	
 	@Test
-	void testCreateBelongsWithOtherTeamDepartment() throws Exception {
-		//Creamos el belong con un departamento de otro equipo
-		Team java=new Team();
-		java.setId(40);
-		java.setName("Java");
-		Department department=new Department();
-		department.setId(TEST_DEPARTMENT_ID+1);
-		department.setName("Tec");
-		department.setTeam(java);
-		
-		given(departmentService.findDepartmentById(TEST_DEPARTMENT_ID+1)).willReturn(department);
-		
-		String departmentId=String.valueOf(TEST_DEPARTMENT_ID+1);
-		String belonguserId=String.valueOf(TEST_BELONGUSER_ID);
-		mockMvc.perform(post("/api/departments/belongs").session(mockSession).param("belongUserId", belonguserId).param("departmentId", departmentId)).andExpect(status().is(400));
-	}
-	
-	@Test
 	void testCreateBelongsGiveDepartmentManagerToOtherUser() throws Exception {
 		given(belongsService.findCurrentDepartmentManager(TEST_DEPARTMENT_ID)).willReturn(belongs);
 		String departmentId=String.valueOf(TEST_DEPARTMENT_ID);

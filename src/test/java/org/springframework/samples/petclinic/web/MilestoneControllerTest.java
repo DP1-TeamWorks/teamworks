@@ -93,6 +93,18 @@ public class MilestoneControllerTest {
 	
 	
 	@Test
+	void testGetMilestone() throws Exception{
+		String json = objectMapper.writeValueAsString(septiembre);
+		
+		mockMvc.perform(get("/api/milestone?projectId={projectId}&milestoneId={milestoneId}",
+				TEST_PROJECT_ID, TEST_MILESTONE_ID)
+				.session(mockSession))
+		.andExpect(status().isOk())
+		.andExpect(content().json(json));
+	}
+	
+	
+	@Test
 	void testGetNextMilestone() throws Exception{
 		String json = objectMapper.writeValueAsString(septiembre);
 		
@@ -116,6 +128,7 @@ public class MilestoneControllerTest {
 	
 	@Test
 	void testPostMilestones() throws Exception{
+		septiembre.setId(null);
 		String json = objectMapper.writeValueAsString(septiembre);
 		
 		mockMvc.perform(post("/api/milestones?projectId={projectId}", TEST_PROJECT_ID)
