@@ -155,7 +155,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
     return <p>No projects found.</p>
 
   const currentDepartment = myDepartments[departmentIndex];
-
+  const isDepartmentManager = credentials.isDepartmentManager(currentDepartment.id);
   let DepartmentElements = [];
 
   for (let i = 0; i < myDepartments.length; i++)
@@ -164,7 +164,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
     DepartmentElements.push(<SidePaneElement key={i} selected={i === departmentIndex} onClick={() => setDepartmentIndex(i)}>{dpt.name}</SidePaneElement>);
   }
 
-  const projects = currentDepartment.projects
+  const projects = currentDepartment.projects;
   const ProjectElements = projects.map((x, i) =>
   {
     return <SidePaneElement key={i} selected={i === projectIndex} onClick={() => setProjectIndex(i)}>{x.name}</SidePaneElement>;
@@ -173,7 +173,13 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
   let Content;
   if (projects.length === 0)
   {
-    Content = <p>There are no projects in this department. Click on "Add new project" to create a new one.</p>
+    if (isDepartmentManager)
+    {
+      Content = <p>There are no projects in this department. Click on "Add new project" to create a new one.</p>
+    } else
+    {
+      Content = <p>You aren't a member of any projects from this department.</p>
+    }
   } else
   {
     if (projectIndex >= projects.length)
@@ -183,7 +189,6 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
     }
     const currentProject = projects[projectIndex];
     const isProjectManager = credentials.isProjectManager(currentProject.id);
-
     Content = (
       <>
         <SettingGroup
@@ -209,7 +214,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
         </SettingGroup>
         <SettingGroup
           name="Milestones"
-          description={isProjectManager ? "You can add a new milestone below." : undefined}>
+          description={isProjectManager ? "You can add a new milestone below." : " "}>
           {isProjectManager ? (
             <AddMilestoneForm
               key={`mileform${currentProject.id}`}
@@ -222,23 +227,24 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
             projectName={currentProject.name}
             projectId={currentProject.id} />
         </SettingGroup>
-        <SettingGroup
-          name="Add user to project"
-          description="Type their name below. They must be a department member.">
-          {isProjectManager ? (
+        {isProjectManager ? (
+          <SettingGroup
+            name="Add user to project"
+            description="Type their name below. They must be a department member.">
             <AddUserToProjectForm
-            key={currentProject.name}
-            onUserAdded={onUserAdded}
-            projectId={currentProject.id}
-            departmentId={departments[departmentIndex].id}
-            submitText={`Add to ${currentProject.name}`} />
-          ) : ""}
-        </SettingGroup>
+              key={currentProject.name}
+              onUserAdded={onUserAdded}
+              projectId={currentProject.id}
+              departmentId={departments[departmentIndex].id}
+              submitText={`Add to ${currentProject.name}`} />
+          </SettingGroup>
+        ) : ""}
         <SettingGroup
           name="Members"
           description="Click on a user to see their profile and hover to show available actions.">
           <ProjectMemberList
             key={`${departmentIndex}-${projectIndex}`}
+            departmentId={currentDepartment.id}
             projectId={currentProject.id}
             loading={projectMembers == null}
             members={projectMembers}
@@ -246,7 +252,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
         </SettingGroup>
         <SettingGroup
           name="Tags"
-          description={isProjectManager ? "You can add a new tag below." : undefined}>
+          description={isProjectManager ? "You can add a new tag below." : " "}>
           {isProjectManager ? (
             <AddTagForm
               key={`tagform${currentProject.id}`}
@@ -275,21 +281,18 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
   }
 
   let addBtn;
-  if (credentials.isDepartmentManager(currentDepartment.id))
+  if (isAddLoading)
   {
-    if (isAddLoading)
-    {
-      addBtn = <Spinner />
-    } else
-    {
-      addBtn = (
-        <>
-          <FontAwesomeIcon
-            icon={faPlus}
-            className="AddIcon" />
+    addBtn = <Spinner />
+  } else
+  {
+    addBtn = (
+      <>
+        <FontAwesomeIcon
+          icon={faPlus}
+          className="AddIcon" />
           Add new project
-        </>);
-    }
+      </>);
   }
 
 
@@ -308,10 +311,12 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
           boundaryElement=".SubsettingSidePane"
           topOffset={-240}
           stickyStyle={{ transform: 'translateY(240px)' }}>
-          <SidePaneElement reducedpadding={isAddLoading} onClick={createProject}
-            highlighted elementDiv={isAddLoading}>
-            {addBtn}
-          </SidePaneElement>
+          {isDepartmentManager ? (
+            <SidePaneElement reducedpadding={isAddLoading} onClick={createProject}
+              highlighted elementDiv={isAddLoading}>
+              {addBtn}
+            </SidePaneElement>
+          ) : undefined}
           {ProjectElements}
         </Sticky>
       </div>

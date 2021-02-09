@@ -248,7 +248,7 @@ const TodoTable = ({ tags, projectId, milestoneId, selectedTagId }) =>
                     <th>Name</th>
                     <th>Assignee</th>
                     <th>Tags</th>
-                    {isProjectManager ? <th>Actions</th> : undefined}
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>

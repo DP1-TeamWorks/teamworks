@@ -11,6 +11,7 @@ import UserPage from '../components/settings/users/UserPage';
 import MilestonePage from '../components/settings/milestone/MilestonePage';
 import { useContext } from 'react/cjs/react.development';
 import UserCredentials from '../context/UserCredentials';
+import Spinner from '../components/spinner/Spinner';
 
 
 const PATHS = ["/settings/team", "/settings/departments", "/settings/projects", "/settings/users"];
@@ -20,12 +21,29 @@ const Settings = () =>
     const credentials = useContext(UserCredentials);
     const location = useLocation();
 
-    if (credentials.isTeamManager !== undefined && !credentials.isTeamManager)
-        return <Redirect to="/settings/projects" />
+    if (credentials.isTeamManager === undefined)
+        return (
+            <div className="Content">
+                <SettingsSidebar />
+                <Section className="Section--Lighter">
+                    <div className="SettingGroupsContainer">
+                        <Spinner />
+                    </div>
+                </Section>
+            </div>
+        );
 
     if (credentials.isTeamManager !== undefined && location.pathname.indexOf("/settings") >= 0 && PATHS.indexOf(location.pathname) === -1
         && !(location.pathname.indexOf("/settings/projects") >= 0 || location.pathname.indexOf("/settings/users") >= 0))
-        return <Redirect to="/settings/team" />
+        {
+            if (credentials.isTeamManager)
+            {
+                return <Redirect to="/settings/team" />
+            } else
+            {
+                return <Redirect to="/settings/projects" />
+            }
+        }
 
     return (
         <div className="Content">
@@ -33,8 +51,8 @@ const Settings = () =>
             <Section className="Section--Lighter">
                 <ProfileHeader
                     src="/default_pfp.png"
-                    role="Team Manager"
-                    name="Nicolás de Ory" />
+                    role={credentials.getRoleName()}
+                    name={credentials.user.name + " " + credentials.user.lastname} />
                 <Switch>
                     <Route path="/settings/team">
                         <TeamSettings />

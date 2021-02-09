@@ -85,7 +85,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/toDos/create").addPathPatterns("api/toDos/assign")
                 .addPathPatterns("/api/toDos/delete")
                 .addPathPatterns("/api/toDos/updateTitle").addPathPatterns("/api/toDos/setTags")
-                .addPathPatterns("/api/milestones")
                 .excludePathPatterns("/api/milestones/next").order(3);
         registry.addInterceptor(
                 new ProjectEmployeeInterceptor(userTWService, milestoneService, toDoService, participationService, belongsService, projectService))
@@ -94,6 +93,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/toDos").addPathPatterns("/api/toDos/markAsDone")
                 .addPathPatterns("/api/toDos/mine").addPathPatterns("/api/toDos/mine/create")
                 .addPathPatterns("/api/projects/participation")
-                .addPathPatterns("/api/project/details").order(4);
+                .addPathPatterns("/api/project/details")
+                .addPathPatterns("/api/milestones").order(4);
     }
 }

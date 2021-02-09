@@ -16,8 +16,12 @@ const DepartmentMemberList = ({ departmentId, members, loading, onListUpdated })
   {
     if (member.isDepartmentManager)
     {
-      // TODO: Change confirm message if it's department manager and not team manager who is asking
-      if (window.confirm(`Are you sure to demote ${member.name} ${member.lastname} and make them a member?`))
+      let confirmMessage = `Are you sure to demote ${member.name} ${member.lastname} and make them a member?`;
+      if (!credentials.isTeamManager && isDepartmentManager)
+      {
+        confirmMessage = `NOTE: You are demoting yourself and you will NO LONGER HAVE MANAGEMENT PRIVILEGES. This action cannot be undone. Would you like to continue?`;
+      }
+      if (window.confirm(confirmMessage))
       {
         DepartmentApiUtils.addUserToDepartment(departmentId, member.userId, false)
           .then(() => onListUpdated())
@@ -25,8 +29,12 @@ const DepartmentMemberList = ({ departmentId, members, loading, onListUpdated })
       }
     } else
     {
-      // TODO: Change confirm message if it's department manager and not team manager who is asking
-      if (window.confirm(`Are you sure to promote ${member.name} ${member.lastname} to department manager?`))
+      let confirmMessage = `Are you sure to demote ${member.name} ${member.lastname} and make them a member?`;
+      if (!credentials.isTeamManager && isDepartmentManager)
+      {
+        confirmMessage = `NOTE: You are promoting ${member.name} ${member.lastname} to department manager. You will NO LONGER HAVE MANAGEMENT PRIVILEGES. This action cannot be undone. Would you like to continue?`;
+      }
+      if (window.confirm(confirmMessage))
       {
         DepartmentApiUtils.addUserToDepartment(departmentId, member.userId, true)
           .then(() => onListUpdated())
