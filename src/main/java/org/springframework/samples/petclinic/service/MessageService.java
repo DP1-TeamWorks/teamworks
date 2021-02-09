@@ -23,9 +23,6 @@ public class MessageService {
 
 	@Transactional
 	public void saveMessage(Message message) throws DataAccessException {
-		if(message.getSender() == null || message.getText() == null) {
-			throw new NullPointerException();
-		}
 		messageRepository.save(message);
 	}
 
