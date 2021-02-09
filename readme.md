@@ -6,9 +6,10 @@
 - Clone the repository 
 - import the maven project
 - maven install
-- execute the commnad: `./mvnw spring-boot:run`
+- execute the commnad: `./mvnw spring-boot:run` or run "PetclinicApplication"
 
 ### Frontend
+If you wish to modify frontend code and see changes on the fly:
 - Navigate to `/frontend/teamworks`
 - `npm install`
 - `npm run start`
