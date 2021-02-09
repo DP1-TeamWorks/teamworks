@@ -42,24 +42,26 @@ public class ParticipationService {
         }
 
         participationRepository.save(participation);
-
-        // CASCADE ASSIGNEES
-        List<ToDo> affectedTodos = participation
-            .getProject()
-            .getMilestones()
-            .stream()
-            .map(x -> x.getToDos())
-            .flatMap(Collection::stream)
-            .filter(x -> x.getAssignee() != null && x.getAssignee().equals(participation.getUserTW()))
-            .collect(Collectors.toList());
-        for (ToDo t : affectedTodos) {
-            t.setAssignee(null);
-            try {
-                toDoService.saveToDo(t);
-            } catch (Exception e) {
-                log.error("ERROR", e);
+        if(participation.getFinalDate() != null) {
+        	// CASCADE ASSIGNEES
+            List<ToDo> affectedTodos = participation
+                .getProject()
+                .getMilestones()
+                .stream()
+                .map(x -> x.getToDos())
+                .flatMap(Collection::stream)
+                .filter(x -> x.getAssignee() != null && x.getAssignee().equals(participation.getUserTW()))
+                .collect(Collectors.toList());
+            for (ToDo t : affectedTodos) {
+                t.setAssignee(null);
+                try {
+                    toDoService.saveToDo(t);
+                } catch (Exception e) {
+                    log.error("ERROR", e);
+                }
             }
         }
+        
     }
 
 	@Transactional

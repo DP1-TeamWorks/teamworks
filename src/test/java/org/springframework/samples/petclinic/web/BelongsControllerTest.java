@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -123,9 +124,11 @@ public class BelongsControllerTest {
 		//Part
 		participation = new Participation();
 		participation.setUserTW(juan);
-		participation.setUserTW(rosa);
 		participation.setId(TEST_PARTICIPATION_ID);
 		participation.setIsProjectManager(true);
+		List<Participation> parts= new ArrayList<>();
+		parts.add(participation);
+		juan.setParticipation(parts);
 		
 		//Session
 		mockSession.setAttribute("userId",TEST_USER_ID);

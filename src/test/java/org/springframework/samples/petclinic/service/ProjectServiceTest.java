@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -20,6 +19,7 @@ import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Milestone;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
+import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyProjectManagerException;
@@ -38,6 +38,8 @@ public class ProjectServiceTest {
 	protected UserTWService userService;
 	@Autowired
 	protected ToDoService todoService;
+	@Autowired
+	protected MilestoneService milestoneService;
 
 
 	@Test
@@ -138,10 +140,21 @@ public class ProjectServiceTest {
 
 		Participation participacion = new Participation();
 		UserTW user = userService.findUserById(1);
-		participacion.setUserTW(user);
 		participacion.setProject(project);
 		participacion.setIsProjectManager(false);
-
+		List<Participation> parts = new ArrayList<>();
+		parts.add(participacion);
+		user.setParticipation(parts);
+		participacion.setUserTW(user);
+		
+		Milestone mil = milestoneService.findMilestoneById(1);
+		ToDo todo = todoService.findToDoById(1);
+		List<ToDo> todos = new ArrayList<>();
+		todos.add(todo);
+		mil.setToDos(todos);
+		List<Milestone> miles = new ArrayList<>();
+		miles.add(mil);
+		project.setMilestones(miles);
 		try {
 			//peta aquí, tiene que ver con el save participation pero no soy capaz de dar con el error
 			participationService.saveParticipation(participacion);
