@@ -50,6 +50,7 @@ const AssignUserForm = ({ onUserAssigned, submitText, milestoneId, projectId, to
   return (
     <>
     <AddForm
+      tooManyErrorText="This user has too many tasks assigned. Mark some as done."
       disabled={selectedUser.current === todo.assigneeId??-1}
       hasAutocomplete submitText={submitText}
       postFunction={addUserToProject}

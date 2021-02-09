@@ -25,9 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	DataSource dataSource;
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 	    http.csrf().disable();
@@ -35,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin();
 	}
 	@Bean
-	public static PasswordEncoder passwordEncoder() {	    
+	public static PasswordEncoder passwordEncoder() {
 		PasswordEncoder encoder =  new BCryptPasswordEncoder();
 	    return encoder;
 	}

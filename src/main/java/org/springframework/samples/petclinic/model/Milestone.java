@@ -57,9 +57,12 @@ public class Milestone extends BaseEntity {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "milestone", orphanRemoval = true)
 	private List<ToDo> toDos;
 
-	@JsonIgnore
-	// @JsonManagedReference(value="milestone-tag")
-	@ManyToMany
-	private List<Tag> tags;
+	/*@JsonIgnore
+	public void setToDos(List<ToDo> todos)
+    {
+        toDos = todos;
+    }*/
+
+	
 
 }

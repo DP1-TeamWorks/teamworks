@@ -1,9 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,7 +79,7 @@ public class MilestoneController {
             .collect(Collectors.toList());
 	}
 
-	@PostMapping(value = "/api/milestones")
+	@PostMapping(value = "/api/milestones/post")
 	public ResponseEntity<String> postMilestones(@RequestParam(required = true) Integer projectId,
 			@Valid @RequestBody Milestone milestone) {
 
@@ -112,10 +109,10 @@ public class MilestoneController {
 
 	}
 
-	@DeleteMapping(value = "/api/milestones")
+	@DeleteMapping(value = "/api/milestones/delete")
 	public ResponseEntity<String> deleteMilestones(@RequestParam(required = true) Integer milestoneId) {
 		try {
-			milestoneService.deleteMilestonetById(milestoneId);
+			milestoneService.deleteMilestoneById(milestoneId);
 			return ResponseEntity.ok("Milestone delete");
 		} catch (DataAccessException d) {
 			return ResponseEntity.notFound().build();

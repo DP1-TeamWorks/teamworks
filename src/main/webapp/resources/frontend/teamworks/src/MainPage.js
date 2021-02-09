@@ -3,11 +3,13 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import Header from "./components/header/Header";
 import ScrollToTop from "./components/routing/ScrollToTop";
+import UserCredentialsProvider from "./context/UserCredentialsProvider";
 import Inbox from "./sections/Inbox";
 import "./sections/Section.css";
 import Settings from "./sections/Settings";
 
-const MainPage = () => {
+const MainPage = () =>
+{
   const [search, setSearch] = useState("");
   return (
     <Router>
@@ -19,7 +21,9 @@ const MainPage = () => {
         </Route>
         <Route path="/settings">
           <Header nosearchbar />
-          <Settings />
+          <UserCredentialsProvider>
+            <Settings />
+          </UserCredentialsProvider>
         </Route>
       </Switch>
     </Router>

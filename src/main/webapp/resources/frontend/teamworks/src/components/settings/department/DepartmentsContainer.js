@@ -9,9 +9,13 @@ import SidePaneElement from "../SidePaneElement";
 import DepartmentMemberList from "./DepartmentMemberList";
 import Sticky from "react-sticky-el";
 import "../SubsettingContainer.css";
+import { useContext } from 'react/cjs/react.development';
+import UserCredentials from '../../../context/UserCredentials';
 
 const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
 {
+
+  const credentials = useContext(UserCredentials);
 
   function onDepartmentAttributeUpdated(field, value)
   {
@@ -100,6 +104,39 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
 
   const currentDepartment = myDepartments[selectedIndex];
 
+  const isDepartmentManager = credentials.isDepartmentManager(currentDepartment.id);
+
+  let addUserToDptElement;
+  let deleteDepartmentElement;
+  if (isDepartmentManager)
+  {
+    addUserToDptElement = (
+      <SettingGroup
+        name="Add user to department"
+        description="Start typing their name below.">
+        <AddUserToDepartment
+          key={currentDepartment.name}
+          onUserAdded={onUserAdded}
+          departmentId={currentDepartment.id}
+          submitText={`Add to ${currentDepartment.name}`} />
+      </SettingGroup>
+    );
+
+    deleteDepartmentElement = (
+      <SettingGroup
+        danger
+        name="Delete department"
+        description="Deletes the department, as well as its associated members and projects. <br>This action cannot be undone.">
+        <Button
+          className="Button--red"
+          onClick={onDepartmentDeleteClicked}>
+          {isDeleting ? <Spinner red /> : "Delete department"}
+        </Button>
+      </SettingGroup>
+    );
+  }
+
+
   return (
     <div className="SubsettingContainer">
       <div className="SubsettingSidePane">
@@ -118,6 +155,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
             key={selectedIndex}
             value={currentDepartment.name}
             fieldName="name"
+            editable={isDepartmentManager}
             postFunction={updateDepartment}
             onUpdated={onDepartmentAttributeUpdated} />
         </SettingGroup>
@@ -128,22 +166,15 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
             key={selectedIndex}
             smaller
             value={currentDepartment.description}
+            editable={isDepartmentManager}
             fieldName="description"
             postFunction={updateDepartment}
             onUpdated={onDepartmentAttributeUpdated} />
         </SettingGroup>
-        <SettingGroup
-          name="Add user to department"
-          description="Start typing their name below.">
-          <AddUserToDepartment
-            key={currentDepartment.name}
-            onUserAdded={onUserAdded}
-            departmentId={currentDepartment.id}
-            submitText={`Add to ${currentDepartment.name}`} />
-        </SettingGroup>
+        {addUserToDptElement}
         <SettingGroup
           name="Members"
-          description="Click on a user to see their profile and hover to show available actions.">
+          description={isDepartmentManager ? "Click on a user to see their profile and hover to show available actions." : "Click on a user to see their profile."}>
           <DepartmentMemberList
             key={selectedIndex}
             departmentId={currentDepartment.id}
@@ -151,16 +182,7 @@ const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>
             members={departmentMembers}
             onListUpdated={fetchDepartmentMembers} />
         </SettingGroup>
-        <SettingGroup
-          danger
-          name="Delete department"
-          description="Deletes the department, as well as its associated members and projects. <br>This action cannot be undone.">
-          <Button
-            className="Button--red"
-            onClick={onDepartmentDeleteClicked}>
-            {isDeleting ? <Spinner red /> : "Delete department"}
-          </Button>
-        </SettingGroup>
+        {deleteDepartmentElement}
       </div>
     </div>
   );

@@ -24,6 +24,9 @@ public interface UserTWRepository extends Repository<UserTW, Integer> {
 
     public UserTW findById(Integer id);
 
+    @Query("SELECT u FROM UserTW u WHERE u.team.id = :teamId AND u.role = 0")
+    public UserTW findTeamOwner(@Param("teamId") Integer teamId);
+
     @Query("SELECT u FROM UserTW u WHERE u.name LIKE :name%")
     public Collection<UserTW> findByName(@Param("name") String name);
 
@@ -31,9 +34,9 @@ public interface UserTWRepository extends Repository<UserTW, Integer> {
     public Collection<UserTW> findByLastName(@Param("lastname") String lastname);
 
     @Query("SELECT u FROM UserTW u WHERE u.team.id = :teamId")
-    public Collection<UserTW.StrippedUser> findUsersByTeam(@Param("teamId") Integer teamId);
+    public Collection<UserTW> findUsersByTeam(@Param("teamId") Integer teamId);
 
-    public Collection<UserTW.StrippedUser> findAll() throws DataAccessException;
+    public Collection<UserTW> findAll() throws DataAccessException;
 
     @Query("SELECT u FROM UserTW u WHERE u.email = :email")
     public UserTW findByEmail(@Param("email") String email);

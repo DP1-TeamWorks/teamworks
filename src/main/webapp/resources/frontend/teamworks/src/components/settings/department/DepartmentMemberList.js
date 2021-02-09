@@ -1,17 +1,27 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react/cjs/react.development";
+import UserCredentials from "../../../context/UserCredentials";
 import "../../../FontStyles.css";
 import DepartmentApiUtils from "../../../utils/api/DepartmentApiUtils";
 import Spinner from "../../spinner/Spinner";
 import "../UserList.css";
 
-const DepartmentMemberList = ({departmentId, members, loading, onListUpdated}) => {
+const DepartmentMemberList = ({ departmentId, members, loading, onListUpdated }) =>
+{
+
+  const credentials = useContext(UserCredentials);
+  const isDepartmentManager = credentials.isDepartmentManager(departmentId);
 
   function onPromoteClicked(member)
   {
     if (member.isDepartmentManager)
     {
-      // TODO: Change confirm message if it's department manager and not team manager who is asking
-      if (window.confirm(`Are you sure to demote ${member.name} ${member.lastname} and make them a member?`))
+      let confirmMessage = `Are you sure to demote ${member.name} ${member.lastname} and make them a member?`;
+      if (!credentials.isTeamManager && isDepartmentManager)
+      {
+        confirmMessage = `NOTE: You are demoting yourself and you will NO LONGER HAVE MANAGEMENT PRIVILEGES. This action cannot be undone. Would you like to continue?`;
+      }
+      if (window.confirm(confirmMessage))
       {
         DepartmentApiUtils.addUserToDepartment(departmentId, member.userId, false)
           .then(() => onListUpdated())
@@ -19,8 +29,12 @@ const DepartmentMemberList = ({departmentId, members, loading, onListUpdated}) =
       }
     } else
     {
-      // TODO: Change confirm message if it's department manager and not team manager who is asking
-      if (window.confirm(`Are you sure to promote ${member.name} ${member.lastname} to department manager?`))
+      let confirmMessage = `Are you sure to demote ${member.name} ${member.lastname} and make them a member?`;
+      if (!credentials.isTeamManager && isDepartmentManager)
+      {
+        confirmMessage = `NOTE: You are promoting ${member.name} ${member.lastname} to department manager. You will NO LONGER HAVE MANAGEMENT PRIVILEGES. This action cannot be undone. Would you like to continue?`;
+      }
+      if (window.confirm(confirmMessage))
       {
         DepartmentApiUtils.addUserToDepartment(departmentId, member.userId, true)
           .then(() => onListUpdated())
@@ -35,8 +49,8 @@ const DepartmentMemberList = ({departmentId, members, loading, onListUpdated}) =
     if (window.confirm(`Are you sure to remove ${member.name} ${member.lastname} from the department?`))
     {
       DepartmentApiUtils.removeUserFromDepartment(departmentId, member.userId)
-      .then(() => onListUpdated())
-      .catch(err => console.error(err));
+        .then(() => onListUpdated())
+        .catch(err => console.error(err));
     }
   }
 
@@ -52,34 +66,65 @@ const DepartmentMemberList = ({departmentId, members, loading, onListUpdated}) =
     {
       const completename = member.name + " " + member.lastname;
       const username = completename.toLowerCase().replace(/ /g, "");
-      return (
-        <tr key={member.id}>
-          <td><Link to={`/settings/users/${member.userId}/${username}`}>{member.lastname}, {member.name}</Link></td>
-          <td>{member.email}</td>
-          <td>{member.isDepartmentManager ? "Dpt. Manager" : "Member"}</td>
-          <td>{member.initialDate}</td>
-          <td className="ActionStrip">
-            <span onClick={() => onPromoteClicked(member)} className="BoldTitle BoldTitle--Smallest ActionButton">{member.isDepartmentManager ? "Demote" : "Promote"}</span>
-            <span onClick={() => onRemoveClicked(member)} className="BoldTitle BoldTitle--Smallest ActionButton">Remove</span>
-          </td>
-        </tr>
-      );
+      if (isDepartmentManager)
+      {
+        return (
+          <tr key={member.id}>
+            <td><Link to={`/settings/users/${member.userId}/${username}`}>{member.lastname}, {member.name}</Link></td>
+            <td>{member.email}</td>
+            <td>{member.isDepartmentManager ? "Dpt. Manager" : "Member"}</td>
+            <td>{member.initialDate}</td>
+            <td className="ActionStrip">
+              <span onClick={() => onPromoteClicked(member)} className="BoldTitle BoldTitle--Smallest ActionButton">{member.isDepartmentManager ? "Demote" : "Promote"}</span>
+              <span onClick={() => onRemoveClicked(member)} className="BoldTitle BoldTitle--Smallest ActionButton">Remove</span>
+            </td>
+          </tr>
+        );
+      } else 
+      {
+        return (
+          <tr key={member.id}>
+            <td><Link to={`/settings/users/${member.userId}/${username}`}>{member.lastname}, {member.name}</Link></td>
+            <td>{member.email}</td>
+            <td>{member.isDepartmentManager ? "Dpt. Manager" : "Member"}</td>
+            <td>{member.initialDate}</td>
+          </tr>
+        );
+      }
     });
   } else
   {
     return <p>This department has no members yet.</p>
   }
 
+  let tableHeader;
+  if (isDepartmentManager)
+  {
+    tableHeader = (
+      <tr>
+        <th>Name</th>
+        <th>E-mail address</th>
+        <th>Role</th>
+        <th>Member since</th>
+        <th>Actions</th>
+      </tr>
+    );
+  } else
+  {
+    tableHeader = (
+      <tr>
+        <th>Name</th>
+        <th>E-mail address</th>
+        <th>Role</th>
+        <th>Member since</th>
+      </tr>
+    );
+  }
+
   return (
     <table className="UserList">
       <thead className="UserList__thead">
-        <tr>
-          <th>Name</th>
-          <th>E-mail address</th>
-          <th>Role</th>
-          <th>Member since</th>
-          <th>Actions</th>
-        </tr>
+        {tableHeader}
       </thead>
       <tbody>
         {elements}

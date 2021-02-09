@@ -11,12 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Department;
+import org.springframework.samples.petclinic.model.Project;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
-import org.springframework.samples.petclinic.service.BelongsService;
-import org.springframework.samples.petclinic.service.DepartmentService;
-import org.springframework.samples.petclinic.service.TeamService;
-import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.service.*;
 import org.springframework.samples.petclinic.validation.DepartmentValidator;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -28,14 +26,16 @@ public class DepartmentController {
 	private final TeamService teamService;
 	private final BelongsService belongsService;
 	private final DepartmentValidator departmentValidator;
+	private final ParticipationService participationService;
 
 	@Autowired
-	public DepartmentController(DepartmentService departmentService, TeamService teamService,
-			UserTWService userTWService, BelongsService belongsService, DepartmentValidator departmentValidator) {
+	public DepartmentController(DepartmentService departmentService, ParticipationService participationService, TeamService teamService, BelongsService belongsService, DepartmentValidator departmentValidator) {
+
 		this.departmentService = departmentService;
 		this.teamService = teamService;
 		this.belongsService = belongsService;
 		this.departmentValidator = departmentValidator;
+		this.participationService = participationService;
 	}
 
 	@InitBinder
@@ -51,21 +51,35 @@ public class DepartmentController {
 		return l;
 	}
 
-	@GetMapping(value = "/api/department/users")
+	/*@GetMapping(value = "/api/department/users")
 	public List<UserTW> getTeamUser(HttpServletRequest r, @RequestParam(required = true) Integer departmentId) {
 		List<UserTW> l = new ArrayList<>();
 		l = departmentService.findDepartmentUsers(departmentId).stream().collect(Collectors.toList());
 		return l;
-	}
+	}*/
 
 	@GetMapping(value = "/api/departments/mine")
 	public List<Department> getMyDeparments(HttpServletRequest r) {
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
-		List<Department> l = belongsService.findMyDepartments(userId).stream().collect(Collectors.toList());
-		return l;
+		List<Department> myDpts = belongsService.findMyDepartments(userId).stream().collect(Collectors.toList());
+		// for every department remove projects the user isnt a member in
+        List<Project> participations = participationService.findCurrentParticipationsUser(userId)
+            .stream().map(x -> x.getProject()).collect(Collectors.toList());
+        for (Department d : myDpts)
+        {
+            List<Project> projectsWhereUserParticipates = new ArrayList<>();
+            for (Project p : d.getProjects())
+            {
+                if (participations.contains(p))
+                    projectsWhereUserParticipates.add(p);
+            }
+            d.setProjects(projectsWhereUserParticipates);
+        }
+
+		return myDpts;
 	}
 
-	@PostMapping(value = "/api/departments")
+	@PostMapping(value = "/api/departments/create")
 	public ResponseEntity<String> createDeparment(@Valid @RequestBody Department department, HttpServletRequest r) {
 		try {
 			Integer teamId = (Integer) r.getSession().getAttribute("teamId");
@@ -82,7 +96,7 @@ public class DepartmentController {
 		}
 	}
 
-	@PatchMapping(value = "/api/departments")
+	@PatchMapping(value = "/api/departments/update")
 	public ResponseEntity<String> updateDepartment(@RequestBody Department department, HttpServletRequest r,
 			BindingResult errors) {
 		try {
@@ -112,7 +126,7 @@ public class DepartmentController {
 		}
 	}
 
-	@DeleteMapping(value = "/api/departments/{id}")
+	@DeleteMapping(value = "/api/departments/{id}/delete")
 	public ResponseEntity<String> deleteDeparment(@PathVariable(required = true) Integer id, HttpServletRequest r) {
 		try {
 			departmentService.deleteDepartmentById(id);

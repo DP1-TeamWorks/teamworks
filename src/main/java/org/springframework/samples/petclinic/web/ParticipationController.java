@@ -3,32 +3,26 @@ package org.springframework.samples.petclinic.web;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.samples.petclinic.model.Belongs;
-import org.springframework.samples.petclinic.model.Participation;
-import org.springframework.samples.petclinic.model.Project;
-import org.springframework.samples.petclinic.model.Role;
-import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.model.UserTW;
-import org.springframework.samples.petclinic.service.BelongsService;
-import org.springframework.samples.petclinic.service.ParticipationService;
-import org.springframework.samples.petclinic.service.ProjectService;
-import org.springframework.samples.petclinic.service.TeamService;
-import org.springframework.samples.petclinic.service.UserTWService;
+import org.springframework.samples.petclinic.model.*;
+import org.springframework.samples.petclinic.enums.Role;
+import org.springframework.samples.petclinic.service.*;
 import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.samples.petclinic.validation.IdParentIncoherenceException;
 import org.springframework.samples.petclinic.validation.ManyProjectManagerException;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@Slf4j
+@RestController
 public class ParticipationController {
 	private final ProjectService projectService;
 	private final ParticipationService participationService;
@@ -37,7 +31,7 @@ public class ParticipationController {
 
 	@Autowired
 	public ParticipationController(ProjectService projectService, ParticipationService participationService,
-			UserTWService userTWService, BelongsService belongsService) {
+                                   UserTWService userTWService, BelongsService belongsService) {
 		this.projectService = projectService;
 		this.participationService = participationService;
 		this.userTWService = userTWService;
@@ -54,15 +48,15 @@ public class ParticipationController {
     {
         try
         {
-            Collection<Participation> belongs = participationService.findCurrentParticipationsInDepartment(projectId).stream().sorted(Comparator.comparing(Participation::getLastname).thenComparing(Participation::getName)).collect(Collectors.toList());
-            return ResponseEntity.ok(belongs);
+            Collection<Participation> participation = participationService.findCurrentParticipationsInProject(projectId).stream().sorted(Comparator.comparing(Participation::getLastname).thenComparing(Participation::getName)).collect(Collectors.toList());
+            return ResponseEntity.ok(participation);
         } catch (DataAccessException e)
         {
             return ResponseEntity.badRequest().build();
         }
     }
 
-    @PostMapping(value = "/api/projects/participation")
+    @PostMapping(value = "/api/projects/participation/create")
     public ResponseEntity<String> postParticipation(@RequestParam(required = true) Integer participationUserId,
                                                     @RequestParam(required = true) Integer projectId,
                                                     @RequestParam(required = false) Boolean willBeProjectManager, HttpServletRequest r) {
@@ -140,7 +134,7 @@ public class ParticipationController {
 
     }
 
-	@DeleteMapping(value = "/api/projects/participation")
+	@DeleteMapping(value = "/api/projects/participation/delete")
 	public ResponseEntity<String> deleteParticipation(@RequestParam(required = true) Integer participationUserId,
 			@RequestParam(required = true) Integer projectId, HttpServletRequest r) {
 		try {
@@ -152,6 +146,7 @@ public class ParticipationController {
                 // End the participation
                 currentParticipation.setFinalDate(LocalDate.now());
                 participationService.saveParticipation(currentParticipation);
+
                 return ResponseEntity.ok().build();
             }
 			else {

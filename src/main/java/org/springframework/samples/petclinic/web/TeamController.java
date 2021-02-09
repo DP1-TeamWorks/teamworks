@@ -22,7 +22,7 @@ public class TeamController {
 
 	private final TeamService teamService;
 	@Autowired
-	public TeamController(TeamService teamService, UserTWService userService) {
+	public TeamController(TeamService teamService) {
 		this.teamService = teamService;
 	}
 
@@ -38,7 +38,7 @@ public class TeamController {
 	    return ResponseEntity.ok(teamName);
 	}
 
-	@PostMapping(value = "/api/team")
+	@PostMapping(value = "/api/team/update")
 	public ResponseEntity<String> updateTeam(HttpServletRequest req, @RequestBody Team teamAttrs) {
 		try {
 		    String name = teamAttrs.getName();
@@ -59,14 +59,14 @@ public class TeamController {
 		}
 	}
 
-	@DeleteMapping(value = "/api/team")
+	@DeleteMapping(value = "/api/team/delete")
 	public ResponseEntity<String> deleteTeam(HttpServletRequest req) {
         Integer teamId = (Integer) req.getSession().getAttribute("teamId");
 		try {
 			teamService.deleteTeamById(teamId);
 			return ResponseEntity.ok("Team deleted");
 		} catch (DataAccessException d) {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.badRequest().build();
 		}
 	}
 

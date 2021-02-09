@@ -66,7 +66,7 @@ public class TagController {
         return tags;
     }
 
-    @PostMapping(value = "/api/tags")
+    @PostMapping(value = "/api/tags/create")
     public ResponseEntity<String> createTag(HttpServletRequest r, @Valid @RequestBody Tag tag,
             @RequestParam(required = true) Integer projectId) {
         try {
@@ -86,7 +86,7 @@ public class TagController {
         }
     }
 
-    @DeleteMapping(value = "/api/tags")
+    @DeleteMapping(value = "/api/tags/delete")
     public ResponseEntity<String> deleteTagById(HttpServletRequest r, @RequestParam(required = true) Integer projectId, @RequestParam(required = true) Integer tagId) {
         try {
             tagService.deleteTagById(tagId);

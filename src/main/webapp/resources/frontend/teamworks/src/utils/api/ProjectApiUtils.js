@@ -6,22 +6,22 @@ const ProjectApiUtils = {
   /*PROJECT*/
   getProjects: (departmentId) => ApiUtils.get(PROJECT_URL + `?departmentId=${departmentId}`),
   getMyProjects: (departmentId) => ApiUtils.get(PROJECT_URL + "/mine?departmentId=" + departmentId),
-  postProject: (departmentId, project) => ApiUtils.post(PROJECT_URL + `?departmentId=${departmentId}`, project),
-  updateProject: (departmentId, projectId, project) => ApiUtils.patch(PROJECT_URL + `?departmentId=${departmentId}&projectId=${projectId}`, project),
-  deleteProject: (departmentId, projectId) => ApiUtils.delete(PROJECT_URL + `?departmentId=${departmentId}&projectId=${projectId}`),
+  postProject: (departmentId, project) => ApiUtils.post(PROJECT_URL + `/create?departmentId=${departmentId}`, project),
+  updateProject: (departmentId, projectId, project) => ApiUtils.patch(PROJECT_URL + `/update?departmentId=${departmentId}&projectId=${projectId}`, project),
+  deleteProject: (departmentId, projectId) => ApiUtils.delete(PROJECT_URL + `/delete?departmentId=${departmentId}&projectId=${projectId}`),
   addUserToProject: (projectId, userId, projectManager) => 
   {
     if (projectManager !== undefined)
     {
-      return ApiUtils.post(PROJECT_URL + PARTICIPATION_URL + `?projectId=${projectId}&participationUserId=${userId}&willBeProjectManager=${projectManager}`);
+      return ApiUtils.post(PROJECT_URL + PARTICIPATION_URL + `/create?projectId=${projectId}&participationUserId=${userId}&willBeProjectManager=${projectManager}`);
     } else
     {
-      return ApiUtils.post(PROJECT_URL + PARTICIPATION_URL + `?projectId=${projectId}&participationUserId=${userId}`);
+      return ApiUtils.post(PROJECT_URL + PARTICIPATION_URL + `/create?projectId=${projectId}&participationUserId=${userId}`);
     }
   },
   removeUserFromProject: (projectId, userId) => 
   {
-    return ApiUtils.delete(PROJECT_URL + PARTICIPATION_URL + `?projectId=${projectId}&participationUserId=${userId}`);
+    return ApiUtils.delete(PROJECT_URL + PARTICIPATION_URL + `/delete?projectId=${projectId}&participationUserId=${userId}`);
   },
   getMembersFromProject: (projectId) => ApiUtils.get(PROJECT_URL + PARTICIPATION_URL + `?projectId=${projectId}`)
 };

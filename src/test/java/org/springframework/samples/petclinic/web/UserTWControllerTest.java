@@ -1,194 +1,264 @@
-/*package org.springframework.samples.petclinic.web;
+package org.springframework.samples.petclinic.web;
 
-import org.assertj.core.util.Lists;
+import static org.mockito.BDDMockito.doThrow;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.model.UserTW;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.given;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.samples.petclinic.config.TestWebConfig;
+import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
+import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+import org.springframework.samples.petclinic.enums.Role;
+import org.springframework.samples.petclinic.model.*;
+import org.springframework.samples.petclinic.service.*;
+import org.springframework.samples.petclinic.validation.ManyTeamOwnerException;
+import org.springframework.samples.petclinic.validation.UserValidator;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
-import org.springframework.security.test.context.support.WithMockUser;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Test class for {@link OwnerController}
+ * Test class for {@link UserTWController}
  *
- * @author Colin But
  */
 
-/*@WebMvcTest(controllers=OwnerController.class,
-		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
-		excludeAutoConfiguration= SecurityConfiguration.class)
-class UserTWControllerTest {
+@WebMvcTest(controllers = UserTWController.class,
+		excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
+@WebAppConfiguration
+@ContextConfiguration(classes = {TestWebConfig.class, SecurityConfiguration.class})
+@Import(UserTWController.class)
+public class UserTWControllerTest {
 
-	private static final int TEST_OWNER_ID = 1;
 
-	@Autowired
-	private OwnerController ownerController;
+	private static final int TEST_USER_ID = 1;
+	private static final int TEST_TEAM_ID = 3;
+
+    @MockBean
+    GenericIdToEntityConverter idToEntityConverter;
 
 	@MockBean
-	private OwnerService clinicService;
+	private UserTWService UserTWService;
 
-        @MockBean
-	private UserService userService;
+    @MockBean
+	private TeamService teamService;
+    @MockBean
+    private BelongsService belongsService;
+    @MockBean
+    private ParticipationService participationService;
 
-        @MockBean
-        private AuthoritiesService authoritiesService;
+    @MockBean
+    private UserValidator userValidator;
+
+//    @Autowired
+//    private WebApplicationContext context;
+//
+//    @Autowired
+//    private Filter springSecurityFilterChain;
 
 	@Autowired
 	private MockMvc mockMvc;
+	@Autowired
+	private ObjectMapper objectMapper;
 
-	private UserTW george;
+	private UserTW juan;
+
+	private Team team;
+	private List<UserTW.StrippedUser> userList;
+	private Collection<UserTW> userCol;
+	private Collection<Participation> participationCol;
+	private Collection<Belongs> belongsCol;
+	@Autowired
+	protected MockHttpSession mockSession;
 
 
 	@BeforeEach
 	void setup() {
 
+		userCol=new ArrayList<>();
+		belongsCol=new ArrayList<>();
+		participationCol=new ArrayList<>();
+		userList=new ArrayList<>();
 
-		george = new UserTW();
-		george.setName("George");
-		george.setLastname("Franklin");
-		george.setPassword(123456);
-		george.setRole("1");
-		george.setTeam("1");
-		given(this.clinicService.findOwnerById(6)).willReturn(george);
+		//Juan
+		juan = new UserTW();
+		juan.setId(TEST_USER_ID);
+		juan.setName("Juan");
+		juan.setLastname("Franklin");
+		juan.setEmail("andrespuertas@cyber");
+		juan.setPassword("123456789");
+		juan.setRole(Role.team_owner);
+
+		//Team
+		team=new Team();
+		team.setId(TEST_TEAM_ID);
+		juan.setTeam(team);
+		//Participation and belongs of George
+		Participation participation=new Participation();
+		participation.setUserTW(juan);
+		participation.setIsProjectManager(true);
+		Belongs belongs=new Belongs();
+		belongs.setUserTW(juan);
+		belongs.setIsDepartmentManager(true);
+		belongsCol.add(belongs);
+		participationCol.add(participation);
+		given(belongsService.findUserBelongs(TEST_USER_ID)).willReturn(belongsCol);
+		given(belongsService.findCurrentUserBelongs(TEST_USER_ID)).willReturn(belongsCol);
+		given(participationService.findCurrentParticipationsUser(TEST_USER_ID)).willReturn(participationCol);
+		given(participationService.findUserParticipations(TEST_USER_ID)).willReturn(participationCol);
+		//Session
+		mockSession.setAttribute("userId",TEST_USER_ID);
+		mockSession.setAttribute("teamId",TEST_TEAM_ID);
+
+
+		//given(this.mockSession.getAttribute("userID"),TEST_USER_ID)
+		given(this.UserTWService.findUserById(TEST_USER_ID)).willReturn(juan);
+		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(team);
 
 	}
 
-	@WithMockUser(value = "spring")
-        @Test
-	void testInitCreationForm() throws Exception {
-		mockMvc.perform(get("/owners/new")).andExpect(status().isOk()).andExpect(model().attributeExists("owner"))
-				.andExpect(view().name("owners/createOrUpdateOwnerForm"));
-	}
-
-	@WithMockUser(value = "spring")
-        @Test
-	void testProcessCreationFormSuccess() throws Exception {
-		mockMvc.perform(post("/owners/new").param("firstName", "Joe").param("lastName", "Bloggs")
-							.with(csrf())
-							.param("address", "123 Caramel Street")
-							.param("city", "London")
-							.param("telephone", "01316761638"))
-				.andExpect(status().is3xxRedirection());
-	}
-
-	@WithMockUser(value = "spring")
-        @Test
-	void testProcessCreationFormHasErrors() throws Exception {
-		mockMvc.perform(post("/owners/new")
-							.with(csrf())
-							.param("firstName", "Joe")
-							.param("lastName", "Bloggs")
-							.param("city", "London"))
-				.andExpect(status().isOk())
-				.andExpect(model().attributeHasErrors("owner"))
-				.andExpect(model().attributeHasFieldErrors("owner", "address"))
-				.andExpect(model().attributeHasFieldErrors("owner", "telephone"))
-				.andExpect(view().name("owners/createOrUpdateOwnerForm"));
-	}
-
-	@WithMockUser(value = "spring")
-        @Test
-	void testInitFindForm() throws Exception {
-		mockMvc.perform(get("/owners/find")).andExpect(status().isOk()).andExpect(model().attributeExists("owner"))
-				.andExpect(view().name("owners/findOwners"));
-	}
-
-	@WithMockUser(value = "spring")
-        @Test
-	void testProcessFindFormSuccess() throws Exception {
-		given(this.clinicService.findOwnerByLastName("")).willReturn(Lists.newArrayList(george, new Owner()));
-
-		mockMvc.perform(get("/owners")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
-	}
-
-	@WithMockUser(value = "spring")
-        @Test
-	void testProcessFindFormByLastName() throws Exception {
-		given(this.clinicService.findOwnerByLastName(george.getLastName())).willReturn(Lists.newArrayList(george));
-
-		mockMvc.perform(get("/owners").param("lastName", "Franklin")).andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/owners/" + TEST_OWNER_ID));
-	}
-
-        @WithMockUser(value = "spring")
 	@Test
-	void testProcessFindFormNoOwnersFound() throws Exception {
-		mockMvc.perform(get("/owners").param("lastName", "Unknown Surname")).andExpect(status().isOk())
-				.andExpect(model().attributeHasFieldErrors("owner", "lastName"))
-				.andExpect(model().attributeHasFieldErrorCode("owner", "lastName", "notFound"))
-				.andExpect(view().name("owners/findOwners"));
+	void testGetUsers() throws Exception {
+		userCol.add(juan);
+		userList=userCol.stream().map(x -> new StrippedUserImpl(x)).collect(Collectors.toList());
+		given(this.UserTWService.findUsersByTeam(TEST_TEAM_ID)).willReturn(userCol);
+		String usersJson = objectMapper.writeValueAsString(userList);
+		mockMvc.perform(get("/api/users").session(mockSession)).andExpect(status().is(200)).andExpect(content().json(usersJson));
+	}
+	@Test
+	void testGetUser() throws Exception {
+
+		Map<String,Object> m=new HashMap<>();
+		m.put("user", new StrippedUserImpl(juan));
+		List<Belongs> lb = belongsCol.stream().collect(Collectors.toList());
+		m.put("currentDepartments", lb);
+		List<Participation> lp = participationCol.stream()
+				.collect(Collectors.toList());
+		m.put("currentProjects", lp);
+		String userDeatailJson = objectMapper.writeValueAsString(m);
+		Integer userId=TEST_USER_ID;
+		String userIdString=userId.toString();
+		mockMvc.perform(get("/api/user").session(mockSession).param("userId",userIdString )).andExpect(status().is(200)).andExpect(content().json(userDeatailJson));
+	}
+	@Test
+	void testGetInvalidUser() throws Exception {
+		//Introducimos un usuario con id invalida
+		mockMvc.perform(get("/api/user").session(mockSession).param("userId","2000" )).andExpect(status().is(400));
+	}
+	@Test
+	void testGetUserDiferentTeam() throws Exception {
+		//Introducimos un usuario con team diferente al logeado
+		UserTW jose=new UserTW();
+		jose.setName("Jose");
+		jose.setId(TEST_USER_ID+1);
+		jose.setLastname("Franklin");
+		jose.setPassword("123456789");
+		jose.setRole(Role.employee);
+		Team team2= new Team();
+		team2.setId(70);
+		team2.setName("Atomic");
+		jose.setTeam(team2);
+		given(this.UserTWService.findUserById(TEST_USER_ID+1)).willReturn(jose);
+		Integer userId=TEST_USER_ID+1;
+		String userIdString=userId.toString();
+		mockMvc.perform(get("/api/user").session(mockSession).param("userId",userIdString )).andExpect(status().is(400));
 	}
 
-        @WithMockUser(value = "spring")
-	@Test
-	void testInitUpdateOwnerForm() throws Exception {
-		mockMvc.perform(get("/owners/{ownerId}/edit", TEST_OWNER_ID)).andExpect(status().isOk())
-				.andExpect(model().attributeExists("owner"))
-				.andExpect(model().attribute("owner", hasProperty("lastName", is("Franklin"))))
-				.andExpect(model().attribute("owner", hasProperty("firstName", is("George"))))
-				.andExpect(model().attribute("owner", hasProperty("address", is("110 W. Liberty St."))))
-				.andExpect(model().attribute("owner", hasProperty("city", is("Madison"))))
-				.andExpect(model().attribute("owner", hasProperty("telephone", is("6085551023"))))
-				.andExpect(view().name("owners/createOrUpdateOwnerForm"));
+
+    @Test
+	void testPostUser() throws Exception {
+		String georgejson = objectMapper.writeValueAsString(juan);
+		mockMvc.perform(post("/api/user/create").session(mockSession).contentType(MediaType.APPLICATION_JSON).content(georgejson)).andExpect(status().is(200));
+	}
+    @Test
+	void testPostMorethan1TeamOwner() throws Exception {
+    	UserTW jose=new UserTW();
+		jose.setName("Jose");
+		jose.setId(TEST_USER_ID+1);
+		jose.setLastname("Franklin");
+		jose.setPassword("123456789");
+		jose.setRole(Role.team_owner);
+		jose.setTeam(team);
+
+    	doThrow(ManyTeamOwnerException.class).when(this.UserTWService).saveUser(jose);
+		mockMvc.perform(post("/api/user/create").session(mockSession)).andExpect(status().is(400));
 	}
 
-        @WithMockUser(value = "spring")
+    @Test
+  	void testDeleteUser() throws Exception {
+    	Integer userId=TEST_USER_ID;
+		String userIdString=userId.toString();
+  		mockMvc.perform(delete("/api/user/delete").session(mockSession).param("userId",userIdString)).andExpect(status().is(200));
+  	}
+    @Test
+  	void testDeleteUserInvalidId() throws Exception {
+    	Integer userId=99999;
+		String userIdString=userId.toString();
+		doThrow(new DataAccessResourceFailureException("Id no existente"))
+        .when(UserTWService).deleteUserById(userId);
+  		mockMvc.perform(delete("/api/user/delete").session(mockSession).param("userId",userIdString)).andExpect(status().is(400));
+  	}
+
+    @Test
+    void testGetCredentials() throws Exception{
+    	Map<String,Object> m=new HashMap<>();
+    	m.put("isTeamManager", juan.getRole().equals(Role.team_owner));
+		List<Belongs> lb = belongsCol.stream().collect(Collectors.toList());
+		m.put("currentDepartments", lb);
+		List<Participation> lp = participationCol.stream()
+			.collect(Collectors.toList());
+		m.put("currentProjects", lp);
+    	Integer userId=TEST_USER_ID;
+		String userIdString=userId.toString();
+		String georgeCredentialsJson = objectMapper.writeValueAsString(m);
+    	mockMvc.perform(get("/api/user/credentials").session(mockSession).param("userId",userIdString)).andExpect(status().is(200)).andExpect(content().json(georgeCredentialsJson));
+    }
+    @Test
+	void testGetInvalidUserCredentials() throws Exception {
+    	//Introducimos un usuario con id invalida
+		mockMvc.perform(get("/api/user/credentials").session(mockSession).param("userId","2000" )).andExpect(status().is(400));
+	}
 	@Test
-	void testProcessUpdateOwnerFormSuccess() throws Exception {
-		mockMvc.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID)
-							.with(csrf())
-							.param("firstName", "Joe")
-							.param("lastName", "Bloggs")
-							.param("address", "123 Caramel Street")
-							.param("city", "London")
-							.param("telephone", "01616291589"))
-				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/owners/{ownerId}"));
+	void testGetUserCredentialsDiferentTeam() throws Exception {
+		//Introducimos un usuario de un equipo diferente al del usuario logeado
+		UserTW jose=new UserTW();
+		jose.setName("Jose");
+		jose.setId(TEST_USER_ID+1);
+		jose.setLastname("Franklin");
+		jose.setPassword("123456789");
+		jose.setRole(Role.employee);
+		Team team2= new Team();
+		team2.setId(70);
+		team2.setName("Atomic");
+		jose.setTeam(team2);
+		given(this.UserTWService.findUserById(TEST_USER_ID+1)).willReturn(jose);
+		Integer userId=TEST_USER_ID+1;
+		String userIdString=userId.toString();
+		mockMvc.perform(get("/api/user/credentials").session(mockSession).param("userId",userIdString )).andExpect(status().is(400));
+
 	}
 
-        @WithMockUser(value = "spring")
-	@Test
-	void testProcessUpdateOwnerFormHasErrors() throws Exception {
-		mockMvc.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID)
-							.with(csrf())
-							.param("firstName", "Joe")
-							.param("lastName", "Bloggs")
-							.param("city", "London"))
-				.andExpect(status().isOk())
-				.andExpect(model().attributeHasErrors("owner"))
-				.andExpect(model().attributeHasFieldErrors("owner", "address"))
-				.andExpect(model().attributeHasFieldErrors("owner", "telephone"))
-				.andExpect(view().name("owners/createOrUpdateOwnerForm"));
-	}
-
-        @WithMockUser(value = "spring")
-	@Test
-	void testShowOwner() throws Exception {
-		mockMvc.perform(get("/owners/{ownerId}", TEST_OWNER_ID)).andExpect(status().isOk())
-				.andExpect(model().attribute("owner", hasProperty("lastName", is("Franklin"))))
-				.andExpect(model().attribute("owner", hasProperty("firstName", is("George"))))
-				.andExpect(model().attribute("owner", hasProperty("address", is("110 W. Liberty St."))))
-				.andExpect(model().attribute("owner", hasProperty("city", is("Madison"))))
-				.andExpect(model().attribute("owner", hasProperty("telephone", is("6085551023"))))
-				.andExpect(view().name("owners/ownerDetails"));
-	}
 
 }
-*/

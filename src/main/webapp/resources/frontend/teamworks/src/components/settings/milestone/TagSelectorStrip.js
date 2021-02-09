@@ -31,7 +31,7 @@ const TagSelectorStrip = ({ tags, onSelectedIndexChanged }) =>
                         onClick={() => setSelectedIndex(i+1)}>
                         {x.title}
                     </TagTab>
-                    <div className="TagSeparator" />
+                    {i < tags.length - 1 ? <div className="TagSeparator" /> : ""}
                 </Fragment>
             );
         });

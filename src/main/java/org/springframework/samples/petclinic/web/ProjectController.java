@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Project;
-import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.enums.Role;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
@@ -102,12 +102,12 @@ public class ProjectController {
 
 		List<Project> l = new ArrayList<>();
 		Integer userId = (Integer) r.getSession().getAttribute("userId");
-		l = participationService.findMyDepartemntProjects(userId, departmentId).stream().collect(Collectors.toList());
+		l = participationService.findMyDepartmentProjects(userId, departmentId).stream().collect(Collectors.toList());
 		return l;
 
 	}
 
-	@PostMapping(value = "/api/projects")
+	@PostMapping(value = "/api/projects/create")
 	public ResponseEntity<String> postProjects(@RequestParam(required = true) Integer departmentId,
 			@Valid @RequestBody Project project) {
 
@@ -121,7 +121,7 @@ public class ProjectController {
 		}
 	}
 
-	@PatchMapping(value = "/api/projects")
+	@PatchMapping(value = "/api/projects/update")
 	public ResponseEntity<String> updateProject(@RequestParam(required = true) Integer departmentId,
 			@RequestParam(required = true) Integer projectId, @RequestBody Project project, BindingResult errors) {
 		try {
@@ -146,7 +146,7 @@ public class ProjectController {
 	}
 
 	// TODO: discutir departmentID (INTERCEPTOR)
-	@DeleteMapping(value = "/api/projects")
+	@DeleteMapping(value = "/api/projects/delete")
 	public ResponseEntity<String> deleteProjects(@RequestParam(required = true) Integer departmentId,
 			@RequestParam(required = true) Integer projectId) {
 		try {

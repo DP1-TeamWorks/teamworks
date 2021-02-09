@@ -29,11 +29,6 @@ public class TeamService {
 		return teamRepository.findById(teamId);
 	}
 
-	@Transactional(readOnly = true)
-	public Collection<Team> findTeamByName(String name) {
-		return teamRepository.findByName(name);
-	}
-
 	@Transactional
 	public void deleteTeamById(Integer teamId) throws DataAccessException {
 		teamRepository.deleteById(teamId);

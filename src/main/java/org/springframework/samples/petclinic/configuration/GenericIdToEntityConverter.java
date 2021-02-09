@@ -15,15 +15,15 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.stereotype.Component;
 
 @Component()
-public final class GenericIdToEntityConverter implements ConditionalGenericConverter {
+public class GenericIdToEntityConverter implements ConditionalGenericConverter {
     private static final Logger log = LoggerFactory.getLogger(GenericIdToEntityConverter.class);
 
     private final ConversionService conversionService=new DefaultConversionService();
-    
+
     @Autowired(required = false)
     private EntityManager entityManager;
 
-        
+
 
     public Set<ConvertiblePair> getConvertibleTypes() {
     	Set<ConvertiblePair> result=new HashSet<ConvertiblePair>();
