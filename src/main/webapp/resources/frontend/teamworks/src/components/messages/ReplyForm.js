@@ -14,6 +14,7 @@ class ReplyForm extends React.Component {
       requestError: "",
     };
     this.repliedMessage = props.repliedMessage;
+    this.setOpenMessage = props.setOpenMessage;
   }
 
   hasErrors = () => {
@@ -84,6 +85,7 @@ class ReplyForm extends React.Component {
       //Call API request in order to receive the user for the session
       this.apiRequestHandler(text);
       this.setState({ inputs: { ...this.state.inputs, text: "" } });
+      this.setOpenMessage("");
     } else {
       console.log("There are errors in this form");
       console.log(this.state.errors);

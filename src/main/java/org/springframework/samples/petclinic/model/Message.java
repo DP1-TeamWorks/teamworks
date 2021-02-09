@@ -19,6 +19,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -82,9 +83,11 @@ public class Message extends BaseEntity {
         return recipients.stream().map(user -> new StrippedUserImpl(user)).collect(Collectors.toList());
     }
 
-    @Column(name = "attatchments")
+    @Transient
+    private MultipartFile file;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "message", orphanRemoval = true)
-    private List<Attatchment> attatchments;
+    private List<Attachment> attatchments;
 
     @ManyToMany
     private List<Tag> tags;

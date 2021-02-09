@@ -15,6 +15,8 @@ class ForwardForm extends React.Component {
     };
     this.forwardedMessage = props.forwardedMessage;
     this.forwardOptions = props.forwardOptions;
+    this.setOpenMessage = props.setOpenMessage;
+
   }
 
   hasErrors = () => {
@@ -78,6 +80,7 @@ class ForwardForm extends React.Component {
       //Call API request in order to receive the user for the session
       this.apiRequestHandler(recipientsEmails);
       this.setState({ inputs: { ...this.state.inputs, recipientsEmails: "" } });
+      this.setOpenMessage("");
     } else {
       console.log("There are errors in this form");
       console.log(this.state.errors);

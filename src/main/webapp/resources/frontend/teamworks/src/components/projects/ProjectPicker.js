@@ -6,9 +6,6 @@ import "./ProjectPicker.css";
 const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   const [departmentList, setDepartmentList] = useState([]);
   const [projectList, setProjectList] = useState([]);
-
-  // TODO: Save picked department and fix this. correctly request departments at the beginning
-  // NO HACER UNA REQUEST CON UNDEFINED!
   const [department, setDepartment] = useState(null);
   const [pickedDepartment, setPickedDepartment] = useState({});
   const [opened, setOpened] = useState(false);
@@ -24,14 +21,14 @@ const ProjectPicker = ({ pickedProject, setPickedProject }) => {
   }, []);
 
   useEffect(() => {
-    if (department === null) return;
-    ProjectApiUtils.getMyProjects(department.id)
-      .then((res) => {
-        setProjectList(res);
-      })
-      .catch((error) => {
-        console.log("ERROR: cannot get the projects");
-      });
+    if (department !== null)
+      ProjectApiUtils.getMyProjects(department.id)
+        .then((res) => {
+          setProjectList(res);
+        })
+        .catch((error) => {
+          console.log("ERROR: cannot get the projects");
+        });
   }, []);
 
   const openOrClose = () => {

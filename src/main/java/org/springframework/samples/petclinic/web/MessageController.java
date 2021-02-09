@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.web;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,24 +11,30 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.petclinic.model.Attachment;
 import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.Tag;
 import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
+import org.springframework.samples.petclinic.service.AttachmentService;
 import org.springframework.samples.petclinic.service.MessageService;
 import org.springframework.samples.petclinic.service.TagService;
 import org.springframework.samples.petclinic.service.ToDoService;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.samples.petclinic.validation.TagLimitProjectException;
 import org.springframework.samples.petclinic.validation.ToDoMaxToDosPerAssigneeException;
+import org.springframework.samples.petclinic.validation.TooBigFileException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
@@ -38,14 +45,17 @@ public class MessageController {
     private final UserTWService userService;
     private final TagService tagService;
     private final ToDoService toDoService;
+    private final AttachmentService attachmentService;
 
     @Autowired
     public MessageController(MessageService messageService, UserTWService userService, TagService tagService,
-            ToDoService toDoService) {
+            ToDoService toDoService, AttachmentService attachmentService) {
         this.messageService = messageService;
         this.userService = userService;
         this.tagService = tagService;
         this.toDoService = toDoService;
+        this.attachmentService = attachmentService;
+
     }
 
     @InitBinder
@@ -156,8 +166,9 @@ public class MessageController {
         }
     }
 
-    @PostMapping(value = "api/message")
-    public ResponseEntity<String> newMessage(HttpServletRequest r, @Valid @RequestBody Message message) {
+    @PostMapping(value = "api/message", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> newMessage(HttpServletRequest r, @Valid @RequestPart Message message,
+            @RequestPart("files") MultipartFile[] files) {
         try {
             log.info("Creating new message");
             Integer userId = (Integer) r.getSession().getAttribute("userId");
@@ -171,6 +182,7 @@ public class MessageController {
             List<UserTW> recipientList = message.getRecipientsEmails().stream()
                     .map(mail -> userService.findByEmail(mail)).collect(Collectors.toList());
             message.setRecipients(recipientList);
+            messageService.saveMessage(message);
 
             if (message.getToDoList() != null) {
                 log.info("Todo list received. saving the relationships");
@@ -200,32 +212,52 @@ public class MessageController {
                 }
             }
 
-            return ResponseEntity.ok().build();
-        } catch (
+            if (files != null) {
+                log.info("File received. attaching it to the message");
 
-                DataAccessException | TagLimitProjectException | ToDoMaxToDosPerAssigneeException d) {
+                for (MultipartFile f : files) {
+                    log.info("Attaching a file");
+                    Attachment attach = new Attachment();
+                    attach.setFile(f);
+                    newAttachment(attach, message);
+                }
+
+            }
+
+            log.info("Message sent correctly");
+            return ResponseEntity.ok().build();
+        } catch (DataAccessException | TagLimitProjectException | ToDoMaxToDosPerAssigneeException | IOException
+                | TooBigFileException d) {
             log.error("exception ocurred saving message", d);
             return ResponseEntity.badRequest().build();
         }
     }
 
+    public void newAttachment(Attachment attach, Message msg)
+            throws DataAccessException, IOException, TooBigFileException {
+
+        log.info("Saving the attachment");
+        attach.setMessage(msg);
+        attachmentService.uploadAndSaveAttachment(attach);
+    }
+
     @PostMapping(value = "api/message/reply")
     public ResponseEntity<String> replyMessage(HttpServletRequest r,
-            @Valid @RequestParam(required = true) Message message, @RequestParam(required = true) Integer replyId) {
-
-        log.info("Replying to the message with id: " + replyId);
-        Message repliedMessage = messageService.findMessageById(replyId);
+            @Valid @RequestBody(required = true) Message message,
+            @RequestParam(required = true) Integer repliedMessageId) {
+        log.info("Replying to the message with id: " + repliedMessageId);
+        Message repliedMessage = messageService.findMessageById(repliedMessageId);
         message.setReplyTo(repliedMessage);
         log.info("Creating the reply");
-        return newMessage(r, message);
+        return newMessage(r, message, null);
 
     }
 
     @PostMapping(value = "api/message/forward")
     public ResponseEntity<String> forwardMessage(HttpServletRequest r, @RequestBody List<String> forwardList,
-            Integer messageId) {
-        log.info("Forwarding the message with id: " + messageId + " to: " + forwardList);
-        Message message = messageService.findMessageById(messageId);
+            @RequestParam(required = true) Integer forwardedMessageId) {
+        log.info("Forwarding the message with id: " + forwardedMessageId + " to: " + forwardList);
+        Message message = messageService.findMessageById(forwardedMessageId);
         log.info("Copying the message");
         Message forwardCopy = new Message();
         forwardCopy.setRead(false);
@@ -235,8 +267,9 @@ public class MessageController {
         forwardCopy.setText(message.getSender().getName() + "'s Original Message: " + message.getText());
         forwardCopy.setTagList(message.getTags().stream().map(tag -> tag.getId()).collect(Collectors.toList()));
         forwardCopy.setToDoList(message.getToDos().stream().map(todo -> todo.getId()).collect(Collectors.toList()));
+        forwardCopy.setAttatchments(message.getAttatchments());
         log.info("Creating the forward copy");
-        return newMessage(r, forwardCopy);
+        return newMessage(r, forwardCopy, null);
     }
 
     @PostMapping(value = "/api/message/markAsRead")
