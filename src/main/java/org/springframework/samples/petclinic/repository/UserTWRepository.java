@@ -24,6 +24,9 @@ public interface UserTWRepository extends Repository<UserTW, Integer> {
 
     public UserTW findById(Integer id);
 
+    @Query("SELECT u FROM UserTW u WHERE u.team.id = :teamId AND u.role = 0")
+    public UserTW findTeamOwner(@Param("teamId") Integer teamId);
+
     @Query("SELECT u FROM UserTW u WHERE u.name LIKE :name%")
     public Collection<UserTW> findByName(@Param("name") String name);
 

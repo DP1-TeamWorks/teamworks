@@ -15,7 +15,6 @@ const Inbox = ({ search, setSearch }) => {
     if (reloadCounters)
       MessageApiUtils.getNumberOfNotReadMessages()
         .then((res) => {
-          console.log("Getting number of Inbox Messages");
           setNInboxMessages(res);
         })
         .catch((error) => {

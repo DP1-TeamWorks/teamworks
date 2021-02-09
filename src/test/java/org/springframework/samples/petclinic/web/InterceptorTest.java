@@ -22,7 +22,7 @@ import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Milestone;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
-import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.enums.Role;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.ToDo;
 import org.springframework.samples.petclinic.model.UserTW;
@@ -74,10 +74,10 @@ public class InterceptorTest {
 
 	@MockBean
 	private ProjectService projectService;
-	
+
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@Autowired
 	protected MockHttpSession mockSession;
 	private UserTW juan;
@@ -129,7 +129,7 @@ public class InterceptorTest {
 		game.setName("Game");
 		game.setDescription("Hola");
 		game.setDepartment(calidad);
-		
+
 		//Partticipacion Juan a game
 		participationRosa=new Participation();
 		participationRosa.setUserTW(rosa);
@@ -158,7 +158,7 @@ public class InterceptorTest {
 		mockSession.setAttribute("userId", TEST_TEAMOWNER_ID);
 		mockSession.setAttribute("teamId", TEST_TEAM_ID);
 	}
-	
+
 	//LoginInterceptor
 	@Test
 	void testLoginInterceptorAccessAsLogerUser() throws Exception {

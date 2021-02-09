@@ -33,8 +33,7 @@ import org.springframework.samples.petclinic.model.Belongs;
 import org.springframework.samples.petclinic.model.Department;
 import org.springframework.samples.petclinic.model.Participation;
 import org.springframework.samples.petclinic.model.Project;
-import org.springframework.samples.petclinic.model.Role;
-import org.springframework.samples.petclinic.model.Tag;
+import org.springframework.samples.petclinic.enums.Role;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.DepartmentService;
@@ -55,7 +54,7 @@ excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classe
 @ContextConfiguration(classes = {TestWebConfig.class, SecurityConfiguration.class})
 @Import(ProjectController.class)
 public class ProjectControllerTest {
-	
+
 	private static final int TEST_PROJECT_ID = 11;
 	private static final int TEST_DEPARTMENT_ID = 54;
 	private static final int TEST_PARTICIPATION_ID = 44;
@@ -63,31 +62,31 @@ public class ProjectControllerTest {
 	private static final int TEST_BELONGS_ID = 22;
 	@MockBean
     GenericIdToEntityConverter idToEntityConverter;
-	
+
 	@MockBean
 	private ProjectService projectService;
-	
+
 	@MockBean
 	private DepartmentService departmentService;
-	
+
 	@MockBean
 	private ParticipationService participationService;
-	
+
 	@MockBean
 	private UserTWService userTWService;
-	
+
 	@MockBean
 	private BelongsService belongsService;
-	
+
 	@MockBean
 	private ProjectValidator projectValidator;
-	
+
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
-	
+
 	@Autowired
 	protected MockHttpSession mockSession;
 
@@ -102,7 +101,7 @@ public class ProjectControllerTest {
 	private List<Belongs> bel;
 	private List<UserTW> users;
 	private Map<String, Object> map;
-	
+
 	@BeforeEach
 	void setup() {
 		//proyecto
@@ -114,7 +113,7 @@ public class ProjectControllerTest {
 		projects = new ArrayList<>();
 		projects.add(project);
 
-		
+
 		//departamento
 		department = new Department();
 		department.setId(TEST_DEPARTMENT_ID);
@@ -123,8 +122,8 @@ public class ProjectControllerTest {
 		department.setProjects(projects);
 		//relacion con project
 		project.setDepartment(department);
-		
-		
+
+
 		//participacion
 		part = new Participation();
 		part.setId(TEST_PARTICIPATION_ID);
@@ -134,7 +133,7 @@ public class ProjectControllerTest {
 		//relacion con project
 		part.setProject(project);
 		participations.add(part);
-		
+
 		//user
 		user = new UserTW();
 		user.setId(TEST_USER_ID);
@@ -147,7 +146,7 @@ public class ProjectControllerTest {
 		users = new ArrayList<>();
 		users.add(user);
 
-		
+
 		//relacion con participation
 		part.setUserTW(user);
 
@@ -160,19 +159,19 @@ public class ProjectControllerTest {
 		belongs.setInitialDate(LocalDate.now());
 		bel = new ArrayList<>();
 		bel.add(belongs);
-		
+
 		//relacion con  user y department
 		user.setBelongs(bel);
 		department.setBelongs(bel);
-		
-		
+
+
 		mockSession.setAttribute("projectId",TEST_PROJECT_ID);
 		mockSession.setAttribute("departmentId",TEST_DEPARTMENT_ID);
 		mockSession.setAttribute("userId",TEST_USER_ID);
 		mockSession.setAttribute("participationId", TEST_PARTICIPATION_ID);
 		mockSession.setAttribute("belongsId", TEST_BELONGS_ID);
-		
-		
+
+
 		given(this.userTWService.findUserById(TEST_USER_ID)).willReturn(user);
 		given(this.belongsService.findCurrentBelongs(TEST_USER_ID, TEST_DEPARTMENT_ID)).willReturn(belongs);
 		given(this.departmentService.findDepartmentById(TEST_DEPARTMENT_ID)).willReturn(department);
@@ -180,22 +179,22 @@ public class ProjectControllerTest {
 		given(this.projectService.findUserProjects(TEST_PROJECT_ID)).willReturn(users);
 		given(this.participationService.findMyDepartmentProjects(TEST_USER_ID, TEST_DEPARTMENT_ID)).willReturn(projects);
 	}
-	
-	
+
+
 	@Test
 	void tesGetProyects() throws Exception{
-	
+
 		String json = objectMapper.writeValueAsString(projects);
-		
+
 		mockMvc.perform(get("/api/projects?departmentId={departmentId}", TEST_DEPARTMENT_ID)
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(content().json(json));
 	}
-	
+
 	@Test
 	void tesGetProyectsForbidden() throws Exception{
-		
+
 		given(this.belongsService.findCurrentBelongs(TEST_USER_ID, TEST_DEPARTMENT_ID)).willReturn(null);
 		user2 = new UserTW();
 		user.setId(55555);
@@ -205,32 +204,32 @@ public class ProjectControllerTest {
 		user.setPassword("123123123");
 		user.setRole(Role.employee);
 		given(this.userTWService.findUserById(55555)).willReturn(user2);
-		
+
 		String json = objectMapper.writeValueAsString(projects);
 		mockMvc.perform(get("/api/projects?departmentId={departmentId}", TEST_DEPARTMENT_ID)
 				.session(mockSession))
 		.andExpect(status().isForbidden());
 	}
-	
-	
+
+
 	@Test
 	void testGetProyect() throws Exception{
 		map = new HashMap<String, Object>();
 		map.put("members", users);
 		map.put("milestones", null);
 		map.put("tags", null);
-		
+
 		String json = objectMapper.writeValueAsString(map);
-		
+
 		mockMvc.perform(get("/api/project/details?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(content().json(json));
 
 	}
-	
+
 	void testGetProyectForbidden() throws Exception{
-		
+
 		given(this.belongsService.findCurrentBelongs(TEST_USER_ID, TEST_DEPARTMENT_ID)).willReturn(null);
 		user2 = new UserTW();
 		user.setId(55555);
@@ -240,102 +239,102 @@ public class ProjectControllerTest {
 		user.setPassword("123123123");
 		user.setRole(Role.employee);
 		given(this.userTWService.findUserById(55555)).willReturn(user2);
-		
-		
+
+
 		map = new HashMap<String, Object>();
 		map.put("members", users);
 		map.put("milestones", null);
 		map.put("tags", null);
-		
+
 		String json = objectMapper.writeValueAsString(map);
-		
+
 		mockMvc.perform(get("/api/project/details?projectId={projectId}", TEST_PROJECT_ID)
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(content().json(json));
 
 	}
-	
+
 	@Test
 	void testGetMyProjects() throws Exception{
 		String json = objectMapper.writeValueAsString(projects);
-		
+
 		mockMvc.perform(get("/api/projects/mine?departmentId={departmentId}", TEST_DEPARTMENT_ID)
 				.session(mockSession))
 		.andExpect(status().isOk())
 		.andExpect(content().json(json));
 	}
-	
+
 	@Test
 	void testPostProject() throws Exception{
 		String json = objectMapper.writeValueAsString(project);
-		
+
 		mockMvc.perform(post("/api/projects?departmentId={departmentId}", TEST_DEPARTMENT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON)
 				.content(json))
 		.andExpect(status().isOk());
 	}
-	
+
 	@Test
 	void testPostProjectException() throws Exception{
 		doThrow(new DataAccessResourceFailureException("Id ya existente"))
 		.when(projectService).saveProject(project);
 		String json = objectMapper.writeValueAsString(project);
-		
+
 		mockMvc.perform(post("/api/projects?departmentId={departmentId}", TEST_DEPARTMENT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON)
 				.content(json))
 		.andExpect(status().isBadRequest());
 	}
-	
+
 	@Test
 	void testUpdateProject() throws Exception{
 		String json = objectMapper.writeValueAsString(project);
-		
+
 		mockMvc.perform(patch("/api/projects?departmentId={departmentId}&projectId={projectId}",
 				TEST_DEPARTMENT_ID, TEST_PROJECT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON)
 				.content(json))
 		.andExpect(status().isOk());
 	}
-	
-	
+
+
 	@Test
 	void testUpdateProjectException() throws Exception{
 		doThrow(new DataAccessResourceFailureException("Id ya existente"))
 		.when(projectService).saveProject(project);
-		
+
 		String json = objectMapper.writeValueAsString(project);
-		
+
 		mockMvc.perform(patch("/api/projects?departmentId={departmentId}&projectId={projectId}",
 				TEST_DEPARTMENT_ID, TEST_PROJECT_ID)
 				.session(mockSession).contentType(MediaType.APPLICATION_JSON)
 				.content(json))
 		.andExpect(status().isBadRequest());
 	}
-	
-	
+
+
 	@Test
 	void testDeleteProjects() throws Exception{
-		
+
 		mockMvc.perform(delete("/api/projects?departmentId={departmentId}&projectId={projectId}",
 				TEST_DEPARTMENT_ID, TEST_PROJECT_ID)
 				.session(mockSession))
 		.andExpect(status().isOk());
 	}
-	
+
 	@Test
 	void testDeleteProjectsNotFound() throws Exception{
 		doThrow(new DataAccessResourceFailureException("Id no existente"))
 		.when(projectService).deleteProjectById(TEST_PROJECT_ID);
-		
-		
+
+
 		mockMvc.perform(delete("/api/projects?departmentId={departmentId}&projectId={projectId}",
 				TEST_DEPARTMENT_ID, TEST_PROJECT_ID)
 				.session(mockSession))
 		.andExpect(status().isNotFound());
 	}
-	
-	
-	
+
+
+
 }

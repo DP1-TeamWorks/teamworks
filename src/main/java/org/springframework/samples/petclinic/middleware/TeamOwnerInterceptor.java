@@ -3,7 +3,7 @@ package org.springframework.samples.petclinic.middleware;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.enums.Role;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.service.UserTWService;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;

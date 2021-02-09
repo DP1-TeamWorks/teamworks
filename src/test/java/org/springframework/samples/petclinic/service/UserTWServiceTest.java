@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Role;
+import org.springframework.samples.petclinic.enums.Role;
 import org.springframework.samples.petclinic.model.Team;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.validation.ManyTeamOwnerException;
@@ -48,7 +48,7 @@ class UserTWServiceTest {
 
 		assertThat(user.getId()).isNotNull();
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldNotInsertAUserNullIntoDatabase() {
@@ -66,13 +66,13 @@ class UserTWServiceTest {
 		assertThat(user3.getLastname()).isEqualTo("Torres");
 
 	}
-	
+
 	@Test
 	void shouldFindUserByMail() {
 		UserTW user3 = this.userTWService.findUserById(3);
 		assertThat(user3.getEmail()).isEqualTo("mariatorres@cyber");
 	}
-	
+
 	@Test
 	void shouldFindUserByTeam() {
 		UserTW user3 = this.userTWService.findUserById(3);
@@ -113,8 +113,8 @@ class UserTWServiceTest {
 		UserTW user2 = this.userTWService.getLoginUser("johnnysilverhand@cyber", "123123123");
 		assertThat(user.getId()).isEqualTo(user2.getId());
 	}
-	
-	
+
+
 	@Test
 	@Transactional
 	void shouldNotInsertUserIntoDataBase() {
@@ -124,7 +124,7 @@ class UserTWServiceTest {
 
 		assertThrows(Exception.class, ()-> {
 			this.userTWService.saveUser(user);
-			});	
+			});
 	}
 
 }

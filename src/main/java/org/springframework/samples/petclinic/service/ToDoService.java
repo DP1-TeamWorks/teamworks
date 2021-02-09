@@ -25,12 +25,6 @@ public class ToDoService {
 
     @Transactional(rollbackFor = ToDoMaxToDosPerAssigneeException.class)
     public void saveToDo(ToDo toDo) throws DataAccessException, ToDoMaxToDosPerAssigneeException {
-        // If it's an update we won't check this
-        if (toDo.getId() != null)
-        {
-            toDoRepository.save(toDo);
-            return;
-        }
         if (toDo.getDone() || toDo.getAssignee() == null || findToDoByMilestoneAndUser(toDo.getMilestone().getId(), toDo.getAssignee().getId())
                 .stream().filter(t -> !t.getDone()).count() < 7L) {
             toDoRepository.save(toDo);

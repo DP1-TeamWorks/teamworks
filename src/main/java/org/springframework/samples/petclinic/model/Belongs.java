@@ -70,4 +70,14 @@ public class Belongs extends BaseEntity {
         return userTW.getEmail();
     }
 
+    public String getDepartmentName()
+    {
+        return this.department.getName();
+    }
+
+    public Integer getDepartmentId()
+    {
+        return this.department.getId();
+    }
+
 }

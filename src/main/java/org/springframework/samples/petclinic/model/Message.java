@@ -64,7 +64,7 @@ public class Message extends BaseEntity {
     @Transient
     private List<Integer> tagList;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "sender_id")
     @JsonIgnore
     private UserTW sender;
