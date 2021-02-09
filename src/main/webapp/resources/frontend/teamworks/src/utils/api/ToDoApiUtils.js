@@ -9,7 +9,7 @@ const ToDoApiUtils = {
     ApiUtils.get(TODO_URL + "/mine?milestoneId=" + milestoneId),
   getAllMyToDos: () => ApiUtils.get(TODO_URL + "/mine/all"),
   addNewPersonalToDo: (milestoneId, toDo) =>
-    ApiUtils.post(TODO_URL + "/mine?milestoneId=" + milestoneId, toDo),
+    ApiUtils.post(TODO_URL + "/mine/create?milestoneId=" + milestoneId, toDo),
   markToDoAsDone: (toDoId, unmark) => ApiUtils.post(TODO_URL + `/markAsDone?unmark=${unmark?1:0}&toDoId=${toDoId}`),
   createTodo: (milestoneId, todo) => ApiUtils.post(TODO_URL + "/create?milestoneId=" + milestoneId, todo),
   assignTodo: (milestoneId, todoId, assigneeId) => ApiUtils.post(TODO_URL + `/assign?todoId=${todoId}&milestoneId=${milestoneId}&assigneeId=${assigneeId}`),

@@ -38,7 +38,7 @@ public class TeamController {
 	    return ResponseEntity.ok(teamName);
 	}
 
-	@PostMapping(value = "/api/team")
+	@PostMapping(value = "/api/team/update")
 	public ResponseEntity<String> updateTeam(HttpServletRequest req, @RequestBody Team teamAttrs) {
 		try {
 		    String name = teamAttrs.getName();
@@ -59,7 +59,7 @@ public class TeamController {
 		}
 	}
 
-	@DeleteMapping(value = "/api/team")
+	@DeleteMapping(value = "/api/team/delete")
 	public ResponseEntity<String> deleteTeam(HttpServletRequest req) {
         Integer teamId = (Integer) req.getSession().getAttribute("teamId");
 		try {

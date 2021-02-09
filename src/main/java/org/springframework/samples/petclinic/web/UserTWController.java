@@ -71,7 +71,7 @@ public class UserTWController {
 		}
 	}
 
-	@PostMapping(value = "/api/user")
+	@PostMapping(value = "/api/user/create")
 	public ResponseEntity<String> postUser(HttpServletRequest r, @RequestBody UserTW user, BindingResult errors) {
 		try {
 
@@ -148,7 +148,7 @@ public class UserTWController {
         }
     }
 
-	@DeleteMapping(value = "/api/user")
+	@DeleteMapping(value = "/api/user/delete")
 	public ResponseEntity<String> deleteUser(@RequestParam(required = true) Integer userId) {
 		try {
 			userService.deleteUserById(userId);

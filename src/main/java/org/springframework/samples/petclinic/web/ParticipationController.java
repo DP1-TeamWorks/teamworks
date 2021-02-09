@@ -59,7 +59,7 @@ public class ParticipationController {
         }
     }
 
-    @PostMapping(value = "/api/projects/participation")
+    @PostMapping(value = "/api/projects/participation/create")
     public ResponseEntity<String> postParticipation(@RequestParam(required = true) Integer participationUserId,
                                                     @RequestParam(required = true) Integer projectId,
                                                     @RequestParam(required = false) Boolean willBeProjectManager, HttpServletRequest r) {
@@ -137,7 +137,7 @@ public class ParticipationController {
 
     }
 
-	@DeleteMapping(value = "/api/projects/participation")
+	@DeleteMapping(value = "/api/projects/participation/delete")
 	public ResponseEntity<String> deleteParticipation(@RequestParam(required = true) Integer participationUserId,
 			@RequestParam(required = true) Integer projectId, HttpServletRequest r) {
 		try {
