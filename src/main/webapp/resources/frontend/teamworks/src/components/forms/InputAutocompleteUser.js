@@ -107,7 +107,7 @@ const InputAutocompleteUser = ({ name, placeholder, departmentId, projectId, onU
             .catch(err => console.error(err));
         } else
         {
-            UserApiUtils.getAllUsers()
+            UserApiUtils.getUsers()
             .then(res => setUsers(res))
             .catch(err => console.error(err));
         }

@@ -39,7 +39,7 @@ public class UserTWService {
 	public UserTW findUserById(Integer userId) {
 		return userRepository.findById(userId);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public UserTW findByEmail(String userEmail) {
 		return userRepository.findByEmail(userEmail);

@@ -8,11 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.model.Belongs;
-import org.springframework.samples.petclinic.model.Participation;
-import org.springframework.samples.petclinic.model.Role;
-import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.model.UserTW;
+import org.springframework.samples.petclinic.model.*;
 import org.springframework.samples.petclinic.service.BelongsService;
 import org.springframework.samples.petclinic.service.ParticipationService;
 import org.springframework.samples.petclinic.service.TeamService;
@@ -55,9 +51,9 @@ public class UserTWController {
 	}
 
 	@GetMapping(value = "/api/users")
-	public Collection<UserTW> getUsers(HttpServletRequest r) {
+	public Collection<UserTW.StrippedUser> getUsers(HttpServletRequest r) {
         Integer teamId = (Integer) r.getSession().getAttribute("teamId");
-		List<UserTW> l = userService.findUsersByTeam(teamId).stream().collect(Collectors.toList());
+		List<UserTW.StrippedUser> l = userService.findUsersByTeam(teamId).stream().map(x -> new StrippedUserImpl(x)).collect(Collectors.toList());
 		return l;
 	}
 
@@ -67,7 +63,7 @@ public class UserTWController {
 		UserTW user = userService.findUserById(userId);
 		Map<String, Object> m = new HashMap<>();
 		if(user!=null&&user.getTeam().getId().equals(teamId)) {
-			m.put("user", user);
+			m.put("user", new StrippedUserImpl(user));
 			List<Belongs> lb = belongsService.findUserBelongs(userId).stream().collect(Collectors.toList());
 			m.put("currentDepartments", lb);
 			List<Participation> lp = participationService.findUserParticipations(userId).stream()
@@ -89,17 +85,18 @@ public class UserTWController {
 				Integer teamId = (Integer) r.getSession().getAttribute("teamId");
 				Team team = teamService.findTeamById(teamId);
 				user.setTeam(team);
+				user.setRole(Role.employee);
 				user.setEmail(
 						user.getName().toLowerCase() + user.getLastname().toLowerCase() + "@" + team.getIdentifier());
 				user.setPassword(SecurityConfiguration.passwordEncoder().encode(user.getPassword()));
 				userService.saveUser(user);
 				return ResponseEntity.ok("User Created");
 			} else {
-				return ResponseEntity.badRequest().body(errors.getAllErrors().toString());
+				return ResponseEntity.badRequest().body("errors");
 			}
 
 		} catch (DataAccessException | ManyTeamOwnerException d) {
-			return ResponseEntity.badRequest().body(d.getMessage());
+			return ResponseEntity.badRequest().body("alreadyexists");
 		}
 	}
 

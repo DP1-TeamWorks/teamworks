@@ -28,6 +28,10 @@ public class UserTW extends BaseEntity {
         String getLastname();
 
         String getEmail();
+
+        LocalDate getJoinDate();
+
+        Role getRole();
     }
 
     // Attributes

@@ -37,11 +37,7 @@ import org.springframework.samples.petclinic.config.TestUserWebConfig;
 import org.springframework.samples.petclinic.config.TestWebConfig;
 import org.springframework.samples.petclinic.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.model.Belongs;
-import org.springframework.samples.petclinic.model.Participation;
-import org.springframework.samples.petclinic.model.Role;
-import org.springframework.samples.petclinic.model.Team;
-import org.springframework.samples.petclinic.model.UserTW;
+import org.springframework.samples.petclinic.model.*;
 import org.springframework.samples.petclinic.service.*;
 import org.springframework.samples.petclinic.validation.ManyTeamOwnerException;
 import org.springframework.samples.petclinic.validation.UserValidator;
@@ -71,8 +67,8 @@ import javax.servlet.Filter;
 @ContextConfiguration(classes = {TestWebConfig.class, SecurityConfiguration.class})
 @Import(UserTWController.class)
 public class UserTWControllerTest {
-	
-	
+
+
 	private static final int TEST_USER_ID = 1;
 	private static final int TEST_TEAM_ID = 3;
 
@@ -88,7 +84,7 @@ public class UserTWControllerTest {
     private BelongsService belongsService;
     @MockBean
     private ParticipationService participationService;
-    
+
     @MockBean
     private UserValidator userValidator;
 
@@ -106,7 +102,7 @@ public class UserTWControllerTest {
 	private UserTW juan;
 
 	private Team team;
-	private List<UserTW> userList;
+	private List<UserTW.StrippedUser> userList;
 	private Collection<UserTW> userCol;
 	private Collection<Participation> participationCol;
 	private Collection<Belongs> belongsCol;
@@ -123,12 +119,12 @@ public class UserTWControllerTest {
 
 	@BeforeEach
 	void setup() {
-		
+
 		userCol=new ArrayList<>();
 		belongsCol=new ArrayList<>();
 		participationCol=new ArrayList<>();
 		userList=new ArrayList<>();
-		
+
 		//Juan
 		juan = new UserTW();
 		juan.setId(TEST_USER_ID);
@@ -137,7 +133,7 @@ public class UserTWControllerTest {
 		juan.setEmail("andrespuertas@cyber");
 		juan.setPassword("123456789");
 		juan.setRole(Role.team_owner);
-		
+
 		//Team
 		team=new Team();
 		team.setId(TEST_TEAM_ID);
@@ -158,31 +154,27 @@ public class UserTWControllerTest {
 		//Session
 		mockSession.setAttribute("userId",TEST_USER_ID);
 		mockSession.setAttribute("teamId",TEST_TEAM_ID);
-		
-		
+
+
 		//given(this.mockSession.getAttribute("userID"),TEST_USER_ID)
 		given(this.UserTWService.findUserById(TEST_USER_ID)).willReturn(juan);
 		given(this.teamService.findTeamById(TEST_TEAM_ID)).willReturn(team);
-		
-		
-		
-
 
 	}
 
 	@Test
 	void testGetUsers() throws Exception {
 		userCol.add(juan);
-		userList=userCol.stream().collect(Collectors.toList());
+		userList=userCol.stream().map(x -> new StrippedUserImpl(x)).collect(Collectors.toList());
 		given(this.UserTWService.findUsersByTeam(TEST_TEAM_ID)).willReturn(userCol);
 		String usersJson = objectMapper.writeValueAsString(userList);
 		mockMvc.perform(get("/api/users").session(mockSession)).andExpect(status().is(200)).andExpect(content().json(usersJson));
 	}
 	@Test
 	void testGetUser() throws Exception {
-		
+
 		Map<String,Object> m=new HashMap<>();
-		m.put("user", juan);
+		m.put("user", new StrippedUserImpl(juan));
 		List<Belongs> lb = belongsCol.stream().collect(Collectors.toList());
 		m.put("currentDepartments", lb);
 		List<Participation> lp = participationCol.stream()
@@ -216,8 +208,8 @@ public class UserTWControllerTest {
 		String userIdString=userId.toString();
 		mockMvc.perform(get("/api/user").session(mockSession).param("userId",userIdString )).andExpect(status().is(400));
 	}
-	
-	
+
+
     @Test
 	void testPostUser() throws Exception {
 		String georgejson = objectMapper.writeValueAsString(juan);
@@ -232,11 +224,11 @@ public class UserTWControllerTest {
 		jose.setPassword("123456789");
 		jose.setRole(Role.team_owner);
 		jose.setTeam(team);
-    	
+
     	doThrow(ManyTeamOwnerException.class).when(this.UserTWService).saveUser(jose);
 		mockMvc.perform(post("/api/user").session(mockSession)).andExpect(status().is(400));
 	}
-    
+
     @Test
   	void testDeleteUser() throws Exception {
     	Integer userId=TEST_USER_ID;
@@ -251,7 +243,7 @@ public class UserTWControllerTest {
         .when(UserTWService).deleteUserById(userId);
   		mockMvc.perform(delete("/api/user").session(mockSession).param("userId",userIdString)).andExpect(status().is(400));
   	}
-    
+
     @Test
     void testGetCredentials() throws Exception{
     	Map<String,Object> m=new HashMap<>();
@@ -288,8 +280,8 @@ public class UserTWControllerTest {
 		Integer userId=TEST_USER_ID+1;
 		String userIdString=userId.toString();
 		mockMvc.perform(get("/api/user/credentials").session(mockSession).param("userId",userIdString )).andExpect(status().is(400));
-	
+
 	}
-	
-	
+
+
 }
