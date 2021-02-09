@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useContext } from "react/cjs/react.development";
+import UserCredentials from "../../../context/UserCredentials";
 import DepartmentApiUtils from "../../../utils/api/DepartmentApiUtils";
 import AddDepartmentForm from "../../forms/AddDepartmentForm";
 import Spinner from "../../spinner/Spinner";
@@ -8,9 +10,12 @@ import DepartmentsContainer from "./DepartmentsContainer";
 const DepartmentSettings = () =>
 {
 
+  const credentials = useContext(UserCredentials);
+
   function retrieveDepartments()
   {
-    DepartmentApiUtils.getDepartments()
+    let func = credentials.isTeamManager ? DepartmentApiUtils.getDepartments : DepartmentApiUtils.getMyDepartments;
+    func()
       .then(dpts => setDepartments(dpts))
       .catch((err) => console.error(err));
   }
@@ -28,7 +33,7 @@ const DepartmentSettings = () =>
       <SettingGroup
         name="Manage departments"
         description=" ">
-          <Spinner />
+        <Spinner />
       </SettingGroup>
     );
   }
@@ -37,7 +42,7 @@ const DepartmentSettings = () =>
     manageDepartments = (
       <SettingGroup
         name="Manage departments"
-        description="Only showing departments you have management permissions on.">
+        description=" ">
         <DepartmentsContainer departments={departments} onDepartmentDeleted={retrieveDepartments} />
       </SettingGroup>
     );
@@ -47,18 +52,24 @@ const DepartmentSettings = () =>
     manageDepartments = (
       <SettingGroup
         name="Manage departments"
-        description="There aren't any deparments yet.">
+        description={credentials.isTeamManager ? "There aren't any departments yet." : "You aren't a member of any departments."}>
       </SettingGroup>
     );
   }
 
-  return (
-    <div className="SettingGroupsContainer">
+  let addNewDepartment;
+  if (credentials.isTeamManager)
+    addNewDepartment = (
       <SettingGroup
         name="Create new department"
         description="You will be able to add users once created.">
         <AddDepartmentForm onDepartmentAdded={retrieveDepartments} />
       </SettingGroup>
+    );
+
+  return (
+    <div className="SettingGroupsContainer">
+      {addNewDepartment}
       {manageDepartments}
     </div>
   );

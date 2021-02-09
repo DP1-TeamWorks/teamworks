@@ -2,7 +2,8 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react/cjs/react.development";
+import { useContext, useEffect, useState } from "react/cjs/react.development";
+import UserCredentials from "../../../context/UserCredentials";
 import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
 import Circle from "../../projects/tags/Circle";
 import Spinner from "../../spinner/Spinner";
@@ -10,6 +11,9 @@ import TodoDetail from "./TodoDetail";
 
 const TodoTable = ({ tags, projectId, milestoneId, selectedTagId }) => 
 {
+    const credentials = useContext(UserCredentials);
+    const isProjectManager = credentials.isProjectManager(projectId);
+
     // selected todo index
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [todos, setTodos] = useState([]);
@@ -226,9 +230,9 @@ const TodoTable = ({ tags, projectId, milestoneId, selectedTagId }) =>
                         <td><Link to={`/settings/users/${t.assigneeId}/${username}`}>{t.assigneeName} {t.assigneeLastname}</Link></td>
                         <td>{tagElements}</td>
                         <td className="ActionStrip">
-                            <span onClick={() => setSelectedIndex(i)} className="BoldTitle BoldTitle--Smallest ActionButton">Modify</span>
+                            {isProjectManager ? <span onClick={() => setSelectedIndex(i)} className="BoldTitle BoldTitle--Smallest ActionButton">Modify</span> : ""}
                             <span onClick={() => markAsDone(t)} className="BoldTitle BoldTitle--Smallest ActionButton">{t.done ? "Unm" : "M"}ark as done</span>
-                            <span onClick={() => deleteTodo(t)} className="BoldTitle BoldTitle--Smallest ActionButton">Remove</span>
+                            {isProjectManager ? <span onClick={() => deleteTodo(t)} className="BoldTitle BoldTitle--Smallest ActionButton">Remove</span> : ""}
                         </td>
                     </tr>
                     {todoDetail}
@@ -244,19 +248,21 @@ const TodoTable = ({ tags, projectId, milestoneId, selectedTagId }) =>
                     <th>Name</th>
                     <th>Assignee</th>
                     <th>Tags</th>
-                    <th>Actions</th>
+                    {isProjectManager ? <th>Actions</th> : undefined}
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td colSpan={4} className="AddTodoButton" onClick={addNewTodo}>
-                        <FontAwesomeIcon
-                            icon={faPlus}
-                            className="AddIcon" />
+                {isProjectManager ? (
+                    <tr>
+                        <td colSpan={4} className="AddTodoButton" onClick={addNewTodo}>
+                            <FontAwesomeIcon
+                                icon={faPlus}
+                                className="AddIcon" />
                         New task
                         {addLoading ? <Spinner green className="TodoTable__Spinner" /> : ""}
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                ) : undefined}
                 {elements}
             </tbody>
         </table>

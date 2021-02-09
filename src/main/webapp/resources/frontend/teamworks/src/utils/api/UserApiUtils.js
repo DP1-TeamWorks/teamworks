@@ -7,7 +7,8 @@ const UserApiUtils = {
   getUsers: () => ApiUtils.get(USERS_URL),
   registerUser: (user) => ApiUtils.post(USER_URL + "/create", user),
   updateUser: (user) => ApiUtils.post(USER_URL + "/update", user),
-  deleteUser: (userId) => ApiUtils.delete(USER_URL + `/delete?userId=${userId}`)
+  deleteUser: (userId) => ApiUtils.delete(USER_URL + `/delete?userId=${userId}`),
+  getCredentials: () => ApiUtils.get(USER_URL + "/credentials")
 };
 
 export default UserApiUtils;
