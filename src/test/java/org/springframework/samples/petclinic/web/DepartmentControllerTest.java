@@ -144,12 +144,6 @@ public class DepartmentControllerTest {
 	}
 	
 	
-	@Test
-	void testGetTeamUsers() throws Exception {
-		mockMvc.perform(get("/api/department/users").param("departmentId", ((Integer) TEST_DEPARTMENT_ID).toString()))
-		.andExpect(status().is(200));
-	}
-	
 	
 	@Test
 	void testGetMyDepartments() throws Exception {
