@@ -6,7 +6,7 @@ const DepartmentApiUtils = {
   /*DEPARTMENTS*/
   getDepartments: () => ApiUtils.get(DEPARTMENT_URL),
   postDepartment: (department) => ApiUtils.post(DEPARTMENT_URL + "/create", department),
-  updateDepartment: (department) => ApiUtils.patch(DEPARTMENT_URL + "/update", department),
+  updateDepartment: (department) => ApiUtils.patch(DEPARTMENT_URL + `/update?departmentId=${department.id}`, department),
   deleteDepartment: (id) => ApiUtils.delete(DEPARTMENT_URL + "/" + id + "/delete"),
   getMyDepartments: () => ApiUtils.get(DEPARTMENT_URL + "/mine"),
   addUserToDepartment: (departmentId, userId, departmentManager) => 

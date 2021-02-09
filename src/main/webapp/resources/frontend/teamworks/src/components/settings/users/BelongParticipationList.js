@@ -14,7 +14,14 @@ const BelongParticipationList = ({ department, project, values }) =>
   let elements;
   if (values && values.length > 0)
   {
-    values = values.sort((a, b) => new Date(a.initialDate) - new Date(b.initialDate));
+    values = values.sort((a, b) => 
+    {
+      if (a.finalDate === null && b.finalDate !== null)
+        return -1;
+      if (a.finalDate !== null && b.finalDate === null)
+        return 1;
+      return new Date(a.initialDate) - new Date(b.initialDate);
+    });
     elements = values.map(val =>
     {
       let name;
