@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.Tag;
 import org.springframework.samples.petclinic.model.UserTW;
+import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,18 +40,19 @@ class MessageServiceTest {
 
 		UserTW sender = userTWService.findUserById(1);
 		ArrayList<Integer> recipients = new ArrayList<>();
-		recipients.add(2);
+		recipients.add(userTWService.findUserById(2).getId());
 		Message message = new Message();
 		message.setSubject("Prueba de Mensaje correcto");
 		message.setText("Primer mensaje enviado");
-		message.setRecipientsIds(recipients);
+
 		message.setSender(sender);
 		message.setId(111);
+		message.setTimestamp(LocalDate.now());
 		ArrayList<Integer> tags = new ArrayList<>();
 		//tag: planning
 		tags.add(1);
 		message.setTagList(tags);
-		
+		message.setRecipientsIds(recipients);
 		try {
 			messageService.saveMessage(message);
 		} catch (DataAccessException ex) {

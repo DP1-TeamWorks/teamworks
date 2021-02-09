@@ -8,6 +8,7 @@ import org.springframework.samples.petclinic.model.Message;
 import org.springframework.samples.petclinic.model.Tag;
 import org.springframework.samples.petclinic.model.UserTW;
 import org.springframework.samples.petclinic.repository.MessageRepository;
+import org.springframework.samples.petclinic.validation.DateIncoherenceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,9 @@ public class MessageService {
 
 	@Transactional
 	public void saveMessage(Message message) throws DataAccessException {
+		if(message.getSender() == null || message.getText() == null) {
+			throw new NullPointerException();
+		}
 		messageRepository.save(message);
 	}
 
