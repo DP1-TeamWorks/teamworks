@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @RestController
 public class TeamController {
 
@@ -33,6 +35,7 @@ public class TeamController {
 
 	@GetMapping(value = "/api/team")
 	public ResponseEntity<String> getTeamName(HttpServletRequest req) {
+		log.info("Obteniendo el nombre del team con id: " + req.getSession().getAttribute("teamId"));
 	    Integer teamId = (Integer)req.getSession().getAttribute("teamId");
 	    String teamName = teamService.findTeamById(teamId).getName();
 	    return ResponseEntity.ok(teamName);
@@ -41,6 +44,7 @@ public class TeamController {
 	@PostMapping(value = "/api/team/update")
 	public ResponseEntity<String> updateTeam(HttpServletRequest req, @RequestBody Team teamAttrs) {
 		try {
+			log.info("Actualizando el team con id: " + req.getSession().getAttribute("teamId"));
 		    String name = teamAttrs.getName();
 			Integer teamId = (Integer) req.getSession().getAttribute("teamId");
 			Team team = teamService.findTeamById(teamId);
@@ -50,11 +54,15 @@ public class TeamController {
             }
 			else
             {
+				log.error("El team no existe");
                 return ResponseEntity.badRequest().build();
             }
+			log.info("Guardando el team");
 			teamService.saveTeam(team);
+			log.info("Team gurdado correctamente");
 			return ResponseEntity.ok("Team update");
 		} catch (DataAccessException d) {
+			log.error("Error:",d);
 			return ResponseEntity.badRequest().build();
 		}
 	}
@@ -63,7 +71,9 @@ public class TeamController {
 	public ResponseEntity<String> deleteTeam(HttpServletRequest req) {
         Integer teamId = (Integer) req.getSession().getAttribute("teamId");
 		try {
+			log.info("Eliminando el team con id: " + req.getSession().getAttribute("teamId"));
 			teamService.deleteTeamById(teamId);
+			log.info("Eliminado correctamente");
 			return ResponseEntity.ok("Team deleted");
 		} catch (DataAccessException d) {
 			return ResponseEntity.badRequest().build();

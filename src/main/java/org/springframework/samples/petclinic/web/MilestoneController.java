@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @RestController
 public class MilestoneController {
 	private final MilestoneService milestoneService;
@@ -40,16 +42,19 @@ public class MilestoneController {
 
     @GetMapping(value = "/api/milestone")
     public Milestone getMilestone(@RequestParam(required = true) Integer projectId, @RequestParam(required = true) Integer milestoneId) {
-        return milestoneService.findMilestoneById(milestoneId);
+    	log.info("Obteniendo milestone más próxima del proyecto con id: "+projectId);
+    	return milestoneService.findMilestoneById(milestoneId);
     }
 
 	@GetMapping(value = "/api/milestones/next")
 	public Milestone getNextMilestone(@RequestParam(required = true) Integer projectId) {
+		log.info("Obteniendo todas las milestones");
 		return milestoneService.findNextMilestone(projectId);
 	}
 
 	@GetMapping(value = "/api/milestones")
 	public List<Milestone> getMilestones(@RequestParam(required = true) Integer projectId) {
+		log.info("Obteniendo todas las milestones");
 		return milestoneService.findMilestonesForProject(projectId)
             .stream()
             .sorted((a, b) ->
@@ -84,15 +89,19 @@ public class MilestoneController {
 			@Valid @RequestBody Milestone milestone) {
 
 		try {
+			log.info("Milestone validada correctamente");
 			Project project = projectService.findProjectById(projectId);
             milestone.setProject(project);
 			if (milestone.getId() == null)
             {
+				log.info("Guardando milestone");
                 milestoneService.saveMilestone(milestone);
+                log.info("Milestone guardada correctamente");
                 return ResponseEntity.ok("Milestone create");
             }
 			else
-            {
+            {   
+				log.info("Actualizando milestone");
                 Milestone dbMile = milestoneService.findMilestoneById(milestone.getId());
                 if (dbMile == null || dbMile.getProject().getId() != projectId)
                     return ResponseEntity.badRequest().build();
@@ -101,9 +110,11 @@ public class MilestoneController {
                 if (milestone.getDueFor() != null)
                     dbMile.setDueFor(milestone.getDueFor());
                 milestoneService.saveMilestone(dbMile);
+                log.info("Milestone actualizada correctamente");
                 return ResponseEntity.ok("Milestone updated");
             }
 		} catch (DataAccessException d) {
+			log.error("Error:",d);
 			return ResponseEntity.badRequest().build();
 		}
 
@@ -112,9 +123,12 @@ public class MilestoneController {
 	@DeleteMapping(value = "/api/milestones/delete")
 	public ResponseEntity<String> deleteMilestones(@RequestParam(required = true) Integer milestoneId) {
 		try {
+			log.info("Borrando milestone con id: " +milestoneId);
 			milestoneService.deleteMilestoneById(milestoneId);
+			log.info("Milestone borrada correctamente");
 			return ResponseEntity.ok("Milestone delete");
 		} catch (DataAccessException d) {
+			log.error("Error:",d);
 			return ResponseEntity.notFound().build();
 		}
 

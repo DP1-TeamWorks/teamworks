@@ -49,14 +49,15 @@ public class TagController {
 
     @GetMapping(value = "/api/tags")
     public List<Tag> getTagsByProjectId(HttpServletRequest r, @RequestParam(required = true) Integer projectId) {
-        Project project = projectService.findProjectById(projectId);
+    	log.info("Obteniendo tags del proyecto con id: "+projectId);
+    	Project project = projectService.findProjectById(projectId);
         return project.getTags();
     }
 
     @GetMapping(value = "/api/tags/mine/all")
     public Map<String, List<Tag>> getAllMyTagsByProject(HttpServletRequest r) {
         UserTW user = userTWService.findUserById((Integer) r.getSession().getAttribute("userId"));
-
+        log.info("Obteniendo todas las tags por proyecto del usuario");
         Map<String, List<Tag>> tags = user.getParticipation().stream().filter(p -> p.getFinalDate() == null)
                 .map(Participation::getProject).map(Project::getTags).flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(tag -> tag.getProject().getName()));
@@ -70,12 +71,16 @@ public class TagController {
     public ResponseEntity<String> createTag(HttpServletRequest r, @Valid @RequestBody Tag tag,
             @RequestParam(required = true) Integer projectId) {
         try {
+        	log.info("Tag validada con exito");
             Project project = projectService.findProjectById(projectId);
             tag.setProject(project);
+            log.info("Guardando tag");
             tagService.saveTag(tag);
+            log.info("Tag guardada correctamente");
             return ResponseEntity.ok().build();
         } catch (DataAccessException | TagLimitProjectException d) {
-            if (d.getClass() == TagLimitProjectException.class)
+            log.error("Error:",d);
+        	if (d.getClass() == TagLimitProjectException.class)
             {
                 return ResponseEntity.badRequest().body("toomany");
             } else
@@ -89,10 +94,13 @@ public class TagController {
     @DeleteMapping(value = "/api/tags/delete")
     public ResponseEntity<String> deleteTagById(HttpServletRequest r, @RequestParam(required = true) Integer projectId, @RequestParam(required = true) Integer tagId) {
         try {
+        	log.info("Borrando tag con id: "+tagId);
             tagService.deleteTagById(tagId);
+            log.info("Tag borrada correctamente");
             return ResponseEntity.ok().build();
         } catch (DataAccessException d) {
-            return ResponseEntity.badRequest().build();
+        	log.error("Error: ",d);
+        	return ResponseEntity.badRequest().build();
         }
     }
 }
