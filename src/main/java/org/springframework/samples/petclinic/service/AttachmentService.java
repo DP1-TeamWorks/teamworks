@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Attachment;
 import org.springframework.samples.petclinic.repository.AttachmentRepository;
+import org.springframework.samples.petclinic.validation.TooBigFileException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,15 +26,20 @@ public class AttachmentService {
 	}
 
 	@Transactional(rollbackFor = IOException.class)
-	public void uploadAndSaveAttachment(Attachment attatchment) throws DataAccessException, IOException {
-		String fileName = attatchment.getFile().getOriginalFilename();
+	public void uploadAndSaveAttachment(Attachment attachment)
+			throws DataAccessException, IOException, TooBigFileException {
+		String fileName = attachment.getFile().getOriginalFilename();
 		Path path = Paths.get("src//main//webapp//resources//upload//" + fileName);
 
-		byte[] bytes = attatchment.getFile().getBytes();
+		log.info("Uploading file of ", attachment.getFile().getSize());
+		if (attachment.getFile().getSize() > 50 * 1024 * 1024)
+			throw new TooBigFileException();
+
+		byte[] bytes = attachment.getFile().getBytes();
 		Files.write(path, bytes);
 		log.info("Uploading file");
-		attatchment.setUrl("/upload/" + fileName);
-		attatchmentRepository.save(attatchment);
+		attachment.setUrl("/upload/" + fileName);
+		attatchmentRepository.save(attachment);
 	}
 
 	@Transactional
