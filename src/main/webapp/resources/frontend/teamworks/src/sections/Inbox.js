@@ -9,11 +9,15 @@ const Inbox = ({ search, setSearch }) => {
   const [selectedTab, setSelectedTab] = useState("Inbox");
   const [selectedMessages, setSelectedMessages] = useState([]);
   const [nInboxMessages, setNInboxMessages] = useState([]);
-  const [pickedProject, setPickedProject] = useState({
-    name: "Any",
-    id: 9999,
-    tags: [],
-  });
+  const [pickedProject, setPickedProject] = useState(
+    localStorage.getItem("pickedProject")
+      ? localStorage.getItem("pickedProject")
+      : {
+          name: "Any",
+          id: 9999,
+          tags: [],
+        }
+  );
   const [reloadCounters, setReloadCounters] = useState(true);
 
   useEffect(() => {

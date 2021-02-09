@@ -9,7 +9,7 @@ import SidePaneElement from "../SidePaneElement";
 import DepartmentMemberList from "./DepartmentMemberList";
 import Sticky from "react-sticky-el";
 import "../SubsettingContainer.css";
-import { useContext } from 'react/cjs/react.development';
+import { useContext } from 'react';
 import UserCredentials from '../../../context/UserCredentials';
 
 const DepartmentsContainer = ({ departments, onDepartmentDeleted }) =>

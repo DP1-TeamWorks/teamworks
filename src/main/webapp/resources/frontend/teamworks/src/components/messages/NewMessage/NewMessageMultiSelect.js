@@ -1,5 +1,5 @@
 import React from "react";
-import Select from "react-select";
+import Creatable from "react-select/creatable";
 import InputError from "../../forms/InputError";
 import CustomOptionComponent from "./CustomOptionComponent";
 
@@ -20,8 +20,7 @@ const NewMessageMultiSelect = ({
       }}
     >
       <p className="TitleNewMsg">{name}</p>
-      <Select
-        // components={{Option: CustomOptionComponent}}
+      <Creatable
         formatOptionLabel={CustomOptionComponent}
         options={options}
         defaultValue={defaultOptions}
@@ -37,7 +36,7 @@ const NewMessageMultiSelect = ({
         name={name}
         placeholder={placeholder}
         isMulti
-      ></Select>
+      ></Creatable>
       {error && <InputError error={error} />}
     </div>
   );

@@ -9,7 +9,7 @@ import Spinner from "../../spinner/Spinner";
 import BelongParticipationList from "./BelongParticipationList";
 import Sticky from "react-sticky-el";
 import UserCredentials from "../../../context/UserCredentials";
-import { useContext } from "react/cjs/react.development";
+import { useContext } from "react";
 
 const UserPage = ({ match: { params: { userId, userName } } }) =>
 {

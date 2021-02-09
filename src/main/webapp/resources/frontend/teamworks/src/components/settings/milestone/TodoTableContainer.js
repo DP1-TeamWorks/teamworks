@@ -2,7 +2,7 @@ import "./TodoTable.css";
 import TagSelectorStrip from "./TagSelectorStrip";
 import TagApiUtils from "../../../utils/api/TagApiUtils";
 import TodoTable from "./TodoTable";
-import { useEffect, useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react";
 import ToDoApiUtils from "../../../utils/api/ToDoApiUtils";
 
 const TodoTableContainer = ({milestoneId, projectId}) =>

@@ -2,7 +2,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import Sticky from "react-sticky-el";
-import { useContext } from "react/cjs/react.development";
+import { useContext } from "react";
 import UserCredentials from "../../../context/UserCredentials";
 import ProjectApiUtils from "../../../utils/api/ProjectApiUtils";
 import Button from "../../buttons/Button";
@@ -155,7 +155,7 @@ const ProjectsContainer = ({ departments, onProjectAdded, onProjectDeleted }) =>
     return <p>No projects found.</p>
 
   const currentDepartment = myDepartments[departmentIndex];
-  const isDepartmentManager = credentials.isDepartmentManager(currentDepartment.id);
+  const isDepartmentManager = currentDepartment ? credentials.isDepartmentManager(currentDepartment.id) : false;
   let DepartmentElements = [];
 
   for (let i = 0; i < myDepartments.length; i++)
