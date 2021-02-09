@@ -31,10 +31,9 @@ public class Attachment extends BaseEntity {
 	private MultipartFile file;
 
 	// Relations
-
+	@JsonIgnore
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "message")
-	@JsonIgnore
 	private Message message;
 
 }

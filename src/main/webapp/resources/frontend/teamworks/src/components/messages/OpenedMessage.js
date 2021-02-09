@@ -81,7 +81,7 @@ const OpenedMessage = ({ msg, setOpenMessage }) => {
         })}
       </div>
       <div className="MsgContentFiles">
-        {msg.files.map((file) => {
+        {msg.attatchments.map((file) => {
           return <FilePreview key={file.id} id={file.id} url={file.url} />;
         })}
       </div>

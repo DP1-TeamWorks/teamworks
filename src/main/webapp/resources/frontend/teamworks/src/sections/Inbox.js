@@ -7,7 +7,7 @@ import Section from "./Section";
 
 const Inbox = ({ search, setSearch }) => {
   const [selectedTab, setSelectedTab] = useState("Inbox");
-  const [selectedMessages, setSelectedMessages] = useState(null);
+  const [selectedMessages, setSelectedMessages] = useState([]);
   const [nInboxMessages, setNInboxMessages] = useState([]);
   const [pickedProject, setPickedProject] = useState({
     name: "Any",
@@ -46,6 +46,7 @@ const Inbox = ({ search, setSearch }) => {
         case "Inbox":
           MessageApiUtils.getMyInboxMessages()
             .then((res) => {
+              console.log("Getting inbox Messages");
               setSelectedMessages(res);
             })
             .catch((error) => {

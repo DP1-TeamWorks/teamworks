@@ -4,11 +4,13 @@ import { useEffect, useState } from "react/cjs/react.development";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLongArrowAltDown } from "@fortawesome/free-solid-svg-icons";
 
-const FilePreview = () => {
+const FilePreview = (url) => {
   return (
-    <div className="FilePreview" onClick={null}>
-      <FontAwesomeIcon icon={faLongArrowAltDown} />
-    </div>
+    <a href={url}>
+      <div className="FilePreview" onClick={null}>
+        <FontAwesomeIcon icon={faLongArrowAltDown} />
+      </div>
+    </a>
   );
 };
 
