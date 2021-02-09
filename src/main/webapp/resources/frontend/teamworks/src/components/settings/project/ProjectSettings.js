@@ -25,7 +25,7 @@ const ProjectSettings = () =>
               const proj = projects[i];
               dpts[i].projects = proj.sort((a,b) => a.name.localeCompare(b.name));
             }
-            setDepartments(dpts);
+            setDepartments(dpts.sort((a,b) => a.name.localeCompare(b.name)));
           });
       })
       .catch((err) => console.error(err));

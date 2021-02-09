@@ -1,3 +1,4 @@
+import { faWindows } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
 import { useContext } from "react/cjs/react.development";
 import UserCredentials from "../../../context/UserCredentials";
@@ -13,30 +14,43 @@ const ProjectMemberList = ({departmentId, projectId, members, loading, onListUpd
 
   function onPromoteClicked(member)
   {
+    let isCredentialInDanger = !credentials.isTeamManager && !credentials.isDepartmentManager(departmentId) && isProjectManager;
     if (member.isProjectManager)
     {
       let confirmMessage = `Are you sure to demote ${member.name} ${member.lastname} and make them a member?`;
-      if (!credentials.isTeamManager && !credentials.isDepartmentManager(departmentId) && isProjectManager)
+      if (isCredentialInDanger)
       {
         confirmMessage = `NOTE: You are demoting yourself and you will NO LONGER HAVE MANAGEMENT PRIVILEGES. This action cannot be undone. Would you like to continue?`;
       }
       if (window.confirm(confirmMessage))
       {
         ProjectApiUtils.addUserToProject(projectId, member.userId, false)
-          .then(() => onListUpdated())
+          .then(() => 
+          {
+            if (isCredentialInDanger)
+              window.location.reload();
+            else
+              onListUpdated();
+          })
           .catch(err => console.error(err));
       }
     } else
     {
       let confirmMessage = `Are you sure to promote ${member.name} ${member.lastname} to project manager?`;
-      if (!credentials.isTeamManager && !credentials.isDepartmentManager(departmentId) && isProjectManager)
+      if (isCredentialInDanger)
       {
         confirmMessage =  `NOTE: You are promoting ${member.name} ${member.lastname} to project manager. You will NO LONGER HAVE MANAGEMENT PRIVILEGES. This action cannot be undone. Would you like to continue?`;
       }
       if (window.confirm(confirmMessage))
       {
         ProjectApiUtils.addUserToProject(projectId, member.userId, true)
-          .then(() => onListUpdated())
+          .then(() => 
+          {
+            if (isCredentialInDanger)
+              window.location.reload();
+            else
+              onListUpdated();
+          })
           .catch(err => console.error(err));
       }
     }
@@ -45,10 +59,22 @@ const ProjectMemberList = ({departmentId, projectId, members, loading, onListUpd
 
   function onRemoveClicked(member)
   {
-    if (window.confirm(`Are you sure to remove ${member.name} ${member.lastname} from the project?`))
+    let isCredentialInDanger = member.userId === credentials.user.id && !credentials.isTeamManager && !credentials.isDepartmentManager(departmentId) && isProjectManager;
+    let confirmMessage = `Are you sure to remove ${member.name} ${member.lastname} from the project?`;
+    if (isCredentialInDanger)
+    {
+      confirmMessage = "Are you sure to REMOVE YOURSELF from this project and lose access? This action cannot be undone.";
+    }
+    if (window.confirm(confirmMessage))
     {
       ProjectApiUtils.removeUserFromProject(projectId, member.userId)
-      .then(() => onListUpdated())
+      .then(() => 
+      {
+        if (isCredentialInDanger)
+          window.location.reload();
+        else
+          onListUpdated();
+      })
       .catch(err => console.error(err));
     }
   }
