@@ -40,6 +40,7 @@ public class BelongsService {
 
 	@Transactional
 	public void deleteBelongsById(Integer belongsId) throws DataAccessException {
+
 		belongsRepository.deleteById(belongsId);
 	}
 
