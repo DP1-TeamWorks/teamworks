@@ -22,6 +22,7 @@ const UserCredentialsProvider = ({ children }) =>
             {
                 c.isDepartmentManager = (departmentId) =>
                 {
+                    departmentId = Number(departmentId);
                     if (c.isTeamManager)
                         return true;
                     const dpt = c.currentDepartments?.find(x => x.id === departmentId);
@@ -29,10 +30,14 @@ const UserCredentialsProvider = ({ children }) =>
                         return false;
                     return dpt.isDepartmentManager;
                 };
-                c.isProjectManager = (projectId) =>
+                c.isProjectManager = (projectId, departmentId) =>
                 {
+                    projectId = Number(projectId);
+                    departmentId = Number(departmentId);
                     if (c.isTeamManager)
                         return true;
+                    if (departmentId && c.isDepartmentManager(departmentId))
+                        return true; 
                     const proj = c.currentProjects?.find(x => x.id === projectId);
                     if (!proj)
                         return false;

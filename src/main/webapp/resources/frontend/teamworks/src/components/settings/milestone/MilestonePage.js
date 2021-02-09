@@ -9,11 +9,11 @@ import EditableField from "../EditableField";
 import SettingGroup from "../SettingGroup";
 import TodoTableContainer from "./TodoTableContainer";
 
-const MilestonePage = ({ match: { params: { projectName, projectId, milestoneName, milestoneId } } }) =>
+const MilestonePage = ({ match: { params: { projectName, departmentId, projectId, milestoneName, milestoneId } } }) =>
 {
 
     const credentials = useContext(UserCredentials);
-    const isProjectManager = credentials.isProjectManager(projectId);
+    const isProjectManager = credentials.isProjectManager(projectId, departmentId);
     const [milestone, setMilestone] = useState(null);
 
     const projname = projectName.replace(/-/g," ");
@@ -79,7 +79,7 @@ const MilestonePage = ({ match: { params: { projectName, projectId, milestoneNam
                     <EditableField editable={isProjectManager} inputType="date" value={milestone?.dueFor} postFunction={onAttributeUpdated} fieldName="dueFor" />
                 </SettingGroup>
                 <SettingGroup name="Tasks" description=" ">
-                    <TodoTableContainer projectId={projectId} milestoneId={milestoneId} />
+                    <TodoTableContainer departmentId={departmentId} projectId={projectId} milestoneId={milestoneId} />
                 </SettingGroup>
                 {isProjectManager ? (
                     <SettingGroup name="Delete milestone" description="Deletes the milestone and associated tasks from the team.">

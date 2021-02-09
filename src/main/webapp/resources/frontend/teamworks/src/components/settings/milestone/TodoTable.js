@@ -9,10 +9,10 @@ import Circle from "../../projects/tags/Circle";
 import Spinner from "../../spinner/Spinner";
 import TodoDetail from "./TodoDetail";
 
-const TodoTable = ({ tags, projectId, milestoneId, selectedTagId }) => 
+const TodoTable = ({ tags, projectId, milestoneId, selectedTagId, departmentId }) => 
 {
     const credentials = useContext(UserCredentials);
-    const isProjectManager = credentials.isProjectManager(projectId);
+    const isProjectManager = credentials.isProjectManager(projectId, departmentId);
 
     // selected todo index
     const [selectedIndex, setSelectedIndex] = useState(-1);

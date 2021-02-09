@@ -10,7 +10,7 @@ import "../UserList.css";
 const ProjectMemberList = ({departmentId, projectId, members, loading, onListUpdated}) => {
 
   const credentials = useContext(UserCredentials);
-  const isProjectManager = credentials.isProjectManager(projectId);
+  const isProjectManager = credentials.isProjectManager(projectId, departmentId);
 
   function onPromoteClicked(member)
   {

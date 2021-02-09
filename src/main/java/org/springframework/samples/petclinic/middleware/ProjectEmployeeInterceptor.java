@@ -30,6 +30,7 @@ public class ProjectEmployeeInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
+
         Integer userId = (Integer) req.getSession().getAttribute("userId");
         UserTW user = userTWService.findUserById(userId);
         ToDo todo = null;
@@ -42,18 +43,18 @@ public class ProjectEmployeeInterceptor extends HandlerInterceptorAdapter {
         	todo = toDoService.findToDoById(Integer.valueOf(req.getParameter("toDoId")));
         	projectId = todo.getMilestone().getProject().getId();
         }
-            
+
         if (paramMilestoneId != null) {
         	 milestone = milestoneService.findMilestoneById(Integer.valueOf(req.getParameter("milestoneId")));
         	projectId = milestone.getProject().getId();
         }
-           
 
-        
+
+
         if (paramProjectId != null){
-        	projectId=Integer.valueOf(paramProjectId); 
+        	projectId=Integer.valueOf(paramProjectId);
         }
-       
+
 
         Participation participation = participationService.findCurrentParticipation(userId, projectId);
         /*
@@ -63,8 +64,8 @@ public class ProjectEmployeeInterceptor extends HandlerInterceptorAdapter {
          * getAssignee().getId() == userId;
          */
         Boolean isProjectEmployee = participation != null;
-        
-        
+
+
         if (isProjectEmployee) {
             return true;
         } else {
@@ -75,7 +76,7 @@ public class ProjectEmployeeInterceptor extends HandlerInterceptorAdapter {
         		team=milestone.getProject().getDepartment().getTeam();
         	}else if(todo!=null) {
         		dptId=todo.getMilestone().getProject().getDepartment().getId();
-        		team=todo.getAssignee().getTeam();
+        		team=user.getTeam();
         	}
         	else if(projectId!=null){
         		Project project=projectService.findProjectById(projectId);
@@ -85,7 +86,7 @@ public class ProjectEmployeeInterceptor extends HandlerInterceptorAdapter {
         		res.sendError(403);
         		return false;
         	}
-            
+
             Belongs userBelongs = belongsService.findCurrentBelongs(userId, dptId);
             if((user.getRole().equals(Role.team_owner)&&user.getTeam().equals(team))) {
             	return true;

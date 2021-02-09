@@ -7,11 +7,11 @@ import Circle from "../../projects/tags/Circle";
 import Spinner from "../../spinner/Spinner";
 import "../UserList.css";
 
-const TagList = ({ projectId, updateCounter }) =>
+const TagList = ({ departmentId, projectId, updateCounter }) =>
 {
 
   const credentials = useContext(UserCredentials);
-  const isProjectManager = credentials.isProjectManager(projectId);
+  const isProjectManager = credentials.isProjectManager(projectId, departmentId);
 
   const [tags, setTags] = useState(null);
   const [loading, setLoading] = useState(true);
