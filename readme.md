@@ -1,6 +1,6 @@
-# TEAMWORKS
+# TeamWorks
 
-A showcase video can be found [here](https://youtu.be/g9Iu-Cj1-e0).
+A showcase video can be found [here](https://youtu.be/g9Iu-Cj1-e0) (recorded in Spanish).
 
 ## Local Deployment
 ### Backend
