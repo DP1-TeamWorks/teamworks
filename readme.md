@@ -47,3 +47,12 @@ The following items should be installed in your system:
 |The Main Class | [PetClinicApplication](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
 |Properties Files | [application.properties](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/resources) |
 |Caching | [CacheConfiguration](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java) |
+
+
+## Authors
+This group project was made for a Design and Testing course in the University of Seville by the following members:
+- José Montiel Nieves
+- Fernando Rabasco Ledesma
+- Ignacio Navarro Blázquez
+- Pedro Alonso Pontiga
+- Nicolás de Ory Carmona
